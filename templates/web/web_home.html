@@ -1,0 +1,423 @@
+{#utf-8#}{% extends "base_mainjl5.html" %}
+{% load rates %}
+{% block title%}
+  首页
+{% endblock %}
+{% block content %}
+<!-- <input type="hidden" id="left_days" value="{{request.session.left_days}}">
+<input type="hidden" id="point_count" value="{{JLB_COUNT}}">
+<input type="hidden" id="freeze_point_deadline" value="{{account.freeze_point_deadline|default:''}}"> -->
+  <!-- 主区通告 -->
+  {%if main_info%}
+      <div id="main_tip" class="hide mb10">
+            {{main_info.html|safe}}
+      </div>
+      <input type="hidden" id="main_tip_config" value='{"content_model":"{{main_info.content_model}}","level":"{{main_info.level}}","id":"{{main_info.id}}","show_again":"{{main_info.show_again}}"}'>
+  {%endif%}
+  <!-- 主区通告 -->
+
+  <div class="row-fluid ">
+    <div class="span19">
+      <div class="box">
+        <div class="box_hd">
+          <span class="box_l"><i class="iconfont mr5">&#xe652;</i>账户报表</span>
+          <span class="box_r">
+          <div class="dropdown" id="account_select_days">
+            <a class="dropdown-toggle btn btn-small" data-toggle="dropdown" data-autowidth="true"  data-type="select" href="#">
+            	<i class="iconfont mr5">&#xe61e;</i>
+	        	  {% if is_rt_cust%}
+	              <span class="dropdown-value cust_last_day" value=0>今日实时</span>
+	              {% else %}
+	              <span class="dropdown-value cust_last_day" value=1>过去1天</span>
+	              {% endif %}
+        		<i class="iconfont">&#xe626;</i>
+    		</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              {% if is_rt_cust%}
+              <li><a value="0" href="javascript:;">今日实时</a></li>
+              {% endif %}
+              <li><a value="1" href="javascript:;">过去1天</a></li>
+              <li><a value="3" href="javascript:;">过去3天</a></li>
+              <li><a value="7" href="javascript:;">过去7天</a></li>
+              <li><a value="15" href="javascript:;">过去15天</a></li>
+            </ul>
+          </div>
+          </span>
+        </div>
+        <div class="box_bd" id="account_data">
+          <div class="row-fluid">
+            <div id='sum_rpt'></div>
+            <ul class="nav nav-tabs no-left-warp-border mt-3">
+              <li class="active">
+                <a href="#account_graph" data-toggle="tab">曲线图</a>
+              </li>
+              <li>
+                <a href="#account_report" data-toggle="tab">报表</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane fade active ovh in" id="account_graph">
+              </div>
+              <div class="tab-pane fade" id="account_report">
+                <table class="table-bordered table-no-warp-border mt10" id="detailed_table">
+                  <thead>
+                    <tr>
+                      <th><div>日期</div></th>
+                      <th><div>展现量</div></th>
+                      <th><div>点击量</div></th>
+                      <th><div>点击率</div></th>
+                      <th><div>PPC<i class="tips icon-pt-help ml3" title="平均点击花费">&#xe62b;</i>
+                      </div></th>
+                      <th><div>总花费</div></th>
+                      <th><div>成交额</div></th>
+                      <th><div>成交笔数</div></th>
+                      <th><div>收藏次数</div></th>
+                      <th><div>ROI<i class="tips icon-pt-help ml3" title="投资回报率">&#xe62b;</i>
+                      </div></th>
+                      <th><div>CVR<i class="tips icon-pt-help ml3" title="点击转化率">&#xe62b;</i>
+                      </div></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for rpt in account.snap_list%}
+                    <tr>
+                      <td>{{rpt.date|date:"Y-m-d"}}</td>
+                      <td>{{rpt.impressions}}</td>
+                      <td>{{rpt.click}}</td>
+                      <td>{{rpt.ctr|floatformat:'2'}}%</td>
+                      <td>{{rpt|div:'cpc,100,2'}}</td>
+                      <td class="base_data">{{rpt|div:'cost,100,2'}}</td>
+                      <td class="conv_data"><div class="tips" data-original-title="直接成交金额 : {{rpt|div:'directpay,100,2'|floatformat:'2'}}元<br>间接成交金额 : {{rpt|div:'indirectpay,100,2'|floatformat:'2'}}元">{{rpt|div:'pay,100,2'|floatformat:'2'}}</div></td>
+                      <td class="conv_data"><div class="tips" data-original-title="直接成交笔数 : {{rpt.directpaycount}}笔<br> 间接成交笔数 : {{rpt.indirectpaycount}}笔">{{rpt.paycount}}</div></td>
+                      <td class="conv_data"><div class="tips" data-original-title="店铺收藏次数 : {{rpt.favshopcount}}次<br>宝贝收藏次数 : {{rpt.favitemcount}}次">{{rpt.favcount}}</div></td>
+                      <td class="conv_data">{{rpt.roi|floatformat:'2'}}</td>
+                      <td class="conv_data">{{rpt.conv|floatformat:'2'}}%</td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span5">
+      <ul id="main_info">
+
+        <li class="home_upgrade {% if home_dialog.arithmetic.show_result and home_dialog.arithmetic.show_type != 8 %} hide {%endif%}">
+          <div class="f12 lh30">
+            <div class="row-fluid">
+              <div class="span8">
+                会员等级：
+              </div>
+              <div class="span16">
+                  {%if grade == '金牌'%}
+                      <img src="/site_media/jl5/images/gold_medal.png" class="ml-5" width="20" height="20" alt="金牌">
+                  {%endif%}
+                  {%if grade == '银牌'%}
+                      <img src="/site_media/jl5/images/silver_medal.png" class="ml-5" width="20" height="20" alt="银牌">
+                  {%endif%}
+                  {%if grade == '铜牌'%}
+                      <img src="/site_media/jl5/images/bronze_medal.png" class="ml-5" width="20" height="20" alt="铜牌">
+                  {%endif%}
+                  {{grade}}
+
+                {%if is_sign_today %}
+                  <a class="btn btn-mini btn-primary mt3 r disabled" id="sign_point"><i class="iconfont mr5">&#xe698;</i><span>已签到</span></a>
+                {%else%}
+                <a class="btn btn-mini btn-primary mt3 r" id="sign_point"><i class="iconfont mr5">&#xe698;</i><span>签到</span></a>
+                {%endif%}
+              </div>
+            </div>
+            <div class="row-fluid">
+              <div class="span8">
+                会员积分：
+              </div>
+              <div class="span16">
+                <span class="point_count">{{JLB_COUNT}}</span><a href="{%url 'point_mall'%}" class="ml5" target="_blank">兑换</a>
+              </div>
+            </div>
+            {% if request.session.item_code == 'ts-25811-6' %}
+              <div class="row-fluid">
+                <div class="span8">
+                  类目专家：
+                </div>
+                <div class="span16">
+                  效果诊断、咨询
+                  <a class="ml5" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{server.ww}}">
+                  <img alt="点这里给我发消息" border="0" src="http://amos.alicdn.com/online.aw?v=2&amp;uid=%E5%BC%80%E8%BD%A6%E7%B2%BE%E7%81%B5&amp;site=cntaobao&amp;s=2&amp;charset=utf-8"></a>
+                </div>
+              </div>
+            {%else%}
+              <div class="row-fluid">
+                <div class="span8">
+                  订购版本：
+                </div>
+                <div class="span16">
+                  {% if request.session.item_code == 'ts-25811-8' %}
+                      开车精灵双引擎版
+                  {% endif %}
+
+                  {% if request.session.item_code == 'ts-25811-1' %}
+                      开车精灵四引擎版
+                  {% endif %}
+
+                  {% if request.session.item_code == 'ts-25811-3' %}
+                      开车精灵单引擎版
+                  {% endif %}
+
+                  {% if request.session.item_code == 'ts-25811-v9' %}
+                      VIP专家托管_买2送1
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+            <div class="row-fluid">
+              <div class="span8">
+                剩余时间：
+              </div>
+              <div class="span16">
+                {{request.session.left_days}}天
+                  <a class="btn btn-mini btn-primary mt3 r" href="/web/upgrade_suggest/?referer=upgrade&item_code={{request.session.item_code}}" target="_blank">续订优惠</a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <span>账户余额：</span><span class="b">￥{{account.balance}}</span>
+            <button class="btn btn-mini btn-primary r" id="btn_recharge">立即充值</button>
+          </div>
+        </li>
+        {% if home_dialog.arithmetic %}
+        <li class="home_lottery {% if not home_dialog.arithmetic.show_result or home_dialog.arithmetic.show_type == 8 %} hide {%endif%}">
+          <div class="title">
+            <span class="red">中奖公告</span>
+          </div>
+          <div class="mt10 fix ml5">
+            <div class="mt10">
+             您已获得<span class="b red">{{home_dialog.arithmetic.award_name}}</span>2015超低价体验名额，快来使用吧！
+            </div>
+            <div class="mt10">
+              <a class="btn btn-mini btn-primary r mt-3 click_lottery_url" href="{{home_dialog.arithmetic.sale_url}}" target="_blank" data-source="home">立即领取</a>
+            </div>
+          </div>
+        </li>
+        {% endif %}
+        <li id="common_message_box">
+          <div class="title">公告信息</div>
+          <div id="common_message_window" class="OverflowScroll rel" data-target="#common_message">
+            <ul class="ml10 abs" id="common_message">
+              {% for msg in common_msg_list %}
+                <li class="mt10">
+                  <a href="#commom_msg_detail_{{msg.id}}" class="{{msg.level}}" data-width="pct60" data-toggle="modal" href="javascript:;"><span class="mr3 b"><i class="iconfont">&#xe619;</i></span>{% if forloop.first %}<span class="red b">【置顶】</span>{% endif %}{{ msg.title }}</a>
+                  <div class="modal hide fade" id="commom_msg_detail_{{msg.id}}">
+                    <div class="modal-header">
+                      <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                      <h5><i class="iconfont mr10">&#xe659;</i>{{msg.title}}</h5>
+                    </div>
+                    <div class="modal-body pt0">
+                      <div class="f14 lh24">
+                      {% autoescape off %}{{msg.message}}{% endautoescape %}
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {%endfor%}
+              {% if not common_msg_list %}
+                <li class="mt10 gray">暂时没有公告信息</li>
+              {%endif%}
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row-fluid mt10">
+    <div class="span124">
+      <div class="box" id="campaign_list_box">
+        <div class="box_hd">
+          <span class="box_l"><i class="iconfont mr5">&#xe61c;</i>计划列表</span>
+          <span class="box_r">
+          <div class="dropdown" id="campaign_select_days">
+            <a class="dropdown-toggle btn btn-small" data-toggle="dropdown" data-autowidth="true" data-type="select" href="#">
+	            <i class="iconfont mr5">&#xe61e;</i>
+	            <span class="dropdown-value rt_camp_title">今日实时</span>
+	            <i class="iconfont">&#xe626;</i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li class='li_rt_camp'><a value="0" href="javascript:;">今日实时</a></li>
+              <li><a value="1" href="javascript:;">过去1天</a></li>
+              <li><a value="3" href="javascript:;">过去3天</a></li>
+              <li><a value="7" href="javascript:;">过去7天</a></li>
+              <li><a value="15" href="javascript:;">过去15天</a></li>
+            </ul>
+          </div>
+          </span>
+        </div>
+        <div class="box_bd pt10">
+          <a href="javascript:;" class="btn btn-small btn-info ml10 choose_mnt_campaign" type="button"><i class="iconfont">&#xe63c;</i>创建全自动托管</a>
+          <a href="javascript:;" class="btn btn-small update_camp" type="button" mode=1><i class="iconfont">&#xe64e;</i>参与推广</a>
+          <a href="javascript:;" class="btn btn-small update_camp" type="button" mode=0><i class="iconfont">&#xe64d;</i>暂停推广</a>
+          <a href="javascript:;" class="btn btn-small js_create_camp" type="button"><i class="iconfont mr3">&#xe61a;</i>新建计划</a>
+          <button class="btn btn-small" data-toggle="modal" data-remote="/web/campaign_history/" data-target="#camp_history_box" data-width="pct80"><i class="iconfont mr3">&#xe631;</i>操作记录</button>
+          <button class="btn btn-small" data-toggle="modal" data-remote="/web/all_history/" data-target="#all_history_box" data-width="pct80"><i class="iconfont mr3">&#xe631;</i>全部操作记录</button>
+          <table class="table-bordered table-no-warp-border mt10" id="campaign_table" data-target="home_campaign.tpm.html">
+            <thead>
+              <tr>
+              <th class="w20 tc">
+                <input class="father_box" type="checkbox" link="campaign_table"/>
+              </th>
+              <th class="pct20">计划名称</th>
+              <th class="pct10">日限额</th>
+              <th class="pct16 n_colum hide">
+                <div class="dropdown db table_sort_dropdown">
+                  <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                    <span>历史基础数据</span>
+                    <i class="iconfont r f16">&#xe614;</i>
+                  </div>
+                  <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                    <li><a value="total_cost" href="javascript:;">总花费</a></li>
+                    <li><a value="impr" href="javascript:;">展现量</a></li>
+                    <li><a value="click" href="javascript:;">点击量</a></li>
+                    <li><a value="click_rate" href="javascript:;">点击率</a></li>
+                    <li><a value="ppc" href="javascript:;">PPC</a></li>
+                  </ul>
+                </div>
+              </th>
+              <th class="pct16 n_colum hide">
+                <div class="dropdown db table_sort_dropdown">
+                  <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                    <span>历史转化数据</span>
+                    <i class="iconfont r f16">&#xe614;</i>
+                  </div>
+                  <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                    <li><a value="total_pay" href="javascript:;">成交额</a></li>
+                    <li><a value="paycount" href="javascript:;">成交量</a></li>
+                    <li><a value="favcount" href="javascript:;">收藏量</a></li>
+                    <li><a value="conv" href="javascript:;">转化率</a></li>
+                    <li><a value="roi" href="javascript:;">ROI</a></li>
+                  </ul>
+                </div>
+              </th>
+
+              <th class="pct16 rt_colum">
+                <div class="dropdown db table_sort_dropdown">
+                  <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                    <span>实时基础数据</span>
+                    <i class="iconfont r f16">&#xe614;</i>
+                  </div>
+                  <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                    <li><a value="rt_cost" href="javascript:;">总花费</a></li>
+                    <li><a value="rt_impression" href="javascript:;">展现量</a></li>
+                    <li><a value="rt_click" href="javascript:;">点击量</a></li>
+                    <li><a value="rt_ctr" href="javascript:;">点击率</a></li>
+                    <li><a value="rt_cpc" href="javascript:;">PPC</a></li>
+                  </ul>
+                </div>
+              </th>
+              <th class="pct16 rt_colum">
+                <div class="dropdown db table_sort_dropdown">
+                  <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                    <span>实时转化数据</span>
+                    <i class="iconfont r f16">&#xe614;</i>
+                  </div>
+                  <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                    <li><a value="rt_transactiontotal" href="javascript:;">成交额</a></li>
+                    <li><a value="rt_transactionshippingtotal" href="javascript:;">成交量</a></li>
+                    <li><a value="rt_favtotal" href="javascript:;">收藏量</a></li>
+                    <li><a value="rt_coverage" href="javascript:;">转化率</a></li>
+                    <li><a value="rt_roi" href="javascript:;">ROI</a></li>
+                  </ul>
+                </div>
+              </th>
+
+              <th class="pct12">状态</th>
+              <th class="pct12">相关信息</th>
+              <th class="tc">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tc" colspan="7">正在加载数据。。。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 计划操作记录 -->
+  <div id="camp_history_box" tabindex="-1" role="dialog" data-hasfoot="false" class="modal hide fade" style="top: 1%;margin-top:0;">
+    <div class="modal-header">
+      <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+      <h4 class="modal-title">计划操作记录</h4>
+    </div>
+    <div class="modal-body"></div>
+  </div>
+  <!-- 计划操作记录 -->
+
+  <!-- 全部操作记录 -->
+  <div id="all_history_box" tabindex="-1" role="dialog" data-hasfoot="false" class="modal hide fade" style="top: 1%;margin-top:0;">
+    <div class="modal-header">
+      <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+      <h4 class="modal-title">全部操作记录</h4>
+    </div>
+    <div class="modal-body"></div>
+  </div>
+  <!-- 全部操作记录 -->
+
+  <!-- 弹窗 -->
+  {%if popup%}
+      <div id="popup">
+        {%if popup.content_model == 'simple'%}
+        <div class="hide modal fade">
+            <img class="abs r0 t0 poi" data-dismiss="modal" src="/site_media/jl5/images/close.png">
+            {% if popup.show_again %}
+              <div class="show_again">
+                <input type="checkbox" id="show_again_checkbox">不再显示
+              </div>
+            {%endif%}
+            {%if popup.link_url%}
+            <a href="{{popup.link_url}}" target="_blank">
+              <span id="popup_img_url">
+                <img id="simple_ad_{{popup.id}}" data-src="{{popup.img_url}}">
+              </span>
+            </a>
+            {%else%}
+              <span id="popup_img_url">
+                <img id="simple_ad_{{popup.id}}" data-src="{{popup.img_url}}">
+              </span>
+            {%endif%}
+        </div>
+        {%else%}
+            {{popup.html|safe}}
+        {%endif%}
+      </div>
+      <input type="hidden" id="popup_config" value='{"content_model":"{{popup.content_model}}","level":"{{popup.level}}","id":"{{popup.id}}","show_again":"{{popup.show_again}}"}'>
+  {%endif%}
+  <!-- 弹窗 -->
+
+  <!-- 顶部通栏消息 -->
+  {%if top_bar%}
+   	  <div id="top_bar" class="hide">
+            {{top_bar.html|safe}}
+      </div>
+      <input type="hidden" id="top_bar_config" value='{"content_model":"{{top_bar.content_model}}","level":"{{top_bar.level}}","id":"{{top_bar.id}}","show_again":"{{top_bar.show_again}}"}'>
+  {%endif%}
+  <!-- 顶部通栏消息 -->
+
+{% endblock %}
+{% block custom_js %}
+<script src="{{'/site_media/jl5/pt_js/right_down_services.js'|file_time_stamp}}"></script>
+<script>
+  jQuery(document).ready(function() {
+    PT.Home.init();
+    PT.Campaign_list.init();
+    PT.draw_trend_chart( 'account_graph' ,{{category_list|safe}},{{series_cfg_list|safe}});
+  });
+</script>
+{% endblock %}
+</body>
+</html>

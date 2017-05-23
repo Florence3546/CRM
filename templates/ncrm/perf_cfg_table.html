@@ -1,0 +1,56 @@
+{% load rates%}
+<style type="text/css">
+input:disabled {background-color: inherit; cursor: default; border: hidden; box-shadow: none;}
+.p0_important {padding: 0 !important}
+</style>
+<table id="cfg_table" class="bdd">
+  <thead>
+    <tr>
+      <th class="">积分/金额<div class="tc"></div></th>
+      {% for score_cfg in perf_cfg.score_cfg_list %}
+      <th class="tc">
+        <div class="tc mr10">
+          <input type="text" class="w30 tc sc_desc" value="{{score_cfg.desc}}" {%if not is_modify %}disabled{% endif %} />
+          <input type="text" class="w30 tc sc_count jq_check_num" value="{{score_cfg.count}}" {%if not is_modify %}disabled{% endif %} />
+        </div>
+      </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for pay_cfg in perf_cfg.pay_cfg_list %}
+    <tr class="pay_cfg">
+      <td class="tc">
+        <input type="text" class="w50 tc pc_desc" value="{{pay_cfg.desc}}" {%if not is_modify %}disabled{% endif %} />
+        <input type="text" class="w50 tc pc_pay_min jq_check_num {%if not is_modify %}hide{% endif %} " value="{{pay_cfg.pay_min}}" {%if not is_modify %}disabled{% endif %} />
+      </td>
+      {% for trl in perf_cfg.team_royalty_list %}
+        {% if forloop.parentloop.counter = forloop.counter %}
+          {% for team_royalty in trl%}
+          <td class="tc">
+            <input type="text" class="w30 tr team_royalty jq_check_num" value="{{team_royalty|divide:'0.01'|floatformat:'0'}}" {%if not is_modify %}disabled{% endif %} /> %
+          </td>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <tr class="consult_pay_limit">
+      <td class="tc">顾问提成上限(元)</td>
+      {% for score_cfg in perf_cfg.score_cfg_list %}
+      <td class="tc"><input type="text" class="w50 tc jq_check_num" value="{{score_cfg.consult_pay_limit}}" {%if not is_modify %}disabled{% endif %} /></td>
+      {% endfor %}
+    </tr>
+    <tr class="consult_royalty_equation">
+      <td class="tc">顾问提成点公式</td>
+      {% for score_cfg in perf_cfg.score_cfg_list %}
+      <td>
+        y={{score_cfg.consult_royalty_equation.x2}}*x*x + {{score_cfg.consult_royalty_equation.x1}}*x + {{score_cfg.consult_royalty_equation.x0}}
+        <input type="text" class="w40 hide tc cre_x2" value="{{score_cfg.consult_royalty_equation.x2}}" {%if not is_modify %}disabled{% endif %} />
+        <input type="text" class="w40 hide tc cre_x1" value="{{score_cfg.consult_royalty_equation.x1}}" {%if not is_modify %}disabled{% endif %} />
+        <input type="text" class="w40 hide tc cre_x0" value="{{score_cfg.consult_royalty_equation.x0}}" {%if not is_modify %}disabled{% endif %} />
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>

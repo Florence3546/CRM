@@ -1,0 +1,240 @@
+    <header>
+        {%if request.user.nick %}
+        <div class="bg_layer"></div>
+        <!--顶部横条 start-->
+        {% if top_banner %}
+        <div class="auto bg_striped tc" id="show_top_banner" ad_show_secs="{{ top_banner.ad_show_secs }}"
+             ad_close_btn="{{ top_banner.ad_close_btn }}" ad_delay_secs="{{ top_banner.ad_delay_secs }}"
+             ad_frequency="{{ top_banner.ad_frequency }}" ad_id="{{ top_banner.obj_id }}">
+            <div class="r" id="hide_top_banner">
+                <a href="javascript:;" >关闭广告<strong><i class="icon iconfont">&#xe614;</i></strong></a>
+            </div>
+            <div id="top_banner_content" class="tc">
+                {% autoescape off %}
+                {{ top_banner.ad_content }}
+                {% endautoescape %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="auto tc hide" id="top_user_info" >
+            <div class="r" id="hide_user_info">
+                <!--<a href="javascript:;" id="close_user_info" >下次再填<strong><i class="icon iconfont">&#xe614;</i></strong></a>-->
+            </div>
+            <div class="tc">
+                {% autoescape off %}
+                <p id="lbl_title">完善会员信息，享受更贴心的服务，更优惠的价格</p>
+                <p id="lbl_descr">获得500会员积分，续订/升级更加优惠，计划烧下线短信提醒，宝贝违规下架短信提醒，免费店铺诊断</p>
+                <div class="line_box">
+                    <input type="text" id="txt_tel" placeholder="请输入您的手机号">
+                    <input type="text" id="txt_qq" placeholder="请输入您的QQ号">
+                    <button class="btn btn-sm btn-primary" id="btn_save_info">确认</button>
+                    <span id="lbl_msg">(完善信息后将不再显示)</span>
+                </div>
+                {% endautoescape %}
+            </div>
+        </div>
+
+        <!--顶部横条 end-->
+        <div id="siet_info">
+        <aside><a id="chart_link_ad" ad_id="{{ request.session.char_link.obj_id }}" href="{% if request.session.char_link.ad_url %}{{ request.session.char_link.ad_url }}{% else %}javascript:;{% endif %}" target="_blank">{{ request.session.char_link.ad_title }}</a></aside>
+        <!--文字链 start-->
+        {% if request.session.char_link %}
+        <div class="auto bg_white tc vm" id="show_chart_link_view">
+            <div id="hide_chart_link_view"><a href="javascript:;"><i class="icon iconfont">&#xe614;</i></a></div>
+            <div id="chart_link_content">
+                {% autoescape off %}
+                {{ request.session.char_link.ad_content }}
+                {% endautoescape %}
+            </div>
+        </div>
+        {% endif %}
+        <!--文字链 end-->
+        <ul>
+            <li class="poptip">
+                <a href="javascript:;"><i class="iconfont">&#xe601;</i>设置</a>
+                <div class="popcontent animate" id="account_setting">
+                    <div class="themes">
+                        <a href="javascript:;" class="green"></a>
+                        <a href="javascript:;" class="dark_blue"></a>
+                        <a href="javascript:;" class="light_blue"></a>
+                        <a href="javascript:;" class="orange"></a>
+                    </div>
+                    <p class="pt10 pb5">
+                        账户异常情况发送短信提醒
+                        <span class="switch {%if request.session.remind == 1 %}on{%endif%} vm" data-toggle="switch"></span>
+                    </p>
+                    <div id="user_info" {%if request.session.remind == 0 %}class="hidden"{%endif%}>
+                        <div class="form-group">
+                            <label for="phone">手机号</label>
+                            <input type="text" class="form-control" name="phone" value="{{request.session.phone}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="nick">称&emsp;呼</label>
+                            <input type="text" class="form-control" name="nick" value="{{request.session.seller}}">
+                        </div>
+                    </div>
+                    <div class="tr">
+                        <button class="btn btn-sm btn-primary">保存</button>
+                    </div>
+                </div>
+            </li>
+            <li><a href="javascript:;" id="id_sync_data"><i class="iconfont">&#xe602;</i>下载全店数据</a></li>
+            <li><a href="{%url 'vip_home'%}"><i class="iconfont">&#xe663;</i>会员中心</a></li>
+            <li><a href="javascript:;" id="top_msg"><i class="iconfont">&#xe66f;</i>我的私信<span id="msg_count" class="round_mark hide">0</span></a></li>
+            <li class="poptip">
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe611;</i><span id="a_nick" >{{ request.user.nick }}</span><i class="iconfont animaite">&#xe605;</i>
+                </a>
+                <ul class="popcontent animate ">
+                    <li><a href="/web/user_config" target="_blank">设置代理</a></li>
+                    <li><a href="http://shop{{ request.user.shop_id }}.taobao.com/" target="_blank">店铺首页</a></li>
+                    <li><a href="/router/top_logout/{{ request.session.theme|default:'orange' }}" id="top_logout">退出系统</a></li>
+                    <!-- <li><a href="">升级日志</a></li> -->
+<!--                    <li><a href="">退出系统</a></li>-->
+                </ul>
+            </li>
+        </ul>
+        {%endif%}
+    </div>
+    <div id="site_nav">
+        <a href="/web/web_home" class="logo">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAAAyCAYAAADr7cFEAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpCMDJCMTlFRDA3NEFFNTExQTM3QUYyQjE3RDUyMTFDQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozQ0ZFRUIyNzU5MUQxMUU1OTRGRUQxQjE5Njc5QUUwRSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozQ0ZFRUIyNjU5MUQxMUU1OTRGRUQxQjE5Njc5QUUwRSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU0REJGRUZFMTc1OUU1MTFBQjYwQzhBOEM1OTM0NjNGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkIwMkIxOUVEMDc0QUU1MTFBMzdBRjJCMTdENTIxMUNCIi8+IDwvcmRmOkRlc2NyaXB0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" alt="">
+        </a>
+        {%if request.user.nick %}
+        <nav>
+            <ul>
+                <li {% if PAGE_MARK.2 == "web_home" %}class="active"{%endif%}>
+                    <a href="/web/web_home"><i class="iconfont">&#xe60e;</i>首页</a>
+                </li>
+                <li class="poptip {% if PAGE_MARK.2 == 'mnt_campaign' or PAGE_MARK.2 == 'choose_mnt_campaign' %}active{%endif%}">
+                    <a href="javascript:void(0);"> <i class="iconfont">&#xe610;</i>自动优化</a>
+                    <ul class="popcontent animate">
+                        {% for mnt in MNT_LIST %}
+                        <li class="mnt_index {% if camp.campaign_id == mnt.campaign_id%}active{% endif %}" id="li_camp_{{mnt.campaign_id}}">
+                            <a href="/mnt/mnt_campaign/{{mnt.campaign_id}}">
+                                <span class="label label-gray f14">
+                                {{ mnt.mnt_type_name }}
+                                </span>
+                                <span class="camp_title ml5">{{mnt.name}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+
+                        {% if MNT_LIST|length < 8 %}
+                        <li>
+                            <a href="/mnt/choose_mnt_campaign/0">添加托管计划</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <li class="poptip {% if PAGE_MARK.2 == 'hand_optimize' or PAGE_MARK.2 == 'duplicate_check' or PAGE_MARK.2 == 'shop_core' %}active{%endif%}">
+                    <a href="javascript:void(0);"> <i class="iconfont">&#xe60f;</i>手动优化</a>
+                    <ul class="popcontent animate">
+                        <li><a href="/web/hand_optimize/">宝贝列表</a></li>
+                        <li><a id="duplicate_check_id" href="javascript:;">全店删词</a></li>
+                        <li><a href="{%url 'shop_core'%}">全店核心词</a></li>
+                    </ul>
+                </li>
+                <li class="poptip {% if PAGE_MARK.2 == 'auto_rob_rank' %}active{%endif%}">
+                    <a href="javascript:void(0);"> <i class="iconfont">&#xe66e;</i>工具</a>
+                    <ul class="popcontent animate">
+                        <li><a href="{%url 'op_history'%}">操作记录</a></li>
+                        <li><a href="{%url 'auto_rob_rank'%}">自动抢排名</a></li>
+                    </ul>
+                </li>
+                {%if SERVER_MENU_LIST %}
+                 <li class="poptip {% if PAGE_MARK.2 == 'paithink_services' %}active{%endif%}">
+                    <a href="javascript:void(0);"> <i class="iconfont">&#xe60d;</i>服务中心</a>
+                    <ul class="popcontent animate w200">
+                        {%for ad in SERVER_MENU_LIST%}
+                          <li class="server_menu" value="{{ ad.obj_id }}"><a href="{%url 'paithink_services' ad.id %}" target="_blank">{{ad.title}}</a></li>
+                        {%endfor%}
+                    </ul>
+                </li>
+                {%endif%}
+            </ul>
+        </nav>
+        <aside>
+            <span class="poptip">
+                <a href="javascript:;" title="联系旺旺">
+                    <img src="/site_media/jl6/static/images/wangwang.png?t=1490089588990" class="lxwm">
+                </a>
+                <div class="popcontent animate" id="concet_ww" CONSULT_WW="{{ CONSULT_WW }}">
+                    <ul>
+				        {% if CONSULT_WW %}
+				        <li id="li_CONSULT_WW">
+				            <div class="title">专属顾问</div>
+				            <div class="phone">{{ CONSULT_WW }}</div>
+				            <div>
+				                <a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{ CONSULT_WW }}"><img class="marl_6" src="http://amos.alicdn.com/realonline.aw?v=2&uid={{ CONSULT_WW }}&site=cntaobao&s=1&charset=utf-8"></a>
+				            </div>
+				            <time>（在线时间：8:30-23:00）</time>
+				        </li>
+				        {% endif %}
+                        <li id="li_pskj_WW">
+                            <div class="title">精灵主旺旺</div>
+                            <div class="phone">派生科技</div>
+                            <div>
+                                <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                            </div>
+                            <time>（在线时间：8:30-23:00）</time>
+                        </li>
+                        <li>
+                            <div class="title">预约专家免费诊断</div>
+                            <div>
+                                <a id="order_shop_check" class="a_WW" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                            </div>
+                            <time>
+                                (周一至周五&ensp;8:30-18:00)
+                            </time>
+                        </li>
+                        <li>
+                            <div class="title">顾问专线</div>
+                            <div class="phone">400-0610-203</div>
+                            <time>（在线时间：9:00-23:00）</time>
+                        </li>
+                        <li>
+                            <div class="title">投诉电话</div>
+                            <div class="phone">027-59401772</div>
+                            <time>
+                                (周一至周五&ensp;14:00-22:00)
+                            </time>
+                        </li>
+                    </ul>
+                </div>
+            </span>
+            <span class="poptip">
+                <a href="javascript:;" title="微信二维码">
+                    <img src="/site_media/jl6/static/images/weixin.png?t=1490089588990">
+                </a>
+                <div class="popcontent animate" id="concat_wx">
+                    <img src="/site_media/jl6/static/images/wx.png?t=1490089588990" alt="">
+                    <div class="tc mb10">加微信公众号<br>关注电商干货</div>
+                </div>
+            </span>
+            <span class="hide">
+                <a href="" title="帮助">
+                    <img src="/site_media/jl6/static/images/bangzhu.png?t=1490089588990">
+                </a>
+            </span>
+            <span class="jpoptip">
+                <a href="javascript:;" title="意见反馈">
+                    <img src="/site_media/jl6/static/images/yijian.png?t=1490089588990">
+                </a>
+                <div class="popcontent animate" id="suggest">
+                    <p class="title">意见反馈</p>
+                    <textarea class="form-control" placeholder="您的意见是我们前进最大的动力"></textarea>
+                    <div class="tip form-inline">感谢您的建议与鞭策
+                        {% if not request.session.phone %}
+                        ，为了方便联系，请留下您的手机：<input type="text" class="form-control">
+                        {%endif%}
+                    </div>
+                    <button class="btn btn-primary btn-sm">提交反馈</button>
+                </div>
+            </span>
+        </aside>
+        {%endif%}
+    </div>
+</header>
+

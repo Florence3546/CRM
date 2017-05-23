@@ -1,0 +1,100 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% block title %}手动优化{% endblock %}
+{% block content %}
+<input type="hidden" value="0" id="page_type">
+<input type="hidden" value="{{ camp_id }}" id="campaign_id">
+<input type="hidden" value="{{ mnt_type }}" id="mnt_type" />
+<input type="hidden" value="{{ add_item_flag }}" id="add_item_flag" />
+<input type="hidden" value="{{ CONSULT_WW }}" id="CONSULT_WW" />
+<section class="container-fluid">
+    <ol class="breadcrumb">
+      <li><a href="../web_home">首页</a></li>
+      <li class="dropdown" id="select_camp">
+         <a class="dropdown-toggle w200" data-trigger="hover" data-toggle="dropdown" href="#">
+            {% for c in main_list %}
+                {%if c.id == camp_id %}
+                    {% if c.mnt_type %}
+                        {{ c.mnt_type }}：</span>
+                    {%endif%}
+                    {{ c.name }}
+                {%endif%}
+            {%endfor%}
+            <span class="caret"></span>
+         </a>
+         <ul class="dropdown-menu ml20">
+            {% for c in main_list %}
+                <li><a value="{{c.id}}" href="/web/hand_optimize/{{c.id}}">
+                    {% if c.mnt_type %}
+                        <span class="label label-gray f12">{{ c.mnt_type }}</span>
+                    {% endif %}
+                    {{c.name}}
+                    </a>
+                </li>
+            {%endfor%}
+         </ul>
+      </li>
+    </ol>
+    <div class="box">
+        <header>
+            <div class="line_box">
+                <span class="title">宝贝列表&ensp;(共<span class="adgroup_count">0</span>个)</span>
+                <div class="dtr_picker_warp">
+                    <span class="tip" data-toggle="dtr_picker" id="select_days"></span>
+                </div>
+            </div>
+            <div class="operate">
+                <button class="btn btn-default btn-sm" id="show_kw">显示关键词数</button>
+                <button class="btn btn-default btn-sm" id="show_cr">显示创意数</button>
+                <div class="pull-right">
+                    <div class="form-inline" autocomplete="on">
+                      <div class="form-group">
+                          <div class="input-group">
+                              <div class="select_warp ml0" id="search_status_type">
+                                  <span class="tip form" data-toggle="dropdown">推广状态</span>
+                                  <ul class="dropdown-menu">
+                                      <li data-value=""><span>全部</span></li>
+                                      <li data-value="online"><span>推广中</span></li>
+                                      <li data-value="offline"><span>已暂停</span></li>
+                                      <li data-value="audit_offline"><span>违规下架</span></li>
+                                      <li data-value="crm_offline"><span>CRM下线</span></li>
+                                  </ul>
+                              </div>
+                          </div>&nbsp;&nbsp;
+                          <div class="input-group">
+                              <div class="select_warp ml0" id="search_opt_type">
+                                  <span class="tip form" data-toggle="dropdown">优化状态</span>
+                                  <ul class="dropdown-menu">
+                                      <li data-value="-1"><span>全部</span></li>
+                                      <li data-value="1"><span>自动优化</span></li>
+                                      <li data-value="2"><span>只改价</span></li>
+                                      <li data-value="0"><span>未托管</span></li>
+                                  </ul>
+                              </div>
+                          </div>&nbsp;&nbsp;
+                          <div class="input-group">
+                              <div class="select_warp ml0" id="search_follow_type">
+                                  <span class="tip form" data-toggle="dropdown">宝贝分类</span>
+                                  <ul class="dropdown-menu">
+                                      <li data-value="-1"><span>全部</span></li>
+                                      <li data-value="1"><span>关注宝贝</span></li>
+                                      <li data-value="0"><span>普通宝贝</span></li>
+                                  </ul>
+                              </div>
+                          </div>&nbsp;&nbsp;
+                          <div class="input-group">
+                              <input type="text" class="form-control" autocomplete="on" id="search_val" placeholder="输入宝贝名称">
+                              <div class="btn input-group-addon" id="search_btn"><i class="iconfont">&#xe618;</i></div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="ad-group-table">
+
+        </div>
+    </div>
+    <div class="page-tool"></div>
+</section>
+{%endblock%}

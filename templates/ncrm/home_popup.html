@@ -1,0 +1,436 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}首页弹窗{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/site_media/jl5/plugins/froala/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="/site_media/jl5/plugins/froala/css/froala_editor.min.css" />
+<style type="text/css" media="screen">
+    label{display: inline;}
+    table{table-layout:auto;}
+    .hovershow{display: none;}
+    .hover .active .hovershow{display: block;}
+    li.rel.active{z-index:2;}
+    .header .hor-menu ul.nav li a,.header .nav > li.dropdown .dropdown-toggle{padding: 9px 18px;}
+    .header .nav > li.dropdown{padding-left: 0;padding-right: 0;}
+
+    .ks-dtp table{width: auto;}
+    .ks-dtp select{padding: 0;height: auto;}
+    .w430{width: 430px;}
+    html, body{
+        height: auto;
+    }
+    table i {
+      color: initial;
+    }
+</style>
+
+<div class="mt20 w1200 auto">
+
+    <div class="red">
+        <i class="iconfont mr5">&#xe659;</i>为防止广告数量或质量影响用户体验，任何软件内页的活动、公告、弹窗，发布前都要和产品经理沟通。私自发布，研发有权删除！
+    </div>
+
+    <ul class="nav nav-tabs mt20 pl0" id="editor_tabs" fix-ie="hover">
+        {%for msg in msg_list%}
+            <li class="rel {%if current.id == msg.id %}active{%endif%}">
+                <a href="{{home_popup}}?id={{msg.id}}" editor_id='{{msg.id}}' >{{msg.title}}</a>
+                <i class="iconfont abs t0 r0 red mt-5 mr-10 f18 poi hovershow del_tab">&#xe623;</i>
+            </li>
+        {%endfor%}
+        <li id="add_tab">
+            <a href="javascript:;" ><i class="iconfont f18 ml10">&#xe624;</i></a>
+        </li>
+    </ul>
+    <div class="tab-content mb20">
+
+    {%if current%}
+        <div class="tab-pane p10 fade  active in" id="tab">
+            <form id="form">
+                <table class="table-layout lh30 f14">
+                    <tr>
+                        <td class="w80">卡片标题：</td>
+                        <td>
+                            <span class="dib w250"><input class="w200 title" name="title" data-rule="require" maxlength="14" type="text" value="{{current.title}}"><span class="red ml3 f12">*</span></span>
+                            <span class="ml20 gray f12">本页面顶部卡片标题，不超过14个中文汉字</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">有效时间：</td>
+                        <td>
+                            <input class="w140" data-rule="require" name="start_time" type="text" value="{{current.start_time|date:'Y-m-d H:i'}}" id="start_time" /><span class="red ml3 f12">*</span>
+                            <span class="w50 dib tc">到</span>
+                            <input class="w140" data-rule="require" type="text" name="end_time" value="{{current.end_time|date:'Y-m-d H:i'}}" id="end_time" /><span class="red ml3 f12">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">是否显示：</td>
+                        <td>
+                          <div class="switch vn-3 {%if current.flag %}on{%else%}off{%endif%}" data-toggle="switch" >
+                            <label class="db"></label>
+                            <input class="flag" id="flag" name="flag" type="checkbox" {%if current.flag %}checked="checked"{%endif%}>
+                          </div>
+                          <span class="ml20 gray f12">开启后才会在前台显示，与有效时间起相同作用</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">不再提示：</td>
+                        <td>
+                          <div class="switch vn-3 {%if current.show_again %}on{%else%}off{%endif%}" data-toggle="switch" >
+                            <label class="db"></label>
+                            <input class="show_again" id="show_again" name="show_again" type="checkbox" {%if current.show_again %}checked="checked"{%endif%}>
+                          </div>
+                          <span class="ml20 gray f12">  开启后，顶部通告、简单模式下的首页弹窗前台会有“不再提示”复选框，除非清空浏览器记录后会再次显示
+                          </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">位&emsp;&emsp;置：</td>
+                        <td>
+                            <label class="dib mb0"><input name="type" {%if current.type == "popup"%}checked="checked"{%endif%} class="vn mr5" value="popup" type="radio">首页弹窗</label>
+                            <label class="dib mb0 ml20"><input name="type" {%if current.type == "top_bar" %}checked="checked"{%endif%} class="vn mr5" value="top_bar" type="radio">顶部通告</label>
+                            <label class="dib mb0 ml20"><input name="type" {%if current.type == "main_info" %}checked="checked"{%endif%} class="vn mr5" value="main_info" type="radio">主区通告</label>
+                            <span class="ml20 gray f12">顶部通告，主区通告只能用“高级模式”，不同位置的公告可以同时显示</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">权&emsp;&emsp;重：</td>
+                        <td>
+                            <span class="dib "><input class="w40 weight" name="weight" data-rule="require" type="text" value="{{current.weight|default:1}}"><span class="red ml3 f12">*</span></span>
+                            <span class="ml20 gray f12">同一位置下所有满足条件的弹窗只取权重最大的1条显示，权值最小1，最大99</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">显示频率：</td>
+                        <td>
+                            <select class="w160 times" name="level">
+                                <option value="everytimes" {%if current.level == "everylogin"%}selected="selected"{%endif%}>每次刷新</option>
+                                <option value="everyday" {%if current.level == "everyday"%}selected="selected"{%endif%}>每天一次</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">显示条件：</td>
+                        <td>
+                            <label class="dib mb0"><input name="condition_type" {%if current.condition_type == "condition" or not current.condition_type %}checked="checked"{%endif%} class="vn mr5" value="condition" type="radio">给定条件</label>
+                            <label class="dib mb0 ml20"><input name="condition_type" {%if current.condition_type == "shop_list" %}checked="checked"{%endif%} class="vn mr5" value="shop_list" type="radio">给定nick</label>
+                            <span class="ml20 gray f12">“给定条件”在底部列表，目前支持逻辑运算 && 和 || ，算术运算支持 >, <, >=, <=, ==, !=</span>
+                        </td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80"></td>
+                        <td>
+                                <input class="w500 condition {%if current.condition_type == 'shop_list' %}hide{%endif%}" name="condition" value="{{current.condition|default:'left_days>-1'}}" type="text" placeholder="请输入条件">
+                                <textarea class="pct90 shop_list {%if current.condition_type == 'condition' or not current.condition_type %}hide{%endif%}" name="shop_list" value="{{current.shop_list}}" cols="30" rows="10" placeholder="注意：会覆盖之前输入的黑名单，仅用于第一次新建（输入nick，以正斜杠 / 分割，不允许出现空格）">{{current.shop_list}}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80">编辑模式：</td>
+                        <td>
+                            <label class="dib mb0"><input name="content_model" {%if current.type != "popup"%}disabled="disabled"{%endif%} {%if current.content_model == "simple" or not current.content_model %}checked="checked"{%endif%} value="simple" class="vn mr5" type="radio">简单模式</label>
+                            <label class="dib mb0 ml20"><input name="content_model" {%if current.content_model == "senior" %}checked="checked"{%endif%} value="senior" class="vn mr5" type="radio">高级模式</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80"></td>
+                        <td>
+                            <div class="simple_box {%if current.content_model == "senior" %}hide{%endif%}">
+                                <div>图片地址：<input class="w430 img_url" name="img_url" value="{{current.img_url}}" type="text" placeholder="请输入条件"></div>
+                                <div class="mt20">图片链接：<input class="w430 link_url" value="{{current.link_url}}" name="link_url" type="text" placeholder="请输入条件"></div>
+                            </div>
+                            <div class="editor {%if current.content_model == "simple" or not current.content_model %}hide{%endif%}" id="editor_box">
+  <!--                               <div class="editor_wating">
+                                    <img src="/site_media/jl5/images/forecast_orde_ajax.gif">
+                                    <span class="ml5">组件加载中</span>
+                                </div> -->
+                                <textarea id="editor" placeholder="这里输入内容" autofocus>
+                                    {{current.html}}
+                                </textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80 vt">黑名单：</td>
+                        <td>
+                            <textarea class="black_list pct90" name="black_list" value="{{current.black_list}}" cols="30" rows="10" placeholder="注意：会覆盖之前输入的黑名单，仅用于第一次新建（输入nick，以正斜杠 / 分割，不允许出现空格）
+">{{current.black_list}}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w80"></td>
+                        <td>
+                            <button type="submit" class="btn btn-primary submit" disabled>保存</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    {%else%}
+        <div class="lh30 tc">
+            还没有数据
+        </div>
+    {%endif%}
+    </div>
+<h2>
+    条件说明
+</h2>
+</div>
+
+<table class="table-bordered w1200 auto" style="  margin-bottom: 80px;">
+    <tr>
+        <td>department</td>
+        <td>销服部门，三个部门分别为：GROUP1，GROUP2，GROUP3</td>
+        <td>例 department==GROUP1</td>
+    </tr>
+    <tr>
+        <td>order_times</td>
+        <td>订购次数</td>
+        <td>例 order_times==1</td>
+    </tr>
+    <tr>
+        <td>used_days</td>
+        <td>已经使用的天数</td>
+        <td>例 used_days>=10</td>
+    </tr>
+    <tr>
+        <td>left_days</td>
+        <td>剩余天数</td>
+        <td>例 left_days==15</td>
+    </tr>
+    <tr>
+        <td>deadline</td>
+        <td>过期时间</td>
+        <td>例 deadline==2015-05-07 00:00:00</td>
+    </tr>
+    <tr>
+        <td>item_code</td>
+        <td>订购代码</td>
+        <td>例 item_code==ts-25811-1</td>
+    </tr>
+    <tr>
+        <td>pay</td>
+        <td>付款金额</td>
+        <td>例 pay==10000 单位分</td>
+    </tr>
+    <tr>
+        <td>isneed_phone</td>
+        <td>是否需要手机号</td>
+        <td>例 isneed_phone==true</td>
+    </tr>
+    <tr>
+        <td>cycle</td>
+        <td>订购周期</td>
+        <td>例 cycle==6</td>
+    </tr>
+    <tr>
+        <td>create_time</td>
+        <td>订单创建时间</td>
+        <td>例 create_time==2015-05-07 00:00:00</td>
+    </tr>
+    <tr>
+        <td>start_date</td>
+        <td>订单开始时间</td>
+        <td>例 start_date==2015-05-07 00:00:00</td>
+    </tr>
+    <tr>
+        <td>end_date</td>
+        <td>订单结束时间</td>
+        <td>例 end_date==2015-05-07 00:00:00</td>
+    </tr>
+    <tr>
+        <td>is_invited</td>
+        <td>【积分相关】是否被邀请过</td>
+        <td>例 is_invited==true</td>
+    </tr>
+    <tr>
+        <td>is_invited_4shop</td>
+        <td>【积分相关】是否被指定店铺的方式邀请过</td>
+        <td>例 is_invited_4shop==true</td>
+    </tr>
+    <tr>
+        <td>point</td>
+        <td>【积分相关】积分数量</td>
+        <td>例 point>5000</td>
+    </tr>
+    <tr>
+        <td>freeze_point_deadline</td>
+        <td>【积分相关】保留积分的日期</td>
+        <td>例 freeze_point_deadline>2012-05-07 00:00:00</td>
+    </tr>
+</table>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/froala_editor.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/tables.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/lists.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/colors.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/font_family.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/font_size.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/block_styles.min.js"></script>
+
+
+{% endblock %}
+{% block custom_js %}
+<script>
+$().ready(function(){
+
+    var editor;
+
+    function object2json(data){
+        temp={}
+        for(var d in data){
+            temp[data[d]['name']]=$.trim(data[d]['value']);
+        }
+        return temp;
+    }
+
+    function create_editor(){
+        $('#editor').editable({
+            inlineMode: false,
+            beautifyCode: false,
+            allowScript: true,
+            alwaysBlank: true,
+            height: '300px'
+        })
+    }
+
+
+    $('.submit').removeAttr('disabled');
+    $('.release').removeAttr('disabled');
+
+
+    //默认为高级模式下
+    if($('#editor').length && !$('#editor_box').hasClass('hide')){
+    }
+        create_editor();
+
+    //日期时间选择器
+    require(['dom', 'gallery/datetimepicker/1.1/index'], function (DOM, Datetimepicker) {
+        var b,c;
+        new Datetimepicker({
+                start : '#start_time',
+                formatTime:'HH:mm'
+            });
+        new Datetimepicker({
+                start : '#end_time',
+                formatTime:'HH:mm'
+            });
+    });
+
+    $('#form').vaildata({call_back:function(){
+        var id=$('#editor_tabs li.active a').attr('editor_id'),
+            obj=$('#form'),
+            form_data=object2json(obj.serializeArray());
+
+        console.log(form_data);
+        form_data['function']='ncrm_update_ad_manage';
+        form_data['id']=id;
+        form_data['shop_list']=form_data['shop_list'].replace(/\//g,",");
+        form_data['black_list']=form_data['black_list'].replace(/\//g,",");
+        form_data['flag']=$('#flag')[0].checked?1:0;
+        form_data['show_again']=$('#show_again')[0].checked?1:0;
+        form_data['html']=$('#editor').editable('getHTML');
+
+        if(new Date(form_data['start_time'])>new Date(form_data['end_time'])){
+            PT.alert('开始时间大于结束时间');
+            return false;
+        }
+
+        if(form_data['condition_type']=='condition'&&form_data['condition']==''){
+            PT.alert('请完善显示条件');
+            return false;
+        }
+
+        if(form_data['condition_type']=='shop_list'&&form_data['shop_list']==''){
+            PT.alert('请填写shop_id');
+            return false;
+        }
+
+        if(form_data['content_model']=='simple'&&form_data['img_url']==''){
+            PT.alert('请填写图片地址');
+            return false;
+        }
+
+        if(form_data['content_model']=='simple'&&form_data['link_url']==''){
+            PT.alert('请填写图片链接');
+            return false;
+        }
+
+        if(form_data['content_model']=='senior'&&form_data['html']==''){
+            PT.alert('请填写推广内容');
+            return false;
+        }
+
+        PT.sendDajax(form_data);
+    }});
+
+    //立即显示一个编辑器
+    $('#editor_tabs').trigger('shown');
+
+    $('#add_tab').on('click',function(){
+        PT.show_loading('正在创建新标签')
+        PT.sendDajax({'function':'ncrm_add_menu_ad','is_manual':1,'type':'popup'})
+    });
+
+    $('.release').on('click',function(){
+        var id=$('#editor_tabs li.active a').attr('editor_id');
+        PT.sendDajax({'function':'ncrm_release_ad','id':id});
+    });
+
+    $('.del_tab').on('click',function(){
+        if(!confirm('您确定要删除一个推广内容吗？')){
+            return false;
+        }
+        var id=$('#editor_tabs li.active a').attr('editor_id');
+        PT.sendDajax({'function':'ncrm_del_ad_manage','id':id})
+    });
+
+    $('input[name=condition_type]').on('change',function(){
+        var obj=$(this).parents('form:first');
+
+        if($(this).val()=='condition'){
+            obj.find('input[name=condition]').show();
+            obj.find('textarea[name=shop_list]').hide();
+        }else{
+            obj.find('input[name=condition]').hide();
+            obj.find('textarea[name=shop_list]').show();
+        }
+    });
+
+    $('input[name=content_model]').on('change',function(){
+        var obj=$(this).parents('form:first');
+
+        if($(this).val()=='simple'){
+            obj.find('.simple_box').show();
+            obj.find('.editor').hide();
+        }else{
+            obj.find('.simple_box').hide();
+            obj.find('.editor').show();
+
+            // if(!editor){
+            //     create_editor();
+            // }
+        }
+    });
+
+    $('input[name=type]').on('change',function(){
+        var obj=$(this).parents('form:first');
+
+        if($(this).val()=='main_info'||$(this).val()=='top_bar'){
+            obj.find('input[name=content_model][value=senior]').attr('checked','checked');
+            obj.find('input[name=content_model][value=simple]').attr('disabled','disabled');
+            obj.find('.simple_box').hide();
+            obj.find('.editor').show();
+        }else{
+            obj.find('input[name=content_model][value=simple]').removeAttr('disabled');
+            // obj.find('.simple_box').show();
+            // obj.find('.editor').hide();
+        }
+    });
+
+});
+
+</script>
+{% endblock %}

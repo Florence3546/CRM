@@ -1,0 +1,24 @@
+{#utf-8#}{% extends "qnyd_base.html" %}
+{% block custom_js %}
+<script>
+/*aa={"refresh_interval":1800,"taobao_user_id":"454449631","auto_login_token":"(null)","mobile_token":"(null)","access_token":"6300b23bc481025dc9497facb2c87ac678f052947ce9dd4454449631","r1_expires_in":30986885,"refresh_token":"6301d239a6df3c68c869be9cf3e9154aa872b2b3840a29a454449631","taobao_user_nick":"cncys1","usession_id":"15a6d0000182d1dd655accd5c51c8a1a7344519fca4a169661085454449631","re_expires_in":30986885,"r2_expires_in":259200,"w1_expires_in":30986885,"w2_expires_in":1800,"beg_time":1393932821.224602,"expires_in":30986885}
+
+function decode_sso(json){
+	var temp_url='';
+	for(var i in json){
+		temp_url+=i+'='+json[i];
+	}
+	
+}
+*/
+
+
+TOP.mobile.invoke(
+    'sso',
+    {forceRefresh:true|false},
+    function(info){
+		info['timestamp']=info.beg_time.toFixed(3).replace('.','')
+		window.location.href='\/?uid='+info.taobao_user_id+'&authString='+JSON.stringify(info)+'&event=event_go_plugin&plugInType=zhitongcheguanli';
+    },-1);
+</script>
+{% endblock %}

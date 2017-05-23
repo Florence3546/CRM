@@ -1,0 +1,200 @@
+{#utf-8#}{% extends "base_new.html" %}
+{% load rates %}
+{% block title%}
+	快捷入口
+{% endblock %}
+{% block extra_style %}
+<link href="/site_media/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+<link href="/site_media/jl/plugins/tour/css/bootstrap-tour.min.css" rel="stylesheet" type="text/css" />
+<link href="/site_media/jl/css/fuck_ie/adgroup_list.css?v={{VERSION}}.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN PAGE HEADER-->
+<input type="hidden" value="{{cur_camp_id}}" id="campaign_id" />
+<input type="hidden" value="0" id="mnt_type" />
+<input type="hidden" value="1" id="is_quick_entry" />
+
+<div class="row-fluid">
+    <span class="span3 por hide" id='adg_control'>
+    </span>
+    <div class="">
+        <div class="fr">
+            <span>推广计划：</span>
+            {{search_list_form.campaign_id}}
+             <span class="marl_24">快速查找：</span>
+                <select id="id_quick_search" class="marb_0">
+                    <option value="all">全部...</option>
+                    <option value="online">推广中</option>
+                    <option value="offline">已暂停</option>
+                    {% if page == "select_keyword" or page == "title_optimize" %}
+                    <option value="mnt">托管中</option>
+                    <option value="unmnt">未托管</option>
+                    {% endif %}
+                </select>
+            <span class="input-append marl_24 marb_0">
+                <input class="m-wrap" type="text" placeholder="请输入宝贝标题查询" id="search_val"><button class="btn" type="button" id="search_btn"><i class="icon-search"></i></button>
+            </span>
+         </div>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb marb_0">
+            <li>
+                <i class="icon-list marl_12"></i>
+                <span class='bld normally'>宝贝列表（共<span id="adgroup_count" class='r_color'></span>个{% if page != "select_keyword" and page != "title_optimize" %}未托管的{% endif %}宝贝）</span>
+            </li>
+            <li class="fr no-text-shadow marl_3">
+                <div id="dashboard-report-range" class="dashboard-date-range no-tooltip-on-touch-device responsive">
+                    <i class="icon-calendar icon-white"></i>
+                    <span>统计天数：<span class="date_value">过去{{last_day}}天</span></span>
+                    <i class="icon-chevron-down icon-white"></i>
+                    <form action="./" method="post" class="hide" post_mode="ajax" post_fuc="PT.Adgroup_list.select_call_back">
+                    	<input type="hidden" name="last_day" value="{{last_day}}" />
+                    </form>
+                </div>
+            </li>
+            <li class="fr">
+                <button id="show_keyword_count" class="btn vat" style="height:34px;background-color: #679B00;color:white;">显示关键词个数</button>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<!--<div class="container-fluid">-->
+    <div class="portlet-body">
+
+    <table class="table table-bordered table-hover td_middle mart_0 {{page}}" id="adgroup_table" page="{{page}}">
+        <thead>
+            <tr>
+                <th class="link_inner_checkbox pointer" style="width:8px;"><input type="checkbox" class="group-checkable father_box" data-set="#sample_1 .checkboxes" link="adgroup_table"/></th>
+                <th style="width:100px;">宝贝图片</th>
+                <th style="width: 210px;">宝贝标题</th>
+                <th >基础数据</th>
+                <th >转化数据</th>
+                <th >优化状态</th>
+                <th >推广状态</th>
+                <th >全自动状态</th>
+                <th style="width:153px;">优化功能</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="row-fluid">
+        <div class="span6 dataTables_info" id="page_info">
+           每页显示<span class="page_size">100</span>个宝贝，共<span class="page_count">0</span>页
+        </div>
+        <div class="span6">
+          <div class="dataTables_paginate pagination" id="dynamic_pager"></div>
+        </div>
+    </div>
+
+	</div>
+<!--</div>-->
+<!-- END PAGE CONTENT-->
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/jquery.bootpag.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/date.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<script src="/site_media/jl/plugins/tour/js/bootstrap-tour.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/adgroup_list.js?v={{VERSION}}.js" type="text/javascript"></script>
+<!--<script src="/site_media/jl/scripts/aks.js" type="text/javascript"></script>-->
+<script src="/site_media/assets/plugins/data-tables/FixedHeader.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+  jQuery(document).ready(function() {
+	PT.Adgroup_list.init();
+  });
+</script>
+{% endblock %}
+
+{% block template%}
+<script id="adgroup_tr" type="text/html">
+<tr>
+	<td class="link_inner_checkbox pointer"><input type="checkbox" class="checkboxes kid_box" value=<%=adgroup_id%> online_status="<%=online_status%>" name="adg_checkbox"/></td>
+	<td><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>'><img src="<%=item_pic_url%>_100x100.jpg" width="100" height="100" /></a></td>
+	<td >
+		<span class="hide"><%=item_price%></span>
+		<div class="s_color"><%=campaign_title%></div>
+		<div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>'><%=item_title%></a><a class='a_td_no black marl_3 hide' target='_blank' href='/web/title_optimize/?item_id=<%=item_id%>'><i class="icon-wrench zoom"></i></a></div>
+		<div class="o_color">￥<%=item_price%>
+			<%if (comment_count) { %>
+			<a href="javascript:;" class="open_comment fr marr_12" obj_id="<%=adgroup_id%>" obj_type=2><img src="/site_media/jl/img/comment.gif"></a>
+			<% } %>
+		</div>
+	</td>
+	<td>
+		<span class="hide"><%=total_cost%></span>
+		<div>总花费&nbsp;<span class="bold"><%=total_cost%></span></div>
+		<div><span>展现量&nbsp;<span class="marl_3"><%=impr%></span></span></div>
+		<div><span>点击量&nbsp;<span class="marl_3"><%=click%></span></span></div>
+		<div><span>点击率&nbsp;<span class="marl_3"><%=click_rate%></span></span></div>
+		<div><span>点击花费&nbsp;<span class="marl_3"><%=ppc%></span></span></div>
+	</td>
+	<td>
+		<span class="hide"><%=total_pay%></span>
+		<div class="tooltips" data-placement="right" data-original-title="直接成交金额&nbsp;<%=directpay%>元<br>间接成交金额&nbsp;<%=indirectpay%>元<br>直接成交笔数&nbsp;<%= directpaycount%>笔<br>间接成交笔数&nbsp;<%=indirectpaycount%>笔<br>店铺收藏次数&nbsp;<%=favshopcount%>次<br>宝贝收藏次数&nbsp;<%=favitemcount%>次">
+			<div>成交额&nbsp;<span class="bold"><%=total_pay%></span></div>
+			<div><span>成交量&nbsp;<span class="marl_3"><%=paycount%></span></span></div>
+			<div><span>收藏量&nbsp;<span class="marl_3"><%=favcount%></span></span></div>
+			<div><span>转化率&nbsp;<span class="marl_3"><%=conv%>%</span></span></div>
+			<div><span>投资回报率&nbsp;<span class="marl_3"><%=roi%></span></span></div>
+		</div>
+	</td>
+	<td>
+		<span class="keyword_count hide">0</span>
+        <div class="keyword_count_str hide"><img src="/site_media/jl/img/ajax-loader.gif" width="20" height="20" style="display:inline-block"><span class="s_color vam">正在查询</span></div>
+		<div>
+			<% if(mnt_type==0) {%>
+			<span>上次优化&nbsp;&nbsp;<% if (optm_submit_time) { %><%=optm_submit_time%><% }else{ %>尚未优化<%}%></span>
+			<% } else {%>
+			<span>系统托管中</span>
+			<% } %>
+		</div>
+	</td>
+	<td class='tac'>
+		<% if(online_status=='online'){ %>
+		<span id='status_<%=adgroup_id%>'>推广中</span><i class="icon-pause update_adg single marl_6 pointer r_color hide" name="stop"></i>
+		<%}%>
+		<% if(online_status=='offline'){ %>
+		<span class="r_color" id='status_<%=adgroup_id%>'>已暂停</span><i class="icon-play-circle update_adg single marl_6 pointer  larger g_color hide" name="start"></i>
+		<%}%>
+		<% if(error_descr) {%>
+		<br/><span class="r_color"><%=error_descr%></span>
+		<%}%>
+	</td>
+	<td class='tac'>
+		<span id="mnt_status_<%=adgroup_id%>"><% if(mnt_type==0){ %> 未托管 <% } else {%> 托管中 <% } %></span>
+	</td>
+	<td>
+		<div class="adg_oper">
+			<div>
+				{% if page == 'smart_optimize' %}<a href="/web/smart_optimize/<%=adgroup_id%>" target='_blank' class="lb_color normally bld">智能优化</a>{%endif%}
+				{% if page == 'bulk_optomize' %}<a href="/web/bulk_optomize/<%=adgroup_id%>" target='_blank' class="lb_color normally bld">批量优化</a>{%endif%}
+				{% if page == 'rob_rank' %}<a href="/web/rob_rank/<%=adgroup_id%>" target="_blank" class="lb_color normally bld"> 极速排名 </a>{%endif%}
+				{% if page == 'select_keyword' %}
+					<a href="/web/quick_add_keyword/?adgroup_id=<%=adgroup_id%>" target='_blank' class="lb_color normally bld">快速选词</a>
+					<a href="/web/precise_tao_keyword/?adgroup_id=<%=adgroup_id%>" target='_blank' class="lb_color normally bld">精准淘词</a><br/>
+					<a href="{%url 'auto_combine_words'%}?adgroup_id=<%=adgroup_id%>" target='_blank' class="lb_color normally bld">手工组词</a>
+					<a href="{%url 'manual_add_words'%}?adgroup_id=<%=adgroup_id%>" target='_blank' class="lb_color normally bld">手工加词</a>
+				{%endif%}
+				{% if page == 'title_optimize' %}<a href="/web/title_optimize/?adgroup_id=<%=adgroup_id%>" target="_blank"  class="lb_color normally bld"> 标题优化 </a>{%endif%}
+			</div>
+		</div>
+	</td>
+</tr>
+</script>
+<script id="title_popover_temp" type="text/html">
+	<input type="text" class="m-wrap" style="width:290px" /><button type="button" class="btn blue marl_6">确定</button><button type="button" class="btn marl_6">取消</button>
+</script>
+{%endblock%}

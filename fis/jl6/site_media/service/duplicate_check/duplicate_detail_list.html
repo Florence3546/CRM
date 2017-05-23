@@ -1,0 +1,16 @@
+{{ each datas as value index }}
+<tr>
+    <td class="tc choose_sub_column"><input type="checkbox" class="child-select-sub" value="{{ value.kw_id }}"/></td>
+    <td class="tc"><span class="hide">{{ index + 1 }}</span><span class="adg_index"><i class="iconfont lock_kw f20">&#xe660;</i></span></td>
+    <td><span class="hide">{{ value.item_id }}</span><img alt="" width="40" height="40" src="{{ value.pic_url }}_40x40.jpg"/></td>
+    <td><span class="camp_id">{{ value.camp_id }}</span></td>
+    <td class="tc">{{ value.max_price }}</td>
+    <td class="tc">{{ value.max_mobile_price }}</td>
+    <td class="tc">{{ value.qscore }}</td>
+    <td class="tc">{{ value.wireless_qscore }}</td>
+    <td class="tc">{{ value.impr }}</td>
+    <td class="tc">{{ value.click }}</td>
+    <td class="tc">{{ value.cpc }}</td>
+    <td class="tc">{{ value.pay }}</td>
+</tr>
+{{ /each }}

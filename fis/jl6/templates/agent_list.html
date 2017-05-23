@@ -1,0 +1,20 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% block title %}选择精灵代理{% endblock %}
+
+{% block content %}
+<section class="container-fluid">
+<div class="mt20 w500 auto tc">
+    <span class="select_warp ml0" id="select_agent">
+        <span class="form tip" data-toggle="dropdown">选择要登录的开车精灵账户</span>
+        <ul class="dropdown-menu">
+            {% for agent in agent_list %}
+                <li data-value="{{agent.principal.id}}"><span>{{agent.principal.nick}}</span></li>
+            {% endfor %}
+        </ul>
+    </span>
+    <button id="agent_user_login" class="btn btn-primary" style="padding: 5px 10px; margin-top: -2px;">登录</button>
+    <a href="{% url 'agent_login' %}" class="btn btn-default" style="padding: 5px 10px; margin-top: -2px;">返回</a>
+</div>
+</section>
+{%endblock%}

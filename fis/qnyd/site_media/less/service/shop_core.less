@@ -1,0 +1,78 @@
+#shop_core_list{
+    li>div{
+        // color: @gray-darker;
+        // font-size: .65rem;
+        &:first-child{
+            position: relative;
+            line-height: 2rem;
+            // font-size: .85rem;
+            &>div:nth-child(2),&>div:nth-child(3){
+                position: absolute;
+                right: 0;
+                top: 0;
+                float: right;
+            }
+        }
+        &:nth-child(2){
+            display: flex;
+            div{
+                flex:1;
+            }
+        }
+        &:nth-child(3){
+            input{
+                height: 1.2rem;
+            }
+            text-align: right;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            margin-top: .3rem;
+        }
+    }
+
+    li.up{
+        input.pc{
+            color: @orange;
+        }
+    }
+
+    li.down{
+        input.pc{
+            color: @green;
+        }
+    }
+
+    li.limit{
+        input.pc{
+            border-color: @red;
+        }
+    }
+
+    li.mobileUp{
+        input.mobile{
+            color: @red;
+        }
+    }
+
+    li.mobileDown{
+        input.mobile{
+            color: @green;
+        }
+    }
+
+    li.mobileLimit{
+        input.mobile{
+            border-color: @red;
+        }
+    }
+
+    input{
+        width: 3rem;
+    }
+
+    .kw-title{
+        color: @gray;
+        margin-right: 4px;
+        font-size: .65rem;
+    }
+}

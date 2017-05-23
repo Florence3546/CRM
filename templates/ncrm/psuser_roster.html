@@ -1,0 +1,57 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}花名册{% endblock %}
+
+{% block content %}
+
+<div class="w1329 auto">
+	
+	<div class="mt20 tr">
+		<input type="text" id="id_search_text" placeholder="输入QQ/手机号/旺旺/姓名搜索">
+		<a href="javascript:void(0);" id="id_search_user" class="btn">搜索</a>
+	</div>
+	<table class="table table-bordered table-hover mt20" id="id_psuser_table">
+		<thead>
+			<tr>
+				<th><div class="th_wrapp">姓名(<span class="red b" id="id_psuser_count">{{psuser_list|length}}</span>个)</div></th>
+				<th><div class="th_wrapp">职位</div></th>
+				<th><div class="th_wrapp">QQ</div></th>
+				<th><div class="th_wrapp">旺旺</div></th>
+				<th><div class="th_wrapp">手机号</div></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for psuser in psuser_list %}
+			<tr {%if psuser.status == '离职' %}class="bge0"{%endif%}>
+				<td>{{psuser.name_cn}}</td>
+				<td>{{psuser.get_position_display}}</td>
+				<td>{{psuser.qq|default:''}}<br/>
+					{% if psuser.qq %}
+					<a href="http://wpa.qq.com/msgrd?v=3&uin={{psuser.qq|trim}}&site=qq&menu=yes">
+						<img border="0" src="http://wpa.qq.com/pa?p=2:{{psuser.qq|trim}}:51" alt="点击这里给我发消息" title="点击这里给我发消息"/>
+					</a>
+					{%endif%}
+				</td>
+				<td>{{psuser.ww|default:''}}<br/>
+					{% if psuser.ww %}
+					<a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao{{psuser.ww|trim}}">
+						<img class="marl_6" src="http://amos.alicdn.com/realonline.aw?v=2&amp;uid={{psuser.ww|trim}}&amp;site=cntaobao&amp;s=1&amp;charset=utf-8">
+					</a>
+					{%endif%}
+				</td>
+				<td>{{psuser.phone|default:''}}</td>
+			</tr>
+			{%endfor%}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/psuser_roster.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.PSUserRoster.init();
+});
+</script>
+{% endblock %}

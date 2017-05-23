@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}-开车精灵</title>
+        <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+        {% if request.session.visitor_from == 'qnpc'%}
+            <link rel="stylesheet" href="/site_media/jl6/themes/light_blue/theme.css?t=1490089588990>"/>
+        {% else %}
+            <link rel="stylesheet" href="/site_media/jl6/themes/{{request.session.theme|default:'orange'}}/theme.css?t=1490089588990>"/>
+        {% endif %}            
+    <link id="systheme" rel="stylesheet" href="/site_media/jl6/static/css/quickLayout.css?t=1490089588990" />
+    <style>
+@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1466065367_3793232.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1466065367_3793232.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1466065367_3793232.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1466065367_3793232.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1466065367_3793232.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+        </style>
+</head>
+    {%if request.user.nick%}
+    <body class="from-{{request.session.visitor_from}}" {% if not error %} id="{{PAGE_MARK.2}}" {% endif %}>
+    {%else%}
+    <body>
+    {%endif%}
+        <input id="systhemes" type="hidden" value="{{request.session.theme}}"/>
+        <input id="shop_id" type="hidden" value="{{ request.user.shop_id }}" />
+        <input id="nick" type="hidden" value="{{ request.user.nick }}" />
+        <section id="main_content">
+            {% block base_jl5 %}{% endblock %}
+            {% if request.session.bottom_banner %}
+             <div class="auto bg_white tc mt20" id="show_bottom_banner" ad_id="{{ request.session.bottom_banner.obj_id }}">
+                <div id="bottom_banner_content" class="pct100">
+                    {% autoescape off %}
+                    {{ request.session.bottom_banner.ad_content }}
+                    {% endautoescape %}
+                </div>
+             </div>
+            {% endif %}
+            <footer>
+                <div>
+                    <a href="http://www.paithink.com" target="_blank">公司网站</a>&emsp;&emsp;
+                    <a href="http://www.paithink.com/promotion.html"  target="_blank">店铺推广服务</a>&emsp;&emsp;
+                    <a href="http://www.paithink.com/operate.html"  target="_blank">店铺运营服务</a>&emsp;&emsp;
+                    <a href="http://bangpai.taobao.com/group/14487125.htm"  target="_blank">加入开车精灵帮派</a>&emsp;&emsp;
+                    <a href="{% url 'point_praise' %}">给精灵好评</a>
+                    <p>
+                        Copyright@2015&emsp;www.paithink.com Inc.All Rights Reserved.武汉派生科技有限公司&emsp;保留一切权利
+                    </p>
+                </div>
+            </footer>
+            <div id="back_top">
+                <i class="iconfont">&#xe604;</i>
+            </div>
+        </section>
+    
+<script type="text/javascript" src="/site_media/jl6/static/js/require.js?t=1490089588990"></script>
+<script type="text/javascript">/*resourcemap*/
+require.config({paths:{
+  "jl6/site_media/plugins/jquery/jquery.min": "/site_media/jl6/plugins/jquery/jquery.min.js?t=1490089588990",
+  "jl6/site_media/plugins/bootstrap/dist/bootstrap.min": "/site_media/jl6/plugins/bootstrap/dist/bootstrap.min.js?t=1490089588990",
+  "jl6/site_media/plugins/artTemplate/template": "/site_media/jl6/plugins/artTemplate/template.js?t=1490089588990",
+  "jl6/site_media/widget/alert/alert": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/loading/loading": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/ajax/ajax": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/lightMsg/lightMsg": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/confirm/confirm": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/switch/switch": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/scrollBar/scrollBar": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/chart/chart": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/dtrPicker/dtrPicker": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/select/select": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/showMore/showMore": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/bootstrapExt/popoverList": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/templateExt/templateExt": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/pageBar/pageBar": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/selectSort/selectSort": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/jqueryExt/serializeObject": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/vaildata/vaildata": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/share/share": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/widget/tagEditor/tagEditor": "/site_media/jl6/static/js/widget.js?t=1490089588990",
+  "jl6/site_media/plugins/jquery-mousewheel/jquery.mousewheel.min": "/site_media/jl6/plugins/jquery-mousewheel/jquery.mousewheel.min.js?t=1490089588990",
+  "jl6/site_media/plugins/Highcharts/highcharts": "/site_media/jl6/plugins/Highcharts/highcharts.js?t=1490089588990",
+  "jl6/site_media/plugins/moment/moment.min": "/site_media/jl6/plugins/moment/moment.min.js?t=1490089588990",
+  "jl6/site_media/plugins/jquery-ui-daterangepicker/jquery.comiseo.daterangepicker.min": "/site_media/jl6/plugins/jquery-ui-daterangepicker/jquery.comiseo.daterangepicker.min.js?t=1490089588990",
+  "jl6/site_media/plugins/jquery-ui/jquery-ui.min": "/site_media/jl6/plugins/jquery-ui/jquery-ui.min.js?t=1490089588990",
+  "jl6/site_media/service/common/common": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/add_item_box/add_item_box": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/add_item_box/select_item_img": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/add_item_box/set_adg_cfg": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/add_item_box/error_adg_list": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/common/main_poster_event": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/common/char_link": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/common/poster_store": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/common/top_bar_event": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/report_detail/report_detail": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/keyword/keyword": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/adgroup_data/adgroup_data": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/my_message/msg_dialog": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/upgrade_suggest/upgrade_suggest_modal": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/rob_rank/real_time": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/rob_rank/rob_rank": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/rob_rank/rob_record": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_mobdiscount/edit_mobdiscount": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/agent_login/agent_login": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/auto_rob_rank/auto_rob_rank": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/bulk_optimize/bulk_optimize": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/campaign_list/campaign_list": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_camp_budget/edit_camp_budget": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_camp_platform/edit_camp_platform": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_camp_schedule/schedule_templet": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_camp_schedule/edit_camp_schedule": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/chart/chart": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/choose_mnt_campaign/choose_mnt_campaign": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/common/adg_top_bar_event": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/common/top_user_info": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/complete_user_info/complete_user_info": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/duplicate_check/duplicate_check": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_camp_area/edit_camp_area": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_camp_title/edit_camp_title": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/edit_fix_price/edit_fix_price": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/goods_list/confirm_win": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/page_tool/page_tool": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/goods_list/select_tool": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/goods_list/goods_list": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/goods_list/select_mnt_type": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/goods_list/goods_table": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/hand_optimize/hand_optimize": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/hot_zone/hot_zone": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/invite_friend/invite_friend": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/lottery/scrolList": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/lottery/lottery": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/manage_elemword/manage_elemword": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/mnt/edit_camp_price": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/mnt/mnt_camp_rpt": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/mnt/mnt_campaign": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/op_history/op_row": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/op_history/op_history": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/op_history/op_table": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/paithink_services/paithink_services": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/perfect_phone/perfect_phone": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/perfect_promotion/perfect_promotion": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/point_detial/point_detial": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/point_mall/point_mall": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/point_praise/point_praise": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/select_feedback/select_feedback": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/select_keyword_order/select_keyword_order": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/select_keyword/select_keyword": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/shop_core/shop_core": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/smart_optimize/smart_optimize": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/title_optimize/title_optimize": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/top_logout/top_logout": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/upgrade_suggest/upgrade_suggest": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/user_config/user_config": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/vip_home/vip_home": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/waiting/waiting": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/web_home/mc_window": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/web_home/mr_window": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/web_home/right_notice": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/web_home/top_banner": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/service/web_home/web_home": "/site_media/jl6/static/js/service.js?t=1490089588990",
+  "jl6/site_media/plugins/shiftcheckbox/jquery.shiftcheckbox": "/site_media/jl6/plugins/shiftcheckbox/jquery.shiftcheckbox.js?t=1490089588990",
+  "jl6/site_media/plugins/store/store.min": "/site_media/jl6/plugins/store/store.min.js?t=1490089588990",
+  "jl6/site_media/plugins/data-tables/dataTableExt": "/site_media/jl6/plugins/data-tables/dataTableExt.js?t=1490089588990",
+  "jl6/site_media/plugins/data-tables/dataTables.min": "/site_media/jl6/plugins/data-tables/dataTables.min.js?t=1490089588990",
+  "jl6/site_media/plugins/data-tables/FixedHeader.min": "/site_media/jl6/plugins/data-tables/FixedHeader.min.js?t=1490089588990",
+  "jl6/site_media/plugins/data-tables/TableTools": "/site_media/jl6/plugins/data-tables/TableTools.js?t=1490089588990",
+  "jl6/site_media/plugins/data-tables/ZeroClipboard": "/site_media/jl6/plugins/data-tables/ZeroClipboard.js?t=1490089588990",
+  "jl6/site_media/plugins/jquery.json-2.4.min": "/site_media/jl6/plugins/jquery.json-2.4.min.js?t=1490089588990",
+  "jl6/site_media/plugins/jquery-pin/jquery.pin.min": "/site_media/jl6/plugins/jquery-pin/jquery.pin.min.js?t=1490089588990",
+  "jl6/site_media/plugins/jslider/js/jquery.slider": "/site_media/jl6/plugins/jslider/js/jquery.slider.js?t=1490089588990",
+  "jl6/site_media/plugins/zclip/jquery.zclip.min": "/site_media/jl6/plugins/zclip/jquery.zclip.min.js?t=1490089588990",
+  "jl6/site_media/plugins/caret/jquery.caret.min": "/site_media/jl6/plugins/caret/jquery.caret.min.js?t=1490089588990",
+  "jl6/site_media/plugins/jquery-tag-editor/jquery.tag-editor.min": "/site_media/jl6/plugins/jquery-tag-editor/jquery.tag-editor.min.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/img_templates": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/img_single_tags": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/img_styles": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/creative": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/demo": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/image_optimize": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/service/image_optimize/modal_camp_trend": "/site_media/jl6/static/js/image_optimize.js?t=1490089588990",
+  "jl6/site_media/plugins/kinetic/kinetic-v5.1.0.min": "/site_media/jl6/plugins/kinetic/kinetic-v5.1.0.min.js?t=1490089588990",
+  "jl6/site_media/plugins/Jcrop/js/jquery.Jcrop.min": "/site_media/jl6/plugins/Jcrop/js/jquery.Jcrop.min.js?t=1490089588990",
+  "jl6/site_media/plugins/webfontloader/webfontloader": "/site_media/jl6/plugins/webfontloader/webfontloader.js?t=1490089588990"
+}});</script>
+<script type="text/javascript" src="/site_media/jl6/service/main.js?t=1490089588990"></script>
+</body>    {% block modal %}{% endblock %}
+    {% block manage_elemword %}{% endblock %}
+</html>

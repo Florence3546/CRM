@@ -1,0 +1,1 @@
+start python.exe compare_cat_class.py

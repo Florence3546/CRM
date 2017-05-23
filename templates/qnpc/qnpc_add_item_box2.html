@@ -1,0 +1,302 @@
+<div id="fancybox_add_item" class="hide marr_6"  style="height:550px; width:620px;">
+	<div>
+		<span class="bld larger lh_36 marr_12">
+			{% if mnt_type == 0 %}
+			推广新宝贝
+			{% else %}
+			<span name="mnt_name"></span> - 选择计划下未推广宝贝
+			{% endif %}
+		</span>
+		<span class="r_color">
+	        <strong>免责声明：</strong>
+	        <span>
+	            请仔细确认推广宝贝、标题和推广标题，以免违规，如因违规造成的一切后果与精灵软件无关。
+	            详情参考
+	            {% if request.user.shop_type == "C"%}
+	            <a class="b_color" target="_blank" href="http://zhitongche.taobao.com/help/showItem.action?helpItemId=148">《淘宝直通车软件服务使用规范》</a>
+	            {% else %}
+	            <a class="b_color" target="_blank" href="http://zhitongche.taobao.com/help/showItem.action?helpItemId=149">《天猫直通车软件服务使用规范》</a>
+	            {% endif %}
+	        </span>
+		</span>
+	</div>
+
+    <div class="tabbable-custom nav-justified mart_12">
+        <ul class="sui-nav nav-tabs nav-justified">
+            <li class="active">
+                <a href="#tab_candidate2" data-toggle="tab">
+                     <span class="bld">候选宝贝</span>(<span class="total_item_count red_num bld" init_value="">---</span>个)
+                </a>
+            </li>
+            <li class="">
+                <a href="#tab_selected2" data-toggle="tab">
+                    <span class="bld">已选宝贝</span>(<span class="new_item_count red_num bld">0</span>个，还可添加<span class="mnt_count red_num bld">---</span>个<span class="danger_cats_info r_color hide">，<span class="danger_item_count red_num bld">0</span>个宝贝类目有推广限制</span>)
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_candidate2">
+                <div class="statistic_div">
+                    <div class="row-fluid">
+                        <div class="tar pad_3 mar_0 sui-form form-search">
+                          <input type="text" placeholder="请输入宝贝标题查询" class="input-medium search-query input-large" id="search_item_input"><button class="sui-btn btn-primary" type="button" id="search_item_btn"><i class="sui-icon icon-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <table source="item_table" class="table pof table_4fixedhead" style="width:590px;z-index:5;">
+                </table>
+                <table id="item_table" class="table">
+                    <thead style="background-color:#eee;">
+                        <tr style="height:43px;">
+                            <th class="tac" style="width:96px;">
+                                <button class="batch_add_item sui-btn btn-small btn-primary pad_3" style="height:27px;">批量添加<span class="batch_item_num">50</span>个</button>
+                                <span>宝贝图片</span>
+                            </th>
+                            <th class="tac" style="width:195px;">宝贝标题</th>
+                            <th class="tac" style="width:145px;">销量</th>
+                            <th class="tac" style="width:146px;">库存</th>
+                        </tr>
+                    </thead>
+                    <tbody class="lh_24"></tbody>
+                </table>
+                <div class="tac large"><a href="javascript:void(0);" id="load_more_item" class="hide">加载更多宝贝。。。</a></div>
+            </div>
+            <div class="tab-pane" id="tab_selected2">
+                <div class="statistic_div">
+                    <div class="row-fluid">
+                        <div class="tar pad_3">
+                            <button class="sui-btn btn-large btn-primary btn_OK">确定</button>
+                        </div>
+                    </div>
+                </div>
+                <table source="item_cart" class="table pof table_4fixedhead" style="width:523px;z-index:5;">
+                </table>
+                <table id="item_cart" class="table">
+                    <thead style="background-color:#eee;">
+                        <tr style="height:43px;">
+                            <th class="tac" style="width:96px;">宝贝图片</th>
+                            <th class="tac" style="width:426px;">宝贝标题 & 推广标题</th>
+                        </tr>
+                    </thead>
+                    <tbody class="lh_24"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="in_block" style="width:600px;">
+<!--	    <div class="statistic_div">
+	        <div class="row-fluid">
+		        <div class="span4 pad_6" style="line-height:27px">
+		            <span class="bld">候选宝贝</span>(<span class="total_item_count red_num bld" init_value="">---</span>个)
+		        </div>
+		        <div class="span8 tar pad_3">
+		            <input class="title_search_box" type="text" placeholder="请输入宝贝标题查询" id="search_item_input"><button class="btn" type="button" id="search_item_btn"><i class="icon-search"></i></button>
+		        </div>
+	        </div>
+	    </div>
+	    <div class="row-fluid" style="height:465px;overflow-y:scroll;">
+	        <table source="item_table" class="table pof table_4fixedhead" style="width:583px;z-index:5;">
+	        </table>
+	        <table id="item_table" class="table">
+	            <thead style="background-color:#eee;">
+	                <tr style="height:43px;">
+	                    <th class="tac" style="width:96px;">
+	                        <button class="batch_add_item btn blue pad_3 mini" style="height:27px;">批量添加<span class="batch_item_num">50</span>个</button>
+	                        <span>宝贝图片</span>
+	                    </th>
+	                    <th class="tac" style="width:195px;">宝贝标题</th>
+	                    <th class="tac" style="width:145px;">销量</th>
+	                    <th class="tac" style="width:146px;">库存</th>
+	                </tr>
+	            </thead>
+	            <tbody class="lh_24"></tbody>
+	        </table>
+	        <div class="tac large"><a href="javascript:void(0);" id="load_more_item" class="hide">加载更多宝贝。。。</a></div>
+	    </div>
+    </div>
+     <div class="in_block vat marl_12" style="width:540px;">
+       <div class="statistic_div">
+	        <div class="row-fluid">
+	            <div class="span10 pad_6" style="line-height:27px">
+	                <span class="bld">已选宝贝</span>(<span class="new_item_count red_num bld">0</span>个，还可添加<span class="mnt_count red_num bld">---</span>个<span class="danger_cats_info r_color hide">，<span class="danger_item_count red_num bld">0</span>个宝贝类目有推广限制</span>)
+	            </div>
+	            <div class="span2 tar pad_3">
+	                <button class="btn blue btn_OK">确定</button>
+	            </div>
+	        </div>
+        </div>-->
+<!--        <div class="row-fluid" style="height:465px;overflow-y:scroll;">
+            <table source="item_cart" class="table pof table_4fixedhead" style="width:523px;z-index:5;">
+            </table>
+            <table id="item_cart" class="table">
+                <thead style="background-color:#eee;">
+                    <tr style="height:43px;">
+                        <th class="tac" style="width:96px;">宝贝图片</th>
+                        <th class="tac" style="width:426px;">宝贝标题 & 推广标题</th>
+                    </tr>
+                </thead>
+                <tbody class="lh_24"></tbody>
+            </table>
+        </div>
+    </div>-->
+</div>
+</div>
+<!-- 设置关键词最高限价 -->
+<div class="sui-modal hide fade" id="modal_init_limit_price" item_id="" data-backdrop="false" data-width="520">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3>设置关键词最高限价</h3>
+  </div>
+  <div class="modal-body lh_36">
+    <div class="cat_path">
+      <span class="bld">宝贝所属类目：</span>
+      <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_path"></span>
+    </div>
+    <div class="cat_avg_cpc">
+      <span class="bld">行业市场均价：</span>
+      <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_avg_cpc"></span>元
+      <span class="s_color">(建议关键词最高限价设为行业市场均价的1.2倍)</span>
+    </div>
+    <div>
+      <span class="bld">关键词最高限价：</span>
+      <form class="sui-form form-horizontal marb_0 in_block" novalidate="novalidate" id="check_limit_price">
+        <div class="controls" style="display:inline-block">
+          <input type="text" id="init_limit_price" maxlength="5" min="0.8" max="20" name="limit_price" >
+          <div class="sui-msg msg-tips msg-naked">
+            <div class="msg-con" min='0.8' max='20'>[0.8-20]</div>
+            <s class="msg-icon"></s>
+          </div>
+        </div>
+      </form>
+<!--
+      <span class="in_block" style="width:14px;"><i class="icon-exclamation-sign hide tooltips"></i></span>
+      <span class="s_color" style="margin-left:-15px;">(<span class="limit_price_min">0.80</span>~<span class="limit_price_max">20.00</span> 元)</span>
+-->
+    </div>
+<!--    <div class="r_color mart_6 lh_24 bld">
+      注意：系统将删除该宝贝7天无点击的关键词。
+    </div>-->
+    <div>
+      <span class="bld r_color">友情提示：</span>
+      <span>限价过低，会导致没有流量、没有转化。</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:void(0);" class="sui-btn btn-large btn-primary" id="submit_impt_item">确定</a>
+    <a href="javascript:void(0);" class="sui-btn btn-large" data-dismiss="modal">取消</a>
+  </div>
+</div>
+
+<!-- 临时回收站  -->
+<div class="hide">
+    <table id="item_recycle_bin">
+    </table>
+</div>
+
+<!-- 新添宝贝信息提示 -->
+<div class="modal hide fade" id="modal_new_item_info">
+<!--
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h3>新添宝贝信息</h3>
+    </div>
+-->
+    <div class="lh_36">
+        <div class="normally">
+            已选<span class="new_item_count red_num">0</span>个宝贝添加推广<span class="to_mnt">并托管</span>，请再次确认推广宝贝和推广标题！
+        </div>
+        <div class="danger_cats_info r_color normally">
+            <i class="icon-warning-sign r_color large marr_6"></i><span class="danger_item_count red_num">0</span>个新添宝贝的类目有推广限制，已用红色标记！
+        </div>
+        <div id="add_item_warning" class="bld normally r_color tar">
+            请您仔细确认宝贝是否符合直通车规范！因此而产生的违规，精灵不负任何责任！
+        </div>
+    </div>
+<!--
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="btn blue" id="return_2add_item">返回选择计划下未推广宝贝</a>
+        <a href="javascript:void(0);" class="btn red into_next_step">确定并进入下一步</a>
+        <a href="javascript:void(0);" class="btn red btn_OK2" confirmed="0">确定</a>
+    </div>
+-->
+</div>
+
+<!-- ajax自定义加载动画用 -->
+<input id="ajax_loading_animate_id" type="hidden" value="---">
+
+<script id="item_tr" type="text/html">
+<%for (var i in data) { %>
+<tr item_id="<%=data[i].item_id%>" cat_id="<%=data[i].cat_id%>">
+    <td class="por">
+        <a href='javascript:void(0);' name='item'>
+	        <img src="<%=data[i].pic_url%>_100x100.jpg" width="100" height="100"/>
+	        <img src="/site_media/jl/css/img/circle_ok.png" class="poa hide" style="bottom: 0;right: 0;" title="点击添加该宝贝"/>
+        </a>
+    </td>
+    <td>
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+        <div class="o_color"><%=data[i].price%></div>
+    </td>
+    <td class="tac">
+		<%=data[i].sales_count%>
+    </td>
+    <td class="tac por">
+	    <%=data[i].stock%>
+	    <a href="javascript:void(0);" class="add_item poa marr_3 hide" style="top:0px;right:0px">添加宝贝</a>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="item_cart_tr" type="text/html">
+<%for (var i in data) { %>
+<tr item_id="<%=data[i].item_id%>" cat_id="<%=data[i].cat_id%>" <%if (data[i].danger_cat) { %>class="danger_cat"<% }%>>
+    <td class="por">
+        <a href='javascript:void(0);' name='new_item'>
+	        <img src="<%=data[i].pic_url%>" width="100" height="100" />
+	        <img src="/site_media/jl/css/img/circle_remove.png" class="poa hide" style="bottom: 0;right: 0;" title="点击取消该宝贝"/>
+        </a>
+    </td>
+    <td class="padl_6 por">
+        <div name="item_title">
+            <%=data[i].title%>
+        </div>
+        <div>
+            <span class="cat_path in_block">
+	            <span class="bld">类目：</span>
+	            <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+	            <span name="cat_path"></span>
+            </span>
+            <%if (mnt_type=='2') { %>
+            <span>
+	            <span class="bld">关键词限价：</span>
+	            <span class="o_color">￥<span name="limit_price"><%=data[i].limit_price%></span></span>
+            </span>
+            <% }%>
+        </div>
+        <div class="adg_title1">
+            <span class="bld">推广标题：</span>
+            <span class="loading_tag s_color">正在生成<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide normal_size pad_0" style="width:275px;">
+            <span name="title_length_prompt" class="hide marl_3"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <a href="javascript:void(0);" class="del_item poa marr_3 hide" style="top:0px;right:0px">删除宝贝</a>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="add_item_fail_msg" type="text/html">
+<div class="bld in_block m_color bgc_ddd pad_3">添加失败的宝贝</div>
+<%for (var item in fail_msg) { %>
+<div class="bld mart_6"><%=fail_msg[item][1]%></div>
+<div class="row-fluid base_data">
+    <div class="span3">
+        <img src="<%=fail_msg[item][0]%>">
+    </div>
+    <div class="span9 r_color mar_0 pad_6">
+        <span class="bld">错误信息：</span><%=fail_msg[item][2]%>
+    </div>
+</div>
+<% }%>
+</script>

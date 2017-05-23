@@ -1,0 +1,68 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}日志检查{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt10 ovh">
+        <form action="." method="post">
+	        <ul class="ul_line">
+	            <li class="l mr10">
+	                起始时间：<input type="text" name="start_time" value="{{start_time}}">
+	            </li>
+	            <li class="l">
+	                结束时间：<input type="text" name="end_time" value="{{end_time}}">
+	            </li>
+	            <li class="r">
+	                员工名称：
+                    <input type="hidden" id="search_id" name="search_id" value="{{psuser.id|default:0}}">
+                    <input type="text" class="psuser_input" link="#search_id" value="{{psuser.name_cn|default:''}}" autocomplete="off">
+	                <input type="submit" value="搜索"> 
+	            </li>
+	        </ul>        
+        </form>
+    </div>
+    <div class="mt10">
+        {% for log in logs %}
+	        <div class="l  pct23 bdd mr10 mt10 p2" style="border:1px solid gray;"> 
+	            <div class="ovh h24" style="background-color:#ddd;">
+	                <ul class="ul_line">
+	                    <li class="pct40 l f16 b"> 编号&nbsp;<span class="red f18 b">{{forloop.counter}}</span> </li>
+	                    <li class="pct50 l"> {{log.create_time}} </li>
+	                </ul>    
+	            </div>
+	            <div class="ovh p3">
+	                <div >
+	                    <div class="f16 b" style="padding-bottom:4px;border:none;border-bottom:1px solid gray;">
+	                        今日工作
+	                    </div>
+	                    <div class="h160 ovh ">
+	                       {{log.content|safe}}
+	                    </div>
+	                </div>
+	                <div>
+	                    <div class="f16 b bdd" style="padding-bottom:4px;border:none;border-bottom:1px solid gray;">
+	                        明日计划
+	                    </div>
+	                    <div class="h160 ovh">
+	                       {{log.todolist|safe}}
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    {% empty %}
+	       <div class="tc">
+	           {% if error %}
+	               {{error}}
+	           {% else %}
+	               很抱歉，未能搜索到相应数据。
+	           {% endif %}
+	       </div>
+	    {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+
+{% endblock %}

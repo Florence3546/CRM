@@ -1,0 +1,89 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}订单分配记录{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+
+    <div class="mt20">
+       <span class="b f16">订单条数(<span style="color:red;">{{total_count}}</span>个)</span>
+
+        <button class="btn r btn-primary ml5" id="search_order_distribute" >查询订单</button>
+        <button class="w100 r btn f12" type="button" id="reset_form">重　置</button>
+    </div>
+    <div class="m0 bg_white p10 mt20 fix mb20 bdd">
+        <form class="m0" action="" method="post" id="form_search_order_distribute">
+            <input type="text" class="psuser_input mr10 w210" value="{{form.psuser_cn.value|default:''}}" name="psuser_cn" link="#psuser_id_d" placeholder="分配人" autocomplete="off"/>
+            <input type="hidden" id="psuser_id_d" name="psuser_id" value="{{form.psuser_id.value|default:''}}">
+            <input type="text" class="mr10 w210" value="{{form.shop.value}}" name="shop" placeholder="店铺ID/店铺名"/>
+            <input type="text" class="mr10 w210" value="{{form.subscribe_id.value}}" name="subscribe_id" placeholder="订单ID"/>
+            <input type="text" class="psuser_input mr10 w210" value="{{form.org_list_cn.value|default:''}}" name="org_list_cn" link="#org_list_id_d" placeholder="原人员" autocomplete="off"/>
+            <input type="hidden" id="org_list_id_d" name="org_list_id" value="{{form.org_list_id.value|default:''}}">
+            <input type="text" class="psuser_input mr10 w210" value="{{form.new_list_cn.value|default:''}}" name="new_list_cn" link="#new_list_id_d" placeholder="新人员" autocomplete="off"/>
+            <input type="hidden" id="new_list_id_d" name="new_list_id" value="{{form.new_list_id.value|default:''}}">
+            {{form.category}}
+            <br>
+            <div class="mt10">
+                订购时间：<input class="w120" type="text" value="{{form.order_start_date.value}}" id="id_order_start_date" name="order_start_date"/> - <input class="w120 mr10 mr20" type="text" id="id_order_end_date" value="{{form.order_end_date.value}}" name="order_end_date"/>
+                分配时间：<input class="w120" type="text" value="{{form.distribute_start_date.value}}" id="id_distribute_start_date" name="distribute_start_date"/> - <input class="w120 mr10 mr20" type="text" id="id_distribute_end_date" value="{{form.distribute_end_date.value}}" name="distribute_end_date"/>
+                金额范围：<input class="w80" type="number" value="{{form.pay_start.value}}" name="pay_start" min="0"/> - <input class="w80 mr10 mr20" type="number" value="{{form.pay_end.value}}" name="pay_end" min="0"/>
+                {{form.page_no}}
+            </div>
+
+
+        </form>
+    </div>
+    <table class="bdd" id="table_subscribe">
+        <thead>
+            <tr>
+                <th class="w80">订单ID</th>
+{#                <th class="w100">分配人</th>#}
+                <th class="w100">分配人姓名</th>
+                <th class="w80">店铺ID</th>
+                <th class="w80">业务类型</th>
+
+{#                <th class="w60">原人员ID列表</th>#}
+                <th class="w120">原人员姓名列表</th>
+{#                <th class="w60">新人员ID列表</th>#}
+                <th class="w120">新人员姓名列表</th>
+                <th class="w60">成交金额(元)</th>
+                <th class="w60">分配时间</th>
+                <th class="w80">订单订购时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in record_list %}
+            <tr class="tc" id="{{record.subscribe_id}}">
+                <td>{{record.subscribe_id}}</td>
+{#                <td>{{order.psuser_id}}</td>#}
+                <td>{{record.psuser_cn}}</td>
+                <td>{{record.nick}}</td>
+                <td>{{record.category_cn}}</td>
+{#                <td>{{order.org_id_list}}</td>#}
+                <td>{{record.org_cn_list}}</td>
+{#                <td>{{order.new_id_list}}</td>#}
+                <td>{{record.new_cn_list}}</td>
+                <td>{{record.pay|divide:'100'}}</td>
+                <td>{{record.create_time}}</td>
+                <td>{{record.sub_time}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        <tfoot>
+            <div style="margin:10px;">
+                <span style="float:right;">每页{{ page_size }}条</span>
+            </div>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/order_distribute.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.OrderDistribute.init();
+});
+</script>
+{% endblock %}
+

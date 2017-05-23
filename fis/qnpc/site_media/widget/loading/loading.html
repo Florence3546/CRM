@@ -1,0 +1,31 @@
+<style>
+.layer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 105;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+}
+.loadmsg{
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 100%;
+    height: 50px;
+    margin-top: -25px;
+}
+.msg-content{
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 50px;
+}
+</style>
+<div class="layer">
+    <div class="loadmsg">
+        <span class="sui-loading loading-inline"> <img width="50" height="50" class="sui-icon icon-pc-loading" src="../../static/images/loading.png?__inline"/></span>
+        <span class="msg-content">{{ tip }}</span>
+    </div>
+</div>

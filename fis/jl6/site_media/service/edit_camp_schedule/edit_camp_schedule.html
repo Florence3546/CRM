@@ -1,0 +1,124 @@
+<div class="modal fade">
+    <div class="modal-dialog" style="width:812px;" id="modal_camp_schedule">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">设置投放时间</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning f12 mb10">
+                    <span>宝贝在不同时段流量和转化可能有所不同，您可以针对各时段设置不同的折扣出价，提高流量利用效果，</span>
+                    <a href="http://shuyuan.taobao.com/?spm=0.0.0.0.gAD0nS#!/selftutorial/detail?id=249" target="_blank">了解详情&nbsp;&gt;&gt;</a>
+                </div>
+                <div class="schedule_config radio">
+                    <div class="l">
+                        <label class="checkbox-inline"><input type="radio" class="schedule_radio" checked name="schedule_radio" value="current"/>当前设置</label>
+                        <label class="checkbox-inline"><input type="radio" class="schedule_radio" name="schedule_radio" value="100"/>全日制投放</label>
+                        <label class="checkbox-inline"><input type="radio" class="schedule_radio" id="select_template" name="schedule_radio"/>快捷模板</label>
+                        <div class="select_warp ml0" id="search_schedule">
+                            <span class="form tip" data-toggle="dropdown">请选择...&emsp;&emsp;&emsp;&emsp;&nbsp;</span>
+                            <ul class="dropdown-menu">
+                                <li data-value="-1"><span class="schedule_type">请选择......&emsp;&emsp;&emsp;&emsp;</span></li>
+                                {{ each templets }}
+                                    <li data-value="-1"><span class="schedule_type">{{ $value.type }}</span></li>
+                                    {{ each $value.list as templet index }}
+                                    <li data-value="{{ templet.id }}"><span>{{ templet.name }}</span></li>
+                                    {{ /each }}
+                                {{ /each }}
+                            </ul>
+                        </div>
+                        <div class="select_warp ml0" id="select_batch">
+                            <span class="form tip" data-toggle="dropdown">全部增加</span>
+                            <ul class="dropdown-menu">
+                                <li data-value="1"><span class="active">全部增加</span></li>
+                                <li data-value="-1"><span>全部减少</span></li>
+                            </ul>
+                        </div>
+                        <div class="form-inline pull-right" autocomplete="on">
+                          <div class="form-group">
+                              <div class="input-group">
+                                  <input type="text" maxlength="3" class="form-control" id="batch_value">
+                                  <div class="input-group-addon" >%</div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="opt_btn r w180 tr">
+                        <button class="btn btn-default bluk_set" value="-1">恢复上一步</button>
+                        <button class="btn btn-default bluk_set" value="0">清空</button>
+                    </div>
+                </div>
+                <div class="duration">
+                    <ul class="header">
+                        <li class="l info">星期\时间</li>
+                        <li class="l time">
+                            <div class="num">00:00 - 06:00</div>
+                            <ul class="detail clearfix">
+                                <li class="digital l">0</li>
+                                <li class="digital l">1</li>
+                                <li class="digital l">2</li>
+                                <li class="digital l" >3</li>
+                                <li class="digital l">4</li>
+                                <li class="digital l last">5</li>
+                            </ul>
+                        </li>
+                        <li class="l time">
+                            <div class="num">06:00 - 12:00</div>
+                            <ul class="detail clearfix" >
+                                <li class="digital l">6</li>
+                                <li class="digital l">7</li>
+                                <li class="digital l">8</li>
+                                <li class="digital l">9</li>
+                                <li class="digital l">10</li>
+                                <li class="digital l last">11</li>
+                            </ul>
+                        </li>
+                        <li class="l time">
+                            <div class="num" >12:00 - 18:00</div>
+                            <ul class="detail clearfix">
+                                <li class="digital l">12</li>
+                                <li class="digital l">13</li>
+                                <li class="digital l">14</li>
+                                <li class="digital l">15</li>
+                                <li class="digital l">16</li>
+                                <li class="digital l last">17</li>
+                            </ul>
+                        </li>
+                        <li class="l time">
+                            <div class="num">18:00 - 24:00</div>
+                            <ul class="detail clearfix">
+                                <li class="digital l">18</li>
+                                <li class="digital l">19</li>
+                                <li class="digital l">20</li>
+                                <li class="digital l">21</li>
+                                <li class="digital l">22</li>
+                                <li class="digital l last">23</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="content">
+                        <ul class="l week">
+                            <li class="day">星期一</li>
+                            <li class="day">星期二</li>
+                            <li class="day">星期三</li>
+                            <li class="day">星期四</li>
+                            <li class="day">星期五</li>
+                            <li class="day">星期六</li>
+                            <li class="day">星期天</li>
+                        </ul>
+                        <ul class="boxzone" id="selectable">
+                            {{each liObjList}}<li class="box" id="duration_box_{{$index}}" box-index="{{$index}}" data-num=0 ></li>{{/each}}
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt10 mb10">
+                    <span class="f12 item_dark">可以拖拽鼠标选择投放时间段</span>
+                    <span class="r">
+                        <button class="btn btn-primary submit">提交</button>
+                        <button class="btn btn-default" data-dismiss="modal">取消</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

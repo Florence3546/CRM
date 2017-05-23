@@ -1,0 +1,24 @@
+<div class="dropdown-menu show_more_modal">
+    <div class="alert alert-info"><i class="iconfont">&#xe608;</i>建议：选择4-6列便于浏览</div>
+    <div class="content">
+        <div class="choose">
+            <p>选择度量</p>
+            <ul>
+                {{each data as value index}}
+                <li><label><input type="checkbox" {{if value[1]}}checked{{/if}} value="{{value[2]}}">{{value[0]}}</label></li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="list">
+            <p>列表</p>
+            <ul>
+                {{each data as value index}}
+                    <li data-name="{{value[2]}}" {{if !value[1]}}class="hidden"{{/if}}>{{value[0]}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm">确定</button>
+    <button type="button" class="btn btn-default btn-sm">取消</button>
+</div>

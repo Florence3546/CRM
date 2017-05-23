@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<title></title>
+<link rel="stylesheet" href="/site_media/qnyd/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="/site_media/qnyd/css/qnyd.css" type="text/css" />
+<link rel="stylesheet/less" href="/site_media/qnyd/less/common.less" type="text/css" />
+{% block extra_style %} {% endblock %}
+</head>
+<body>
+ <nav class="bar-tab" id="main_nav">
+  <ul class="tab-inner">
+    <li class="tab-item {% if current_page == 'account' %}active{%endif%}">
+        <a href="account"> <span class="glyphicon glyphicon-home tab-icon"></span>
+            <div class="tab-label">账户</div>
+      </a>
+   </li>
+    {%if CAN_USE_ATTENTION %}
+        <li class="tab-item {% if current_page == 'keyword_manage' %}active{%endif%}">
+        <a href="keyword_manage" id="keyword_manage_link"> <span class="glyphicon glyphicon-eye-open tab-icon">
+            </span>
+                <div class="tab-label">重点词</div>
+        </a>
+        </li>
+   {%endif%}
+   <!--
+    <li class="tab-item main {% if current_page == 'adgroup_cost' %}active{%endif%}">
+        <a href="adgroup_cost">
+            <span class="glyphicon glyphicon-list tab-icon"></span>
+            <div class="tab-label">宝贝</div>
+        </a>
+    </li>
+    -->
+    <li class="tab-item main {% if current_page == 'kw_monitor' %}active{%endif%}">
+        <a href="kw_monitor">
+            <span class="glyphicon glyphicon-list tab-icon"></span>
+            <div class="tab-label">实时监控</div>
+        </a>
+    </li>
+    <li class="tab-item {% if current_page == 'mnt' %}active{%endif%}">
+        <a href="mnt"> <span class="glyphicon glyphicon-globe tab-icon"></span>
+            <div class="tab-label">全自动</div>
+        </a>
+    </li>
+    <li class="tab-item {% if current_page == 'set' %}active{%endif%}">
+        <a href="set">
+            <span class="glyphicon glyphicon-cog tab-icon"></span>
+            <div class="tab-label">设置</div>
+         </a>
+    </li>
+  </ul>
+</nav>
+
+<div class="content hidden">
+   {% block content %}{%endblock%}
+</div>
+
+
+<!--自定义弹出框-->
+<div id="loading" class="hide">
+	<div class="box_background"></div>
+    <div class="box_warp" style="">
+    	<div class="box_content">
+        	<img src="/site_media/qnyd/img/loader.gif" width="28" height="28">
+            <div class="loading_info">正在获取数据</div>
+        </div>
+    </div>
+</div>
+
+<!--自定义alert弹出框-->
+<div class="alert_box" id="PT_alert">
+	<div class="alert_box_background"></div>
+    <div class="alert_box_warp">
+        <div class="alert_box_content">您确定要提交到直通车吗</div>
+		<ul class="alert_box_ul">
+        	<li class="alert_btn">确定</li>
+        </ul>
+    </div>
+</div>
+
+<!--自定义confirm弹出框-->
+<div class="alert_box" id="PT_confirm">
+	<div class="alert_box_background"></div>
+    <div class="alert_box_warp">
+        <div class="alert_box_content">您确定要提交到直通车吗</div>
+		<ul class="alert_box_ul" style="">
+			<li class="no">取消</li>
+            <li class="ok">确定</li>
+        </ul>
+    </div>
+</div>
+
+<!--动画层-->
+<div style="position:fixed; left:0; width:100%; height:100%; top:0; background-color:#fff; display:none;" id="animate_layer">
+    <nav class="bar-tab">
+        <ul class="tab-inner">
+            <li class="tab-item active">
+                <a href="javascript:;">
+                    <div class="tab-label" style="font-size:2rem;"><span class="glyphicon glyphicon-arrow-left marr_6"></span>返回</div>
+                </a>
+            </li>
+        </ul>
+    </nav>
+	<div class="main">
+    	<div class="tac mart_12"><img src="/site_media/qnyd/img/ajax-white.gif" width=18 style="vertical-align:-4px; margin-right:6px;" >正在加载......</div>
+    </div>
+</div>
+
+<!--公共消息-->
+<div class="message_box" id="PT_message">
+    <div class="message_box_background"></div>
+    <div class="message_box_warp">
+        <div class="message_box_inner">
+            <ul class="message_box_ul">
+            </ul>
+            <div class="message_close">好的，知道了</div>
+        </div>
+    </div>
+</div>
+
+<script src="/site_media/qnyd/scripts/qnyd.js"></script>
+<script src="/site_media/qnyd/plugins/js/highcharts.js"></script>
+
+<script type="text/javascript" src="http://g.tbcdn.cn/sj/qn/??jssdk.js,/lib/js/less.js"></script>
+<script type="text/javascript" src="http://l.tbcdn.cn/apps/top/c/sdk-mobile.js"></script>
+{% block custom_js %}{% endblock %}
+<script>
+	$().ready(function(){
+		//在不同的页面中执行相应的函数
+	  	var acitve_page=$('nav li[class*="active"] a').attr('href');
+		PTQN.router(acitve_page);
+		PTQN.Base.init();
+
+		//绑定导航事件
+		$('#main_nav').on('click','a',function(){
+			var page_name=$(this).attr('href');
+
+			//判断是否有关注的词
+			if(page_name=='keyword_manage'){
+				//PTQN.show_animate_layer($('#set_attention_page').html());
+				PTQN.sendDajax({'function': 'qnyd_has_attention_keyword'});
+				return false;
+			}
+
+			$('.PT_page').addClass('hide');
+			$('#'+page_name).removeClass('hide');
+
+			$('nav .tab-item').removeClass('active');
+			$(this).parent().addClass('active');
+
+			//改变浏览器URL,以便于刷新操作
+			history.pushState(page_name, "", page_name);
+
+			//调用对应的函数
+			PTQN.router(page_name);
+			return false;
+		});
+
+		//响应浏览器的前进后退事件
+		window.addEventListener('popstate', function(e){
+		  if (e.state){
+			var page_name = e.state;
+			$('.PT_page').addClass('hide');
+			$('#'+page_name).removeClass('hide');
+
+			$('nav .tab-item').removeClass('active');
+			$('#main_nav a[href='+page_name+']').parent().addClass('active');
+		  }
+		}, false);
+
+	});
+</script>
+{% block template%}
+{%endblock%}
+</body>
+</html>

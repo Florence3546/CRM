@@ -1,0 +1,187 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}员工管理{% endblock %}
+
+{% block content %}
+
+<div class="w1329 auto">
+
+	<div id="searchdiv" class="mt20 mb20" >
+		<form>
+		<select name="gender" id="gender"  class="w100">
+			<option selected="selected" value="">性别</option>
+			<option value="男">男</option>
+			<option value="女">女</option>
+		</select>
+		<select name="department" id="department"   class="w100">
+			<option selected="selected" value="">部门</option>
+			{% for dpt in department %}
+               <option value="{{dpt.1}}">{{dpt.1}}</option>
+            {%endfor%}
+		</select>
+		<select name="position" id="position" class="w100">
+		    <option selected="selected" value="">岗位</option>
+			{% for pot in position %}
+               <option value="{{pot.1}}">{{pot.1}}</option>
+            {%endfor%}
+		</select>
+		<select name="status" id="status" class="w100">
+			<option selected="selected" value="">雇佣状态</option>
+			<option value="试用">试用</option>
+			<option value="转正">转正</option>
+			{% if me.position in 'HR,COMMANDER,SMANAGER' %}
+            <option value="离职">离职</option>
+	        {% endif %}
+		</select>
+<!--		<select name="education" id="education" class="w100">
+			<option selected="selected" value="">学历</option>
+			<option value="本科">本科</option>
+			<option value="小学">小学</option>
+			<option value="初中">初中</option>
+			<option value="高中">高中</option>
+			<option value="中专">中专</option>
+			<option value="大专">大专</option>
+			<option value="硕士">硕士</option>
+			<option value="博士">博士</option>
+		</select>-->
+	  <select name="date" id="date" class="w120">
+			<option selected="selected" value="">日期</option>
+			<option value="生日日期">生日日期</option>
+			<option value="合同截止日期">合同截止日期</option>
+			<option value="入职日期">入职日期</option>
+	  </select>
+	  <input class="w100" name="date_min" id="date_min" type="text"><span> - </span><input name="date_max" class="w100" id="date_max" type="text">
+	  	<input type="text" class="input-medium  w250" name="searchtxt" id="searchtxt" placeholder="请输入姓名/qq/旺旺">
+		{% if 'C' in me.perms %}
+		<a target="_blank"  href="{%url 'ncrm_add_psuser'%}" class="r ml5">
+            <input type="button" class="btn btn-primary" value="添加">
+        </a>
+        {% endif %}
+		<input type="reset" id="reset" class="btn r ml5" value="重置">
+		<input type="button" id="search" class="btn r ml5" value="搜索">
+		</form>
+	</div>
+	<div>
+		<table id="psuser">
+			<thead>
+				<tr>
+				<th class="tl w100">
+					<div>
+						姓名
+					</div>
+				</th>
+				<th class="tl w60">
+					<div>
+                        性别
+					</div>
+				</th>
+				<th class="tl w60">
+					<div>
+						部门
+					</div>
+				</th>
+				<th class="tl w60">
+					<div>
+						岗位
+					</div>
+				</th>
+				<th class="tl w60">
+                    <div>
+                        雇佣状态
+                    </div>
+                </th>
+                <th class="tl w60">
+                    <div>
+                        入职日期
+                    </div>
+                </th>
+                <th class="tl w80">
+                    <div>
+                        合同截止日期
+                    </div>
+                </th>
+                <th class="tl w55">
+                    <div class="w55">
+                        出生年月
+                    </div>
+                </th>
+                <th class="tl w55">
+                    <div class="w55">
+                        联系电话
+                    </div>
+                </th>
+                <th class="tl w30">
+                    <div>
+                        旺旺
+                    </div>
+                </th>
+                <th class="tl w60">
+                    <div>
+                        QQ
+                    </div>
+                </th>
+
+                {% if 'C' in me.perms %}
+                <th class="tl w30">
+                    <div>
+                        学历
+                    </div>
+                </th>
+                <th class="tl w40">
+                    <div>
+                        权限码
+                    </div>
+                </th>
+                {% endif %}
+				</tr>
+
+			</thead>
+			<tbody>
+
+			{% for psuser in psuser_list %}
+			<tr  class="success" {% if psuser.status == '离职' %} style="display: none" {%endif%}>
+				<td><a target="_blank" href="{%url 'ncrm_add_psuser'%}?id={{psuser.id}}">{{psuser.name_cn}} - {{ psuser.name }}</a></td>
+<!--				<td>{{psuser.name_cn}}</td>-->
+				<td>{{psuser.gender|default:''}}</td>
+				<td>{{psuser.get_department_display|default:''}}</td>
+				<td>{{psuser.get_position_display|default:''}}</td>
+				<td>{{psuser.status|default:''}}</td>
+				<td>{{psuser.entry_date|default:''}}</td>
+                <td>{{psuser.contract_end|default:''}}</td>
+                <td>{{psuser.birthday|default:''}}</td>
+				<td>{{psuser.phone|default:''}}</td>
+				<td>
+					{% if psuser.ww and not psuser.ww == 'None'%}
+					<a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao{{psuser.ww|trim}}">
+						<img class="marl_6" src="http://amos.alicdn.com/realonline.aw?v=2&amp;uid={{psuser.ww|trim}}&amp;site=cntaobao&amp;s=1&amp;charset=utf-8">
+					</a>
+					{%endif%}
+				</td>
+				<td>
+                    {% if psuser.qq %}
+                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{psuser.qq|trim}}&site=qq&menu=yes" title="点击这里给我发消息" alt="点击这里给我发消息" >
+                        {{psuser.qq|default:''}}
+                    </a>
+                    {%endif%}
+                </td>
+                {% if 'C' in me.perms %}
+                <td>{{psuser.education|default:''}}</td>
+                <td>{{psuser.perms|default:''}}</td>
+                {% endif %}
+			</tr>
+			{%endfor%}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_psuser_roster.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmPsuserRoster.init();
+});
+</script>
+{% endblock %}

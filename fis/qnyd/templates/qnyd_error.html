@@ -1,0 +1,23 @@
+{#utf-8#}{% extends "qnyd_nonav.html" %}
+{% block content %}
+    <div class="page page-current" style="color:#aaa;text-align: center;">
+        <div style="width:200px;margin:10% auto 0 auto;">
+            <img src="/site_media/static/images/error.png" width="200">
+        </div>
+        <div style="font-size:12px;">{{msg}}</div>
+        <div style="margin-top:20px;">
+            联系客服：<img id="wangwang" class="marl_6" style="vertical-align: -4px;" src="/site_media/jl/img/online.ww.gif">
+        </div>
+    </div>
+{%endblock%}
+{% block js %}
+    <script>
+        $('#wangwang').on('click',function(){
+            TOP.mobile.ww.chat({
+                chatNick:'派生科技',
+                text:'来自千牛移动：',
+                domain_code:"taobao"
+            });
+        });
+    </script>
+{%endblock%}

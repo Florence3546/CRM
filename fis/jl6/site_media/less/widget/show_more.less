@@ -1,0 +1,77 @@
+.show_more_warp {
+
+    .select_warp;
+
+    .show_more_modal {
+        width: 425px;
+        margin-top: -28px;
+        right: 105px;
+        left: auto;
+        padding: 20px 10px 10px;
+
+        .content {
+            .clearfix;
+        }
+        .choose, .list {
+            float: left;
+            font-size: 12px;
+
+            ul {
+                display: inline-block;
+                overflow: hidden;
+                margin: 0;
+
+                li {
+                    list-style: none;
+                    float: left;
+                    width: 100px;
+                    line-height: 30px;
+                    height: 30px;
+                }
+            }
+        }
+        .choose {
+            ul {
+                padding: 10px;
+                width: 240px;
+                border: 1px solid @gray-light;
+
+                li{
+                    margin-bottom: 5px;
+                }
+            }
+
+            input {
+                margin-right: 5px;
+            }
+
+            margin-right: 20px;
+        }
+        .list {
+            ul {
+                padding: 0;
+                width: 140px;
+                height: 267px;
+                overflow-y: auto;
+
+                li{
+                    width: 100%;
+                    margin-bottom: 10px;
+                    border:1px dashed @gray-light;
+                    padding-left: 10px;
+                }
+            }
+        }
+    }
+    .alert {
+        padding: 0 15px;
+        margin: 0;
+
+        i{
+            margin-right: 5px;
+        }
+    }
+    p{
+        margin: 0;
+    }
+}

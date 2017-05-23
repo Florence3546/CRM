@@ -1,0 +1,104 @@
+<link rel="stylesheet" href="/site_media/jl5/plugins/jQuery-Tags-Input-master/jquery.tagsinput.css" />
+<div id="div_manage_elemword" class="modal fade hide">
+    <div class="modal-header nbb">
+        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+    </div>
+    <div class="p20">
+        <div class="portlet box">
+            <div class="fix lh23 pt5 pb5">
+                <div class="l b"><i class="iconfont mr5">&#xe617;</i>产品词</div>
+                <div class="r btn-group">
+                    <button id="save_elemword_ps" class="btn btn-info btn-mini disabled"><i class="iconfont mr3">&#xe62e;</i>保存</button>
+                    <button id="restore_elemword_ps" class="btn btn-mini"><i class="iconfont">&#xe631;</i>恢复默认配置</button>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- <div>产品词：能直观描述宝贝是什么的名词及其同义词，作为核心关键词词，如："连衣裙"，"连身裙"，"除味剂"等。</div> -->
+                <input id="m_prdtword" type="text" class="m-wra tags" value="" />
+                <input id="org_m_prdtword" type="hidden" value="" />
+            </div>
+            <div class="gray f12">注：产品词：能直观描述宝贝是什么的名词及其同义词，作为核心关键词词，如："连衣裙"，"连身裙"，"除味剂"等。</div>
+            <div class="portlet-body hide">
+                <div>卖点词：产品的独特的、具有卖点的属性，也可以是从有转化的关键词中提取的成交词，选词淘词时包含卖点词的关键词会优先推荐。</div>
+                <input id="m_saleword" type="text" class="m-wra tags" value="" />
+                <input id="org_m_saleword" type="hidden" value="" />
+            </div>
+        </div>
+        <div class="portlet box hide">
+            <div class="portlet-title">
+                <div class="caption large bld marb_0">属性词</div>
+                <div class="tools mart_0">
+                    <button name="save_elemword" wordtype="propword" class="btn m_bgc mini"><i class="icon-save marr_6 white"></i>保存</button>
+                    <button name="restore_elemword" wordtype="propword" class="btn m_bgc mini"><i class="icon-refresh marr_6 white"></i>恢复默认配置</button>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>掌柜在该宝贝的详情页中设置的属性，如："短袖"，"圆领"，"黑色"等。</div>
+                <input id="m_propword" type="text" class="m-wra tags" value="" />
+                <input id="org_m_propword" type="hidden" value="" />
+            </div>
+        </div>
+        <div class="portlet box hide">
+            <div class="portlet-title">
+                <div class="caption large bld marb_0">修饰词</div>
+                <div class="tools mart_0">
+                    <button name="save_elemword" wordtype="dcrtword" class="btn m_bgc mini"><i class="icon-save marr_6 white"></i>保存</button>
+                    <button name="restore_elemword" wordtype="dcrtword" class="btn m_bgc mini"><i class="icon-refresh marr_6 white"></i>恢复默认配置</button>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>除了宝贝详情页上设定的属性词外，其他也能起到描述作用的形容词或名词。</div>
+                <input id="m_dcrtword" type="text" class="m-wra tags" value="" />
+                <input id="org_m_dcrtword" type="hidden" value="" />
+            </div>
+        </div>
+        <!--    <h4 style="margin:0 10px 10px 0;" class="in_block">扩展词根管理</h4>-->
+        <!--
+        <div class="portlet box">
+            <div class="portlet-title">
+                <div class="caption large bld marb_0">卖点词 / 成交词</div>
+                <div class="tools mart_0">
+                    <button name="save_elemword" wordtype="saleword" class="btn m_bgc mini"><i class="icon-save marr_6 white"></i>保存</button>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>从该宝贝推广效果比较好的关键词中提取出来的形容词，选词淘词时包含卖点词的关键词会优先推荐。</div>
+                <input id="m_saleword" type="text" class="m-wra tags" value="" />
+                <input id="org_m_saleword" type="hidden" value="" />
+            </div>
+        </div>
+        -->
+        <div class="portlet">
+            <div class="fix lh23 pt5 pb5 mt10">
+                <div class="l">
+                    <div class="b "><i class="iconfont mr5 baseColor">&#xe67f;</i>屏蔽词</div>
+                </div>
+                <div class="r">
+                    <button id="save_m_blackword" class="btn btn-info hide btn-mini"><i class="iconfont mr3">&#xe62e;</i>保存</button>
+                    <button id="save_del_m_blackword" class="btn  btn-mini"><i class="icon-trash marr_6 white mart_0"></i>保存</button>
+                </div>
+            </div>
+            <div class="portlet-body">
+<!--                 <div>
+                    可将无关词设为屏蔽词，比如设置'<span class='r_color bld'>2013</span>'，则会删除多个计划下、同款宝贝中包含'<span class='r_color bld'>2013</span>'的所有关键词，且选词、加词的结果都不会包含'<span class='r_color bld'>2013</span>'。<br/>
+                    <span class='r_color bld'>警告！在跨计划、同款宝贝中，只要包含屏蔽词都会删除，设置错误可能导致好词被删除，或导致无法添加好词。</span>
+                </div> -->
+                <input id="m_blackword" type="text" class="m-wra tags" value="" />
+                <input id="org_m_blackword" type="hidden" value="" />
+            </div>
+            <div class="gray f12"><span class="b">注意：</span>可将无关词设为屏蔽词，比如设置'<span class='b'>2013</span>'，则会删除多个计划下、同款宝贝中包含'<span class='b'>2013</span>'的所有关键词，且选词、加词的结果都不会包含'<span class='b'>2013</span>'。<br/>
+                <span class='red'>警告！在跨计划、同款宝贝中，只要包含屏蔽词都会删除，设置错误可能导致好词被删除，或导致无法添加好词。</span>
+            </div>
+        </div>
+        <div class="tac hide">
+            <button id="save_all_elemword" class="btn blue">保存所有</button>
+            <button class="btn" onclick="javascript:$.fancybox.close();">关闭</button>
+        </div>
+    </div>
+</div>
+<script src="/site_media/jl5/plugins/jQuery-Tags-Input-master/jquery.tagsinput.min.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function() {
+    PT.ManageElemword.init();
+});
+</script>

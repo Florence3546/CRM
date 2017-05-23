@@ -1,0 +1,240 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}计划树{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/jquery.jOrgChart.css"/>
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/custom.css"/>
+<style>
+#node_right_menu {
+    width: 140px;
+    background-color: white;
+    border: 1px solid #ddd;
+    position: absolute;
+}
+#node_right_menu>li>a {
+    display: block;
+    padding: 2px 15px;
+    cursor: default;
+    color: black;
+}
+#node_right_menu>li>a:hover {
+    background-color: #3366CC;
+    color: white;
+}
+.tooltip-inner {
+    text-align: left;
+}
+.label_tree>#div_operate {display: block;}
+.label_tree.limited #edit_plan_tree, .label_tree.limited #del_plan_tree {display: none;}
+body, html {position: static;}
+.jOrgChart .node {
+    width: 180px;
+    height: initial;
+}
+</style>
+{% endblock %}
+{% block content %}
+{#<input type="hidden" id="psuser_id" value="{{ request.session.psuser_id }}">#}
+<input type="hidden" id="tree_psuser_id" value="{{ psuser.id }}">
+<input type="hidden" id="has_extra_perms" value="{{ has_extra_perms }}">
+<div class="w1329 auto tc">
+    <div class="mt20">
+        <div class="tl">
+            <label class="dib f14 b w80">所属员工：</label>
+            <span id="tree_psuser_name" class="f16">{{ psuser.name_cn }}</span>
+            <a href="#modal_member_list" role="button" data-toggle="modal" class="btn btn-mini btn-primary vba ml5">选择员工</a>
+        </div>
+        <div class="tl mt5">
+            <label class="dib f14 b w60">已发布：</label>
+            {% for tree in my_trees.1 %}
+            <label class="label_tree rel dib f14 pr90 {% if tree.is_valid %}orange {% if tree.is_serving %}b f18{% endif %}{% else %}gray{% endif %}">
+                <input type="radio" name="my_trees" value="{{ tree.id }}" status="1" start_time="{{ tree.start_time|date:'Y-m-d' }}">
+                <span>{{ tree.start_time|date:'Y/m/d' }} - {{ tree.end_time|date:'Y/m/d' }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        <div class="tl mt5">
+            <label class="dib f14 b w60">未发布：</label>
+            {% for tree in my_trees.0 %}
+            <label class="label_tree rel dib f14 pr90 gray">
+                <input type="radio" name="my_trees" value="{{ tree.id }}" status="0" start_time="{{ tree.start_time|date:'Y-m-d' }}">
+                <span>{{ tree.start_time|date:'Y/m/d' }} - {{ tree.end_time|date:'Y/m/d' }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        <div id="div_operate" class="abs w80 f12 hide" style="right:5px;bottom:0;">
+            <a id="edit_plan_tree" target="_blank" href="{% url 'edit_plan_tree' %}?tree_id=">编辑</a>
+{#            <a id="copy_plan_tree" target="_blank" href="{% url 'edit_plan_tree' %}?tree_id=&copy_flag=1">复制</a>#}
+            <a id="del_plan_tree" href="javascript:;">删除</a>
+            <a id="release_plan_tree" href="javascript:;">发布</a>
+            <a id="stop_plan_tree" href="javascript:;">终止</a>
+        </div>
+        {% if psuser.id == request.session.psuser_id %}
+        <div class="tl mt5">
+            <a href="{% url 'edit_plan_tree' %}" class="btn btn-primary" target="_blank">添加树</a>
+            <a id="add_plan_tree_record" href="javascript:;" class="btn btn-primary">添加目标记录</a>
+        </div>
+        {% endif %}
+        {% for tree in my_trees.1 %}
+        <ul id="ul_plan_tree_{{ tree.id }}" class="hide"></ul>
+        <div id="div_plan_tree_{{ tree.id }}" class="plan_tree white hide" loaded="0"></div>
+        {% endfor %}
+        {% for tree in my_trees.0 %}
+        <ul id="ul_plan_tree_{{ tree.id }}" class="hide"></ul>
+        <div id="div_plan_tree_{{ tree.id }}" class="plan_tree white hide" loaded="0"></div>
+        {% endfor %}
+    </div>
+</div>
+
+<ul id="node_right_menu" class="hide">
+    <li><a id="work_bench_view" target="_blank">工作台搜索</a></li>
+    <li><a id="bulk_opt_view" target="_blank">批量优化</a></li>
+    <li><a id="plan_tree_record_view">查看目标记录</a></li>
+</ul>
+
+<!--编辑目标记录弹窗-->
+<div id="modal_plan_tree_record" class="modal hide fade p10" data-width="350">
+    <table class="table-layout">
+        <tr>
+            <td class="w60 tr">店铺名/ID</td>
+            <td class="pl10">
+                <input type="text" class="w120 f12" name="ptr_nick" id="ptr_nick" value="">
+            </td>
+        </tr>
+        <tr>
+            <td class="w60 tr vt">记录类型</td>
+            <td class="pl10">
+                <label class="dib mb0"><input type="radio" class="mr3" name="ptr_rec_type" value="renew_order_pay">进账金额</label>
+                <label class="dib mb0 ml10"><input type="radio" class="mr3" name="ptr_rec_type" value="good_comment_count">好评数</label>
+                <label class="dib mb0 ml10"><input type="radio" class="mr3" name="ptr_rec_type" value="unknown_order_count">SD单量</label>
+                <br>
+                <label class="dib mb0"><input type="radio" class="mr3" name="ptr_rec_type" value="is_potential">意向客户</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60 tr">记录值</td>
+            <td class="pl10">
+                <input type="text" class="w120 f12" name="ptr_rec_value" id="ptr_rec_value" value="">
+                （金额单位：元）
+            </td>
+        </tr>
+    </table>
+    <div class="tr">
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_plan_tree_record">确定</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">取消</a>
+    </div>
+</div>
+
+<!--目标记录弹窗-->
+<div id="modal_plan_tree_record_table" class="modal hide fade p10" data-width="600">
+    <h4>查看目标记录(<span id="plan_tree_record_count" class="red"></span>条)</h4>
+    <div>
+        <label class="dib mb10 mr20"><input type="checkbox" class="checkall">全选：</label>
+        <label class="dib mb10 mr20"><input type="checkbox" class="rec_type" value="renew_order_pay">进账金额(<span class="red"></span>) <a href="" target="_blank">跳转</a></label>
+        <label class="dib mb10 mr20"><input type="checkbox" class="rec_type" value="good_comment_count">好评数(<span class="red"></span>) <a href="" target="_blank">跳转</a></label>
+        <label class="dib mb10 mr20"><input type="checkbox" class="rec_type" value="unknown_order_count">SD单量(<span class="red"></span>) <a href="" target="_blank">跳转</a></label>
+        <label class="dib mb10 mr20"><input type="checkbox" class="rec_type" value="is_potential">意向客户(<span class="red"></span>) <a href="" target="_blank">跳转</a></label>
+    </div>
+    <div class="modal_body" style="max-height: 400px;min-height: 200px;overflow-y: auto;"></div>
+    <div class="tr mt10">
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<!--人员选择弹窗-->
+<div id="modal_member_list" class="modal hide fade" data-width="500">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>所属员工</h4>
+    </div>
+    <div class="modal-body" style="max-height: 300px;overflow-y: auto;">
+        <div class="mb15">
+            <span class="b mr10">服务一部 售后</span>
+            {% if member_dict.GROUP1 %}
+                {% for user_id, user_name in member_dict.GROUP1 %}
+                    <a class="dib w60" href="{% url 'plan_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务二部 售后</span>
+            {% if member_dict.GROUP2 %}
+                {% for user_id, user_name in member_dict.GROUP2 %}
+                    <a class="dib w60" href="{% url 'plan_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务三部 售后</span>
+            {% if member_dict.GROUP3 %}
+                {% for user_id, user_name in member_dict.GROUP3 %}
+                    <a class="dib w60" href="{% url 'plan_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务四部 售后</span>
+            {% if member_dict.GROUP4 %}
+                {% for user_id, user_name in member_dict.GROUP4 %}
+                    <a class="dib w60" href="{% url 'plan_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务五部 售后</span>
+            {% if member_dict.GROUP5 %}
+                {% for user_id, user_name in member_dict.GROUP5 %}
+                    <a class="dib w60" href="{% url 'plan_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script type="text/javascript" src="/site_media/jl5/plugins/jOrgChart/jquery.jOrgChart.js"></script>
+<script src="{{'/site_media/jl5/ncrm_js/plan_tree.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.PlanTree.init({{ all_cond_fields|safe }});
+});
+</script>
+<!--节点展示模板-->
+<script id="template_node" type="text/html">
+<li>
+    <div path="<%=tree_data.path%>" mark="<%=tree_data.mark%>">
+        <div class="p5"><%=tree_data.name%></div>
+        <div class="f24 mt2"><%=tree_data.shop_count%></div>
+        <div class="f12 tl p5">
+            <div>预期目标</div>
+            <%if (tree_data.goal) { %>
+            <div class="ml15">
+                <div>进账金额 <span name="renew_order_pay" class="ml10 b f16"><%=tree_data.record.renew_order_pay/100%> / <%=tree_data.goal.renew_order_pay || '无'%></span></div>
+                <div>好评数 <span name="good_comment_count" class="ml10 b f16"><%=tree_data.record.good_comment_count%> / <%=tree_data.goal.good_comment_count || '无'%></span></div>
+                <div>SD单量 <span name="unknown_order_count" class="ml10 b f16"><%=tree_data.record.unknown_order_count%> / <%=tree_data.goal.unknown_order_count || '无'%></span></div>
+            </div>
+            <% }%>
+        </div>
+    </div>
+</li>
+</script>
+<!--目标记录模板-->
+<script id="template_plan_tree_record_table" type="text/html">
+    <table class="table-layout">
+        <%for (var i in record_list) { %>
+        <tr rec_type="<%=record_list[i].rec_type%>" shop_id="<%=record_list[i].shop_id%>">
+            <td class="w130"><%=record_list[i].create_time.slice(0, 19)%></td>
+            <td><%=record_list[i].nick%></td>
+            <td class="w180"><%=record_list[i].rec_desc%></td>
+            <td class="w60"><%=record_list[i].psuser_cn%></td>
+            <td class="w30"><%if (record_list[i].psuser_id!=0) { %><a href="javascript:;" class="del_plan_tree_record" record_id="<%=record_list[i]._id%>">删除</a><% }%></td>
+        </tr>
+        <% }%>
+    </table>
+</script>
+{% endblock %}

@@ -1,0 +1,490 @@
+{% extends "base_jl5.html" %}
+{% block title%}积分商城{% endblock %}
+{% block extra_style %}
+<style>
+    a.white:hover,a.white:focus{
+        color:#fff;
+    }
+    .w265{width: 235px;}
+    .h105{height: 91px;}
+    .bdd{border-radius: 3px;}
+    .gray{color:#999;}
+    .num{color: #b97c5b;}
+    .span6>.bdd{
+        padding: 5px;
+        text-transform:
+    }
+    .span6>.bdd:hover{
+        border:3px solid #bc0000;
+    }
+    .span6>.bdd:hover{
+        padding: 3px;
+    }
+</style>
+{% endblock %}
+
+{%block base_jl5%}
+<input type="hidden" value="{{is_perfect_info}}" id="is_perfect_info">
+<div id="header" class="navbar-static-top container-fluid">
+    <a href="{%url 'web_home'%}">
+        <img class="db l" src="/site_media/jl5/images/logo.png"></a>
+    <ul class="ul_line ar mr10">
+        <li>
+            <a id="open_msg" href="{%url 'web_home'%}"> <i class="iconfont f18 mr3">&#xe606;</i>
+                返回首页
+            </a>
+        </li>
+        <li>
+            <div class="dropdown rel">
+                <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;"> <i class="iconfont f18 mr5">&#xe640;</i>
+                    {{request.user.nick}}
+                    <i class="iconfont">&#xe626;</i>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li>
+                        <a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'top_logout'%}">退出系统</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="container-fluid mt20">
+    <div class="w1100 auto">
+        <div class="row-fluid">
+            <ul class="breadcrumb p0">
+                <li>
+                    <a href="{%url 'web_home'%}">首页</a>
+                    <span class="divider">/</span>
+                </li>
+                <li>
+                    <a href="{%url 'vip_home'%}">会员中心</a>
+                    <span class="divider">/</span>
+                </li>
+                <li class="active">
+                    积分商城
+                </li>
+            </ul>
+
+            <h3>积分商城<span class="f14 n ml10 black">（当前积分：<span class="point_count">{{point_count|default:0}}</span>）</span></h3>
+
+            <div class="bg_white p20">
+                <div class="row-fluid">
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_djj50.png" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">5000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">在升级/续订时，在现有优惠的基础之上，可以再享受50元优惠</div>
+                                <div class="mt10">
+                                    {%if point_count > 5000 %}
+                                        <a href="{%url 'upgrade_suggest'%}?referer=point&item_code={{request.session.item_code}}&point=5000"  target="_blank"  class="btn btn-small btn-primary">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_djj100.png" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">10000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">在升级/续订时，在现有优惠的基础之上，可以再享受100元优惠</div>
+                                <div class="mt10">
+                                    {%if point_count > 10000 %}
+                                        <a href="{%url 'upgrade_suggest'%}?referer=point&item_code={{request.session.item_code}}&point=10000"  target="_blank"  class="btn btn-small btn-primary">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_djj150.png" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">15000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">在升级/续订时，在现有优惠的基础之上，可以再享受150元优惠</div>
+                                <div class="mt10">
+                                    {%if point_count > 15000 %}
+                                        <a href="{%url 'upgrade_suggest'%}?referer=point&item_code={{request.session.item_code}}&point=15000"  target="_blank"  class="btn btn-small btn-primary">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_djj200.png" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">20000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">在升级/续订时，在现有优惠的基础之上，可以再享受200元优惠</div>
+                                <div class="mt10">
+                                    {%if point_count > 20000 %}
+                                        <a href="{%url 'upgrade_suggest'%}?referer=point&item_code={{request.session.item_code}}&point=20000"  target="_blank"  class="btn btn-small btn-primary">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt20 row-fluid">
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_huafei.jpg" class="w265 h105">
+                        <div class="mt10 tl">
+                            <span class="b red f16">2000</span>&ensp;<span class="red f12">积分</span>
+                            <span class="r gray f12">
+                                满10000分可用
+                            </span>
+                        </div>
+                            <div class="mt10">
+                                <div class="tl f12">兑换后，顾问会给您的手机充值20元。联通、移动、电信都可以</div>
+                                <div class="mt10">
+                                {%if point_count > 10000 %}
+                                     <a href="javascript:;" data-type="phone_cost20" class="btn btn-small btn-primary Virtual">&emsp;兑换&emsp;</a>
+                                {%else%}
+                                    <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_shubiao.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">10000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r gray f12">
+                                    满20000分可用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">原价129正品微软无线鼠，人体工学设计，无线便捷、操作简单、性能可靠</div>
+                                <div class="mt10">
+                                    <div class="mt10">
+                                    {%if point_count > 20000 %}
+                                        <a href="javascript:;" data-type="mouse" class="btn btn-small btn-primary gift">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_zhaocaimao.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">12000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+                                    满20000分可用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">原价128天猫正品招财猫，左招财右招福，给你的店铺带来滚滚财源和好运</div>
+                                <div class="mt10">
+                                    <div class="mt10">
+                                    {%if point_count > 20000 %}
+                                        <a href="javascript:;" data-type="cat" class="btn btn-small btn-primary gift">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_zhouheiya.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">14000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+                                    满20000分可用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">原价138武汉特产周黑鸭，无任何添加剂，工艺独特，回味无穷，专供吃货</div>
+                                <div class="mt10">
+                                    <div class="mt10">
+                                    {%if point_count > 20000 %}
+                                        <a href="javascript:;" data-type="duck" class="btn btn-small btn-primary gift">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt20 row-fluid">
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_tuiguangtu.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">6000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+                                    可重复使用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">要引流，就得提高点击率，创意图是关键，开车精灵高级设计师为您设计创意图</div>
+                                <div class="mt10">
+                                    {%if point_count >= 6000 %}
+                                        <a  href="javascript:;" data-type="promotion_img" class="btn btn-small btn-primary Virtual">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_xiangqingye.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">12000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+                                    可重复使用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">买家领进门，转化靠详情！精灵高级设计师为您设计宝贝详情，助您提高转化</div>
+                                <div class="mt10">
+                                    {%if point_count > 12000 %}
+                                        <a href="javascript:;" data-type="details_page" class="btn btn-small btn-primary Virtual">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_shouyezhuangixu.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">18000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+                                    可重复使用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">您提供素材文案，开车精灵顶级设计师为您制作店铺首页，装饰您的门脸</div>
+                                <div class="mt10">
+                                    {%if point_count > 18000 %}
+                                        <a  href="javascript:;" data-type="home_page" class="btn btn-small btn-primary Virtual">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 pl5 pr5">
+                        <div class="tc p3 bdd pb10">
+                            <img src="/site_media/jl5/images/vip_xianjing.jpg" class="w265 h105">
+                            <div class="mt10 tl">
+                                <span class="b red f16">100000</span>&ensp;<span class="red f12">积分</span>
+                                <span class="r f12 gray">
+                                    可重复使用
+                                </span>
+                            </div>
+                            <div class="mt10">
+                                <div class="tl f12">存够积分就可以返现！推荐、续签积分多，感觉好就推荐吧！积分攻略用起来！</div>
+                                <div class="mt10">
+                                    {%if point_count > 100000 %}
+                                        <a href="javascript:;" data-type="money1000" class="btn btn-small btn-primary Virtual">&emsp;兑换&emsp;</a>
+                                    {%else%}
+                                        <a class="btn btn-primary btn-small disabled" href="javascript:;">积分不够</a>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="perfect_info">
+    <input type="hidden" id="modal_gift_type">
+    <div class="modal-header">
+        <h5>请先完善收货信息</h5>
+    </div>
+    <form class="m0" action="">
+    <div class="modal-body">
+        <div class="pl10">
+                <div class="mt10">
+                    收&ensp;件&ensp;人：<input class="ml10" data-rule="require" name="receiver" id="receiver" type="text" value="{{data.info_dict.receiver}}"><span class="ml10 gray f12"><span class="red mr5">*</span>您的姓名</span>
+                </div>
+                <div class="mt10">
+                    手&ensp;机&ensp;号：<input class="ml10" data-rule="phone" name="receiver_phone" id="receiver_phone" type="text" value="{{data.info_dict.receiver_phone}}"><span class="ml10 gray f12"><span class="red mr5">*</span>请填写</span>
+                </div>
+                <div class="mt10">
+                    详细地址：<textarea  class="ml10" data-rule="require" cols="30" name="receive_address" id="receive_address" rows="3">{{data.info_dict.receive_address}}</textarea><span class="ml10 gray f12"><span class="red mr5">*</span>请填写详细的地址，以免寄丢了哦！</span>
+                </div>
+                <div class="mt10">
+                    邮&emsp;&emsp;编：<input class="ml10" data-rule="require" type="text" name="zip_code" id="zip_code" value="{{data.info_dict.zip_code}}"><span class="red mr5 ml10">*</span>
+                </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" >提交</button>
+        <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+     </form>
+</div>
+{%endblock%}
+
+
+{% block custom_js %}
+<script>
+PT.namespace('pointMall');
+PT.pointMall=function(){
+    var init_dom=function(){
+
+        $('.gift').on('click',function(){
+            var is_perfect_info=$('#is_perfect_info').val();
+            var gift_type=$(this).attr('data-type');
+
+            if (is_perfect_info=="True"){
+                //已经完善信息
+                PT.confirm('您确定要兑换吗？',function(){
+                    PT.show_loading('正在发送申请');
+                    PT.sendDajax({
+                        'function': 'web_convert_gift',
+                        'gift_type':gift_type,
+                        'callback': 'PT.pointMall.convert_gift_callback'
+                    });
+                });
+            }else{
+                //未完成信息
+                $('#perfect_info').modal();
+                $('#modal_gift_type').val(gift_type);
+            }
+
+        });
+
+        $('#perfect_info form').vaildata({'placement':'right','call_back':function(obj){
+            var receiver,receiver_phone,receive_address,zip_code;
+
+            receiver=$('#receiver').val();
+            receiver_phone=$('#receiver_phone').val();
+            receive_address=$('#receive_address').val();
+            zip_code=$('#zip_code').val();
+
+            PT.sendDajax({
+                'function': 'web_perfect_info',
+                'receiver':receiver,
+                'receiver_phone':receiver_phone,
+                'receive_address':receive_address,
+                'zip_code':zip_code,
+                'callback': 'PT.pointMall.perfect_info_callback'
+            });
+
+            $('#perfect_info').modal('hide');
+        }});
+
+        $('.Virtual').on('click',function(){
+            var gift_type=$(this).attr('data-type');
+
+            PT.confirm('您确定要兑换吗？',function(){
+                PT.show_loading('正在发送申请');
+                PT.sendDajax({
+                    'function': 'web_convert_virtual',
+                    'gift_type':gift_type,
+                    'callback': 'PT.pointMall.convert_Virtual_callback'
+                });
+            })
+        });
+
+    }
+
+    return {
+        init:function(){
+            init_dom();
+        },
+        perfect_info_callback:function(data){
+            var gift_type=$('#modal_gift_type').val();
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                PT.show_loading('正在发送申请');
+                PT.sendDajax({
+                    'function': 'web_convert_gift',
+                    'gift_type':gift_type,
+                    'callback': 'PT.pointMall.convert_gift_callback'
+                });
+            }
+        },
+        convert_gift_callback:function(data){
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                $('.point_count').each(function(){
+                    var point=Number($(this).text());
+                    $(this).text(point+data.data.point);
+                });
+                 PT.alert("亲！您的兑换申请我们已经收到，会尽快安排为您发货。请在升级记录中查看，物流单号");
+            }
+        },
+        convert_Virtual_callback:function(data){
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                $('.point_count').each(function(){
+                    var point=Number($(this).text());
+                    $(this).text(point+data.data.point);
+                });
+                 PT.alert("亲！您的兑换申请我们已经收到，会尽快安排顾问与您联系，感谢您的支持！");
+            }
+        }
+    }
+
+}();
+
+PT.pointMall.init();
+</script>
+{% endblock %}

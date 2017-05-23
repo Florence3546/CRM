@@ -1,0 +1,40 @@
+<tr id="<%=keyword_id%>" fix-ie="hover">
+    <td class="link_inner_checkbox tc poi"><span class="hide">0</span><input type="checkbox" name="idx" class="checkboxes kid_box" /></td>
+    <td>
+        <span class="match dn"><%=$filter_match(match_scope)%></span>
+        <span class="keyword poi" id="word_<%=keyword_id%>"><%=word%></span>
+    </td>
+    <td class="custom" style="text-align:center;">
+        <span class="max_price l ml3"><%=max_price%></span>
+        <a href="javascript:;" class="mr3 check_ranking r" switch="1">查排名</a>
+    </td>
+    <td class="tr base_data qscore"><%=qscore%></td>
+    <td class="tr base_data click"><%=click%></td>
+    <td class="tr base_data"><span class="ctr"><%=ctr%></span>%</td>
+    <td class="tr base_data cost"><%=cost%></td>
+    <td class="tr conv_data"><span class="conv"><%=conv%></span>%</td>
+    <td class="tr conv_data pay"><%=pay%></td>
+    <td class="tr conv_data roi"><%=roi%></td>
+    <td class="rob_set lh30 pl20">
+        <span class="rob_set_box">
+            <div class="input-append m0">
+                <input class="rob_min tr w25" type="text" maxlength="3">
+                <span class="add-on">名</span>
+            </div>
+            ~
+            <div class="input-append m0">
+                <input class="rob_max tr w25" type="text" maxlength="3">
+                <span class="add-on">名</span>
+            </div>
+            ，
+            <span class="fr">
+                <div class="input-append m0">
+                    <input class="rob_limit tr w40" type="text" maxlength="5">
+                    <span class="add-on">元</span>
+                </div>
+                <a href="javascript:;" class="prompt_price ml3">建议限价</a>
+            </span>
+        </span>
+        <span class="rob_set_info"></span>
+    </td>
+</tr>

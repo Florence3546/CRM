@@ -1,0 +1,66 @@
+<div id="rob_record"  style="width: 600px; margin-left: -300px; left:50%;" tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade drawer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                <h4 class="modal-title">抢排名记录</h4>
+                <div class="btn-group show_model mr10">
+                    <a class="btn btn-sm active" data-type="char_info"><i class="iconfont b">&#xe60d;</i></a>
+                    <a class="btn btn-sm" data-type="table_info"><i class="iconfont b">&#xe60e;</i></a>
+                </div>                       
+            </div>
+            <div class="modal-body" style=" max-height: 400px; overflow-y: scroll">
+                <div class="drawer_body">
+                    <div style="text-align:right;margin-top:10px;">
+                        <div class="show_model">
+                            <a class="active" data-type="sign_char"><i class="iconfont b">&#xe60d;</i></a>
+                            <a data-type="sign_table"><i class="iconfont b">&#xe60e;</i></a>
+                        </div>
+                    </div>
+                    <div id="sign_char" style="height:280px;"></div>
+                    <div id="sign_table" class="hide" style="height:260px;overflow-y: scroll;margin:10px;">
+                        <table class="sui-table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>优化时间</th>
+                                    <th>出价</th>
+                                    <th>排名情况</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" class="tc">
+                                        正在获取，请稍后。。。
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="padding:0 10px;">
+                        <span>当前设置：<span class="setting">--</span></span>
+                        <button class="sui-btn btn-xlarge btn-primary fr close_drawer" type="button">返回</button>
+                    </div>
+                </div>
+                <div id="char_info" style="height:340px;"></div>
+                <div id="table_info" class="hide">
+                    <table class="sui-table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>优化时间</th>
+                                <th>出价</th>
+                                <th>排名情况</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" class="tc">
+                                    正在获取，请稍后。。。
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>

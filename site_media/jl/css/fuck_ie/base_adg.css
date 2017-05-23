@@ -1,0 +1,42 @@
+/* CSS Document */
+/*头部*/
+body{min-width:1280px;}
+.header .brand{width:140px; height:60px; float:left; padding:0}
+.header .brand img{margin:4px 0 0 20px;}
+.header .hor-menu{float:right; margin:0;}
+.header .nav{margin:0;}
+.header .nav>li{display:inline-block;}
+.header .nav>li>a{color:#fff;padding: 30px 10px; font-size:14px;}
+.header .nav>li>a:hover{background-color:#2d2d2d}
+.footer .footer-main a{color:#ccc;}
+.footer .footer-main {width:704px; color: #999;}
+
+.hide_important{display:none !important}
+
+.adgroup_base_info{float:left; border:1px solid #ccc; width:220px;}
+.adgroup_base_info li{list-style:none; line-height:29px;}
+
+.adgroup_base_info_table{padding-left:260px;}
+.adgroup_base_info_table table{clear:none;}
+.daterangepicker{z-index:1056;}
+#adgroup_box,#creative_box{top:50%;}
+
+#adgroup_box .dashboard-date-range,#creative_box .dashboard-date-range{background-color:#679B00;}
+#adgroup_nav li{list-style:none;}
+#adgroup_nav{ display:inline-block;}
+
+#summarization ul,#spread_content ul{list-style:none;}
+#summarization ul li{line-height:30px;}
+#spread_content ul li{line-height:30px;}
+#summarization {height:175px;}
+
+#add_creative_box a{width: 160px;height: 160px;background-color: #35aa47;line-height: 140px;text-align: center;color: #FFF;font-size: 120px;font-weight: 700; display:inline-block; text-decoration:none;}
+#add_creative_box a:hover{background-color:#1D943B;}
+#add_creative_box .explain{width:270px;}
+
+.dropdown-menu{min-width:130px;;}
+.daterangepicker .ranges{width:auto; min-width:120px;}
+
+.creative_input{width:300px; line-height:24px;font-size:12px;}
+
+.blackword {border:1px dashed #FF0000; background-color:#FFFFFF; cursor:pointer; padding:5px 10px;}

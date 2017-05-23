@@ -1,0 +1,45 @@
+<div class="modal fade">
+    <div class="modal-dialog w650">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改计划日限额</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning f12">
+                   <li class="">如当前推广计划当日消耗达到日限额时，该计划下所有的推广将全部下线，第二天自动上线，
+                       <a href="http://help.alimama.com/?spm=0.0.0.0.v12rRB#!/ztc/faq/detail?id=5701658" target="_blank">了解详情&nbsp;&gt;&gt;</a>
+                    </li>
+                    <li class="">如推广计划因到达日限额下线，您可立即通过调整日限额来使推广计划重新上线</li>
+                    <li>花费可能出现超出日限额的情况，但日终会自动返还超出部分，<a href="http://help.alimama.com/#!/ztc/faq/detail?id=5701661" target="_blank">了解详情&nbsp;&gt;&gt;</a></li>
+                    <li>请谨慎设置日限额，不要过高或过低，同时请根据计划花费适当调整日限额</li>
+                </div>
+                <label class="n">
+                    <input type="radio" name="is_limit" {{if budget==20000000}}checked{{/if}} value="unlimit">&ensp;不设置日限额
+                </label>
+                <br/>
+                <label class="n">
+                    <input type="radio" name="is_limit" {{if budget!=20000000}}checked{{/if}} value="limit">&ensp;设置日限额&ensp;
+                    <input class="w80 form-control dib" name="budget" type="text" value="{{if budget!=20000000}}{{budget}}{{else}}300{{/if}}" {{if budget==20000000}}disabled{{/if}}>&ensp;元&ensp;<span class="g9">(范围为{{ budget_min }}~{{ budget_max }}元)</span>
+                </label>
+                <br/>
+                <div style="margin-left:2em;" class="{{if budget==20000000}}dn{{/if}}" >
+                    <label class="n">
+                        <input type="radio" name="is_smooth" {{if is_smooth == '0'}}checked{{/if}} value=0>&ensp;标准投放
+                        <i class="iconfont poi" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="系统会根据您的投放设置正常展现您的推广，<br/>但您可能因过早到达日限额而提前下线。">&#xe61a;</i>
+                    </label>
+                    <br/>
+                    <label class="n">
+                        <input type="radio" name="is_smooth" {{if is_smooth == '1'}}checked{{/if}} value=1>&ensp;智能均匀投放
+                        <i class="iconfont poi" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="根据流量变化及您的日限额，<br/>系统会在设置的投放时间内均匀展现您的推广，<br/>不会因为过早到达日限额而错过晚些时候的流量。">&#xe61a;</i>
+                    </label>
+                    <br/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

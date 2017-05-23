@@ -1,0 +1,104 @@
+{#utf-8#}{% extends "base_jl5.html" %}
+{% load rates %}
+{% block base_jl5 %}
+    <div class="container-fluid pt10 pl20">
+        <div class="row-fluid" id="adg_nav">
+            <div class="span8 p3 rel" id="adg_base_info">
+                <img class="l item_pic" src="{{adg.item.pic_url}}_60x60.jpg" height="60" width="60" />
+                <div class="pl60 ml10 f12">
+                <div class="title"><a href="http://item.taobao.com/item.htm?id={{adg.item_id}}" target="_blank">{{adg.item.title}}</a></div>
+                    <div class="details">
+                        <span>￥{{adg.item|div:'price,100,2'}}元</span>
+                        <a class="ml10" href="javascript:;" id="show_adgroup_box">推广数据</a>
+                        <a class="ml10" href="{%url 'web_home'%}">返回首页</a>
+                        {% if adg.mnt_type != 0 %}<span class="ml10 orange">自动优化中的宝贝</span>{%endif%}
+                    </div>
+                </div>
+                <img class="abs l0 t0 zx106 hide big_item_pic" src="{{adg.item.pic_url}}_320x320.jpg" height="320" width="320" />
+            </div>
+            <div class=" pr5 r rel" id="adg_nav_list">
+                <ul>
+                    {% if adg.mnt_type == 0 %}
+                        <li class="{%if PAGE_MARK.2 == 'smart_optimize' %}active{%endif%}"><a href="{%url 'smart_optimize' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe636;</i></div><span>智能优化</span></a></li>
+                        <li class="{%if PAGE_MARK.2 == 'bulk_optomize' %}active{%endif%}"><a href="{%url 'adgroup_optimize' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe62a;</i></div><span>批量优化</span></a></li>
+                        <li class="{%if PAGE_MARK.2 == 'select_keyword' or PAGE_MARK.2 == 'quick_add_keyword' %}active{%endif%}"><a href="{%url 'select_keyword' 'quick'%}?adgroup_id={{adg.adgroup_id}}"><div class="font-icon"><i class="iconfont">&#xe62f;</i></div><span>选词</span></a> </li>
+                        <li class="{%if PAGE_MARK.2 == 'title_optimize' %}active{%endif%}"><a href="{%url 'title_optimize'%}?adgroup_id={{adg.adgroup_id}}"><div class="font-icon"><i class="iconfont">&#xe627;</i></div><span>标题优化</span></a></li>
+                        <li class="{%if PAGE_MARK.2 == 'rob_rank' %}active{%endif%}"><a href="{%url 'rob_rank' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe630;</i></div><span>极速排名</span></a></li>
+<!--                         <li class="{%if PAGE_MARK.2 == 'creative_optimization' %}active{%endif%}"><a href="{%url 'creative_optimization' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe622;</i></div><span>创意优化</span></a></li> -->
+                        <li class="{%if PAGE_MARK.2 == 'image_optimoze' %}active{%endif%}"><a href="{%url 'image_optimoze' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe699;</i></div><span>创意优化</span></a></li>
+                        <li><a href="javascript:;" class="open_manage_elemword" id="manage_elemword_{{adg.item_id}}" adg_id="{{adg.adgroup_id}}"><div class="font-icon"><i class="iconfont">&#xe62d;</i></div><span>关键词设置</span></a></li>
+                        <li><a href="javascript:;" id="sync_adg"><div class="font-icon"><i class="iconfont">&#xe601;</i></div><span>同步数据</span></a></li>
+                        <li>
+                            <div class="dropdown vb">
+                                <a href="javascript:;" class="dropdown-toggle white" data-trigger="hover" data-toggle="dropdown" data-type="select"><div class="font-icon"><i class="iconfont">&#xe641;</i></div><span>更多功能</span></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                    <li><a class="p0" href="{%url 'deleted_keyword' adg.adgroup_id%}">已删词管理</a></li>
+                                    <li><a class="p0" href="{%url 'adgroup_history' adg.adgroup_id%}">操作记录</a></li>
+                                    <li><a class="p0" id="set_habit" href="javascript:;">设置</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="{%if PAGE_MARK.2 == 'adgroup_data' %}active{%endif%}"><a href="{%url 'adgroup_data' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe60f;</i></div><span>托管详情</span></a></li>
+                        <li class="{%if PAGE_MARK.2 == 'select_keyword' %}active{%endif%}"><a href="{%url 'select_keyword' 'quick'%}?adgroup_id={{adg.adgroup_id}}"><div class="font-icon"><i class="iconfont">&#xe62f;</i></div><span>选词</span></a> </li>
+                        <li class="{%if PAGE_MARK.2 == 'title_optimize' %}active{%endif%}"><a href="{%url 'title_optimize'%}?adgroup_id={{adg.adgroup_id}}"><div class="font-icon"><i class="iconfont">&#xe627;</i></div><span>标题优化</span></a></li>
+<!--                         <li class="{%if PAGE_MARK.2 == 'creative_optimization' %}active{%endif%}"><a href="{%url 'creative_optimization' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe622;</i></div><span>创意优化</span></a></li> -->
+                        <li class="{%if PAGE_MARK.2 == 'image_optimoze' %}active{%endif%}"><a href="{%url 'image_optimoze' adg.adgroup_id%}"><div class="font-icon"><i class="iconfont">&#xe699;</i></div><span>创意优化</span></a></li>
+                        <li><a href="javascript:;" class="open_manage_elemword" id="manage_elemword_{{adg.item_id}}" adg_id="{{adg.adgroup_id}}"><div class="font-icon"><i class="iconfont">&#xe62d;</i></div><span>关键词设置</span></a></li>
+                        <li><a href="javascript:;" id="sync_adg"><div class="font-icon"><i class="iconfont">&#xe601;</i></div><span>同步数据</span></a></li>
+                        <li>
+                            <div class="dropdown vb">
+                                <a href="javascript:;" class="dropdown-toggle white" data-trigger="hover" data-toggle="dropdown" data-type="select"><div class="font-icon"><i class="iconfont">&#xe641;</i></div><span>更多功能</span></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                    <li><a class="p0" href="{%url 'deleted_keyword' adg.adgroup_id%}">已删词管理</a></li>
+                                    <li><a class="p0" id="set_habit" href="javascript:;">设置</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" value="{{adg.adgroup_id}}" id="adgroup_id" />
+    <input type="hidden" value="{{adg.campaign_id}}" id="campaign_id" />
+    <input type="hidden" value="{{adg.item_id}}" id="item_id" />
+    <div class="container-fluid pt10 pl20">
+        {% block content %}{%endblock%}
+        </div>
+        <div id="adgroup_box" class="modal fade hide" data-width="900" style="height:500px;">
+            <div class="modal-header pb0">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                <h4><i class="iconfont mr5">&#xe680;</i>推广数据</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tac l ml10" style="width:100px;" id="adgroup_info_tip">
+                    <img src="/site_media/jl5/images/forecast_orde_ajax.gif" style="display:inline-block">
+                </div>
+                <div class="fix">
+                    <div class="dropdown r" id="adg_select_days">
+                        <a class="dropdown-toggle btn btn-small" data-toggle="dropdown" data-autowidth="true" data-type="select" href="#"><i class="iconfont mr5">&#xe61e;</i><span class="dropdown-value">过去1天</span><i class="iconfont">&#xe626;</i></a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a value="1" href="javascript:;">过去1天</a></li>
+                            <li><a value="3" href="javascript:;">过去3天</a></li>
+                            <li><a value="7" href="javascript:;">过去7天</a></li>
+                            <li><a value="15" href="javascript:;">过去15天</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row-fluid mt10 h140" id="adgroup_detail_box">
+                </div>
+                <div id="adgroup_trend_chart" class="mt10 w880 h230">
+                </div>
+            </div>
+        </div>
+        <!-- 关键词设置 -->
+        {% include 'manage_elemword.html' %}
+{% endblock %}
+{% block base_js %}
+    <script>
+    jQuery(document).ready(function() {
+        PT.Base_adg.init();
+    });
+    </script>
+{% endblock %}

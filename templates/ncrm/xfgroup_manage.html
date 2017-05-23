@@ -1,0 +1,170 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}销服组配置{% endblock %}
+{% block extra_style %}
+<style>
+.work_status_0 { background-color: #FFFDE9; }
+.work_status_1 { background-color: #DEEDF9; }
+.work_status_2 { background-color: #FFEBED; }
+.work_status_3 { background-color: #3d9970; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1200 auto pt20">
+  <div class="bg_white p10 mb20">
+    <div>
+      <form method="post" action="./" class="mb0">
+        <select class="w100" name="department" id="department">
+          <option value="">-统计部门-</option>
+          {% for val, name in department_choies %}
+          <option value="{{val}}" {% if request.POST.department == val %} selected="selected" {% endif %}>{{name}}</option>
+          {% endfor %}
+        </select>
+        <select class="w100 ml10" name="is_active" id="is_active">
+          <option value="">-状态-</option>
+          <option value="1" {% if not request.POST or request.POST.is_active == '1' %} selected="selected" {% endif %}>工作中</option>
+          <option value="0" {% if request.POST.is_active == '0' %} selected="selected" {% endif %}>已废弃</option>
+        </select>
+        <button class="btn btn-primary ml20 w80" type="submit">查&nbsp;询</button>
+        {% if 'X' in request.session.perms %}
+          <button class="btn btn-primary ml20 r" data-toggle="modal" href="#add_xfgroup_modal" >添加销服组</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+
+  {% if unuse_user_list and request.POST.is_active != '0' %}
+    <h4>尚未分配的顾问和售后</h4>
+    <div class="bg_white p10 mb20">
+      {% for user in unuse_user_list %}
+        <div class="dib w150">{{user.get_department_display}}_{{user.get_position_display}}_<span class="b">{{user.name_cn}}</span></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if warning_psuser_list and request.POST.is_active != '0' %}
+    <h4>快到期的顾问和售后</h4>
+    <div class="bg_white p10 mb20">
+      {% for wp in warning_psuser_list %}
+        <div class="dib w250">
+          <span class="b">{{wp.user.get_position_display}}_{{wp.user.name_cn}}</span>
+          <span class="red">{{wp.end_time}}</span>到期
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <h4>销服组<span>({{xfgroups|length}})</span></h4>
+  <div class="">
+    <table class="table-hover" id="pay_rpt_table">
+      <thead>
+        <tr>
+          <th class="w60"><div>创建时间</div></th>
+          <th class="w40"><div>部门</div></th>
+          <th class="w50"><div>销服组</div></th>
+          <th class="w80"><div>服务生效时间</div></th>
+          <th class="w100"><div>服务结束时间</div></th>
+          <th class="w40"><div>顾问</div></th>
+          <th class="w40"><div>销售</div></th>
+          <th class="w40"><div>状态</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for xfg in xfgroups %}
+        <tr xfgroup_id="{{xfg.id}}">
+          <td class="tc">{{xfg.create_time}}</td>
+          <td class="tc">{{xfg.get_department_display}}</td>
+          <td class="tc">{{xfg.name}}</td>
+          <td class="tc">{{xfg.start_time|default:''}}</td>
+          <td class="tc">
+            <input class="w120 ml3 f12 end_time" name="end_time" id="end_time_{{xfg.id}}" type="text" value="{{xfg.end_time|default:''}}" disabled>
+            {% if 'X' in request.session.perms %}
+              <a href="javascript:;" class="modify_end_time ml10">修改</a>
+              <a href="javascript:;" class="save_end_time ml10 hide">保存</a>
+            {% endif %}
+          </td>
+          <td class="tc">{{xfg.consult.name_cn}}</td>
+          <td class="tc">{{xfg.seller.name_cn}}</td>
+          <td class="tc {% if xfg.work_status != '工作中' %}work_status_2 {%endif%}">
+            {{xfg.work_status}}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+        <td colspan="7" class="tc b f14">没有符合要求的销服组</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div id="add_xfgroup_modal" class="modal hide fade" data-width="400">
+  <div class="modal-header">
+    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+  </div>
+  <div class="">
+    <form action="/ncrm/add_xfgroup/" method="post" id="form_xfgroup">
+      <label class="mt10">
+        <div class="dib mr10 tr w100">部门:</div>
+        <select name="department" class="w100 f12">
+          {% for val, name in department_choies %}
+          <option value="{{val}}" >{{name}}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="mt10">
+        <div class="dib mr10 tr w100">顾问:</div>
+        <select name="consult_id" class="w150 f12">
+          {% for user in valid_consult_list %}
+          <option value="{{user.id}}" >{{user.get_department_display}}_{{user.get_position_display}}_{{user.name_cn}}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="mt10">
+        <div class="dib mr10 tr w100">销售:</div>
+        <select name="seller_id" class="w150 f12">
+          {% for user in valid_psuser_list %}
+          <option value="{{user.id}}" >{{user.get_department_display}}_{{user.get_position_display}}_{{user.name_cn}}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="mt10">
+        <div class="dib mr10 tr w100">销服组名称:</div>
+        <input class="w130 f12" type="text" name="xfgroup_name">
+      </label>
+      <label class="mt10">
+        <div class="dib mr10 tr w100">生效时间:</div>
+        <input class="w130 f12" type="text" name="start_time" id="new_xfgroup_starttime">
+      </label>
+    </form>
+  </div>
+  <div class="tc mt10 mb20">
+    <button class="btn btn-primary ml20 w80" id="submit_xfgroup">提&nbsp;交</button>
+  </div>
+</div>
+
+<div id="add_endtime_modal" class="modal hide fade" comment_id＝0 data-width="250">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h5>添加服务结束时间</h5>
+    </div>
+    <div class="modal-body pl20">
+        <input class="w70 ml3 f12" name="end_time" id="end_time" type="text" value="{{end_time}}">
+    </div>
+    <div class="modal-footer tc">
+        <button class="submit_upgrade_comment btn btn-primary">确定</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/xfgroup_manage.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.XFGroupManage.init();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+<style>
+.layer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 105;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+}
+.loadmsg{
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 100%;
+    height: 50px;
+    margin-top: -25px;
+}
+.msg-content{
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 50px;
+}
+</style>
+<div class="layer">
+    <div class="loadmsg">
+        <span class="sui-loading loading-inline"> <img width="50" height="50" class="sui-icon icon-pc-loading" src="data:image/png;base64,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"/></span>
+        <span class="msg-content">{{ tip }}</span>
+    </div>
+</div>

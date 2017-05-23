@@ -1,0 +1,37 @@
+.pt-tag{
+  padding-left: 60px;
+  li {
+    list-style: none;
+    display: inline-block;
+    white-space: nowrap;
+    margin-bottom: 5px;
+    a {
+      color: @gray-dark;
+      font-size: 12px;
+      display: inline-block;
+      border: 1px solid transparent;
+      padding: 4px 9px 4px 8px;
+      &:hover {
+        background-color: @pt_tag_hover;
+      }
+    }
+    span{
+      color: @gray-dark;
+      font-size: 12px;
+      border: 2px solid transparent;
+      padding: 4px 9px 4px 8px;
+    }
+  }
+  li.select a {
+    background-color: #e8ecef;
+  }
+
+  li.hide {
+    display: none;
+  }
+
+  .mini_t{
+     color: @gray-dark;
+     font-size: 12px;
+  }
+}

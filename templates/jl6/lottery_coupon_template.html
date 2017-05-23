@@ -1,0 +1,22 @@
+{% load rates %}
+<div class="main_box">
+    <div class="tc gray">
+        <div class="f20 cycle tc">{{ template.get_cycle_display }}</div>
+        <div class="f14 pt5 pb5 b base_color">兑奖后优惠价</div>
+        <div class="red"><span class="f36 b"><span class="yuan">￥</span>{{template.cur_price |divide:"100" |floatformat:"0"}}<span class="f14">元</span></span></div>
+        <div class="tdlt">订购页优惠价<br>
+        {{template.ori_price|divide:"100" |floatformat:"0"}}&nbsp;元
+        </div>
+    </div>
+</div>
+
+{% if cur_level >  template.level %}
+  <a href="javascript:;" class="btn disabled dib" target="_blank">不支持降级</a>
+{% endif %}
+{% if cur_level ==  template.level %}
+  <a temp_id="{{template.id}}" href="{{template.param_str}}" class="btn btn-primary dib" target="_blank">立即续订</a>
+{% endif %}
+{% if cur_level <  template.level %}
+  <a temp_id="{{template.id}}" href="{{template.param_str}}" class="btn btn-primary dib" target="_blank">立即升级</a>
+{% endif %}
+

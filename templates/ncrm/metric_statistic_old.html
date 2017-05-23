@@ -1,0 +1,129 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}度量统计{% endblock %}
+{% block extra_style %}
+<style>
+    td[data_no]:hover>a.hover_show {
+        display: block;
+        float: right;
+        color: #e74049;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <form id="search_form" action="" method="GET">
+            <div>
+                起止时间：
+                <input class="w100" name="start_time" id="start_time" type="text" value="{{ start_time|date:'Y-m-d' }}"> -
+                <input class="w100" name="end_time" id="end_time" type="text" value="{{ end_time|date:'Y-m-d' }}">
+                <select name="period" id="period" class="w100 ml20 f12">
+                    <option value="">- 周　期 -</option>
+                    {% for name, name_cn in period_list %}
+                    <option value="{{ name }}" {% if period == name %}selected{% endif %}>{{ name_cn }}</option>
+                    {% endfor %}
+                </select>
+                <label class="dib ml20 f12">职位：</label>
+                <label class="dib">
+                    <input type="radio" name="position_type" value="4" {% if position_type == "4" %}checked="checked"{% endif %}> 售后
+                </label>
+            </div>
+            <div class="mt10">
+                <label class="dib vt">度量维度：</label>
+                <div class="dib w1200">
+                    <label class="dib mr10">
+                        <input type="checkbox" value="all" class="checkbox_all"> 全选
+                    </label>
+                    {% for metric in all_metric_info %}
+{#                        {% if metric.name in valid_metric_list %}#}
+                    <label class="dib mr10">
+                        <input type="checkbox" name="metric" value="{{ metric.name }}" {% if metric.default_indicator %}checked="checked"{% endif %}> {{ metric.name_cn }}
+                    </label>
+{#                        {% endif %}#}
+                    {% endfor %}
+                </div>
+            </div>
+            {% for dept_user in dept_user_list %}
+            <div class="mt10">
+                <label class="dib">{{ dept_user.dept_name }}：</label>
+                <div class="dib w1200">
+                    <label class="dib mr10">
+                        <input type="checkbox" value="all" class="checkbox_all"> 全选
+                    </label>
+                    {% for psuser in dept_user.psuser_list %}
+                    <label class="dib mr10" {% if psuser.position_type != position_type %}style="display:none;"{% endif %}>
+                        <input type="checkbox" name="server_id" value="{{ psuser.id }}" position_type="{{ psuser.position_type }}" {% if psuser.is_checked %}checked="checked"{% endif %}> {{ psuser.name_cn }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <input type="hidden" name="refresh_flag" value="">
+            <div class="mt10">
+                <button class="btn btn-primary" type="button" id="search">查　询</button>
+                <button class="ml5 btn" type="button" id="refresh_data">绩效校准</button>
+                <!--
+                <span class="dib vb ml20">
+                    <span>快速查询：</span>
+                    <a href="javascript:;" class="shortcut" months="3" period="week">三个月内按星期统计</a>
+                </span>
+                 -->
+            </div>
+        </form>
+        <table id="table_event_statistic" class="table-bordered mt20"  loaded="{{ request.GET.load }}">
+            <thead>
+                <tr>
+                    <th class="w140">姓名</th>
+                    <th class="w140">度量指标</th>
+                    {% for col, start_date, end_date in column_list %}
+                    <th data_no="{{ forloop.counter }}" start_date="{{ start_date }}" end_date="{{ end_date }}">{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in statistic_data %}
+                <tr>
+                    <td rowspan="{{ row.metric_list|length }}" class="psuser_name tc">{{ row.name_cn }}</td>
+                    {% for metric in row.metric_list %}
+                    <td psuser_id="{{ row.psuser_id }}" psuser_name="{{ row.name_cn }}" metric_name="{{ metric.name }}" unit="{{ metric.unit }}">
+                        <a href="javascript:;" class="metric_chart">{{ metric.name_cn }}（{{ metric.unit }}）</a>
+                    </td>
+                    {% for d in metric.data %}
+                    <td data_no = "{{ forloop.counter }}">
+                        <a href="javascript:;" class="search_shops" title="在工作台搜索店铺">{{ d }}</a>
+                        <a href="javascript:;" class="hide refresh_data">刷新</a>
+                        {% if metric.unit != '%' %}
+                        <a href="javascript:;" class="hover_show hide export_data mr3">导出</a>
+{#                      <a href="javascript:;" class="{% if has_export_perm %}hover_show{% endif %} hide export_data mr3">导出</a>#}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    </tr>
+                    {% if not forloop.last %}<tr>{% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal hide fade w800" id="modal_metric_chart">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="title_metric_chart"></h3>
+  </div>
+  <div class="modal-body p0">
+    <div id="div_metric_chart" class="w800"></div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/metric_statistic_old.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.MetricStatistic.init();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,133 @@
+<div class="page page-current" style="display:none;" id="home">
+<!-- 标题栏 -->
+
+<!-- 这里是页面内容区 -->
+<div class="content" ng-controller="homeCtrl">
+    <header class="top-nav">
+        账户报表
+        <!--<div class="shop_img_box">
+            <img src="http://img01.taobaocdn.com/imgextra/{{request.user.shop.pic_path}}_110x110.jpg" class="shop_img">
+        </div>-->
+        <!--<span class="shop_name">{{request.user.nick}}</span>-->
+    </header>
+    <div class="top_bar" id="account_bar">
+        <div class="warpper">
+            <span><span class="sub-text">余额：</span><span class="balance" ng-bind="balance"></span>元</span>
+            <span class="select_days">
+                    <span class="button">今日实时</span>
+            <select ng-change="selectDays(day)" ng-model="day">
+                        <option value="0">今日实时</option>
+                        <option value="1">昨天</option>
+                        <option value="3">过去3天</option>
+                        <option value="7">过去7天</option>
+                        <option value="15">过去15天</option>
+                    </select>
+            </span>
+        </div>
+    </div>
+    <div>
+    </div>
+    <div id="account_main">
+        <ul>
+            <li>
+                <div class="data_name">总花费</div>
+                <div class="data" ng-bind="cost">--</div>
+            </li>
+            <li>
+                <div class="data_name">展现量</div>
+                <div class="data" ng-bind="impr">--</div>
+            </li>
+            <li>
+                <div class="data_name">投资回报</div>
+                <div class="data" ng-bind="roi">--</div>
+            </li>
+            <li>
+                <div class="data_name">购物车总数</div>
+                <div class="data" ng-bind="carttotal">--</div>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <div class="data_name">总成交额</div>
+                <div class="data" ng-bind="pay">--</div>
+            </li>
+            <li>
+                <div class="data_name">点击量</div>
+                <div class="data" ng-bind="click">--</div>
+            </li>
+            <li>
+                <div class="data_name">转化率</div>
+                <div class="data" ng-bind="conv+'%'">--</div>
+            </li>
+            <li>
+                <div class="data_name">成交客单价</div>
+                <div class="data" ng-bind="avg_pay">--</div>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <div class="data_name">成交量</div>
+                <div class="data" ng-bind="paycount">--</div>
+            </li>
+           <li>
+                <div class="data_name">点击率</div>
+                <div class="data" ng-bind="ctr+'%'">--</div>
+            </li>            
+            <li>
+                <div class="data_name">收藏量</div>
+                <div class="data" ng-bind="favcount">--</div>
+            </li>
+            <li>
+                <div class="data_name">平均点击花费</div>
+                <div class="data" ng-bind="cpc">--</div>
+            </li>
+        </ul>
+    </div>
+    <div id="account_chart">
+    </div>
+    <header class="top-nav">计划列表</header>    
+        <ul id="campaign_list">
+            <li ng-repeat="camp in campaign_list">
+                <div class="info" ng-click="editCampaign()">
+                    <div class="camp-title"><span ng-bind="camp.title"></span>&emsp;<i class="icon icon-arrow-left"></i></div>
+                    <div class="item">
+                        <div>
+                            <span class="name">宝贝数</span>
+                            <span class="value" ng-bind="camp.adg_num"></span>
+                        </div>
+                        <div>
+                            <span class="name">日限额</span>
+                            <span class="value" ng-if="camp.budget=='20000000'">不限</span>
+                            <span class="value" ng-if="camp.budget!=='20000000'">{?camp.budget?}</span>
+                        </div>
+                        <div>
+                            <span class="name">PPC</span>
+                            <span class="value" ng-bind="camp.cpc"></span>
+                        </div>                        
+                    </div>
+                    <div class="item">
+                       <div>
+                            <span class="name">点击率</span>
+                            <span class="value" ng-bind="camp.ctr"></span>
+                        </div>    
+                       <div>
+                            <span class="name">花费</span>
+                            <span class="value" ng-bind="camp.cost"></span>
+                        </div>
+                       <div>
+                            <span class="name">ROI</span>
+                            <span class="value" ng-bind="camp.roi"></span>
+                        </div>                                                                    
+                    </div>
+                    <div class="item">
+                        <span class="button button-fill" ng-if="camp.online_status=='online'">推广中</span>
+                        <span class="button button-fill button-light" ng-if="camp.online_status!=='online'">已暂停</span>
+                        &emsp;
+                        <span class="button button-fill button-light" ng-if="camp.mnt_type==0">手动</span>
+                        <span class="button button-fill button-warning" ng-if="camp.mnt_type!=0">{?camp.mnt_name?}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+</div>
+</div>

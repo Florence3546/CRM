@@ -1,0 +1,11 @@
+<tr title_num="<%=title_num%>">
+    <td data-title="编号"><%=title_num%></td>
+    <td data-title="参考标题"><span class="title poi"><%=title%></span><i class="icon-pencil poi ml5 edit_title"></i></td>
+    <td data-title="引流能力"><span class="title_traffic_score"><img src="/site_media/jl/img/ajax-loader.gif"/></span><i class="icon-add poi ml5"></i></td>
+    <td data-title="操作">
+	    <a href="javascript:void(0);" class="submit_title btn btn-mini">提交</a>
+	    <%if (title_num==1) { %>
+	    <span class="dib green vm">[系统推荐]<i class="iconfont popovers f14 ml3 gray" data-placement="top" data-trigger="hover" data-content="系统推荐的标题可能与宝贝实际属性有偏差，且默认不加品牌词和促销词，请酌情手动调整！">&#xe647;</i></span>
+	    <% }%>
+    </td>
+</tr>

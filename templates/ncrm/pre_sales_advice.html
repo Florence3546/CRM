@@ -1,0 +1,434 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}售前咨询{% endblock %}
+
+{% block content %}
+  <div class="w1329 auto">
+    <div class="mt20">
+      <span class="b f16">售前咨询(<span style="color:red;">{{ total_count }}</span>)</span>
+      <button class="btn r btn-primary ml5 search_btn">查询</button>
+      <button class="btn r btn-primary add_btn">添加</button>
+
+    </div>
+    <div class="m0 bg_white p10 mt20 fix mb20 bdd">
+      <form class="m0" action="" method="post" id="form_search_psa">
+        <input class="psuser_input mr10 w120" data-rule="require" name="name_cn" class="psuser_input" link="#owner"
+               type="text" value="{{ form.name_cn.value|default:'' }}" placeholder="创建人">
+        <input type="hidden" id="owner" name="owner"
+               value="{% if form.name_cn.value %}{{ form.owner.value }}{% endif %}">
+        <input type="text" class="mr10 w120" value="{{ form.nick.value }}" name="nick" placeholder="店铺名/店铺id"/>
+        咨询时间：<input class="w80" type="text" value="{{ form.start_date.value }}" id="id_start_date" name="start_date"/> -
+        <input class="w80 mr10" type="text" id="id_end_date" value="{{ form.end_date.value }}" name="end_date"/>
+        {{ form.page_no }}
+      </form>
+    </div>
+    <table class="bdd" id="table_subscribe">
+      <thead>
+      <tr>
+        <th class="w100">店铺主旺旺</th>
+        <th class="w100">咨询业务</th>
+        <th class="w80">创建时间</th>
+        <th class="w60">创建人</th>
+        <th class="w30">备注</th>
+        <th class="w50">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for psa in pre_sales_advice_list %}
+        <tr class="tc" id="{{ psa.id }}">
+          <td>{{ psa.shop.nick }}</td>
+          <td>{{ psa.get_business_display }}</td>
+          <td class="create_time">{{ psa.create_time }}</td>
+          <td>
+            <span class="psuser">{{ psa.psuser.name_cn }}</span>
+            <input type="hidden" id="id_{{ psa.id }}_psuser_id" org_value="{{ psa.psuser.id }}">
+            <input type="text" class="psuser_input hide w50" link="#id_{{ psa.id }}_psuser_id" autocomplete="off">
+          </td>
+          <td>
+            <button class="btn btn-mini show_note_btn" subscribe_id="{{ psa.id }}" note="{{ psa.note }}">查看</button>
+          </td>
+          <td>
+             <button class="btn btn-mini show_conversion_box_btn" pre_sales_advice_id="{{ psa.id }}" shop_id="{{ psa.shop_id }}">转化</button>
+            {% if psuser.id == psa.psuser.id %}
+              <button nick="{{ psa.shop.nick }}" psuser_id="{{ psa.psuser_id }}" name_cn="{{ psa.psuser.name_cn }}"
+                      note="{{ psa.note }}" class="btn btn-mini edit_btn" subscribe_id="{{ psa.id }}" business="{{ psa.business }}"
+                      nick="{{ psa.shop.nick }}">编辑
+              </button>
+              <button class="btn btn-mini del_btn" psuser_id="{{ psa.id }}">删除</button>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade hide" id="create">
+    <div class="modal-header">
+      <h5><span class="box_title"></span>售前咨询</h5>
+    </div>
+    <div class="modal-body">
+      <div class="pl10">
+        <input type="hidden" id="id">
+        <div class="mt10">
+          创&ensp;建&ensp;人：<span class="ml10">{{ psuser.name_cn }}</span>
+          {% comment %}<input class="psuser_input ml10" data-rule="require" id="name_cn" class="psuser_input" link="#id_psuser_id" type="text"><span class="ml10 gray f12"><span class="red mr5">*</span>请填写</span>{% endcomment %}
+          <input type="hidden" id="id_psuser_id" name="psuser_id" value="{{ psuser.id }}">
+        </div>
+        <div class="mt10">
+          店&ensp;铺&ensp;ID：<input class="ml10" data-rule="require" name="nick" id="nick" type="text"><span
+            class="ml10"></span>
+        </div>
+        <div class="mt10">
+          咨询业务：<select id="business" name="business" class="ml10">
+                    <option value="" selected="selected">--咨询业务--</option>
+                    <option value="DECORATION" {% if request.POST.business == 'DECORATION' %}selected="selected"{% endif %}>装修咨询</option>
+                    <option value="SOFTWARE" {% if request.POST.business == 'SOFTWARE' %}selected="selected"{% endif %}>软件咨询</option>
+                    <option value="TP" {% if request.POST.business == 'TP' %}selected="selected"{% endif %}>TP咨询</option>
+                </select>
+        </div>
+        <div class="mt10 mb10 pr10">
+          备&ensp;&ensp;&ensp;&ensp;注：{% comment %}<div class="editor" data-rule="require" name="note" id="noteEdit"></div><span>&ensp;&ensp;&ensp;&ensp;</span>{% endcomment %}
+          <span class="pl5 pt10">
+            <textarea id="noteEdit" name="note" class="ml10" style="width: 80%; margin-left: 5px;">
+	          </textarea><br/><br/>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary save_btn">提交</button>
+      <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+  </div>
+  <div id="show_note_box" class="modal fade hide">
+    <div class="modal-header">
+      <h5><span class="box_title"></span>聊天记录</h5>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary cloose_box">确定</button>
+    </div>
+  </div>
+  <div id="conversion_box" class="modal fade hide">
+    <div class="modal-header">
+      <h5><span class="box_title"></span>咨询转化</h5>
+    </div>
+    <div class="modal-body">
+      <table class="bdd" id="table_subscribe">
+      <thead>
+        <tr>
+          <th class="w20">版本</th>
+          <th class="w20">新/续</th>
+          <th class="w30">周期</th>
+          <th class="w50">订购时间</th>
+          <th class="w50">到期时间</th>
+          <th class="w40">成交方式</th>
+          <th class="w20">实付</th>
+          <th class="w30">咨询人</th>
+          <th class="w40">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-center"></tbody>
+    </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary cloose_box">确定</button>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block custom_js %}
+  <script src="{{ '/site_media/jl5/ncrm_js/pre_sales_advice.js'|file_time_stamp }}" type="text/javascript"></script>
+  <script>
+      $().ready(function () {
+          PT.PreSalesAdvice.init();
+      });
+      var editorBox;//富文本编辑框
+      var createBox;//新增、修改弹框
+
+      /**
+       * 点击编辑按钮弹出编辑框
+       */
+      $(".edit_btn").click(function () {
+          createBox = $("#create");
+          var _this = $(this);
+          var id = _this.attr("subscribe_id");
+          var nick = _this.attr("nick");
+          var psuser_id = _this.attr("psuser_id");
+          var name_cn = _this.attr("name_cn");
+          var note = _this.attr("note");
+          var business = _this.attr("business");
+          createBox.find(".box_title:first").text("编辑");
+          createBox.find("#id").val(id);
+          createBox.find("#nick").next("span").text(nick);
+          createBox.find("#nick").val(nick);
+          createBox.find("#nick").hide();
+          createBox.find("#id_psuser_id").val(psuser_id);
+          createBox.find("#name_cn").val(name_cn);
+          createBox.find("#note").val(note);
+          createBox.find("#business").val(business);
+          createBox.modal();
+          PT.init_editors("#noteEdit", note);
+      });
+
+      /**
+       * 点击新增按钮弹出新增框
+       */
+      $(".add_btn").click(function () {
+          createBox = $("#create");
+          createBox.find(".box_title:first").text("添加");
+          createBox.find("#id").val('');
+          createBox.find("#nick").val('');
+          createBox.find("#nick").show();
+          createBox.find("#nick").next("span").text('');
+          //createBox.find("#id_psuser_id").val('');
+          createBox.find("#name_cn").val('');
+          createBox.find("#note").val('');
+          createBox.find("#business").val('');
+          createBox.modal();
+          PT.init_editors("#noteEdit", "");
+      });
+
+      /**
+       * 点击保存按钮，执行ajax保存操作
+       */
+      $(".save_btn").click(function () {
+          var id, nick, psuser_id, note;
+          id = $("#id").val();
+          nick = $("#nick").val();
+          psuser_id = $("#id_psuser_id").val();
+          note = editorBox.getSource();
+          business = $("#business").val();
+          if(business == ""){
+              PT.alert("请选择咨询业务");
+              return ;
+          }
+          PT.sendDajax({
+              'function': 'ncrm_save_pre_sales_advice',
+              'id': id,
+              'nick': nick,
+              'psuser_id': psuser_id,
+              'note': note,
+              'callback': 'saveCallback',
+              'business': business
+          });
+      });
+
+      /**
+       * 保存回调
+       * @param msg
+       * @param status
+       */
+      function saveCallback(msg, status) {
+          if (status == 1) {
+              PT.alert(msg, '', function () {
+                  window.location.reload();
+              });
+          } else {
+              PT.alert(msg);
+          }
+      }
+
+      /**
+       * 点击删除按钮
+       */
+      $(".del_btn").click(function () {
+          var id = $(this).attr("psuser_id");
+          PT.confirm("确定删除？", function () {
+              PT.sendDajax({
+                  'function': 'ncrm_del_pre_sales_advice',
+                  'id': id,
+                  'callback': 'delCallback'
+              });
+          });
+      });
+
+      /**
+       * 删除回调
+       * @param msg
+       * @param status
+       * @param id
+       */
+      function delCallback(msg, status, id) {
+          if (status == 1) {
+              PT.alert(msg, '', function () {
+                  $("#" + id).remove();
+              });
+          } else {
+              PT.alert(msg);
+          }
+      }
+
+      /**
+       * 点击搜索按钮
+       */
+      $(".search_btn").click(function () {
+          $("#form_search_psa").submit();
+      });
+
+      /**
+       * 点击转化按钮，弹出咨询转化框
+       */
+      $(".show_conversion_box_btn").click(function () {
+          var pre_sales_advice_id = $(this).attr("pre_sales_advice_id");
+          var shop_id = $(this).attr("shop_id")
+          PT.sendDajax({
+                  'function': 'ncrm_show_conversion_box',
+                  'pre_sales_advice_id': pre_sales_advice_id,
+                  'shop_id': shop_id,
+                  'callback': 'show_conversion_boxCallback'
+              });
+      });
+
+      /**
+       * 弹出咨询转化框回调，列表展示店铺的相关订单
+       * @param data
+       */
+      function show_conversion_boxCallback(data) {
+          var pre_sales_advice_id = data.pre_sales_advice_id
+          var tr;
+          $("#conversion_box tbody:first").html("");
+          $.each(data.subscribeList,function (index, subscribe) {
+              var versionTxt = "";
+              if(subscribe.pay == 0 && subscribe.item_code == 'FW_GOODS-1921400-1'){
+                  versionTxt = "试用";
+              }else{
+                  switch (subscribe.item_code){
+                      case 'ts-25811-1':
+                          versionTxt = "旗舰";
+                          break;
+                      case 'ts-25811-8':
+                          versionTxt = "专业";
+                          break;
+                      case 'ts-25811-5':
+                          versionTxt = "基础";
+                          break;
+                      case 'ts-25811-3':
+                          versionTxt = "单擎";
+                          break;
+                      case 'ts-25811-6':
+                          versionTxt = "人机";
+                          break;
+                      case 'ts-25811-v9':
+                          versionTxt = "VIP";
+                          break;
+                      case 'FW_GOODS-1921400-1':
+                          versionTxt = "QN1";
+                          break;
+                      case 'FW_GOODS-1921400-v2':
+                          versionTxt = "QN2";
+                          break;
+                      case 'FW_GOODS-1921400-v3':
+                          versionTxt = "QN3";
+                          break;
+                  }
+                  switch (subscribe.article_code){
+                      case 'tp-001':
+                          versionTxt = "TP";
+                          break;
+                      case 'tp-002':
+                          versionTxt = "钻展";
+                          break;
+                      case 'tp-003':
+                          versionTxt = "装修";
+                          break;
+                      case 'tp-004':
+                          versionTxt = "运营";
+                          break;
+                      case 'tp-005':
+                          versionTxt = "补单";
+                          break;
+                      case 'tp-006':
+                          versionTxt = "seo";
+                          break;
+                      case 'tp-007':
+                          versionTxt = "客服";
+                          break;
+                  }
+              }
+
+              tr = $("<tr subscribe_id='" + subscribe.id + "'>").append("<td>" + versionTxt + "</td><td>" + subscribe.biz_type_display + "</td><td>" + subscribe.cycle + "</td><td>" + subscribe.start_date + "</td><td>" + subscribe.end_date + "</td><td class='source_type_td'>" + subscribe.source_type_display + "</td><td>" + subscribe.pay + "</td>");
+
+              if(subscribe.pre_sales_advice_id){
+                  var pre_sales_advice = subscribe.pre_sales_advice;
+                  tr.append("<td class='conversion_buser_td'>" + pre_sales_advice.psuser.name_cn + "</td>");
+                  tr.append("<td class='btn_td' subscribe_id='" + subscribe.id + "'><button class='btn btn-mini btn-warning un_conversion_btn'>撤销转化</button></td>");
+              }else{
+                  tr.append("<td class='conversion_buser_td'>- -</td>");
+                  tr.append("<td class='btn_td' subscribe_id='" + subscribe.id + "'><button class='btn btn-mini conversion_btn'>标记转化</button></td>");
+              }
+              $("#conversion_box tbody:first").attr("pre_sales_advice_id", pre_sales_advice_id).append(tr);
+          });
+
+          $("#conversion_box").attr("style", "");
+          $("#conversion_box").modal();
+      }
+
+      /**
+       * 点击标记转化、撤销转化按钮，执行相关操作
+       */
+      $(".un_conversion_btn, .conversion_btn").live("click", function () {
+          var _this = $(this);
+          var subscribe_id =_this.parents("tr:first").attr("subscribe_id");
+          var pre_sales_advice_id = "";
+          if(_this.hasClass("conversion_btn")){
+              pre_sales_advice_id = _this.parents("tbody:first").attr("pre_sales_advice_id");
+          }
+          PT.sendDajax({
+                  'function': 'ncrm_conversion',
+                  'pre_sales_advice_id': pre_sales_advice_id,
+                  'subscribe_id': subscribe_id,
+                  'callback': 'conversionCallback'
+              });
+      });
+
+      /**
+       * 标记转化、撤销转化回调
+       * @param data
+       */
+      function conversionCallback(data) {
+          var subscribe_id = data.subscribe_id;
+          if(data.status == 1){
+              PT.alert(data.msg, '', function () {
+                  //window.location.reload();
+                  var subscribe_tr = $("[subscribe_id='" + subscribe_id + "']");
+                  if(data.pre_sales_advice_id == ""){ // 撤销转化成功
+                      subscribe_tr.find("td.conversion_buser_td").html("- -");
+                      subscribe_tr.find("td.btn_td").html("<button class='btn btn-mini conversion_btn'>标记转化</button>");
+                      subscribe_tr.find("td.source_type_td").html(data.source_type_display);
+                  }else{ // 标记转化成功
+                      subscribe_tr.find("td.conversion_buser_td").html(data.conversion_user.name_cn);
+                      subscribe_tr.find("td.btn_td").html("<button class='btn btn-mini btn-warning un_conversion_btn'>撤销转化</button>");
+                      subscribe_tr.find("td.source_type_td").html(data.source_type_display);
+                  }
+                  $("#conversion_box div.shade").remove(); // 手动去除 alert 遮罩层
+              });
+            }else{
+              PT.alert(data.msg)
+          }
+
+      }
+
+      /**
+       * 点击查看按钮，弹出查看聊天记录框
+       */
+      $(".show_note_btn").click(function () {
+          var note = $(this).attr("note");
+          var show_note_box = $("#show_note_box");
+          show_note_box.find(".modal-body:first").html(note);
+          show_note_box.attr("style", "");
+          show_note_box.modal('toggle');
+      });
+
+      /**
+       * 关闭弹出框
+       */
+      $(".cloose_box").click(function () {
+          $(this).parents(".modal:first").modal("hide");
+      })
+  </script>
+{% endblock %}
+

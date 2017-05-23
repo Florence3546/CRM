@@ -1,0 +1,374 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}事件详情{% endblock %}
+
+{% block content %}
+<input type="hidden" id="lower_detail_plan_id" value="{{plan.id}}">
+<input type="hidden" id="ps_id" name="ps_id" value="{{plan.psuser.id}}">
+<div class="w1329 auto">
+    <div class="mt20">
+        <div class="gray mb10">
+            <i class="iconfont mr5">&#xe659;</i>为了减轻服务器压力，每个事件详情只显示最100条数据
+        </div>
+        <div>
+            事件所属人：
+            <input class="psuser_input w200 mr10" link="#ps_id" type="text" autocomplete="off">
+
+            事件发生时间：
+            <input class="w100" name="start_time" id="start_time" type="text" value="{{plan.start_time}}">
+            <span class="dib w20 tc">-</span>
+            <input class="w100" name="end_time" id="end_time" type="text" value="{{plan.end_time}}">
+
+        </div>
+
+        <div class="p10 bg_white bdd mt10 fix">
+            <span class="b">统计维度：</span>
+            <ul class="pt-tag with-x mt10" id="event_list">
+            {%for e in event_list%}
+                {%for d in e%}
+                <li class="w110" data-event-name="{{d.name}}">
+                    <a href="javascript:;">{{d.describe}}</a>
+                </li>
+                {%endfor%}
+            {%endfor%}
+            </ul>
+            <div class="r">
+                <span class="gray"><span>保存统计维度配置</span><input class="ml5" type="checkbox" id="conifg_switch"></span>
+                <button class="btn-primary ml20" id="search">查询</button>
+            </div>
+        </div>
+
+        <div class="tabbable tabs-left mt40" id="event_detial_box">
+
+        </div>
+    </div>
+</div>
+
+<script id="event_detial_box_content" type="text/html">
+    <ul class="nav nav-tabs w180" id="event_nav">
+        <%for (e in event_list){ %>
+        <li <%if(e==0){ %>class="active"<% } %>>
+            <a href="#<%=event_list[e].name%>" data-toggle="tab" editor_id="1" switch="0">
+                <%=event_list[e].describe%>
+                <span class="round_mark r <%=event_list[e].name%>_count" style="background-color:#4687bd;display:none;">0</span>
+            </a>
+        </li>
+        <%}%>
+    </ul>
+    <div class="tab-content bg_white ova" id="event_content">
+        <%for (e in event_list){ %>
+        <div class="tab-pane btd <%if(e==0){ %>active<% } %>" id="<%=event_list[e].name%>">
+            <div class="abs mt-30">
+                涉及用户数：<span id="<%=event_list[e].name%>_shop_counter">-</span>
+            </div>
+            <div id="<%=event_list[e].name%>_content">
+                <div class="tc">
+                    <img src="/site_media/jl5/images/forecast_orde_ajax.gif">
+                    <span class="ml10">正在获取数据</span>
+                </div>
+            </div>
+        </div>
+        <%}%>
+    </div>
+</script>
+
+<script id="id_ncrm_reintro_layout" type="text/html">
+    <table class="table-bordered mini nbt table-no-warp-border">
+        <thead>
+            <tr>
+                <th class="w160">创建时间</th>
+                <th class="w180">昵称</th>
+                <th class="w120">类型</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody class="content">
+            <%=data%>
+        </tbody>
+    </table>
+</script>
+
+
+<script id="id_ncrm_reintro_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td class="tc">
+            <% if(reintro_type== 'ztc'){ %>
+                直通车操作
+            <%} else if(reintro_type== 'zz') {%>
+                钻展操作
+           <%} else if(reintro_type== 'rjjh') {%>
+                人机操作
+            <%} else if(reintro_type== 'zx') {%>
+                装修
+            <%} else { %>
+                其他
+            <% }%>
+        </td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_operate_layout" type="text/html">
+
+    <table class="table-bordered mini nbt table-no-warp-border">
+        <thead>
+            <tr>
+                <th class="w160">创建时间</th>
+                <th class="w180">昵称</th>
+                <th class="w120">类型</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody class="content">
+            <%=data%>
+        </tbody>
+    </table>
+
+</script>
+
+
+<script id="id_ncrm_operate_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td class="tc">
+            <% if(reintro_type== 'ztc'){ %>
+                直通车操作
+            <%} else if(reintro_type== 'zz') {%>
+                钻展操作
+           <%} else if(reintro_type== 'rjjh') {%>
+                人机操作
+            <%} else if(reintro_type== 'zx') {%>
+                装修
+            <%} else { %>
+                其他
+            <% }%>
+        </td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_contact_layout" type="text/html">
+        <table class="table-bordered mini nbt table-no-warp-border">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w40">类型</th>
+                    <th class="w80">主动联系</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+                <%=data%>
+            </tbody>
+        </table>
+</script>
+
+<script id="id_ncrm_contact_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td class="tc">
+            <% if(contact_type== 'qq'){ %>
+                QQ
+            <%} else if(contact_type== 'phone') {%>
+                电话
+           <%} else if(contact_type== 'ww') {%>
+                旺旺
+            <%} else if(contact_type== 'weixin') {%>
+                微信
+            <%} else { %>
+                其他
+            <% }%>
+        </td>
+        <td class="tc">
+            <% if(is_initiative== 1){ %>
+                是
+            <%} else {%>
+                否
+            <%} %>
+        </td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_subscribe_layout" type="text/html">
+        <table class="table-bordered mini nbt table-no-warp-border">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w180">订购项</th>
+                    <th class="w100">订购类型</th>
+                    <th class="w100">开始时间</th>
+                    <th class="w100">结束时间</th>
+                    <th class="w80">金额</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+                <%=data%>
+            </tbody>
+        </table>
+</script>
+
+<script id="id_ncrm_subscribe_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td>
+            <% if(article_code== 'ts-25811'){ %>
+                <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+            <%} else if(article_code== 'ts-25811-6') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe685;</i>
+            <%} else if(article_code== 'FW_GOODS-1921400') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+            <%} else if(article_code== 'tp-001') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+            <%} else if(article_code== 'tp-002') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe692;</i>
+            <%} else if(article_code== 'tp-003') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe695;</i>
+            <%} else if(article_code== 'tp-004') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe694;</i>
+            <%} else { %>
+                其他
+            <% }%>
+            <% if(article_name.length > 10){ %>
+                <%=article_name.substring(0,10)+"....."%>
+            <% } else {%>
+                <%=article_name.substring(0,10)%>
+            <%} %>
+        </td>
+        <td>
+            <% if(biz_type== 1){ %>
+                新订
+            <% } else if(biz_type== 2){ %>
+                续订
+            <% }  else if(biz_type== 3){ %>
+                升级
+            <% }  else if(biz_type== 4){ %>
+                后台赠送
+            <% } else if(biz_type== 5){ %>
+                自动续订
+            <%} %>
+        </td>
+        <td><%=start_date%></td>
+        <td><%=end_date%></td>
+        <td><%=pay / 100 %></td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_comment_layout" type="text/html">
+        <table class="table-bordered mini nbt table-no-warp-border">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w80">订购项</th>
+                    <th class="w100">评论状态</th>
+                    <th class="w80">踩评名次</th>
+                    <th class="w160">改评时间</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+                <%=data%>
+            </tbody>
+        </table>
+</script>
+
+<script id="id_ncrm_comment_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td>
+            <% if(article_code== 'ts-25811'){ %>
+                开车精灵
+            <%} else if(article_code== 'ts-25811-6') {%>
+                类目专家
+            <%} else if(article_code== 'FW_GOODS-1921400') {%>
+                千牛
+            <% }%>
+        </td>
+        <td>
+            <% if(comment_type== '110'){ %>
+                日常好评
+            <%} else if(comment_type== '120') {%>
+                踩好评
+            <%} else if(comment_type== '200') {%>
+                差评
+            <%} else if(comment_type== '301') {%>
+                5分无评语
+            <%} else if(comment_type== '302') {%>
+                5分评语未去
+            <%} else if(comment_type== '303') {%>
+                去评语评分未改
+            <%} else if(comment_type== '304') {%>
+                未改全5分
+            <%} else if(comment_type== '305') {%>
+                全5分好评
+            <% }%>
+        </td>
+        <td><%=top_comment_times%></td>
+        <td><%=modify_comment_time%></td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_unsubscribe_layout" type="text/html">
+        <table class="table-bordered mini nbt table-no-warp-border">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w120">订购项</th>
+                    <th class="w60">订购周期</th>
+                    <th class="w60">退款金额</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+                <%=data%>
+            </tbody>
+        </table>
+</script>
+
+<script id="id_ncrm_unsubscribe_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td>
+            <div>
+            <% if(article_code== 'ts-25811'){ %>
+                开车精灵
+            <%} else if(article_code== 'ts-25811-6') {%>
+                类目专家
+            <%} else if(article_code== 'FW_GOODS-1921400') {%>
+                千牛
+            <% }%>
+            </div>
+            <%=article_name%>
+        </td>
+        <td>
+            <%=cycle%>
+        </td>
+        <td><%=$format(refund,100,1,2)%></td>
+        <td><%=note%></td>
+    </tr>
+</script>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/event_detial.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.EventDetial.init()
+});
+</script>
+{% endblock %}

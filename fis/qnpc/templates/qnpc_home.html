@@ -1,0 +1,221 @@
+{#utf-8#}
+{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block content %}
+    <!-- page 容器 -->
+    <div class="page" id="{{ PAGE_MARK.2 }}">
+        <div class="breadcrumb">
+            <span class="account-ye">直通车余额：</span> <span class="r_color">￥{{ account.balance }}</span>
+            <span class="func">
+            <a href="javascript:void(0);" id="show_detail" class="sui-btn btn-xlarge btn-primary">查看明细</a>
+            <span class="sui-dropdown select">
+                <span class="dropdown-inner">
+                    <a role="button" data-toggle="dropdown" href="javascript:void(0);" class="sui-btn btn-xlarge btn-primary dropdown-toggle">
+                        <input value="7" name="select_date" id="select_date" type="hidden"><span>过去7天</span><i class="iconfont">&#xe603;</i>
+                    </a>
+                    <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" value="0" href="javascript:void(0);">今日实时</a>
+                        </li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" value="1" href="javascript:void(0);">昨天</a>
+                        </li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" value="3" href="javascript:void(0);">过去3天</a>
+                        </li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" value="5" href="javascript:void(0);">过去5天</a>
+                        </li>
+                        <li role="presentation" class="active"><a role="menuitem" tabindex="-1" value="7" href="javascript:void(0);">过去7天</a>
+                        </li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" value="15" href="javascript:void(0);">过去15天</a>
+                        </li>
+                    </ul>
+                </span>
+            </span>
+        </span>
+        </div>
+
+        <div class="account-rpt">
+            <table class="total_rpt">
+
+            </table>
+
+            <div id="account_chart">
+
+            </div>
+        </div>
+
+        <div class="campaign-table">
+            <div class="opt-group">
+                <a href="javascript:void(0);" class="sui-btn btn-xlarge btn-primary opt-mnt" data-opt="0">暂停推广</a>
+                <a href="javascript:void(0);" class="sui-btn btn-xlarge btn-primary opt-mnt" data-opt="1">参与推广</a>
+            </div>
+
+            <table class="sui-table table-bordered" id="campaign_table">
+                <thead>
+                <tr>
+                    <th  style="border-left:none;text-align: center" >
+                        <div>
+                            <input type="checkbox" class="choose_column" class="all">
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            计划名称
+                        </div>
+                    </th>
+                    <th data-active="budget">
+                        <div class="text-center">日限额</div>
+                    </th>
+                    <th data-active="imp">
+                        <div class="text-center">展现量</div>
+                    </th>
+                    <th data-active="click">
+                        <div class="text-center">点击量</div>
+                    </th>
+                    <th data-active="ctr">
+                        <div class="text-center">点击率</div>
+                    </th>
+                    <th data-active="cost">
+                        <div class="text-center">总花费</div>
+                    </th>
+                    <th data-active="ppc">
+                        <div class="text-center">PPC</div>
+                    </th>
+                    <th data-active="favcount">
+                        <div class="text-center">收藏量</div>
+                    </th>
+                    <th data-active="paycount">
+                        <div class="text-center">成交量</div>
+                    </th>
+                    <th data-active="cov">
+                        <div class="text-center">转化率</div>
+                    </th>
+                    <th data-active="true">
+                        <div class="text-center">成交额</div>
+                    </th>
+                    <th data-active="roi">
+                        <div class="text-center">ROI</div>
+                    </th>
+                    <th data-active="flag">
+                        <div class="text-center">状态</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="tar">
+                    <td colspan="14">
+                        <div class="text-center">
+                            <img src="../site_media/static/images/ajax_loader.gif" alt=""><br>
+                            <span>请稍候...</span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal-->
+    <div id="accountDetailModal"  style="width: 950px; margin-left: -475px; left:50%" tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade">
+        <div class="modal-dialog"
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                    <h4 class="modal-title">
+                        账户明细: {{ request.user.nick }}&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="sui-dropdown select">
+                        <span class="dropdown-inner">
+                            <a role="button" data-toggle="dropdown" href="javascript:void(0);" class="sui-btn btn-xlarge btn-primary dropdown-toggle">
+                                <input value="7" name="select_date" id="selectDetailDate" type="hidden"><span>过去7天</span><i class="iconfont">&#xe603;</i>
+                            </a>
+                            <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" value="1" href="javascript:void(0);">昨天</a>
+                                </li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" value="3" href="javascript:void(0);">过去3天</a>
+                                </li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" value="5" href="javascript:void(0);">过去5天</a>
+                                </li>
+                                <li role="presentation" class="active"><a role="menuitem" tabindex="-1" value="7" href="javascript:void(0);">过去7天</a>
+                                </li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" value="15" href="javascript:void(0);">过去15天</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </span>
+                    </h4>
+                </div>
+                <div class="modal-body" style="height: 320px; overflow-y: scroll">
+                    <table class="sui-table table-bordered" id="detail_table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div>
+                                    日期
+                                </div>
+                            </th>
+                            <th data-active="imp">
+                                <div>展现量</div>
+                            </th>
+                            <th data-active="click">
+                                <div>点击量</div>
+                            </th>
+                            <th data-active="ctr">
+                                <div>点击率</div>
+                            </th>
+                            <th data-active="cost">
+                                <div>总花费</div>
+                            </th>
+                            <th data-active="ppc">
+                                <div>PPC</div>
+                            </th>
+                            <th data-active="favcount">
+                                <div>收藏量</div>
+                            </th>
+                            <th data-active="paycount">
+                                <div>成交量</div>
+                            </th>
+                            <th data-active="cov">
+                                <div>转化率</div>
+                            </th>
+                            <th data-active="true">
+                                <div>成交额</div>
+                            </th>
+                            <th data-active="roi">
+                                <div>ROI</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tar">
+                            <td colspan="14">
+                                <div class="text-center">
+                                    <img src="../site_media/static/images/ajax_loader.gif" alt=""><br>
+                                    <span>请稍候...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+   {% if isneed_phone %}
+    <div id="get_phone_modal"  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade">
+        <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+            <h4>为您的效果负责是精灵不懈的追求，为了方便与您的沟通和及时向您反馈软件效果，请留下您的联系方式！</h4>
+        </div>
+        <div class="modal-body">
+            <form class="sui-form">
+                 <label class="control-label">手机号：
+                    <input type="text" id="inputPhone" placeholder="请输入手机号" class="input-fat"><span style="color: #ff6600; margin:10px 5px;"><stronger>*</stronger></span>
+                 </label>
+                 <label class="control-label" style="margin-top: 10px;">Q&nbsp;Q&nbsp;号：
+                    <input type="text" id="inputQQ" maxlength="12" placeholder="请输入QQ号" class="input-fat">
+                 </label>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="submit_phone" class="sui-btn btn-primary">提交</button>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

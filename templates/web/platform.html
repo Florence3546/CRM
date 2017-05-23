@@ -1,0 +1,100 @@
+<div id="modal_camp_platform"  class="modal fade hide" data-width="860" data-backdrop="static" aria-hidden="false" is_set_nonsearch = '{% if request.user.shop_type == 'B' or request.user.credit > 250 %}1{% endif %}'>
+    <div class="modal-header">
+        <a href="javascript:;" class="close dn" data-dismiss="modal">×</a>
+        <h4 class="tac">设置投放平台</h4>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered platform_table">
+            <thead>
+                <tr class="b f14">
+                    <th class="w100"></th>
+                    <th class="w300 tc b">淘宝站内</th>
+                    <th class="tc b">淘宝站外</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="b f14">计算机设备</td>
+                    <td>
+                        <div>
+                            <span>搜索推广: </span>
+                            <span class="f12 ml10">投放</span>
+                        </div>
+                        <div>
+                            <span>定向推广: </span>
+                            <span class="hide not_set ml10 tooltips" data-original-title="该功能只对一钻以上卖家和天猫卖家开放">暂不可投放 <i class="icon-question-sign ml5"></i></span>
+                            <label class="can_set dib ml10"><input type="radio" value=0 name="pc_insite_nonsearch"><span class="f12 ml5">不投放</span></label>
+                            <label class="can_set dib ml10"><input type="radio" value=1 name="pc_insite_nonsearch"><span class="f12 ml5">投放</span></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <span>搜索推广: </span>
+                            <label class="dib ml10"><input type="radio" value=0 name="pc_outsite_search"><span class="f12 ml5">不投放</span></label>
+                            <label class="dib ml10"><input type="radio" value=1 name="pc_outsite_search"><span class="f12 ml5">投放</span></label>
+                        </div>
+                        <div>
+                            <span>定向推广: </span>
+                            <span class="hide not_set ml10 tooltips" data-original-title="该功能只对一钻以上卖家和天猫卖家开放">暂不可投放 <i class="icon-question-sign ml5"></i></span>
+                            <label class="can_set dib ml10"><input type="radio" value=0 name="pc_outsite_nonsearch"><span class="f12 ml5">不投放</span></label>
+                            <label class="can_set dib ml10"><input type="radio" value=1 name="pc_outsite_nonsearch"><span class="f12 ml5">投放</span></label>
+                        </div>
+                        <div>
+                            <span>投放价格：</span>
+                            <span>淘宝站外投放价格 = 淘宝站内投放价格 * 站外折扣</span>
+                        </div>
+                        <div class="mt10">
+                            <span class="l">站外折扣：</span>
+                            <span class="outside_discount l mb20 w300">
+                                <input id="outside_discount" type="slider" name="outside_discount" value="100">
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="b f14" rowspan=2 >移动设备</td>
+                    <td>
+                        <div>
+                            <span>推广: </span>
+                            <label class="dib ml10"><input type="radio" value=0 name="yd_insite"><span class="f12 ml5">不投放</span></label>
+                            <label class="dib ml10"><input type="radio" value=1 name="yd_insite"><span class="f12 ml5">投放</span></label>
+                        </div>
+                        <div>
+                            <span>投放价格 = 计算机淘宝站内投放价格 * 移动折扣</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <span>推广: </span>
+                            <label class="dib ml10"><input type="radio" value=0 name="yd_outsite"><span class="f12 ml5">不投放</span></label>
+                            <label class="dib ml10"><input type="radio" value=1 name="yd_outsite"><span class="f12 ml5">投放</span></label>
+                        </div>
+                        <div>
+                            <span>投放价格 = 计算机淘宝站内投放价格 * 站外折扣 * 移动折扣</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2>
+                        <div class="mt5">
+                            <span class="l">移动折扣：</span>
+                            <span class="mobile_discount l mb20 w500">
+                                <input id="mobile_discount" type="slider" name="mobile_discount" value="100">
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary submit">提交</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+    </div>
+</div>
+
+<script>
+jQuery(document).ready(function() {
+  PT.Platform.init();
+});
+</script>

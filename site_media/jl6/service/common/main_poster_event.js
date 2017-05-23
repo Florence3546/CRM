@@ -1,0 +1,1 @@
+define("jl6/site_media/service/common/main_poster_event",["jl6/site_media/widget/ajax/ajax"],function(i){var a=function(a){i.ajax("add_show_times",{ad_id:a},d)},e=function(a){i.ajax("add_click_times",{ad_id:a},d)},d=function(){};return{addViewTimes:a,addClickTimes:e}});

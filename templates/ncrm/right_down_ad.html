@@ -1,0 +1,167 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}右下弹层{% endblock %}
+{% block content %}
+<style type="text/css" media="screen">
+    label{display: inline;}
+    table{table-layout:auto;}
+    .hovershow{display: none;}
+    .hover .active .hovershow{display: block;}
+    li.rel.active{z-index:2;}
+    .header .hor-menu ul.nav li a,.header .nav > li.dropdown .dropdown-toggle{padding: 9px 18px;}
+    .header .nav > li.dropdown{padding-left: 0;padding-right: 0;}
+
+    .ks-dtp table{width: auto;}
+    .ks-dtp select{padding: 0;height: auto;}
+</style>
+<div class="mt20 w1200 auto">
+    <div class="gray">
+        <i class="iconfont mr5">&#xe659;</i>图片请先上传到淘宝图片空间，然后直接引用链接，上传图片前请压缩图片，避免用户加载时间过长<br>
+    </div>
+    <ul class="nav nav-tabs mt20 pl0" id="editor_tabs" fix-ie="hover">
+        <li class="rel active">
+            <a href="#tab_{{ad.id}}" data-toggle="tab" editor_id='{{ad.id}}' >右下角弹出广告</a>
+        </li>
+    </ul>
+    <div class="tab-content mb20">
+        <div class="tab-pane p10 fade active in" id="tab_{{ad.id}}">
+            <form id="form_{{ad.id}}">
+                <div class="mt10">
+                    <span class="w100 dib">延时时间：</span>
+                    <input class="w60" data-rule="require digital" type="text" id="dealy_{{ad.id}}" value="{{config.dealy|default:3000}}"><span class="red ml3 f12">*</span>
+                    <span class="ml20 gray f12">等待n秒后显示广告，单位毫秒，tips:如果图片较大，请设置大一些</span>
+                </div>
+                <div class="mt20">
+                    <span class="w100 dib">存在时长：</span>
+                    <input class="w60" data-rule="require digital" type="text" id="during_{{ad.id}}" value="{{config.during|default:12000}}"><span class="red ml3 f12">*</span>
+                    <span class="ml20 gray f12">n秒后自动关闭，单位毫秒</span>
+                </div>
+                <div class="mt20">
+                    <span class="w100 dib">显示频率：</span>
+                    <select class="w160" id="times_{{ad.id}}" name="level">
+                        <option value="everytimes" {%if ad.times == "everylogin"%}selected="selected"{%endif%}>每次刷新</option>
+                        <option value="everyday" {%if ad.times == "everyday"%}selected="selected"{%endif%}>每天一次</option>
+                    </select>
+                </div>
+                <div class="mt20">
+                    <span class="w100 dib">公告尺寸：</span>
+                    <select class="w160" id="size_{{ad.id}}" name="level">
+                        <option value="nomal" {%if config.size == "nomal"%}selected="selected"{%endif%}>正常  (250px*300px)</option>
+                        <option value="large" {%if config.size == "large"%}selected="selected"{%endif%}>较大  (300px*420px)</option>
+                    </select>
+                    <span class="ml20 gray f12">超出的部分会被直接隐藏</span>
+                </div>
+                <div class="mt20">
+                    <span class="w100 dib">是否显示：</span>
+                      <div class="switch vn-3 {%if ad.flag %}on{%else%}off{%endif%}" data-toggle="switch" >
+                        <label class="db"></label>
+                        <input type="checkbox" id="switch_{{ad.id}}" {%if ad.flag %}checked="checked"{%endif%}>
+                      </div>
+                      <span class="ml20 gray f12">开启后才会在前台显示</span>
+                </div>
+                <div class="mt20">
+                    <span class="w100 dib">显示关闭按钮：</span>
+                      <div class="switch vn-3 {%if config.autoclose %}on{%else%}off{%endif%}" data-toggle="switch" >
+                        <label class="db"></label>
+                        <input type="checkbox" id="autoclose_{{ad.id}}" {%if config.autoclose %}checked="checked"{%endif%}>
+                      </div>
+                      <span class="ml20 gray f12">开启后会在右上角显示一个关闭按钮</span>
+                </div>
+                <div class="mt20" id="{{ad.id}}_editor">
+                    <div class="editor_wating">
+                        <img src="/site_media/jl5/images/forecast_orde_ajax.gif">
+                        <span class="ml5">组件加载中</span>
+                    </div>
+                </div>
+                <div class="mt20">
+                    <button type="submit" class="btn btn-primary submit" disabled>发布</button>
+                    <a class="custom_preview ml10" href="javascript:;">预览效果</a><span class="gray f12 ml5">效果在右下角哦！</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="hide">
+    <div id="init_msg_{{ad.id}}">
+        {{ad.html}}
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{{'/site_media/jl5/pt_js/right_down_services.js'|file_time_stamp}}"></script>
+{% endblock %}
+{% block custom_js %}
+<script>
+
+
+require('pt/pt-editor', function(editor){
+    var editors={};
+
+    //加载完成删除wating提示
+    $('.editor_wating').remove();
+    $('.submit').removeAttr('disabled');
+
+    $('#editor_tabs').on('shown',function(){
+        var obj=$(this).find('li.active a'),id=obj.attr('editor_id'),ed;
+        if(obj.attr('switch')==='1'||id==undefined){
+            return;
+        }
+
+
+        if($('#'+id+'_editor').length){
+            ed=new editor({render:'#'+id+'_editor'});
+            ed.initData($('#init_msg_'+id).text());
+            ed.render();
+
+            editors[id]=ed;
+
+            obj.attr('switch',1);
+        }
+
+        //开启验证
+        $('#form_'+id).vaildata({placement:'right',call_back:function(){
+            var id=$('#editor_tabs li.active a').attr('editor_id'),times,size,switch_dom,config,autoclose_dom;
+
+            times=$('#times_'+id).val();
+            switch_dom=$('#switch_'+id)[0];
+            autoclose_dom=$('#autoclose_'+id)[0];
+            config=$.toJSON({dealy:$('#dealy_'+id).val(),during:$('#during_'+id).val(),size:$('#size_'+id).val(),'autoclose':autoclose_dom.checked?1:0})
+
+            if($.trim(editors[id].value())==''){
+                PT.light_msg('你他妈在逗我？','内容为空，不允许提交')
+                return;
+            }
+
+            PT.sendDajax({'function':'ncrm_set_right_down',
+                            'id':id,
+                            'times':times,
+                            'flag':switch_dom.checked?1:0,
+                            'config':config,
+                            'html':editors[id].value()
+                        });
+        }});
+    });
+
+    //立即显示一个编辑器
+    $('#editor_tabs').trigger('shown');
+
+    $('.custom_preview').on('click',function(){
+        var id=$('#editor_tabs li.active a').attr('editor_id'),autoclose_dom,html;
+
+        autoclose_dom=$('#autoclose_'+id)[0];
+
+        if($.trim(editors[id].value())==''){
+            html='<span class="f48">效果在这，没有内容啊</span>'
+        }else{
+            html=editors[id].value();
+        }
+
+
+        new RightDownAd({dealy:$('#dealy_'+id).val(),during:$('#during_'+id).val(),size:$('#size_'+id).val(),'autoclose':autoclose_dom.checked?1:0,body:html});
+    });
+
+})
+
+
+</script>
+{% endblock %}

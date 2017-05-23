@@ -1,0 +1,204 @@
+#campaign_warp{
+    article,aside{
+        height: 280px;
+    }
+
+  .total_rpt{
+    margin-top: 25px;
+    height: 140px;
+  }
+}
+
+#mnt_campaign_setting{
+    height: 280px;
+
+    header{
+        margin-bottom: 6px;
+    }
+
+    &>div{
+        height: 203px;
+        padding: 0 12px;
+
+        background-repeat: no-repeat;
+        background-position: right bottom;
+
+/*        &.un_mnt{
+            background-image: url('../../static/images/camp_statue1.png');
+        }
+
+        &.key{
+            background-image: url('../../static/images/camp_statue2.png');
+        }
+
+        &.long{
+            background-image: url('../../static/images/camp_statue3.png');
+        }*/
+
+        ul{
+            padding: 0;
+            line-height: 30px;
+            li{
+                list-style: none;
+            }
+        }
+
+        h5{
+            color: @base-color;
+        }
+
+        .sub{
+            font-weight: 700;
+        }
+
+        .radio{
+            margin-bottom: 15px;
+        }
+
+        .msg{
+            margin-left: 10px;
+        }
+
+        .iconfont{
+            cursor: pointer;
+            margin-left: 5px;
+            color:@base-color;
+        }
+    }
+
+    .radio{
+      i{
+        color: @gray-dark;
+      }
+    }
+
+    .tip{
+        text-indent: 2em;
+        color:@gray;
+    }
+
+    .iconfont{
+      display: none;
+    }
+
+    .long,.key{
+      a{
+        display: none;
+      }
+      .gray{
+        color: @gray-dark;
+        display: inline-block;
+      }
+    }
+
+    &:hover{
+      .iconfont{
+        display: inline-block;
+      }
+      .long,.key{
+        a{
+          display: inline-block;
+        }
+      }
+    }
+}
+
+.add_adg_box{
+  width: 100%;
+  position: fixed;
+  top: 100%;
+  text-align: center;
+  z-index: 105;
+  background-color: @white;
+  overflow-y:auto;
+  .add_item_box{
+    width: 1280px;
+    left: 50%;
+    position: relative;
+    margin-left: -640px;
+    overflow-y: auto;
+    .left_box,.right_box{
+      height: 910px;
+    }
+    height: 925px;
+  }
+  .opt_var{
+    width: 1280px;
+    left: 50%;
+    position: relative;
+    margin-left: -640px;
+  }
+  .result_box{
+    width: 1280px;
+    left: 50%;
+    position: relative;
+    margin-left: -640px;
+    margin-bottom: 10px;
+    .commit_result{
+      margin-top: 30px;
+      width: 100%;
+      line-height: 40px;
+      .success{
+        font-size:40px;
+        color: @green;
+      }
+    }
+
+    .error_list{
+      margin-left: 340px;
+      .err_img{
+        width: 84px;
+        height: 84px;
+      }
+      .error_adg:last-child{
+        border-bottom: none;
+      }
+
+    }
+    #error_msg{
+      margin-left: 340px;
+      color: @base-color;
+      margin-bottom: -10px;
+    }
+
+  }
+}
+
+#set_camp_blackword{
+  .input-editor{
+    width: 100%;
+    height: 108px;
+    .tag-editor{
+      width: 100%;
+      border: 1px solid @gray-light;
+      background-color: @tag-editor-bg;
+      height: 100%;
+    }
+  }
+}
+
+.opt_url{
+  .dropdown{
+    .dropdown-menu {
+      margin: 0px;
+      li{
+        a{
+          font-size: 12px;
+          color: @base-color;
+        }
+      }
+    }
+    &:hover{
+      .dropdown-menu {
+         display: block;
+      }
+    }
+  }
+}
+
+.big_factor{
+  margin-top: 5px;
+  span.gray{
+    margin-top: -5px;
+  }
+}

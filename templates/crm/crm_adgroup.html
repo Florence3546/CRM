@@ -1,0 +1,909 @@
+{#utf-8#}{% extends "base_crm.html" %}
+{% block title%}
+	宝贝列表
+{% endblock %}
+
+{% block extra_style %}
+<link href="/site_media/assets/css/pages/pricing-tables.css" rel="stylesheet" type="text/css"/>
+<link href="/site_media/jl/css/fuck_ie/common.css?v={{VERSION}}.css" rel="stylesheet" type="text/css"/>
+<link href="/site_media/jl/css/fuck_ie/base_adg.css?v={{VERSION}}.css" rel="stylesheet" type="text/css"/>
+<link href="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+<link href="/site_media/jl/plugins/jslider/css/jquery.slider.min.css" rel="stylesheet"/>
+<style>
+#attr_conf ul li input{ height:14px;width:200px;font-size:12px;margin-bottom:-1px}
+#attr_conf #oper_manager span{font-size:12;color:#333333}
+#select_words_conf ul li {width:97%}
+#select_words_conf ul li .row_title{ width:80px;font-size:12px;float:left}
+#select_words_conf ul li input{ height:14px;font-size:12px;margin-bottom:-1px}
+#select_words_conf ul li textarea{ height:70px;width:580px;font-size:11px;}
+#select_words_conf ul li table th{text-align:center;border:1px solid #ddd;padding:0px;margin:0px}
+#select_words_conf ul li table td{border:1px solid #ddd;padding:0px;margin:0px}
+#select_words_conf ul li table input{border-top:none;border-right:none;border-left:none}
+#select_words_conf .del_words{ margin:0px !important ;}
+#select_words_control ul {margin:5px}
+#select_words_control ul li{border-color:rgb(136, 136, 136);margin:5px}
+
+.add_creative{width:160px;height:160px;background-color:#35AA47;color:#FFF !important;font-size:120px;font-weight:700;display:inline_block;text-decoration:none !important;line-height:135px;display:inline-block !important;}
+.add_creative:hover{color:#FFF !important;background-color:#1D943B;}
+
+.edit_cfg {width:600px;}
+.before_edit {width:200px;}
+.edit_args {width:120px;}
+.instrcn_list {padding: 8px 6px;margin-bottom: 10px;border: 1px solid #ccc;display:inline-block;list-style:none;}
+.instrcn_list li {display: inline-block;background-color:#ddd; cursor:pointer;margin: 2px;}
+.view_style {width:200px;}
+.edit_style {width:400px;border: 1px solid #52a8ec;}
+.edit_style li {font-size:16px;}
+.header .hor-menu {margin: 0;float: left;}
+.btn {background-color: #e5e5e5;border: 0;border-bottom: 1px solid #999;border-right: 1px solid #999;}
+.btn.mini {padding:6px;}
+.table th, .table td {text-align:left;border-right:0;}
+.table {border-left:0;}
+</style>
+ {% endblock %}
+
+{% block content %}
+<!-- 选词管理页面 开始 -->
+<div id="select_words_operater" class="hide span11" style="height:600px;margin:0 20px 0 10px" >
+	<input id="select_word_shop_id" type="hidden" value="">
+	<input id="select_word_item_id" type="hidden" value="">
+	<input id="select_word_adgroup_id" type="hidden" value="">
+	<div class="portlet-body">
+		<div class="row-fluid margin-bottom-40">
+			<div class="span4">
+				<div class="pricing hover-effect" id="attr_conf">
+					<div class="pricing-head">
+						<h3>属性配置</h3>
+						<div style="margin:10px">
+							<a id="item_url" target="_blank" href="">
+								<img id="item_img" src="/" style="width:80px;heigth:80px" />
+							</a><br>
+						</div>
+					</div>
+					<ul class="pricing-content unstyled">
+						<li class="row-fluid">
+							<div class="span11 tal">
+								<div style="height:40px;float:left;">
+									<a href="javascript:;" ><i class="icon-tags"></i></a>
+								</div>
+								<span>宝贝标题 :</span>
+								<span id="item_desc"></span>
+							</div>
+						</li>
+						<li>产品词\卖点词\修饰词 来源：<span id="word_modifier" class="r_color"></span></li>
+						<li>
+							<a href="javascript:;" save_type="product" class="save_attr" ><i class="icon-asterisk"></i></a>
+							<span>产品词 :</span>
+							<input id="product_words" class="attr_val" type='text' />
+						</li>
+						<li>
+							<a href="javascript:;" save_type="sale" class="save_attr" ><i class="icon-heart"></i></a>
+							<span>卖点词  :</span>
+							<input id="sale_words" class="attr_val" type='text' />
+						</li>
+						<li>
+							<a href="javascript:;" save_type="decorate"><i class="icon-star"></i></a>
+							<span>修饰词  :</span>
+							<textarea id="decorate_words" class="attr_val" style="height:150px;width:200px;font-size:11px;resize: none;"></textarea>
+						</li>
+						<li>
+							<a href="javascript:;" save_type="black" class="save_attr" ><i class="icon-shopping-cart"></i></a>
+							<span>黑名单  :</span>
+							<input id="black_words" class="attr_val" type='text' />
+						</li>
+						<li>
+							<a href="javascript:;" ><i class="icon-collapse"></i></a>
+							<span>互斥词  :</span>
+							<input id="include_words" disabled="disabled" class="attr_val" type='text' />
+						</li>
+					</ul>
+					<div class="pricing-footer" style="margin:4px auto;padding:0px auto">
+						<p><span class="label label-important">注</span>：该模块可依据每行前端标示进行宝贝的属性保存.</p>
+					</div>
+
+					<ul style="margin:0px;list-style:none;font-size:16px;color:#888;font-weight:400;" id="oper_manager">
+						<li style="margin:2px;padding:4px;border:2px solid #eee;">
+							<div style="float:left;margin:0px;width:100px;" >
+								<span style="font-weight:600;font-size:13px;color:#888">宝贝操作</span>
+							</div>
+							<div class="tar">
+								<a href="javascript:;" class="btn mini analyse_item"><span>重新解析</span></a>
+							</div>
+						</li>
+						<li style="margin:2px;padding:4px;border:2px solid #eee;">
+							<div style="float:left;margin:0px;width:60px;" >
+								<span style="font-weight:600;font-size:13px;color:#888">解析管理</span>
+							</div>
+							<div class="tar" style="font-size:10px">
+								<a href="javascript:;" target="_blank" jump_type="prodword" class="btn white mini jump_prodword"><span>产品词</span></a>
+								<a href="javascript:;" target="_blank" jump_type="saleword" class="btn white mini jump_saleword"><span>热属性词</span></a>
+								<a href="javascript:;" target="_blank" jump_type="metaword" class="btn white mini jump_metaword"><span>隐喻词</span></a>
+								<a href="javascript:;" target="_blank" jump_type="synoword" class="btn white mini jump_synoword"><span>同义词</span></a>
+								<a href="javascript:;" target="_blank" jump_type="forbidword" class="btn white mini jump_forbidword"><span>违禁词</span></a>
+								<a href="javascript:;" target="_blank" jump_type="includeword" class="btn white mini jump_includeword"><span>互斥词</span></a>
+								<a href="javascript:;" target="_blank" jump_type="elemword" class="btn white mini jump_elemword"><span>原子词</span></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="pricing hover-effect">
+					<div class="pricing-head" >
+						<h5 style="background:#35aa47;border-bottom:solid 1px #41b91c;padding:12px 0;color:#fafafa;font-weight:300;font-size:23px;margin-top:0px">搜索模块</h5>
+					</div>
+					<ul class="pricing-content unstyled">
+						<li class="row-fluid">
+							<div class="control-group">
+								<div class="span12" style="margin-bottom:0px;margin-top:0px">
+									<label class="span5 control-label" style="font-size:16px;margin-bottom:0px;margin-top:0px;">配置查询</label>
+									<div class="tar span6" style="margin-top:2px" >
+										<a href="javascript:;" class="conf_search"><i class="icon-search"></i></a>
+										<a href="javascript:;" class="conf_import" ><i class="icon-share"></i></a>
+									</div>
+								</div>
+								<div class="controls" >
+									<input type="text" id="search_selection_word" class="span11 m-wrap" style="margin: 0 auto;30px !important;" data-provide="typeahead" data-items="4" data-source='["aaaa","abc","abcde","set","ssss"]'>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="span8 pricing hover-effect" id="select_words_conf">
+				<input type="hidden" id="oper_level" value="" />
+				<input type="hidden" id="web_return_cat_name" value="" />
+				<input type="hidden" id="optr_user" value="{{username}}" />
+				<div class="pricing-head">
+					<h3>选词管理</h3>
+				</div>
+				<ul class="pricing-content unstyled">
+					<li>
+						<div class="span7 tal">
+							<span style="font-size:16px">类目名称&nbsp;:</span>
+							<span id="cat_name" style="font-size:15px"></span>
+						</div>
+						<div class="span5 tar">
+							<span style="font-size:15px">操作类型&nbsp;:</span>
+							<select id="config_oper_type" style="font-size:10px;height:27px;width:112px;">
+								<option value="quick_select" selected="selected">快速选词</option>
+								<option value="precise_select">精准淘词</option>
+								<option value="quick_traffic">快速选词流量配置</option>
+								<option value="quick_match">快速选词精准配置</option>
+								<option value="important_select">重点托管选词</option>
+								<option value="important_change">重点托管换词</option>
+								<option value="longtail_select">长尾托管选词</option>
+								<option value="longtail_change">长尾托管换词</option>
+							</select>
+						</div>
+					</li>
+					<li>
+						<div class="span6">
+							<div class="row_title">
+								<span>配置名称</span>
+							</div>
+							<div>
+								<input id="config_name" type="text"/>
+								<a href="javascript:;" id="conf_edit">
+									<i class="icon-lock" id="conf_lock"></i>
+								</a>
+							</div>
+						</div>
+						<div class="span6">
+							<div class="row_title">
+								<span>配置描述</span>
+							</div>
+							<div>
+								<input id="config_discribe" type="text"/>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="row_title">
+							<span>标签定义</span>
+						</div>
+						<div>
+							<table id="config_label_define">
+								<thead>
+									<tr>
+										<th style="width:380px">标签定义</th>
+										<th style="width:150px">
+											<a href="javascript:;" id="add_label_conf" ><i class="icon-plus"></i></a>操作
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</li>
+					<li>
+						<div class="row_title">
+							<span>候选词条件</span>
+						</div>
+						<div>
+							<textarea id="config_candidate_words"></textarea>
+						</div>
+					</li>
+					<li>
+						<div class="row_title">
+							<span>选词配置</span>
+						</div>
+						<div>
+							<table id="config_select_words">
+								<thead>
+									<tr>
+										<th style="width:270px">过滤条件</th>
+										<th style="width:140px">排序</th>
+										<th style="width:40px">数目</th>
+										<th style="width:120px">
+											<a href="javascript:;" id="add_select_words_conf" ><i class="icon-plus"></i></a>操作
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</li>
+					<li>
+						<div class="row_title">
+							<span>初始出价配置</span>
+						</div>
+						<div>
+							<table id="config_price_init" class="table-bordered">
+								<thead >
+									<tr>
+										<th style="width:260px">条件</th>
+										<th style="width:190px">出价</th>
+										<th style="width:120px">
+											<a href="javascript:;" id="add_words_price_conf"><i class="icon-plus"></i></a>操作
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</li>
+					<li>
+						<div class="row_title">
+							<span>删词配置</span>
+						</div>
+						<div class="tar">
+							<input class="del_words" id="remove_dupli"  type="checkbox" />&nbsp;删除重复词&nbsp;
+							<input class="del_words" id="remove_del"  type="checkbox" />&nbsp;过滤已删词&nbsp;
+							<input class="del_words" id="remove_cur"  type="checkbox" />&nbsp;删除已有词&nbsp;
+						</div>
+					</li>
+					<li class="tar">
+						<div >
+							<a href="javascript:;" target="_blank" class="btn mini test_select_words">测试预览</a>
+							 <a href="javascript:;" class="btn mini save_conf">保存配置</a>
+							<a href="javascript:;" save_type="1" class="btn white mini unbind_conf">解除宝贝当前配置</a>
+							<a href="javascript:;" save_type="1" class="btn white mini bind_conf">保存配置到宝贝</a>
+							{%  if username ==  'cj' or username == 'yangrongkai' %}
+								<a href="javascript:;" save_type="0" class="btn white mini bind_conf">保存配置到类目</a>
+							{%  endif %}
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--
+	<div class="pricing" id="select_words_control" style="height:88px">
+		<ul style="list-style:none;font-size:16px;color:#888;font-weight:400;">
+			<li style="margin:2px;padding:4px;border:2px solid #eee;">
+				<div style="float:left;margin:0px;width:100px;" >
+					<span style="font-weight:600">词源管理</span>
+				</div>
+				<div class="tar">
+					<a href="javascript:;" target="_blank" class="btn white mini jump_kw_manager">产品词配置</a>
+					<a href="javascript:;" target="_blank" class="btn white mini jump_kw_manager">卖点词配置</a>
+					<a href="javascript:;" target="_blank" class="btn white mini jump_kw_manager">原子词配置</a>
+					<a href="javascript:;" target="_blank" class="btn white mini jump_kw_manager">违禁词配置</a>
+					<a href="javascript:;" target="_blank" class="btn white mini jump_kw_manager">互斥词配置</a>
+				</div>
+			</li>
+			<li style="margin:2px;padding:4px;border:2px solid #eee;">
+				<div style="float:left;margin:0px;width:100px;" >
+					<span style="font-weight:600">配置管理</span>
+				</div>
+				<div class="tar">
+					<a href="javascript:;" save_type="1" class="btn white mini unbind_conf">解除宝贝当前配置</a>
+					<a href="javascript:;" save_type="1" class="btn white mini bind_conf">保存配置到宝贝</a>
+					<a href="javascript:;" save_type="0" class="btn white mini bind_conf">保存配置到类目</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	 -->
+</div>
+<!-- 选词管理页面 结束 -->
+
+{% include 'creative_box.html' %}
+<!-- 创意一览 开始 -->
+<!-- <div id="creative_box" class="modal container hide fade" tabindex="-1" style="1">
+ 	<div	style="padding:8px 16px;border:0px;border-bottom:2px solid #EFEFEF;margin-bottom:4px;">
+ 		<input type="hidden" id="curr_adgroup" value="0"  shop_id="0"/>
+	 	<div class="tal" style="height:42px;">
+	 		<div class="span5" style="margin: 0px 16px;">
+	 			<h4><b>推广创意详情一览</b></h4>
+	 		</div>
+	 		<div class="span6 tar" style="padding:10px 0px 0px 0px;margin:0px;">
+		 		<select id="change_rpt_days">
+		 			<option value="1">昨天</option>
+		 			<option value="2">过去2天</option>
+		 			<option value="3">过去3天</option>
+		 			<option value="5">过去5天</option>
+		 			<option value="7" selected="selected">过去7天</option>
+		 			<option value="15">过去15天</option>
+		 		</select>
+		 	</div>
+		 	<div style="float:left;width:40px;margin-left:10px;margin-top:15px;">
+		 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
+		 	</div>
+	 	</div>
+ 	</div>
+ 	<div id="creative_container">
+ 	</div>
+</div>  -->
+<!-- 创意一览 结束 -->
+
+<input type="hidden" value="{{source_type}}" id="source_type" />
+
+<div id="conditions_template">{% include 'template_condition.html'  %}</div>
+
+<div class="portlet box grey">
+	<div class="portlet-title">
+  	<div class="caption"><i class="icon-reorder"></i>宝贝查询结果</div>
+    <div class="mal_6">（共<span class="page_count">0</span>页/<span class="total_count">0</span>个宝贝，涉及到<span class="account_count">0</span>个店铺，<span class="camp_count">0</span>个计划）</div>
+  </div>
+  <div class="portlet-body">
+    <div id="summary_rpt">
+        <div class="hide tac" style="border:#ccc solid 1px;" id="summary_info_tip">
+            <img src="/site_media/jl/img/ajax-loader.gif" width="32" height="32" style="display:inline-block">正在统计结果，请稍候......
+        </div>
+        <div id="summary_rpt_table" class="hide">
+        	<table class="table table-bordered">
+            	<thead>
+                	<tr>
+                    	<th>平均展现量</th>
+                    	<th>平均点击量</th>
+                    	<th>平均点击率</th>
+                    	<th>平均总花费</th>
+                    	<th>平均PPC</th>
+                    	<th>平均收藏量</th>
+                    	<th>平均成交量</th>
+                    	<th>平均成交额</th>
+                    	<th>平均转化率</th>
+                    	<th>平均ROI</th>
+                	</tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="fixed_div">
+      <span class="fl" id="adg_control">
+      	<span class="current_count" id="all_selected" table="adg_table" page_index="2" is_all="0"></span>
+        <span class="current_count">当前选中<span id="current_count">0</span>个</span>
+        <a class="btn blue hide" data-toggle="modal" href="#modal_msg">留言&备注</a>
+        <a class="btn blue" id="show_kw_count"  href="javascript:;">显示关键词数</a>
+        <button type="button" class="btn blue adg hide" name="start">参与推广</button>
+        <button type="button" class="btn blue adg hide" name="stop">暂停推广</button>
+        <button type="button" class="btn blue adg hide" name="del">删除</button>
+        <!--
+        <button type="button" class="btn blue download" mode='0'>下载关键词数据</button>
+        <button type="button" class="btn blue download" mode='1'>下载全部宝贝的关键词报表</button>
+        <div class="btn-group hide" style="margin-bottom:0 !important">
+          <a href="javascript:;" class="btn blue" data-toggle="dropdown">修复宝贝数据<i class="icon-angle-down marl_3"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:;" data_type=0 class="repair_data">修复【结构】</a></li>
+            <li><a href="javascript:;" data_type=1 class="repair_data">修复【报表】</a></li>
+          </ul>
+        </div>
+        -->
+        <!--
+        <div class="btn-group hide" style="margin-bottom:0px !important">
+          <a href="javascript:;" class="btn blue dropdown_a" id="search_top_ratio">当页到顶词查看<i class="icon-angle-down marl_3"></i></a>
+          <div class="dropdown-menu hide" id="search_top_ratio_panel">
+            <div class="dropdown_contain">
+              <div style="margin:1px">
+              	<span style='font-size: 12px;'>限价百分比</span>&nbsp;<input type="radio" name="search_top_ratio_radio" value="ratio" checked='checked' style="margin-top:-2px"/>&nbsp;&nbsp;&nbsp;<span style='font-size: 12px;'>自定义价位</span>&nbsp;<input type="radio" value="custom" name="search_top_ratio_radio" style="margin-top:-2px"/>
+              </div>
+              <div class="fr" style="margin-top:3px">
+              	<input type="text" class="min" value="80" style="margin:0px;width:30px;height:12px" /> ~<input type="text" class="max" style="margin:0px;width:30px;height:12px" />&nbsp;&nbsp;&nbsp;
+                <button class="btn blue closer mini" id="search_camp_ratio">确定</button>&nbsp;&nbsp;
+              </div>
+              <br class="clearb">
+            </div>
+          </div>
+	    </div>
+	     -->
+        <a class="por btn blue hide" id="save_as_csv">复制店铺ID</a>
+        <a class="por btn blue hide" id="id_send_command">发送命令</a>
+        <a class="por btn blue hide" id="id_check_cmd_history">命令记录</a>
+
+      </span>
+      <span class="fr">
+        <span>跳转到</span>
+        <button type="button" class="btn jump" target_url="crm_keyword">关键词列表</button>
+      </span>
+    </div>
+    <div>
+      <table class="table table-bordered table-hover td_middle dataTable" id="adg_table">
+        <thead>
+          <tr>
+            <th class="link_inner_checkbox pointer" style="width:8px;"><input type="checkbox" class="group-checkable father_box" data-set="#sample_1 .checkboxes" link="adg_table"/></th>
+            <th>序号</th>
+            <th style="width:60px;">宝贝信息</th>
+            <th>店铺ID</th>
+            <th>养宝贝天数</th>
+            <th>展现量</th>
+            <th>点击量</th>
+            <th>点击率</th>
+            <th>总花费</th>
+            <th>PPC</th>
+            <th>收藏量</th>
+            <th>成交量</th>
+            <th>成交额</th>
+            <th>转化率</th>
+            <th>ROI</th>
+            <th>关键词数</th>
+            <th class="hide">限价占比</th>
+            <th>提交时间及状态</th>
+            <th class="hide">备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div class="row-fluid">
+        <div class="span6 dataTables_info" id="page_info">
+           每页显示<span class="page_size">---</span>个宝贝，共<span class="page_count">0</span>页/<span class="total_count">0</span>个宝贝
+        </div>
+        <div class="span6">
+          <div class="dataTables_paginate pagination" id="dynamic_pager"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--跳转页面时提交的表单-->
+<form action="" method="post" class="hide" id="jump_form" target="_blank">
+  <input type="hidden" value="2" name="source_type" />
+  <input type="hidden" value="0" name="is_jump" />
+  <input type="hidden" value="" name="id_dict" />
+</form>
+
+<!-- 宝贝趋势图弹出层 开始 -->
+<div id="modal_adg_trend"  class="modal hide fade" tabindex="-1" data-width="900"  style="height:450px;">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	  <h4 class="tac"><span  id="adg_trend_title"></span>&nbsp;&nbsp;趋势图</h4>
+	</div>
+	<div class="modal-body">
+		<div id="adg_trend_chart" style="height:300px;width:870px;"></div>
+    </div>
+</div>
+<!-- 宝贝趋势图弹出层 结束 -->
+
+<div class="mid_high hide" id="id_cmd_layer" style="width:1440px;"></div>
+<div class="mid_high hide" id="id_cmd_history_layer" style="width:1024px;"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/jquery.bootpag.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/ZeroClipboard.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/TableTools.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/FixedHeader.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/plugins/jslider/js/jquery.slider.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/crm_adgroup.js?v={{VERSION}}.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/template_condition.js?v={{VERSION}}.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/instruction_list.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/date.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/creative_box.js?v={{VERSION}}.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block template%}
+<script id="show_creative_div" type="text/html">
+<div style="height:290px">
+	<div style="padding: 5px 10px;">
+		<span style="color:gray;font-size:15px;"><%=create.title%></span>
+	</div>
+	<div>
+ 		<div class="span2 show_img tac" style="padding-top:10px;">
+ 			<a href="javascript:;">
+ 				<img src="<%=create.url%>" style="height:110px;width:110px;"/>
+ 			</a>
+ 		</div>
+ 		<div class="span2 show_data">
+			<ul style="list-style:none" >
+				<li>总花费：<span class="m_color bld"><%=create.cost%></span></li>
+				<li>展现量：<span><%=create.impressions%></span></li>
+				<li>点击量：<span><%=create.click%></span></li>
+				<li>点击率：<span><%=create.ctr%></span></li>
+				<li>平均点击花费：<span><%=create.cpc%></span></li>
+			</ul>
+			<ul style="list-style:none">
+				<li>成交额：<span class="m_color bld"><%=create.pay%></span></li>
+				<li>收藏数：<span><%=create.favcount%></span></li>
+				<li>成交数：<span><%=create.ctr%></span></li>
+				<li>点击转化率：<%=create.conv%></li>
+				<li>投资回报率：<span><%=create.roi%></span></li>
+			</ul>
+		</div>
+ 		<div class="span8" id="creative_<%=create.id%>" style="width:700px;height:230px;">
+ 		</div>
+	</div>
+</div>
+</script>
+
+<script id="image_div" type="text/html" >
+<div class="span2 tac selected_div" style="padding:4px;">
+	<a href="javascript:;">
+		<img src="<%=img_url%>" style="height:110px;width:110px;"/>
+	</a>
+</div>
+</script>
+
+<script id="add_creative_div" type="text/html">
+<div style="height:290px">
+	<div style="padding: 5px 10px;">
+		<span style="color:gray;font-size:15px;">当前宝贝暂没有第二个推广标题</span>
+	</div>
+	<div class="row-fluid" id="add_creative_model">
+ 		<div class="span2  tac" style="padding-top:10px;margin-left:30px;">
+ 			<a href="javascript:;" class="add_creative">+</a>
+ 		</div>
+ 		<div class="span9" style="margin-top:40px">
+ 			<div class="larger bld">请点击左侧图标，再添加一个推广内容</div>
+ 			<div class="mart_12 explain lh_24">使用两个推广内容，可以提高更多关键词的标题相关性，增加高质量得分的关键词个数；同时不同风格的标题和图片，能够吸引更多买家</div>
+		</div>
+	</div>
+	<div class="row-fluid hide" id="edit_creative_model" >
+ 		<div class="span1  tac" style="padding-top:10px;margin-left:30px;">
+ 			<span style="font-size:13px;color:gray;">图片选择</span>
+ 		</div>
+ 		<div class="row-fluid span10" id="select_image" style="padding:15px;border: 2px dashed gray; border">
+		</div>
+		<div class="span1  tac" style="padding-top:10px;margin-left:30px;margin-top:12px;">
+ 			<span style="font-size:13px;color:gray;" >编辑标题<span>
+ 		</div>
+ 		<div class="span10" style="padding-top:10px;margin-left:30px;margin-top:5px">
+ 			<div class="tal span10">
+ 				<input type="text" id="creative_title" style="width:100%;border:0px;border-bottom:1px solid gray;"/>
+ 			</div>
+ 			<div class="tar">
+ 				<button type="button" class="btn commit_creative green">提交</button>
+ 				<button type="button" class="btn cancel green">取消</button>
+ 			</div>
+ 		</div>
+	</div>
+</div>
+</script>
+
+<script id="adg_table_tr" type="text/html">
+<tr>
+	<td class="link_inner_checkbox"><input type="checkbox" name="result_item" class="checkboxes kid_box" value="<%=adg_id%>" shop_id="<%=shop_id%>" camp_id="<%=camp_id%>" item_id="<%=item_id%>" /></td>
+	<td class='tar'><%=index%></td>
+	<td><a class="tooltips" data-original-title="<%=title%><span class='m_color marl_12'>(￥<%=$format(price,100,1,2)%>)</span>" target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>' style="display:block;"><img src="<%=pic_url%>_60x60.jpg"/></a></td>
+	<td class="tar"><%=shop_id%></td>
+	<td class="tar"><%=create_days%></td>
+	<td class="tar base_data"><% if (impressions) { %><%=impressions%><% }else{ %>0<% } %></td>
+	<td class="tar base_data"><% if (click) { %><%=click%><% }else{ %>0<% } %></td>
+	<td class="tar base_data"><% if (ctr) { %><%=$format(ctr,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+	<td class="tar base_data"><% if (cost) { %><%=$format(cost,100,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar base_data"><% if (cpc) { %><%=$format(cpc,100,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar conv_data"><% if (favcount) { %><%=favcount%><% }else{ %>0<% } %></td>
+	<td class="tar conv_data"><% if (paycount) { %><%=paycount%><% }else{ %>0<% } %></td>
+	<td class="tar conv_data"><% if (pay) { %><%=$format(pay,100,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar conv_data"><% if (conv) { %><%=$format(conv,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+	<td class="tar conv_data"><% if (roi) { %><%=$format(roi,1,1,2)%><% }else{ %>0.00<% } %></td>
+	<td >
+		<span class="label label-danger kw_count"></span>
+	</td>
+	<td class="hide">
+		<span class="hide"></span>
+		<span class="label label-danger price_ratio"></span>
+	</td>
+	<td>
+		<div><%=modify_time%></div>
+		<% if(online_status=='online'){ %>
+		<span class="alert-info" id='status_<%=adg_id%>'>推广中</span>
+		<%} else {%>
+		<span class="alert-error" id='status_<%=adg_id%>'>已暂停</span>
+		<%}%>
+		<span class="alert-error" id='mnt_type_<%=adg_id%>'><% if(mnt_type == 1){ %>长尾宝贝<% } else if(mnt_type == 2) { %>重点宝贝<% } %></span>
+		</br>
+		<span class="label label-danger"><% if (adg_cpc) { %>行业平均PPC<%=$format(adg_cpc,1,1,2)%>元<% } %></span>
+		</br>
+		<span class="label label-danger"><% if (limit_price) { %>宝贝限价<%=$format(limit_price,100,1,2)%>元<% } %></span>
+		</br>
+		<span class="label label-danger"><% if (mnt_days) { %>自动化天数 <%=mnt_days%>天<% } %></span>
+	</td>
+	<td class='msg_td tac hide'> <% if(msg_status != null){ %> <a href="javascript:;" class="open_msg cur">展开</a> <% } else { %> 无 <% } %></td>
+	<td class='account_oper tac'>
+		<div>
+			<a class="single" href="/crm/crm_redirect?shop_id=<%=shop_id%>&login_type=web&next_url=/web/quick_add_keyword/?adgroup_id=<%=adg_id%>" target="_blank">快速选词</a>
+			<a class="single" href="/crm/crm_redirect?shop_id=<%=shop_id%>&login_type=web&next_url=/web/precise_tao_keyword/?adgroup_id=<%=adg_id%>" target="_blank">精准淘词</a></br>
+			<a class="single" href="/crm/crm_redirect?shop_id=<%=shop_id%>&login_type=web&next_url=/web/title_optimize/?adgroup_id=<%=adg_id%>" target="_blank">标题优化</a>
+			<% if ( mnt_type == 1 || mnt_type == 2){%>
+				<a class="single" href="/crm/crm_redirect?shop_id=<%=shop_id%>&login_type=web&next_url=/mnt/adgroup_data/<%=adg_id%>" target="_blank">跳转宝贝</a>
+			<% } else {%>
+				<a class="single" href="/crm/crm_redirect?shop_id=<%=shop_id%>&login_type=web&next_url=/web/smart_optimize/<%=adg_id%>" target="_blank">跳转宝贝</a>
+			<% } %>
+			</br>
+			<a target="_blank" class="btn mini disabled hide" href="/ncrm/login_ztc/<%shop_id%>">登录到=></a>
+			<a href="javascript:;" class="jump single hide" target_url="crm_keyword">查看所有关键词</a>
+			<a href="javascript:;" class="open_charts single" >趋势图</a>
+			<a href="javascript:;" class="single show_creative_box" >创意详情</a>
+			<a href="javascript:;" class="get_word_conf single hide">配置选词</a><br>
+			<a href="/crm/selection_word_manager?adgroup_id=<%=adg_id%>&shop_id=<%=shop_id%>" class="single" target="_blank">新配置选词</a><br>
+			<a href="javascript:;" class="clear_shop_items" >店铺宝贝缓存清空</a>
+		</div>
+	</td>
+</tr>
+</script>
+
+<script id="summary_rpt_table_td" type="text/html">
+<td class="tar base_data"><%=impressions%></td>
+<td class="tar base_data"><%=click%></td>
+<td class="tar base_data"><%=ctr%>%</td>
+<td class="tar base_data"><%=cost%></td>
+<td class="tar base_data"><%=cpc%></td>
+<td class="tar conv_data"><%=favcount%></td>
+<td class="tar conv_data"><%=paycount%></td>
+<td class="tar conv_data"><%=pay%></td>
+<td class="tar conv_data"><%=conv%>%</td>
+<td class="tar conv_data"><%=roi%></td>
+</script>
+
+<script id="select_words_conf_tr" type="text/html">
+<tr class="select_word" >
+	<td >
+		<input class="candi_filter" style="width:264px" type="text" value="<%= select_word_conf.candi_filter %>" />
+	</td>
+	<td >
+		<input class="sort_mode" style="width:124px" type="text" value="<%= select_word_conf.sort_mode %>" />
+	</td>
+	<td >
+		<input class="select_num" style="width:34px" type="text" value="<%= select_word_conf.select_num %>" />
+	</td>
+	<td class="tac" >
+		<div style="width:114px" >
+			<!-- <a href="#" ><i class="icon-pencil"></i></a> -->
+			<a href="javascript:;" class="select_wards_conf_add"><i class="icon-download-alt"></i></a>
+			<a href="javascript:;" class="select_wards_conf_up"><i class="icon-arrow-up"></i></a>
+			<a href="javascript:;" class="select_wards_conf_down"><i class="icon-arrow-down"></i></a>
+			<a href="javascript:;" class="select_wards_conf_delete"><i class="icon-remove"></i></a>
+		</div>
+	</td>
+</tr>
+</script>
+
+<script id="words_price_conf_tr" type="text/html">
+<tr class="word_price">
+	<td >
+		<input class="candi_filter" style="width:254px" type="text" value="<%= word_price_conf.candi_filter %>" />
+	</td>
+	<td >
+		<input class="init_price" style="width:184px" type="text" value="<%= word_price_conf.init_price %>" />
+	</td>
+	<td class="tac" >
+		<div style="width:114px" >
+			<!-- <a href="#" ><i class="icon-pencil"></i></a> -->
+			<a href="javascript:;" class="words_price_conf_add"><i class="icon-download-alt"></i></a>
+			<a href="javascript:;" class="words_price_conf_up"><i class="icon-arrow-up"></i></a>
+			<a href="javascript:;" class="words_price_conf_down"><i class="icon-arrow-down"></i></a>
+			<a href="javascript:;" class="words_price_conf_delete"><i class="icon-remove"></i></a>
+		</div>
+	</td>
+</tr>
+</script>
+
+<script id="label_conf_tr" type="text/html">
+<tr class="label_conf">
+	<td >
+		<input class="define_label" style="width:374px" type="text" value="<%= label_conf %>" />
+	</td>
+	<td class="tac" >
+		<div style="width:144px" >
+			<!-- <a href="#" ><i class="icon-pencil"></i></a> -->
+			<a href="javascript:;" class="label_conf_add"><i class="icon-download-alt"></i></a>
+			<a href="javascript:;" class="label_conf_up"><i class="icon-arrow-up"></i></a>
+			<a href="javascript:;" class="label_conf_down"><i class="icon-arrow-down"></i></a>
+			<a href="javascript:;" class="label_conf_delete"><i class="icon-remove"></i></a>
+			<a href="javascript:;" class="label_conf_check"><i class="icon-check"></i></a>
+		</div>
+	</td>
+</tr>
+</script>
+
+{% include 'instruction_template.html'  %}
+<script id="id_operate_template" type="text/html">
+    <tr id="operate_<%=operate.func%>" name="operation">
+        <td ><%=operate.name%><input type="hidden" key_name="func" value="<%=operate.func%>"></td>
+        <td id="<%=operate.func%>_args" class="marl_12">
+            <%for(var i in operate.args){%>
+            <span><%=i%>：<input type="text" class="edit_args args_elem" key_name="<%=i%>" value="<%=operate.args[i]%>"></span>
+            <%}%>
+        </td>
+        <td>
+            <span><a class="btn mini sort" move="1">▲</a></span>
+            <span><a class="btn mini sort" move="-1">▼</a></span>
+            <span><a class="btn mini sort" move="0">↑↑</a></span>
+            <span><a class="btn mini remove" onclick="$(this).parent().parent().parent().remove();"><i class="icon-remove"></i></a></span>
+        </td>
+    </tr>
+</script>
+
+<script id="id_optimize_template" type="text/html">
+    <tr id="operate_<%=operate.func%>" name="operation">
+        <td ><%=operate.name%><input type="hidden" key_name="func" value="<%=operate.func%>"></td>
+        <td id="<%=operate.func%>_args" class="marl_12">
+            <span>改价指令：
+                <input type="text" key_name="instrcn_list" id="id_instrcn_list_input" class="args_elem marb_0" style="width:480px;" />
+                <a class="btn mini" id="id_check_instrcn">检查</a><br>
+                <span id="id_check_hint" class="hide">指令<span id="id_invalid_instrcn" style="color:red;"></span>不存在！</span>
+                <input type="hidden" key_name="manual_flag" class="args_elem" value="1" />
+                <!-- <ul class="instrcn_list tal edit_style ui-sortable marl_0">
+                <% for(var i=0;i<operate.args.instrcn_list.length;i++) { %><li><%=operate.args.instrcn_list[i]%></li><% }%>
+                </ul> -->
+                <!-- <input type="text" key_name="instrcn_list" style="width:400px;" id="id_instrcn_list_input" value="<%=operate.args.instrcn_list.toString()%>" readonly="true"> -->
+            </span>
+            <!-- <a class="btn mini marb_12 edit_instrcn"><i class="icon-pencil"></i></a> -->
+            <!-- <span>报表天数：<input type="text" class="edit_args" key_name="rpt_days" value="<%=operate.args.rpt_days%>"></span> -->
+        </td>
+        <td>
+            <span><a class="btn mini sort" move="1">▲</a></span>
+            <span><a class="btn mini sort" move="-1">▼</a></span>
+            <span><a class="btn mini sort" move="0">↑↑</a></span>
+            <span><a class="btn mini remove" onclick="$(this).parent().parent().parent().remove();"><i class="icon-remove"></i></a></span>
+        </td>
+    </tr>
+</script>
+
+<script id="id_addkw_template" type="text/html">
+    <tr id="operate_<%=operate.func%>" name="operation">
+        <td ><%=operate.name%><input type="hidden" key_name="func" value="<%=operate.func%>"></td>
+        <td id="<%=operate.func%>_args" class="marl_12">
+            <span>加词标准：<input type="text" class="edit_args args_elem mar_0" key_name="min_num" value="<%=operate.args.min_num%>"></span>
+            <span>选词配置：
+                <select key_name="conf_name" class="args_elem mar_0">
+                    <% for(var i=0;i<operate.args.conf_name.length;i++) { %>
+                    <option value="<%=operate.args.conf_name[i]%>"><%=operate.args.conf_name[i]%></option>
+                    <% } %>
+                </select>
+
+            </span>
+        </td>
+        <td>
+            <span><a class="btn mini sort" move="1">▲</a></span>
+            <span><a class="btn mini sort" move="-1">▼</a></span>
+            <span><a class="btn mini sort" move="0">↑↑</a></span>
+            <span><a class="btn mini remove" onclick="$(this).parent().parent().parent().remove();"><i class="icon-remove"></i></a></span>
+        </td>
+    </tr>
+</script>
+
+<script type="text/html" id="send_cmd_template">
+    <div class="row-fluid" >
+        <div class="span12">
+            <div id="edit_operation">
+                <div>
+                    <table id="id_operate_list" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th width="120px;">操作名</th>
+                                <th width="600px;">操作参数</th>
+                                <th width="120px;">调整</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="well">
+                    <div class="tac">
+	                    <span class="bigger vm_2 marr_6">针对勾选的宝贝发送命令</span>
+                        <%for(var i=0;i<opt_list.length;i++){%>
+                        <span id="id_func_<%=opt_list[i].func%>">
+                            <a class="btn add_operate"><%=opt_list[i].name%></a>
+                            <input type="hidden" value="<%=opt_list[i].args%>" func="<%=opt_list[i].func%>">
+                        </span>
+                        <%}%>
+                        <a class="btn green marl_10" id="id_send_operation">确定并发送命令</a>
+                    </div>
+                </div>
+            </div>
+            <%include('id_instrcn_porlet_template')%>
+        </div>
+    </div>
+</script>
+
+<script id="id_cmd_history_template" type="text/html">
+    <table class="table table-bordered">
+        <tr>
+            <!-- <th width="8%">发送时间</th>
+            <th width="12%">查询条件</th>
+            <th width="25%">命令详情</th>
+            <th width="5%">执行状态</th>
+            <th widht="50%"> -->
+            <th width="80px;">发送时间</th>
+            <th width="120px;">查询条件</th>
+            <th width="280px;">命令详情</th>
+            <th width="20px;">执行状态</th>
+            <th widht="500px;">
+                <table>
+                    <tr>
+                        <!-- <th width="14%">任务类型</th>
+                        <th width="14%">创建时间</th>
+                        <th width="14%">执行时间</th>
+                        <th width="14%">结束时间</th>
+                        <th width="14%">失败次数</th>
+                        <th width="14%">任务状态</th>
+                        <th width="14%">操作</th> -->
+                        <th width="70px;">任务类型</th>
+                        <th width="70px;">创建时间</th>
+                        <th width="70px;">执行时间</th>
+                        <th width="70px;">结束时间</th>
+                        <th width="70px;">失败次数</th>
+                        <th width="70px;">任务状态</th>
+                        <th width="70px;">操作</th>
+                    </tr>
+                </table>
+            </th>
+        </tr>
+
+        <% for(var i=0;i<uo_list.length;i++) { %>
+        <tr>
+            <td><%=uo_list[i].create_time%></td>
+            <td><%=uo_list[i].query_dict%></td>
+            <td><div style="width:275px;word-wrap: break-word;"><%=uo_list[i].cmd_detail%></div></td>
+            <td><%=uo_list[i].progress%></td>
+            <td>
+                <% if(uo_list[i].task_list.length>0){ %>
+                <table>
+                <%for(j=0;j<uo_list[i].task_list.length;j++){%>
+                    <tr align="center">
+                        <td width="14%"><%=uo_list[i].task_list[j].task_type%></td>
+                        <td width="14%"><%=uo_list[i].task_list[j].create_time%></td>
+                        <td width="14%"><%=uo_list[i].task_list[j].start_time%></td>
+                        <td width="14%"><%=uo_list[i].task_list[j].end_time%></td>
+                        <td width="14%"><%=uo_list[i].task_list[j].failed_count%></td>
+                        <td width="14%"><%=uo_list[i].task_list[j].status%></td>
+                        <td width="14%"><a href="javascript:void(0);" onclick="javascript:void(0);" id="<%=uo_list[i].task_list[j]._id%>" class="exec_mnt_task">执行</a></td>
+                    </tr>
+                <% } %>
+                </table>
+                <% } %>
+            </td>
+        </tr>
+        <%}%>
+    </table>
+</script>
+
+{%endblock%}
+
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function(){
+	PT.CrmAdgroup.init();
+	PT.CrmCondition.init();
+	PT.CrmCondition.init_condition({{base_condition|safe}},{{filter_condition|safe}});
+	PT.CreativeBox.init();
+});
+
+</script>
+{% endblock %}

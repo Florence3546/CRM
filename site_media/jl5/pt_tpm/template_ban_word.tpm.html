@@ -1,0 +1,25 @@
+<div class="modal fade hide">
+    <div class="modal-header pb0">
+        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+        <h5>设置屏蔽词</h5>
+    </div>
+    <div class="modal-body pt0">
+        <div class="red">警告！确定后，系统会立即删除该宝贝在所有推广计划中包含该屏蔽词的关键词。</div>
+        <div id="id_ban_word_part" class="padl_12">
+            <table style="border-collapse:collapse;">
+                <%for(i=0;i<part_list.length;i++){ %>
+                    <tr>
+                        <td class="nbb w12"><input type="checkbox" value="<%=part_list[i]%>"/></td>
+                        <td class="nbb"><%=part_list[i]%></td>
+                    </tr>
+                <% }%>
+            </table>
+            <input type="text" id="manual_blackword" class="mart_6" style="width:100px;" placeholder="其他屏蔽词"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" id="id_submit_bword">确定</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+    </div>
+</div>
+

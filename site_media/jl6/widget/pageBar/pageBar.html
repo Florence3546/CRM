@@ -1,0 +1,20 @@
+{{if binfo}}<span class="page">{{page}}</span>/{{page_count}}页{{/if}}
+{{if record_count }}
+<ul class="pagination m0 vm">
+  <li>
+    <a href="javascript:;" data-page="1" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {{each page_xrange as value index}}
+  <li {{if value == page }}class="active"{{/if}}>
+    <a href="javascript:;" data-page="{{value}}">{{value}}</a>
+  </li>
+  {{/each}}
+  <li>
+    <a href="javascript:;" data-page="{{page_count}}" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+</ul>
+{{/if}}

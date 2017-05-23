@@ -1,0 +1,182 @@
+{% extends "base_ncrm.html" %}
+{% block title%}
+客户分发
+{% endblock %}
+{% load rates %}
+{% block extra_style %}
+
+<style>
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mt20 w1200 auto">
+	<div class="hide">
+		<h2>顾问管理功能</h2>
+		<h3>顾问负责人需要完成哪些功能？</h3>
+		<ul>
+			<li>对单个顾问，解绑客户</li>
+			<li>对单个顾问，设置权重</li>
+			<li>对单个顾问，客户转给其它人（单人？多人？）</li>
+			<li>将指定的一个（批）客户转给其它人</li>
+		</ul>
+	</div>
+	
+	
+	<div class="mb10">
+		<a href="javascript:void(0);" class="btn " id="id_refresh_consult">刷新客户数</a>
+		{% if 'A' in user.perms or user.position == 'COMMANDER' %}
+		<a href="javascript:void(0);" class="btn" id="id_modify_weight">保存权重</a>
+		{% endif %}
+<!--		<a href="javascript:void(0);" class="btn hide" id="id_reallocate">重新分配</a>-->
+	</div>
+	<div class="mb10">
+		<div class="dib">
+			<span class="b">权重</span>:
+      <span class="red" id="weight_sum">0</span>
+      <span class='silver'>(<span id="group1_weight">0</span>+<span id="group2_weight">0</span>+<span id="group3_weight">0</span>+<span id="mkt_weight">0</span>+<span id="tgroup_weight">0</span>)</span>
+		</div>
+    <span class="b ml10">总客户数</span>:
+    <span class="red" id="customer_sum">0</span>
+    <span class='silver'>(<span id="group1_customer">0</span>+<span id="group2_customer">0</span>+<span id="group3_customer">0</span>+<span id="mkt_customer">0</span>+<span id="tgroup_customer">0</span>)</span>
+		<span class="b ml10">服务中</span>:
+    <span class="red" id="inservice_sum">0</span>
+    <span class='silver'>(<span id="group1_inservice">0</span>+<span id="group2_inservice">0</span>+<span id="group3_inservice">0</span>+<span id="mkt_inservice">0</span>+<span id="tgroup_inservice">0</span>)</span>
+    <span class="b ml10">已过期</span>:
+    <span class="red" id="expired_sum">0</span>
+    <span class='silver'>(<span id="group1_expired">0</span>+<span id="group2_expired">0</span>+<span id="group3_expired">0</span>+<span id="mkt_expired">0</span>+<span id="tgroup_expired">0</span>)</span>
+	</div>
+	
+	<div id="id_consult_manager" class="">
+		<table class="table table-bordered table-hover tc" id="id_consult_table">
+			<thead>
+                <tr>
+                    <th>顾问</th>
+                    <th><div>部门/职位</div></th>
+                    <th><div>权重</div></th>
+                    <th><div>本轮已分配</div></th>
+                    <th><div>总客户数</div></th>
+                    <th><div>服务中</div></th>
+                    <th><div>已过期</div></th>
+                    <th><div>保留用户</div></th>
+                    <th class="hide"><div>优先剔除</div></th>
+                    <th>操作</th>
+                </tr>
+			</thead>
+			<tbody>
+			{% for consult in consult_list %}
+			<tr id="{{consult.id}}" work_type="{{consult.position}}" department="{{ consult.department }}" {% if consult.is_invalid %}class="red b"{% endif %}>
+				<td>{{ consult.name_cn }}{% if consult.status == '离职' %}【已离职】{% endif %}</td>
+				<td department="{{ consult.get_department_display }}"><input type="hidden" value="{{ consult.department }}_{{ consult.position }}">【{{ consult.get_department_display }}】{{ consult.get_position_display }}</td>
+                <td>
+                {% if consult.is_invalid %}--{% else %}
+                {% if 'A' in user.perms or user.department == consult.department %}
+                    <input type="text" value="{{ consult.weight }}" class="consult_weight editable w50" org_value="{{ consult.weight }}">
+<!--                    <a href="javascript:void(0);" class="btn save" ><i class="iconfont">&#xe62e;</i></a>-->
+                {% else %}
+                    <input type="hidden" value="{{ consult.weight }}" class="consult_weight">
+                    {{ consult.weight }}
+                {% endif %}{% endif %}
+                </td>
+                <td>{{ consult.cycle_load }}</td>
+				<td>{{ consult.now_load }}</td>
+				<td>{{ consult.inservice_count }}</td>
+				<td>{{ consult.expired_count }}</td>
+                <td>{{ consult.reserved_count }}</td>
+                <td class="hide">{{ consult.to_distribute_count }}</td>
+				<td>
+				{% if 'A' in user.perms or user.department == consult.department %}
+					<a href="javascript:void(0);" class="btn distribute" >分发客户</a>
+				{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	
+	<div id="id_distribute_layout" class="modal hide fade p20 w600">
+		<div class="mb10 f18">
+			<input type="hidden" id="id_consult_id" value=""/>
+			<div>顾问名：<span id="id_consult_name"></span></div>
+			<div class="mt10 f14" id="id_distribute_statistic">
+				总客户数：<span id="id_consult_now_load" class="mr10 red b f18"></span>
+				服务中：<span id="id_consult_inservice" class="mr10"></span>
+				已过期：<span id="id_consult_expired" class="mr10"></span>
+				保留用户：<span id="id_consult_reserved" class="mr10"></span>
+				优先剔除：<span id="id_consult_to_distribute" class=""></span>
+			</div>
+		</div>
+		
+		<div class="mb10">
+			<select name="customer_type" id="customer_type" class="w100">
+				<option value="0" td_index="4" selected="selected">总客户数</option>
+				<option value="1" td_index="5">服务中</option>
+				<option value="2" td_index="6">已过期</option>
+				<option value="3" td_index="-">非保留</option>
+				<option value="4" td_index="-">优先剔除</option>
+			</select>
+			<select name="select_consult" id="id_candidate_list" class="w350"></select>
+			<span class="r">
+				<a href="javascript:void(0);" id="id_add_distributer" class="btn btn-info">添加</a>
+				<a href="javascript:void(0);" id="id_auto_distribute" class="btn btn-info">自动分配</a>
+			</span>
+		</div>
+		<table id="id_dirstribute_table"  class="table table-bordered table-hover mb20 tc">
+			<thead>
+				<tr>
+					<th>部门</th>
+					<th>顾问名</th>
+					<th>总客户数</th>
+					<th>权重</th>
+					<th>分配数量[<span id="dirstribute_sum" class="red">0</span>]</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<div class="tc">
+			<a href="javascript:void(0);" class="btn btn-primary" id="id_do_distribute">确定</a>
+			<a href="javascript:void(0);" class="btn"  data-dismiss="modal">关闭</a>
+		</div>
+	</div>
+	
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ '/site_media/jl5/ncrm_js/consult_manager.js'|file_time_stamp }}" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block template%}
+<script id="id_distribute_template" type="text/html">
+	<tr id="<%=consult_id%>">
+		<td><%=department%></td>
+		<td><%=name%></td>
+		<td><%=customer_count%></td>
+		<td><%=weight%></td>
+		<td><input type="text" value="<%=allocate_num%>" class="w50"/></td>
+		<td><a class="btn remove_distributer"><i class="icon-remove"></i></a></td>
+	</tr>
+</script>
+
+<!--<script id="id_candidate_template" type="text/html">
+	<option value="<%=consult_id%>" now_load="<%=now_load%>" name="<%=name%>" weight="<%=weight%>">【<%=name%>，客户数：<%=now_load%>, 权重：<%=weight%>】</option>
+</script>-->
+
+<script id="id_candidate_template" type="text/html">
+    <option value="<%=consult_id%>" customer_count="<%=customer_count%>" weight="<%=weight%>">【<%=department%>】<%=name%>，<%=customer_count_str%>：<%=customer_count%>, 权重：<%=weight%></option>
+</script>
+{% endblock %}
+
+
+{% block custom_js %}
+<script>
+$(document).ready(function(){
+	PT.ConsultManager.init();	
+});
+</script>
+{% endblock %}

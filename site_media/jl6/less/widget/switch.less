@@ -1,0 +1,44 @@
+.switch{
+    input{
+        display: none;
+    }
+
+    display: inline-block;
+    height: 24px;
+    width: 50px;
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    border-radius: 20px;
+    box-shadow: #dfdfdf 0 0 1px inset;
+    -webkit-transition: border cubic-bezier(0, 0, 0, 1) .4s, box-shadow cubic-bezier(0, 0, 0, 1) .4s;
+    -moz-transition: border cubic-bezier(0, 0, 0, 1) .4s, box-shadow cubic-bezier(0, 0, 0, 1) .4s;
+    transition: border cubic-bezier(0, 0, 0, 1) .4s, box-shadow cubic-bezier(0, 0, 0, 1) .4s;
+
+    &:before{
+        content: "";
+        cursor: pointer;
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        vertical-align: top;
+        border-radius: 20px;
+        background-color: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+        -webkit-transition: margin-left .3s;
+        -moz-transition: margin-left .3s;
+        transition: margin-left .3s;
+    }
+
+    &.on{
+        &:before{
+            margin-left: 26px;
+        }
+        box-shadow: @brand-primary 0 0 0 16px inset;
+        background-color: @brand-primary;
+        border-color: darken(@brand-primary, 10%);
+        -webkit-transition: border ease .4s, box-shadow ease .4s, background-color ease 1.2s;
+        -moz-transition: border ease .4s, box-shadow ease .4s, background-color ease 1.2s;
+        transition: border ease .4s, box-shadow ease .4s, background-color ease 1.2s;
+    }
+}

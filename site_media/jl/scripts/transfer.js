@@ -1,0 +1,1 @@
+function transfer(){var replace_list=$('script[type="text/x-jquery-tmpl"][extra="1"]');for(var i=0;i<replace_list.length;i++){$(replace_list[i]).html($(replace_list[i]).html().replace(/<</g,'{{').replace(/>>/g,'}}'));}}

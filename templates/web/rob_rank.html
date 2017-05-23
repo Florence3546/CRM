@@ -1,0 +1,133 @@
+{% extends "base_adgjl5.html" %}
+{% load rates %}
+{% block title%}
+  极速排名
+{% endblock %}
+{% block content %}
+<div class="w1200 auto">
+
+<div class="row-fluid mb10">
+  <span class="poi orange l rob_rank_help mt3 ml10">
+    <i class="iconfont f18">&#xe62b;</i>
+    <span>帮助和注意事项</span>
+    <p>声明：因直通车引入千人千面算法，而查排名接口无法完全模拟用户，致使部分关键词无法精准抢到排名，建议该部分关键词直接使用建议出价即可。</p>
+  </span>
+</div>
+
+<div class="box">
+  <div class="box_hd">
+  <span class="box_l"><i class="iconfont mr5">&#xe61c;</i>极速排名（共<span id="total_count" class="f20">--</span>个/选中<span id="current_count" class='f20'>0</span>个)</span>
+  <span class="box_r">
+  <div class="dropdown" id="keyword_select_days">
+    <a class="dropdown-toggle btn btn-small" data-toggle="dropdown" data-autowidth="true"  data-type="select" href="#"><i class="iconfont mr5">&#xe61e;</i><span class="dropdown-value">过去7天</span><i class="iconfont">&#xe626;</i></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+    <li><a value="1" href="javascript:;">过去1天</a></li>
+    <li><a value="3" href="javascript:;">过去3天</a></li>
+    <li><a value="7" href="javascript:;">过去7天</a></li>
+    <li><a value="15" href="javascript:;">过去15天</a></li>
+    </ul>
+  </div>
+  </span>
+  </div>
+  <div class="box_bd pt10">
+    <div class="l">
+      <button class="btn btn-primary ml10 mb10" id="rob_btn">开始抢排名</button>
+    </div>
+
+    <div id="no_keyword" class="dn bdc bgfb f18 pt60 pb60 pl20 mt40">
+      <div class=""> 亲，该宝贝没有质量得分6分以上的关键词，请先点击<a href="{%url 'quick_add_keyword'%}?adgroup_id={{adg.adgroup_id}}" class="ml3 mr3">"快速选词"</a>选词</div>
+    </div>
+
+    <table class="table table-bordered table-bordered" id="rob_table">
+      <thead>
+        <tr>
+        <th class="link_inner_checkbox poi w20 nbl"><div><input type="checkbox" class="father_box" /></div></th>
+        <th class="w180"><div>关键词</div></th>
+        <th class="w80"><div>当前出价</div></th>
+        <th class="w60"><div>质量得分</div></th>
+        <th class="w80"><div>点击量</div></th>
+        <th class="w60"><div>点击率</div></th>
+        <th class="w80"><div>总花费</div></th>
+        <th class="w60"><div>转化率</div></th>
+        <th class="w80"><div>成交金额</div></th>
+        <th class="w60"><div>ROI</div></th>
+        <th style="w300"><div><span style="padding-right: 50px;">期望排名</span>，<span class="pl40">最高限价</span></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="unsort">
+          <td></td>
+          <td class="rel">
+            <div class="input-append m0 abs t0 mt5">
+              <input class="w120 search_val" type="text" placeholder="请输入关键词">
+              <button class="btn search_btn" type="button"><i class="iconfont lh14 black">&#xe645;</i></button>
+            </div>
+          </td>
+          <td><select class="w70 h22 f12 p0" id="ip_zone">
+          <option value="">选地区</option>
+          <option value="localhost">当地</option>
+          <option value="202.96.0.133">北京</option>
+          <option value="202.96.199.132">上海</option>
+          <option value="110.76.46.215">杭州</option>
+          <option value="202.96.128.143">广州</option>
+          <option value="202.99.96.68">天津</option>
+          <option value="218.2.135.1">南京</option>
+          <option value="61.128.128.68">重庆</option>
+          <option value="202.103.24.68">武汉</option>
+          <option value="202.98.96.68">成都</option>
+          <option value="202.96.134.133">深圳</option>
+          <option value="222.172.200.68">云南</option>
+          <option value="222.74.242.189">内蒙</option>
+          <option value="219.149.194.56">吉林</option>
+          <option value="218.6.145.111">四川</option>
+          <option value="202.100.96.68">宁夏</option>
+          <option value="202.102.192.68">安徽</option>
+          <option value="202.102.134.68">山东</option>
+          <option value="219.149.190.60">山西</option>
+          <option value="220.192.32.103">广东</option>
+          <option value="202.103.224.68">广西</option>
+          <option value="61.128.99.133">新疆</option>
+          <option value="202.102.29.3">江苏</option>
+          <option value="202.101.224.68">江西</option>
+          <option value="202.99.160.68">河北</option>
+          <option value="202.102.227.68">河南</option>
+          <option value="202.96.102.3">浙江</option>
+          <option value="202.100.209.123">海南</option>
+          <option value="202.103.24.68">湖北</option>
+          <option value="202.103.100.206">湖南</option>
+          <option value="61.178.152.40">甘肃</option>
+          <option value="202.101.115.55">福建</option>
+          <option value="202.98.224.68">西藏</option>
+          <option value="119.1.42.35">贵州</option>
+          <option value="221.202.189.57">辽宁</option>
+          <option value="124.115.214.58">陕西</option>
+          <option value="202.100.138.68">青海</option>
+          <option value="202.45.84.58">香港</option>
+          <option value="202.175.3.8">澳门</option>
+          <option value="168.95.1.1">台湾</option>
+          <option value="202.97.224.69">黑龙江</option>
+        </select></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="tc"><button class="btn btn-mini" id="rob_reset">批量重置</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div>
+
+{% endblock %}
+{% block custom_js %}
+<script>
+jQuery(document).ready(function() {
+  PT.Rob_rank.init();
+});
+</script>
+{% endblock %}

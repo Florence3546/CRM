@@ -1,0 +1,130 @@
+<table class="table table-bordered table-hover fix-table mini keyword" id="keyword_table">
+    <thead>
+        <tr>
+            <th class="choose_column w10">
+                <div class="all">
+                    <input type="checkbox">
+                </div>
+            </th>
+            <th class="hidden w0"></th>
+            <th class="w260">
+                <div> 关键词(<span class="keywords_count">--</span>个) </div>
+            </th>
+            <th class="w60">
+                <div>PC<br>现出价</div>
+            </th>
+            <th class="w70">
+                <div>PC<br>新出价</div>
+            </th>
+            <th class="w60">
+                <div>移动&ensp;<i class="iconfont" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="移动价格分折扣出价和自定义出价。<br/>折：计算机出价*无线折扣后的价格。<br/>自定义价格即单独无线出价">&#xe628;</i><br>现出价</div>
+            </th>
+            <th class="w70">
+                <div>移动<br>新出价</div>
+            </th>
+            <th class="w200 selectSort {%if 'rank' in custom_column %}hide{%endif%}" data-toggle="selectSort" data-name-list='[["计算机","pc_rank"],["移动","mobile_rank"]]' data-table="keyword_table" data-index="7">
+                <div>PC/移动&ensp;<i class="iconfont" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="<div class='tl'>关键词在PC和移动端的当前实际综合排名(因未考虑地域竞争因素，故不同地区排名可能不同)<br><span class='red'>同时如果账户/计划/宝贝处于下线状态，所有词排名将都是PC:5页以后,移动:20条以后</span></div>">&#xe628;</i><br>当前排名
+                    <i class="iconfont downicon ml5">&#xe605;</i>
+                </div>
+            </th>
+            <th class="w140 {%if 'rob' in custom_column %}hide{%endif%}">
+                <div>PC/移动<br/>抢排名</div>
+            </th>
+            <th class="w80 selectSort {%if 'qscore' in custom_column %}hide{%endif%}" data-toggle="selectSort" data-name-list='[["计算机","pc_qs"],["移动","mobile_qs"]]' data-table="keyword_table" data-index="9">
+                <div>PC/移动&ensp;<br>质量得分&ensp;<i class="iconfont downicon">&#xe605;</i></div>
+            </th>
+            <th class="aw w40 {%if 'create_days' in custom_column %}hide{%endif%}">
+                <div>养词<br>天数</div>
+            </th>
+            <th class="aw w60 {%if 'impressions' in custom_column %}hide{%endif%}">
+                <div>展现<br>量</div>
+            </th>
+            <th class="aw w60 {%if 'click' in custom_column %}hide{%endif%}">
+                <div>点击<br>量</div>
+            </th>
+            <th class="aw w50 {%if 'ctr' in custom_column %}hide{%endif%}">
+                <div>点击<br>率</div>
+            </th>
+            <th class="aw w60 {%if 'cost' in custom_column %}hide{%endif%}">
+                <div>总<br>花费</div>
+            </th>
+            <th class="aw w40 {%if 'ppc' in custom_column %}hide{%endif%}">
+                <div>PPC</div>
+            </th>
+            <th class="aw w60 {%if 'cpm' in custom_column %}hide{%endif%}">
+                <div>千次展<br>现花费</div>
+            </th>
+            <th class="aw w60 {%if 'avgpos' in custom_column %}hide{%endif%}">
+                <div>昨日平<br>均排名</div>
+            </th>
+            <th class="aw w40 {%if 'favcount' in custom_column %}hide{%endif%}">
+                <div>收藏<br>量</div>
+            </th>
+            <th class="aw w60 {%if 's_favcount' in custom_column %}hide{%endif%}">
+                <div>店铺<br>收藏量</div>
+            </th>
+            <th class="aw w60 {%if 'a_favcount' in custom_column %}hide{%endif%}">
+                <div>宝贝<br>收藏量</div>
+            </th>
+            <th class="aw w50 {%if 'favctr' in custom_column %}hide{%endif%}">
+                <div>收藏<br>率</div>
+            </th>
+            <th class="aw w60 {%if 'favpay' in custom_column %}hide{%endif%}">
+                <div>收藏<br>成本</div>
+            </th>
+            <th class="aw w50 {%if 'carttotal' in custom_column %}hide{%endif%}">
+                <div>购物车<br>总数</div>
+            </th>
+            <th class="aw w40 {%if 'paycount' in custom_column %}hide{%endif%}">
+                <div>成交<br>量</div>
+            </th>
+            <th class="aw w60 {%if 'z_paycount' in custom_column %}hide{%endif%}">
+                <div>直接<br>成交量</div>
+            </th>
+            <th class="aw w60 {%if 'j_paycount' in custom_column %}hide{%endif%}">
+                <div>间接<br>成交量</div>
+            </th>
+            <th class="aw w60 {%if 'pay' in custom_column %}hide{%endif%}">
+                <div>成交<br>额</div>
+            </th>
+            <th class="aw w60 {%if 'z_pay' in custom_column %}hide{%endif%}">
+                <div>直接<br>成交额</div>
+            </th>
+            <th class="aw w60 {%if 'j_pay' in custom_column %}hide{%endif%}">
+                <div>间接<br>成交额</div>
+            </th>
+            <th class="aw w50 {%if 'conv' in custom_column %}hide{%endif%}">
+                <div>转化<br>率</div>
+            </th>
+            <th class="aw w40 {%if 'roi' in custom_column %}hide{%endif%}">
+                <div>ROI</div>
+            </th>
+            <th class="aw w70 {%if 'g_pv' in custom_column %}hide{%endif%}">
+                <div>全网展<br>现指数</div>
+            </th>
+            <th class="aw w70 {%if 'g_click' in custom_column %}hide{%endif%}">
+                <div>全网点<br>击指数</div>
+            </th>
+            <th class="aw w70 {%if 'g_ctr' in custom_column %}hide{%endif%}">
+                <div>全网<br>点击率</div>
+            </th>
+            <th class="aw w70 {%if 'g_coverage' in custom_column %}hide{%endif%}">
+                <div>全网<br>转化率</div>
+            </th>
+            <th class="aw w70 {%if 'g_roi' in custom_column %}hide{%endif%}">
+                <div>全网<br>ROI</div>
+            </th>
+            <th class="aw w70 {%if 'g_cpc' in custom_column %}hide{%endif%}">
+                <div>全网市<br>场均价</div>
+            </th>
+            <th class="aw w70 {%if 'g_competition' in custom_column %}hide{%endif%}">
+                <div>全网<br>竞争度</div>
+            </th>
+            <th class="aw w70 {%if 'g_paycount' in custom_column %}hide{%endif%}">
+                <div>全网<br>成交指数</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

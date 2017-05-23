@@ -1,0 +1,152 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}短信管理{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/site_media/jl5/plugins/froala/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="/site_media/jl5/plugins/froala/css/froala_editor.min.css" />
+<style type="text/css">
+.btn-danger[disabled] {background-color: #999;}
+</style>
+
+<div class="mt20 w1200 auto">
+    <div class="red mb20">
+        <i class="iconfont mr5">&#xe659;</i>发短信前请确定好目标客户，以免过多消耗短信资源
+    </div>
+	<h4>1. 确定目标客户</h4>
+	<form class="bg_white p10 bdd" id="filter_form">
+		<div>
+		    用户名称：
+		    <input class="w160 mr30" placeholder="支持用户名和店铺id" id="nick" type="text" value="">
+		    订购时间：
+		    <input class="w80" id="order_create_starttime" type="text" value="">
+		    <span class="dib tc w20">-</span>
+		    <input class="w80 mr30" id="order_create_endtime" type="text" value="">
+		    到期时间：
+		    <input class="w80" id="order_end_starttime" type="text" value="">
+		    <span class="dib tc w20">-</span>
+		    <input class="w80 mr30" id="order_end_endtime" type="text" value="">
+		    最后订购周期：
+		    <select class="w80 mr30" id="order_cycle">
+		        <option value="">-----</option>
+		        <option value="1个月">1个月</option>
+		        <option value="3个月">3个月</option>
+		        <option value="6个月">6个月</option>
+		        <option value="12个月">12个月</option>
+		    </select>
+		</div>
+		
+		<div class="mt20">
+		    实付金额包括：
+		    <input class="w50" id="pay_start" type="text" value="">
+		    <span class="dib tc w20">-</span>
+		    <input class="w50 mr30" id="pay_end" type="text" value="">
+		    沟通次数：
+		    <input class="w20" id="contact_start" type="text" value="">
+		    <span class="dib tc w20">-</span>
+		    <input class="w20 mr30" id="contact_end" type="text" value="">
+		    顾问:
+		    <select id="consult" class="psuser_select mr30 w160" data-position="CONSULT" data-init="">
+		    </select>
+<!--            平台包括：
+            <select class="w120 mr30" id="article_code">
+                <option value="">-----</option>
+                <option value="ts-25811">开车精灵</option>
+                <option value="FW_GOODS-1921400">千牛</option>
+                <option value="ts-25811-6">类目专家</option>
+                <option value="tp-001">直通车托管</option>
+            </select>-->
+		    订单类型：
+		    <select class="w120 mr10" name="category" id="category">
+		        <option value="">-----</option>
+		        <option value="kcjl" {%if request.GET.category == 'kcjl' %}selected="selected"{% endif %}>开车精灵</option>
+		        <option value="qn" {%if request.GET.category == 'qn' %}selected="selected"{% endif %}>千牛</option>
+		        <option value="rjjh" {%if request.GET.category == 'rjjh' %}selected="selected"{% endif %}>类目专家</option>
+		        <option value="vip" {%if request.GET.category == 'vip' %}selected="selected"{% endif %}>VIP专家托管</option>
+		        <option value="ztc" {%if request.GET.category == 'ztc' %}selected="selected"{% endif %}>直通车托管</option>
+		    </select>
+		    <button class="btn btn-small mr5" type="reset" onclick="PT.ShortMessageManange.disable_send_sm();">重置</button>
+		    <a class="btn btn-small btn-primary" id="get_recv_count">确定</a>
+<!--		    <a class="btn btn-small btn-primary" id="edit_sm">编辑短信</a>-->
+		</div>
+	</form>
+	
+    <h4>2. 编辑短信</h4>
+    <div class="mb20 bg_white p10 bdd">
+        <div>
+            <label class="w80 dib"><span class="red w12 dib tc"></span>目标客户</label>
+            <span id="recv_count" class="ml5 mr5 red">--</span>个
+        </div>
+        <div class="mt10">
+            <label class="w80 dib"><span class="red w12 dib tc">*</span>标题</label>
+            <input type="text" id="title" placeholder="输入短信标题，不计入短信内容">
+        </div>
+        <div class="mt10">
+            <label class="w80 dib">
+	            <span class="red w12 dib tc">*</span>内容<br>
+                <span class="red pl10">(<span id="content_length">0</span>/64)</span>
+            </label>
+            <textarea id="content" class="vt w400 h100 rn" maxlength="128" placeholder="输入短信内容，每条短信最多64个字符，超过按两条计费"></textarea>
+        </div>
+        <div class="mt10">
+            <label class="w80 dib"></label>
+            <a id="send_sm" href="javascript:void(0);" class="btn btn-danger" disabled="disabled">确定发送</a>
+        </div>
+    </div>
+    
+	
+	<h4>短信记录</h4>
+    <div class="red mb10">
+        <i class="iconfont mr5">&#xe659;</i>重试会过滤已发过的用户并自动发送原短信
+    </div>
+    <table class="table table-bordered table-hover tc mt10 mb30" id="table_sm">
+        <thead>
+            <tr>
+                <th class="w120">创建时间</th>
+                <th class="w280">短信标题（客户不可见）</th>
+                <th>短信内容</th>
+                <th class="w120">收信人数量</th>
+                <th class="w100">发信人</th>
+                <th class="w100">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msg in sm_list %}
+            <tr id="{{ msg.id }}" title="{{ msg.title }}" content="{{ msg.content }}" send_count="{{ msg.send_count }}" condition="{{ msg.condition }}">
+                <td>{{ msg.create_time|date:'Y-m-d H:i' }}</td>
+                <td class="tl">{{ msg.title|truncatechars_ch:40 }}</td>
+                <td class="tl">{{ msg.content|truncatechars_ch:60 }}</td>
+                <td>{{ msg.send_count }}</td>
+                <td>{{ msg.sender }}</td>
+                <td>
+                    <a href="javascript:void(0);" class="show dib btn btn-mini">查看</a>
+                    <a href="javascript:void(0);" class="retry btn btn-danger btn-mini">重试</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+	            <td colspan=6>暂无记录</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/froala_editor.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/tables.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/lists.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/colors.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/font_family.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/font_size.min.js"></script>
+<script type="text/javascript" src="/site_media/jl5/plugins/froala/js/plugins/block_styles.min.js"></script>
+{% endblock %}
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/short_message_manage.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+	PT.ShortMessageManange.init();
+});
+</script>
+{% endblock %}

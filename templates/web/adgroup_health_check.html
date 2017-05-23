@@ -1,0 +1,102 @@
+{#utf-8#}{% extends "base_adg.html" %}
+{% block title%}
+	宝贝诊断
+{% endblock %}
+
+{% block extra_style %}
+<link href="/site_media/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="/site_media/jl/css/component.css"/>
+<link href="/site_media/jl/css/fuck_ie/health_check.css?v={{VERSION}}.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-list-ul"></i>
+                <span>宝贝诊断</span>
+            </li>
+            <li class="fr no-text-shadow marr_0">
+                <span><i class="icon-info-sign remind_icon"></i>开车精灵检查标示</span>
+                <span><i class="icon-user remind_icon"></i>掌柜自检标示</span>
+                <span>
+                	<a id="re_health_check" class="btn gray translucence" style="width:60%;"><i class="icon-undo"></i>重新检查</a
+                ></span>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+
+    </div>
+    <div class="container span12">
+        <div style="width:1000px; margin:0 auto;">
+            <ul class="cbp_tmtimeline" id="health_check_content"></ul>
+        </div>
+    </div>
+{%endblock%}
+
+{% block extra_js %}
+<script src="/site_media/jl/scripts/adgroup_health_check.js?v={{VERSION}}.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+	<script>
+      jQuery(document).ready(function() {
+        PT.HealthCheck.init();
+      });
+    </script>
+{% endblock %}
+
+{% block template%}
+	<script id='time_part' type='text/html'>
+		<li id="show_<%=index%>">
+			<div id="node_<%=index%>" class="cbp_tmicon white">
+				<i id="icon_<%=index%>" class="<%=icon%>" ></i>
+			</div>
+			<div class="cbp_tmlabel">
+				<h3>
+				    <div class="row-fluid">
+						<div class="tal span7"><%=check_title%>问题</div>
+					    <div id="process_show_<%=index%>" class="tar span5" style="font-size:18px;font-weight:300;margin-left:-6px;margin-top: 2px;">等待中...</div>
+					</div>
+				</h3>
+				<div id="item_content_<%=index%>" class="row-fluid show_result_item">
+				</div>
+			</div>
+		</li>
+	</script>
+
+    <script id="check_item_content" type="text/html">
+		<%for(var i = 0 ; i < check_items.length ; i++){%>
+			<div class="span12" style="margin:0px">
+				<div id="check_flag_<%=check_type%>_<%=i%>" class="tac show_mark">
+					<i id="icon_0" class="icon-info-sign"></i>
+				</div>
+				<div id="check_content_<%=check_type%>_<%=i%>" class="check_result">
+					<p class="shor_title"><span><%=check_items[i].short_title%></span>:</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=check_items[i].result%></p>
+					<br>
+				</div>
+			</div>
+		<%}%>
+		<%for(var i = 0 ; i < no_check_items.length ; i++){%>
+			<div class="span12" style="margin:0px">
+				<div id="nocheck_flag_<%=check_type%>_<%=i%>" class="tac show_mark">
+					<i id="icon_0" class="icon-user"></i>
+				</div>
+				<div id="nocheck_content_<%=check_type%>_<%=i%>"  class="check_result" style="margin-bottom:7px">
+					<p class="shor_title"><span><%=no_check_items[i].short_title%></span>:</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=no_check_items[i].result%></p>
+				</div>
+			</div>
+		<%}%>
+	</script>
+
+    <script id="check_no_problem" type="text/html">
+		<div>
+			<h4>恭喜，<B><%=title%></B>&nbsp;指标暂未检查出任何问题,请再接再厉！</h4>
+		</div>
+	</script>
+{% endblock %}
+

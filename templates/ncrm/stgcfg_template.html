@@ -1,0 +1,129 @@
+
+<script id="id_mnt_template" type="text/html">
+    <span>周期：<input type="text" class="w50" key_name="cycle" value="<%=cfg_detail.cycle%>"></span>
+    <span class="marl_12">操作：<input type="text" class="w50" key_name="opt" value="<%=cfg_detail.opt%>"></span>
+    <span class="marl_12">策略：<input type="text" class="w50" key_name="stgy" value="<%=cfg_detail.stgy%>"></span>
+</script>
+
+<script id="id_opt_template" type="text/html">
+    <span>操作：<input type="text" class="w50" key_name="func" value="<%=cfg_detail.func%>"></span>
+</script>
+
+<script id="id_stgy_template" type="text/html">
+    <span>条件：<input type="text" class="w400" key_name="cond" value="<%=cfg_detail.cond%>"></span>
+    </br>
+    <span>指令集：
+        <input type='hidden' key_name="instrcn_list"/>
+        <ul class="instrcn_list tal view_style ui-sortable" style="margin-left:0px;"><% for(var i=0;i<cfg_detail.instrcn_list.length;i++) { %><li><%=cfg_detail.instrcn_list[i]%></li><% }%></ul>
+        <a class="btn mini marb_12 hover-show edit_instrcn"><i class="icon-pencil"></i></a>
+    </span>
+</script>
+
+<script id="base_cfgdetail_template" type="text/html">
+    <div name="<%=name%>" <% if (cfg_type == 'stgy') {%> class="stgy_detail_div" <% } %> >
+        <%include('id_'+cfg_type+'_template')%>
+        <span><a class="btn mini marb_12 hover-show remove" onclick="$(this).parent().parent().remove();"><i class="icon-remove"></i></a></span>
+    </div>
+</script>
+
+<script id="base_taskcfg_tbody_template" type="text/html">
+    <tr tag_name="<%=cfg.name%>" fix-ie="hover">
+        <td class="vam">
+            <% if(cfg.name) { %><%=cfg.name%><% } else { %><input type="text" id="id_new_<%=cfg_type%>" value="" style="width:60px;" /> <% } %>
+        </td>
+        <td class="">
+            <%if(cfg_type=='mnt'){ %>
+                <%include('base_cfgdetail_template', {'cfg_detail':cfg.cfg_detail, 'name':cfg.name, 'cfg_type':cfg_type})%>
+            <% }else{ %>
+                <%for(var j=0;j<cfg.cfg_detail.length;j++){%>
+                <%include('base_cfgdetail_template', {'cfg_detail':cfg.cfg_detail[j], 'name':cfg.name, 'cfg_type':cfg_type})%>
+                <%}%>
+            <% } %>
+        </td>
+        <td class="tac vam">
+            <%if(cfg_type !='mnt'){ %>
+            <a class="add_cfg btn hover-show"><i class="icon-plus"></i></a>
+            <% } %>
+            <a class="save_cfg btn hover-show"><i class="icon-save"></i></a>
+            <a class="delete_cfg btn hover-show"><i class="icon-remove"></i></a>
+        </td>
+    </tr>
+</script>
+
+<script id="id_base_taskcfg_template" type="text/html">
+    <div id="id_<%=cfg_type%>_layer" class="mart_24">
+        <a href="javascript:void(0);" class="add_new_cfg btn blue marb_6" cfg_type="<%=cfg_type%>">添加配置</a>
+        <table id="<%=cfg_type%>_cfg_table" class="table table-bordered table-hover" cfg_type="<%=cfg_type%>" style="width: 1000px;">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">配置名称</th>
+                    <th style="width: 650px;">任务【<%if(cfg_type=='cycle'){ %>周期<% }else if(cfg_type=='opt'){ %>操作<% }else if(cfg_type=='stgy'){ %>策略<% } %>】配置详情</th>
+                    <th style="width: 150px;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0;i<cfg_list.length;i++) { %>
+            <%include('base_taskcfg_tbody_template', {'cfg':cfg_list[i], 'cfg_type':cfg_type})%>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</script>
+
+
+
+<script id="id_instruction_template" type="text/html">
+    <tr tag_name="<%=instrcn.name%>">
+        <td class="tac"><input type="checkbox" name="instrcn_checkbox" id="<%=instrcn.name%>"></td>
+        <td class="tac">
+            <% if(instrcn.name) { %><%=instrcn.name%><% } else { %><input type="text" id="id_new_instrcn" value="" style="width:60px;" /> <% } %>
+        </td>
+        <td class="tac"><input type="text" class="instrcn" key_name="desc" value="<%=instrcn.desc%>" style="width:180px;"></td>
+        <td class="tac" style="white-space: nowrap;">
+            <span class="hide"><%=instrcn.scope%></span>
+            <input type="text" id="" class="instrcn scope_slider" key_name="scope" value="<%=instrcn.scope%>">
+        </td>
+        <td class="tac"><input type="text" class="instrcn" key_name="cond" value="<%=instrcn.cond%>" style="width:300px;"></td>
+        <td class="tac">
+            <span class="hide"><%=instrcn.operate%></span>
+            <input type="text" class="instrcn" key_name="operate" value="<%=instrcn.operate%>" style="width:200px;">
+        </td>
+        <td class="tac">
+            <a class="save_instrcn btn"><i class="icon-save"></i></a>
+            <a class="delete_instrcn btn"><i class="icon-remove"></i></a>
+        </td>
+   </tr>
+</script>
+
+<script id="id_instrcn_porlet_template" type="text/html">
+    <div class="portlet mart_12" id="id_instrcn_list_div">
+        <div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>改价指令(<span id="id_instrcn_count"><%=instrcn_list.length%></span>个)</div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse"></a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <a id="add_new_instrcn" class="btn blue vab">添加指令</a>
+            <input type="text" id="id_search_instrcn" class="marb_0" style="width:120px;" placeholder="回车搜索指令名"/>
+            <table class="table table-bordered table-hover mart_6" id="id_instrcn_table">
+                <thead>
+                    <tr>
+                        <th width="70">改价指令</th>
+                        <th width="70">名称</th>
+                        <th width="200">描述</th>
+                        <th width="240">分类</th>
+                        <th width="320">条件</th>
+                        <th width="210">指令操作</th>
+                        <th width="120"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% for(var i=0;i<instrcn_list.length;i++){%>
+                <%include('id_instruction_template', {'instrcn':instrcn_list[i]})%>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>

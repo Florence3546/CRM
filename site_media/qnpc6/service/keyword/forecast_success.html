@@ -1,0 +1,10 @@
+<select class="forecast_select" style="width: 120px">
+{{each data}}
+    {{if $value[1]=='0.00'}}
+    <option value="{{$value[1]}}" >无左推资格</option>
+    {{else}}
+    <option value="{{$value[1]}}" >{{$value[0]}}</option>
+    {{/if}}
+{{/each}}
+    <option value="reason">预估为0：了解原因</option>
+</select>

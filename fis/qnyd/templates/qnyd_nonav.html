@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link rel="stylesheet" href="/site_media/plugins/sui-mobile/css/sm.css">
+        <link rel="stylesheet" href="/site_media/plugins/sui-mobile/css/sm-extend.css">
+        <link rel="stylesheet" href="/site_media/themes/blue/theme.less"/>
+    </head>
+    <body ng-app="qnyd" ng-controller="qnydCtl">
+
+        {% block content %}{%endblock%}
+
+        <script type="text/javascript" src="/site_media/plugins/zepto/zepto.min.js"></script><!--ignore-->
+        <script type="text/javascript" src="/site_media/plugins/sui-mobile/js/sm.min.js"></script><!--ignore-->
+        <script type="text/javascript" src="/site_media/plugins/sui-mobile/js/sm-extend.min.js"></script><!--ignore-->
+        <script type="text/javascript" src="/site_media/plugins/angular/angular.min.js"></script><!--ignore-->
+        <script type="text/javascript" src="http://l.tbcdn.cn/apps/top/c/sdk-mobile.js"></script><!--ignore-->
+        <script type="text/javascript" src="/site_media/service/app.js"></script><!--ignore-->
+        {% block js %}{%endblock%}
+    </body>
+</html>

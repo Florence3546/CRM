@@ -1,0 +1,49 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title>抢排名-实时测试</title>
+    </head>
+    <body>
+        <table id="rank_table">
+            <thead>
+                <tr>
+                    <th style="width:120px;">时间</th>
+                    <th style="width:160px;">关键词</th>
+                    <th style="width:120px;">当前价格</th>
+                    <th style="width:300px;">实时信息</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </body>
+    <script src="/site_media/jl6/plugins/jquery/jquery.js"></script>
+    <script src="/site_media/jl5/bootstrap_js/jquery-json.js"></script>
+    <script>
+        var ws;
+        var init = function(url){
+            ws = new WebSocket(url);
+            ws.onopen = function(){
+                ws.send("start");
+            };
+            ws.onmessage = function(msg){
+                if(msg!='' && msg!=undefined){
+                    if(msg.data!='1'){
+                        try{
+                            var content = $.evalJSON(msg.data);
+                            $('#rank_table tbody').append('<tr><td>'+content.time+'</td><td>'+content.word+'</td><td>'+content.price+'</td><td>'+content.msg+'</td></tr>');
+                        }catch(err){
+                            console.log(msg.data);
+                        }
+                    }else{
+                        console.log("now started..");
+                    }
+                }else{
+                    console.log("error");
+                }
+            };
+        }
+        init("ws://localhost/web/echo/?keyword_id=236786831341");
+
+    </script>
+</html>

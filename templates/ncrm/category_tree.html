@@ -1,0 +1,213 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}客户分类树{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/jquery.jOrgChart.css"/>
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/custom.css"/>
+<style>
+#node_right_menu {
+    width: 140px;
+    background-color: white;
+    border: 1px solid #ddd;
+    position: absolute;
+}
+#node_right_menu>li>a {
+    display: block;
+    padding: 2px 15px;
+    cursor: default;
+    color: black;
+}
+#node_right_menu>li>a:hover {
+    background-color: #3366CC;
+    color: white;
+}
+.tooltip-inner {
+    text-align: left;
+}
+.label_tree>#div_operate {display: block;}
+.label_tree.limited #edit_category_tree, .label_tree.limited #del_category_tree {display: none;}
+body, html {position: static;}
+</style>
+{% endblock %}
+{% block content %}
+{#<input type="hidden" id="psuser_id" value="{{ request.session.psuser_id }}">#}
+<input type="hidden" id="tree_psuser_id" value="{{ psuser.id }}">
+<input type="hidden" id="has_extra_perms" value="{{ has_extra_perms }}">
+<div class="w1329 auto tc">
+    <div class="mt20">
+        <div class="tl">
+            <label class="dib f14 b w100">所属员工：</label>
+            <span id="tree_psuser_name" class="f16">{{ psuser.name_cn }}</span>
+            <a href="#modal_member_list" role="button" data-toggle="modal" class="btn btn-mini btn-primary vba ml5">选择员工</a>
+        </div>
+        <div class="tl mt5">
+            <label class="dib f14 b w100">类目筛选：</label>
+            <span id="cat_list_name" class="f16">所有</span>
+            <a href="#modal_shop_category_statistics" role="button" data-toggle="modal" class="btn btn-mini btn-primary vba ml5">选择类目</a>
+        </div>
+        <div class="tl mt5">
+            <label class="dib f14 b w100">通用分类树：</label>
+            {% for tree in general_trees %}
+            <label class="label_tree rel dib f16 pr90 {% if '2' not in psuser.perms %}limited{% endif %}">
+                <input type="radio" class="mr3" name="my_trees" value="{{ tree.id }}" tree_name="{{ tree.name }}" {% if forloop.first %}checked="checked"{% endif %}>{{ tree.name }}
+            </label>
+            {% endfor %}
+        </div>
+        <div class="tl mt5">
+            <label class="dib f14 b w100">自定义分类树：</label>
+            {% for tree in custom_trees %}
+            <label class="label_tree rel dib f16 pr90 orange">
+                <input type="radio" class="mr3" name="my_trees" value="{{ tree.id }}" tree_name="{{ tree.name }}" {% if forloop.first %}checked="checked"{% endif %}>{{ tree.name }}
+            </label>
+            {% endfor %}
+            {% if psuser.id == request.session.psuser_id %}
+                <a href="{% url 'edit_category_tree' %}" class="btn btn-mini btn-primary vba ml5" target="_blank">添加树</a>
+            {% endif %}
+        </div>
+        <div id="div_operate" class="abs w80 f12 lh16 hide" style="right:5px;bottom:0;">
+            <a id="edit_category_tree" target="_blank" href="{% url 'edit_category_tree' %}?tree_id=">编辑</a>
+            <a id="copy_category_tree" target="_blank" href="{% url 'edit_category_tree' %}?tree_id=&copy_flag=1">复制</a>
+            <a id="del_category_tree" href="javascript:;">删除</a>
+        </div>
+        {% for tree in my_trees %}
+        <ul id="ul_category_tree_{{ tree.id }}" class="hide"></ul>
+        <div id="div_category_tree_{{ tree.id }}" class="category_tree white hide" loaded="0"></div>
+        {% endfor %}
+    </div>
+</div>
+
+<ul id="node_right_menu" class="hide">
+    <li><a id="work_bench_view" target="_blank">工作台搜索</a></li>
+    <li><a id="bulk_opt_view" target="_blank">批量优化</a></li>
+</ul>
+
+<div id="modal_shop_category_statistics" class="modal hide fade" data-width="500">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>类目筛选<span class="f14 ml10 n">共<span id="all_category_count">{{ cat_list|length }}</span>个类目，已选<span id="checked_category_count">0</span>个</span></h4>
+    </div>
+    <div class="modal-body" style="max-height: 300px;overflow-y: auto;">
+        <div>
+            <label class="f14 dib ml5">
+                <input type="checkbox" class="checkall">
+                <span>全选</span><span class="red b ml5">{{ psuser.mycustomers_withcat|length }}</span>
+            </label>
+        </div>
+    {% for cat_id, cat_count, cat_name in cat_list %}
+        <div>
+            <label class="f14 dib ml5">
+                <input type="checkbox" name="cat_id" value="{{ cat_id }}" cat_name="{{ cat_name }}">
+                <span>{{ cat_name }}</span><span class="red b ml5">{{ cat_count }}</span>
+            </label>
+        </div>
+    {% endfor %}
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" data-dismiss="modal" class="btn">取消</a>
+        <a href="javascript:;" id="set_default_cat_list" class="btn btn-primary">确定</a>
+    </div>
+</div>
+
+<div id="modal_member_list" class="modal hide fade" data-width="500">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>所属员工</h4>
+    </div>
+    <div class="modal-body" style="max-height: 300px;overflow-y: auto;">
+        <div class="mb5">
+            <span class="b mr10">服务一部 人机</span>
+            {% if member_dict.GROUP1 and member_dict.GROUP1.RJJH %}
+                {% for user_id, user_name in member_dict.GROUP1.RJJH %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务一部 售后</span>
+            {% if member_dict.GROUP1 and member_dict.GROUP1.CONSULT %}
+                {% for user_id, user_name in member_dict.GROUP1.CONSULT %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb5">
+            <span class="b mr10">服务二部 人机</span>
+            {% if member_dict.GROUP2 and member_dict.GROUP2.RJJH %}
+                {% for user_id, user_name in member_dict.GROUP2.RJJH %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务二部 售后</span>
+            {% if member_dict.GROUP2 and member_dict.GROUP2.CONSULT %}
+                {% for user_id, user_name in member_dict.GROUP2.CONSULT %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb5">
+            <span class="b mr10">服务三部 人机</span>
+            {% if member_dict.GROUP3 and member_dict.GROUP3.RJJH %}
+                {% for user_id, user_name in member_dict.GROUP3.RJJH %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务三部 售后</span>
+            {% if member_dict.GROUP3 and member_dict.GROUP3.CONSULT %}
+                {% for user_id, user_name in member_dict.GROUP3.CONSULT %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb5">
+            <span class="b mr10">服务四部 人机</span>
+            {% if member_dict.GROUP4 and member_dict.GROUP4.RJJH %}
+                {% for user_id, user_name in member_dict.GROUP4.RJJH %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务四部 售后</span>
+            {% if member_dict.GROUP4 and member_dict.GROUP4.CONSULT %}
+                {% for user_id, user_name in member_dict.GROUP4.CONSULT %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb5">
+            <span class="b mr10">服务五部 人机</span>
+            {% if member_dict.GROUP5 and member_dict.GROUP5.RJJH %}
+                {% for user_id, user_name in member_dict.GROUP5.RJJH %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb15">
+            <span class="b mr10">服务五部 售后</span>
+            {% if member_dict.GROUP5 and member_dict.GROUP5.CONSULT %}
+                {% for user_id, user_name in member_dict.GROUP5.CONSULT %}
+                    <a class="dib w60" href="{% url 'category_tree' %}?psuser_id={{ user_id }}" target="_blank">{{ user_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script type="text/javascript" src="/site_media/jl5/plugins/jOrgChart/jquery.jOrgChart.js"></script>
+<script src="{{'/site_media/jl5/ncrm_js/category_tree.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.CategoryTree.init({{ all_cond_fields|safe }});
+});
+</script>
+{% endblock %}

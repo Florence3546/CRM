@@ -1,0 +1,55 @@
+<div id="div_manage_elemword" class="modal fade manage_elemword">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="portlet">
+                    <div class="fix lh23 pt5 pb5">
+                        <div class="l b word_type f16 mt5"><i class="iconfont mr5">&#xe636;</i>产品词</div>
+                        <div class="r btn-group">
+                            <button id="save_m_prdtword" class="btn btn-primary btn-sm disabled"><i class="iconfont mr3">&#xe633;</i>&nbsp;保存</button>
+                            <button id="restore_elemword_ps" class="btn btn-default btn-sm"><i class="iconfont base_color">&#xe634;</i>&nbsp;恢复默认配置</button>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <!-- <div>产品词：能直观描述宝贝是什么的名词及其同义词，作为核心关键词词，如："连衣裙"，"连身裙"，"除味剂"等。</div> -->
+                        <textarea class="tag-editor" id="m_prdtword"></textarea>
+                        <input type="hidden" id="old_m_prdtword" value=""/>
+                    </div>
+                    <div class="gray f12 item_base pt5">注：产品词：能直观描述宝贝是什么的名词及其同义词，作为核心关键词，如："连衣裙"，"连身裙"，"除味剂"等。</div>
+                </div>
+
+                <div class="portlet">
+                    <div class="fix lh23 pt5 pb5 mt10">
+                        <div class="l">
+                            <div class="b word_type f16 mt5"><i class="iconfont mr5">&#xe635;</i>屏蔽词</div>
+                        </div>
+                        <div class="r">
+                            <button id="save_m_blackword" class="btn btn-primary btn-sm disabled"><i class="iconfont mr3">&#xe633;</i>&nbsp;保存</button>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+        <!--                 <div>
+                            可将无关词设为屏蔽词，比如设置'<span class='r_color bld'>2013</span>'，则会删除多个计划下、同款宝贝中包含'<span class='r_color bld'>2013</span>'的所有关键词，且选词、加词的结果都不会包含'<span class='r_color bld'>2013</span>'。<br/>
+                            <span class='r_color bld'>警告！在跨计划、同款宝贝中，只要包含屏蔽词都会删除，设置错误可能导致好词被删除，或导致无法添加好词。</span>
+                        </div> -->
+                        <textarea class="tag-editor" id="m_blackword"></textarea>
+                        <input type="hidden" id="old_m_blackword" value=""/>
+                    </div>
+                    <div class="gray f12 item_base pt5"><span class="b">注意：</span>比如设置'<span class='b'>2013</span>'为屏蔽词，则会删除多个计划下、同款宝贝中包含'<span class='b'>2013</span>'的所有关键词，且选词、加词的结果都不会包含'<span class='b'>2013</span>'。<br/>
+                        <span class="mt5"><font color="red">警告！在跨计划、同款宝贝中，只要包含屏蔽词都会删除，设置错误可能导致好词被删除，或导致无法添加好词。</font></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+require(['jl6/site_media/service/manage_elemword/manage_elemword'],function(manage_elemword){
+    manage_elemword.init();
+});
+
+</script>

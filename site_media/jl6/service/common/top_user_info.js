@@ -1,0 +1,1 @@
+define("jl6/site_media/service/common/top_user_info",["jl6/site_media/widget/ajax/ajax"],function(e){var i=function(){var i=$("body").attr("id");"web_home"==i&&e.ajax("check_user_phone",null,function(e){e.fill_user_info||$("#top_user_info").removeClass("hide").fadeIn(1e3)},null,{url:"/web/ajax/"})};return{init:i}});

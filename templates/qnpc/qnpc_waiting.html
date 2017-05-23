@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]--><head>
+   <meta charset="utf-8" />
+   <title>正在下载数据</title>
+   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+   <meta content="" name="description" />
+   <meta content="" name="author" />
+   <link href="/site_media/assets/plugins/bootstrap/css/bootstrap.min.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/plugins/bootstrap/css/bootstrap-responsive.min.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/plugins/bootstrap-modal/css/bootstrap-modal.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/plugins/font-awesome/css/font-awesome.min.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/css/style-metro.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/css/style.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/css/style-responsive.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+   <link href="/site_media/assets/css/themes/default.css?v={{VERSION}}" rel="stylesheet" type="text/css" id="style_color"/>
+   <link href="/site_media/assets/css/animate.css?v={{VERSION}}" rel="stylesheet" type="text/css">
+   <link rel="shortcut icon" href="/site_media/assets/img/favicon.png" />
+   <link href="/site_media/jl/css/custom.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+</head>
+
+<body class="page-full-width" style="background-color:#fff !important;">
+    	<!-- BEGIN CONTAINER -->   
+	<div class="page-container">
+        <!-- BEGIN PAGE -->
+        <div class="page-content">
+            <!-- BEGIN PAGE CONTAINER-->
+            <div class="container" style="width:93.75%; max-width:960px; margin-top:5%">
+            	<!--幻灯片开始-->
+                <div id="promo_carousel" class="carousel slide" style="margin:0 auto; min-height:340px; border:1px solid #ccc">
+                    <div class="carousel-inner">
+                        <div class="item marb_0 active">
+                            <div class="animated pulse">
+                                <a href="http://fuwu.taobao.com/ser/detail.htm?spm=a1z13.1113643.51052018.47.D3bqnK&service_code=ts-25811&tracelog=category&scm=1215.1.1.51052018&ppath=&labels=" target="_blank"><img src="/site_media/jl/img/waiting_ads_2.jpg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="item marb_0">
+                            <div class="animated pulse">
+                                <a href="http://fuwu.taobao.com/ser/detail.htm?spm=a1z13.1113643.51052018.47.D3bqnK&service_code=ts-25811&tracelog=category&scm=1215.1.1.51052018&ppath=&labels=" target="_blank"><img src="/site_media/jl/img/waiting_ads_3.jpg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control left" href="#promo_carousel" data-slide="prev" style="display: block;">
+                    <i class="m-icon-big-swapleft m-icon-white"></i>
+                    </a>
+                    <a class="carousel-control right" href="#promo_carousel" data-slide="next"  style="display: block;">
+                    <i class="m-icon-big-swapright m-icon-white"></i>
+                    </a>
+                </div>
+                <!--幻灯片结束-->
+                <!--进度条开始-->
+                <div class="progress progress-striped active" id="progress_box" style="position:relative;text-align:center;line-height: 30px;height: 30px;margin-top:20px;background-color:#e6e6e6; height:30px;background-image:none;">
+                    <div class="bar" id="progress" style="overflow: hidden;z-index: 1;position: absolute; transition:none !important;-webkit-transition:none !important;-o-transition:none;-moz-transition:none;">
+
+                    </div>
+                    <div id="progress_bg"  style="position:absolute; width:100%; z-index:2; color:#fe6001; border:none;font-size:14px;">
+                    	<span class="progress_msg">初始化中</span>
+                        <span class="progress_num  marl_6">0%</span>
+                    </div>
+                </div>
+                <!--进度条结束-->
+            </div>
+            
+            <!-- END PAGE CONTAINER--> 
+        </div>
+        <!-- END PAGE -->           
+	</div>   
+		<!-- END CONTAINER -->
+
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+    <script src="/site_media/assets/plugins/jquery-1.10.1.min.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/jquery.tmpl.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/jquery.json-2.4.min.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/jl/scripts/transfer.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/jquery-migrate-1.2.1.min.js?v={{VERSION}}" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="/site_media/assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js?v={{VERSION}}" type="text/javascript"></script>      
+    <script src="/site_media/assets/plugins/bootstrap/js/bootstrap.js?v={{VERSION}}" type="text/javascript"></script>
+    <!--[if lt IE 9]>
+    <script src="/site_media/assets/plugins/excanvas.min.js"></script>
+    <script src="/site_media/assets/plugins/respond.min.js"></script>  
+    <![endif]-->   
+    <script src="/site_media/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/jquery.blockui.min.js?v={{VERSION}}" type="text/javascript"></script>  
+    <script src="/site_media/assets/plugins/jquery.cookie.min.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/uniform/jquery.uniform.min.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/jl/scripts/dajax.js?v={{VERSION}}" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+<!--    <script src="/site_media/assets/plugins/data-tables/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script src="/site_media/assets/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script> 
+    <script src="/site_media/assets/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
+    <script src="/site_media/assets/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>-->
+    <script src="/site_media/assets/scripts/app.js?v={{VERSION}}" type="text/javascript"></script>
+    <script src="/site_media/jl/scripts/base.js?v={{VERSION}}" type="text/javascript"></script>
+<!--    <script src="/site_media/jl/scripts/artTemplate.js" type="text/javascript"></script>-->
+    <!-- END PAGE LEVEL SCRIPTS -->
+	<script>
+		jQuery(document).ready(function() {    
+		   App.init();
+		   jQuery('#promo_carousel').carousel({
+		      interval: 10000,
+		      pause: 'hover'
+		   });
+			//心跳
+			setInterval(function(){
+				PT.sendDajax({'function':'web_is_data_ready'});
+			},5000);
+			//立即执行一次
+			PT.sendDajax({'function':'web_is_data_ready'});
+		});
+    </script> 
+	<script type="text/javascript" language="javascript">
+    // 后台调用来设置前台进度条的进度
+    function set_progress(progress_json){
+        if(typeof(progress_json.redicrect)!='undefined'){
+            $('#progress').animate({width:'100%'},600,'easeOutCirc',function(){
+                window.location.href='/qnpc/qnpc_home';
+                return false;
+            });
+        };
+
+        var progress_n=parseInt(progress_json.progress);
+		var finally_width=parseInt($('#progress').parent().width()*(progress_n/100));
+        $('#progress').animate({width:finally_width},5000,'easeOutCirc');
+        $('#progress_box .progress_msg').text(progress_json.msg);
+        
+        // 刷新进度的数字和相对位置
+        var timer=setInterval(function(){
+			var p_width=parseInt(($('#progress').width()/$('#progress').parent().width())*100);
+			$('#progress_box .progress_num').text(p_width+'%');
+            if(p_width==progress_n){
+                clearInterval(timer);
+            }
+        },17);
+    }
+    </script> 
+<!-- END JAVASCRIPTS -->
+<script type="text/javascript" src="http://a.tbcdn.cn/apps/isvportal/securesdk/securesdk.js" id="J_secure_sdk_script" data-appkey="12612063"></script>
+</body>
+</html>

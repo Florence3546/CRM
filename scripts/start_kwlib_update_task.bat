@@ -1,0 +1,1 @@
+python.exe ../apps/kwlib/start_kwlib_update_task.py

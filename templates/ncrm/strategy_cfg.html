@@ -1,0 +1,121 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}全自动算法配置{% endblock %}
+
+{% block extra_style %}
+<style>
+.edit_cfg {width:600px;}
+.edit_args {width:120px;}
+.instrcn_list {margin-bottom: 10px;display:inline-block;list-style:none; margin-bottom: 0;}
+.instrcn_list li {display: inline-block; cursor:pointer; margin: 1px; background: gainsboro;}
+.view_style {}
+.edit_style {border: 1px solid #52a8ec;}
+.hover-show{visibility:hidden; cursor: pointer;}
+.hover .hover-show{visibility: visible;}
+.stgy_detail_div{border:#ccc dashed 1px; padding: 3px 6px;}
+.desc_input{border: 1px #fff solid !important;}
+/*.adg_cmd input:checked{color: #fff;}*/
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="ml20 mr20 mt20">
+    <div>
+        <table id="stg_cfg_table">
+            <thead>
+                <tr>
+                    <th class="w30">策略名</th>
+                    <th class="w50">说明</th>
+                    <th class="w200">关键词指令列表</th>
+                    <th class="w90">宝贝指令列表</th>
+                    <th class="w100">影响系数</th>
+                    <th class="w40">操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for sc in stg_cfg_list %}
+            <tr fix-ie="hover" {% if sc.id %} id="{{sc.id}}" {% endif %}>
+                <td contenteditable="true">{{sc.name}}</td>
+                <td contenteditable="true">{{sc.desc}}</td>
+                <td>
+                    <input type='hidden' key_name="instrcn_list"/>
+                    <ul class="instrcn_list view_style ui-sortable ml0">
+                        {% for kc in sc.kw_cmd_list %}
+                        <li>{{kc}}</li>
+                        {% endfor %}
+                    </ul>
+                    <a class="hover-show edit_instrcn">增删指令</a>
+                </td>
+                <td class="adg_cmd tc">
+                    <div class="dib">
+                    {% for method_name, method_desc in adg_cmd_dict.items %}
+                    <label class="mr10 dib"><input type="checkbox" value="{{method_name}}" {% if method_name in sc.adg_cmd_list %} checked="true" {% endif %} class="mr5">{{method_desc}}</label>
+                    {% endfor %}
+                    </div>
+                </td>
+                <td class="">
+                    <div class="dib">
+                    {% for k,v in sc.impact_factor_dict.items %}
+                    <label class="dib">{{k}}: <span contenteditable="true" class="pr15 mr5 impact_factor" data={{k}}>{{v}}</span></label>
+                    {% endfor %}
+                    </div>
+                </td>
+                <td class="tc">
+                    <a href="javascript:;" class="hover-show w30 mr20 save_stg">保存</a>
+                    <a href="javascript:;" class="hover-show w30 del_stg">删除</a>
+                </td>
+            </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+
+        <input type="text" id="id_search_instrcn" class="mb0 w100 mt20 mb5" placeholder="回车搜索指令名"/>
+        <table id="cmd_cfg_table" class="">
+            <thead>
+                <tr>
+                    <th class="w20"></th>
+                    <th class="w50">指令名</th>
+                    <th class="w120">指令说明</th>
+                    <th class="w300">指令条件</th>
+                    <th class="w200">指令操作</th>
+                    <th class="w60">指令修改时间</th>
+                    <th class="w60">操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for cc in cmd_cfg_list %}
+                <tr fix-ie="hover" tag_name="{{cc.name}}" {% if cc.id %} id="{{cc.id}}" {% endif %}>
+                    <td class="tc"><input type="checkbox" name="instrcn_checkbox" id="{{cc.name}}"></td>
+                    <td contenteditable="true" class="name">{{cc.name}}</td>
+                    <td contenteditable="true" class="desc">{{cc.desc}}</td>
+                    <td contenteditable="true" class="cond">{{cc.cond}}</td>
+                    <td contenteditable="true" class="operate">{{cc.operate}}</td>
+                    <td class="tc">{{cc.date|date:"Y-m-d"}}</td>
+                    <td class="tc">
+                        <a href="javascript:;" class="hover-show w30 mr20 save_cmd">保存</a>
+                        <a href="javascript:;" class="hover-show w30 del_cmd">删除</a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/strategy_cfg.js'|file_time_stamp}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmStgCfg.init();
+});
+</script>
+{% endblock %}

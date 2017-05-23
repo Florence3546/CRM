@@ -1,0 +1,2 @@
+python.exe clear_duplicate_orders.py
+pause

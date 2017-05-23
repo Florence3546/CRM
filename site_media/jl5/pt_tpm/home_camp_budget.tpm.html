@@ -1,0 +1,28 @@
+<div id="edit_budget_box">
+  <div>
+    <label>
+      <input type="radio" name="budget_radio" value='0' id="noset_budget"><span class="ml5">不设置日限额</span>
+    </label>
+  </div>
+  <div>
+    <label class="dib">
+      <input type="radio" name="budget_radio" value='1' id="set_budget"><span class="ml5">设置日限额为</span>
+    </label>
+    <input type="text" id="budget_value" maxlength="5" class="w40" style="padding: 1px 3px;">元
+    <span>(范围为30～99999元)</span>
+    <i class="tips iconfont" title="由于淘宝限制，大于10万的日限额，请到直通车后台修改">&#xe62b;</i>
+  </div>
+  <div class="ml30" id="put_setting">
+    <div>
+      <label>
+        <input type="radio" name="smooth_radio" checked="checked"><span class="ml5">标准投放</span>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        <input type="radio" name="smooth_radio"><span class="ml5">智能化均匀投放</span>
+      </label>
+    </div>
+  </div>
+</div>

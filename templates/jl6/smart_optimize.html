@@ -1,0 +1,102 @@
+{#utf-8#}
+{% extends "base_adg.html" %}
+{% block title %}智能优化{% endblock %}
+
+{% load rates %}
+{% block content %}
+<section class="container-fluid adg">
+
+{% include 'common_adg_top_bar.html' %}
+
+    <div class="box">
+        <header class="hide" id="operation_bar">
+            <div class="line_box">
+
+                <div class="dtr_picker_warp ml0">
+                    <span class="tip" data-toggle="dtr_picker" months="1" id="select_keyword_days">过去七天</span>
+                </div>
+
+                <div class="btn-group" id="data_source">
+                  <button type="button" class="btn btn-sm btn-primary active" data-source='all'>汇总</button>
+                  <button type="button" class="btn btn-sm btn-default" data-source='pc'>计算机</button>
+                  <button type="button" class="btn btn-sm btn-default" data-source='mobile'>移动设备</button>
+                </div>
+
+                <span class="ml30 pl20">关键词分类：<span class="switch vm" data-toggle="switch" id="weird_switch"></span></span>
+
+                <span class="ml30 pl20">关键词最高限价提醒：PC
+                    <span id="warn_price">
+                        <span class="edit">
+                            <span>{% if adg.limit_price %}{{adg.limit_price|divide:'100'}}{% else %}5.00{% endif %}</span>元
+                            <i class="ml5 {% if adg.mnt_type != 0 %}disabled{% endif %} iconfont base_color poi">&#xe609;</i>
+                        </span>
+                        <span class="save">
+                            <input class="small w40" type="text" value="{% if adg.limit_price %}{{adg.limit_price|divide:'100'}}{% else %}5.00{% endif %}">
+                            <a href="javascript:;">保存</a>
+                        </span>
+                    </span>
+                    移动
+                    <span id="mobile_warn_price">
+                        <span class="edit">
+                            <span>{% if adg.real_mobile_limit_price %}{{adg.real_mobile_limit_price|divide:'100'}}{% else %}5.00{% endif %}</span>元
+                            <i class="ml5 {% if adg.mnt_type != 0 %}disabled{% endif %} iconfont base_color poi">&#xe609;</i>
+                        </span>
+                        <span class="save">
+                            <input class="small w40" type="text" value="{% if adg.real_mobile_limit_price %}{{adg.real_mobile_limit_price|divide:'100'}}{% else %}5.00{% endif %}">
+                            <a href="javascript:;">保存</a>
+                        </span>
+                    </span>
+                    {% if adg.mnt_type != 0 %}
+                    <i class="iconfont f16" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="默认为关键词限价，修改限价请到托管详情中修改">&#xe628;</i>
+                    {% endif %}
+                </span>
+
+                {% if adg.mob_enabled %}
+                <span class="ml30 pl20">移动折扣：
+                    <span id="adg_mobdiscount">{{adg.mobile_discount}}</span>%
+                    <i class="iconfont ml5 poi edit_mobdiscount base_color">&#xe609;</i>
+                </span>
+                {% endif %}
+                {% include 'common_keyword_show_more.html' %}
+            </div>
+
+            <div class="operate">
+                <span>优化策略：</span>
+                <div class="select_warp ml0" id="smart_optimize_select">
+                    <span class="tip" data-toggle="dropdown">例行优化</span>
+                    <ul class="dropdown-menu">
+                      <li data-value="default"><span class="active">例行优化</span></li>
+                      <li data-value="plus"><span>加价引流</span></li>
+                      <li data-value="fall"><span>降价省油</span></li>
+                    </ul>
+                </div>
+
+                <span class="ml20 pl30">调价力度：</span><span class="ml5 f12 gray">小</span>
+                <div id="set_percent" class="jslider-box" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-original-title="算法已经默认设置调价力度，您也可以调整，力度拉大时，加价的词会加更多价，降价的词降价比例也会更大哦">
+                    <input type="text" value="100">
+                </div><span class="ml5 f12 gray">大</span>
+
+                <ul class="ul_line select_info">
+                    <li class="pr10">已选中(<span class="b" id="checked_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="0">PC加价(<span class="b" id="up_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="1">PC降价(<span class="b" id="down_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="5">移动加价(<span class="b" id="up_mobile_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="6">移动降价(<span class="b" id="down_mobile_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="2">删除(<span class="b" id="del_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="3">匹配(<span class="b" id="match_num">0</span>)</li>
+                    {% if adg.mnt_type != 0 %}
+                    <li class="pr10 select_status tdl poi" mode="4">优化方式(<span class="b" id="mnt_num">0</span>)</li>
+                    {% endif %}
+                    <li><button class="btn btn-sm btn-primary" id="submit_keywords">提交到直通车</button></li>
+                </ul>
+            </div>
+        </header>
+
+        {% include 'common_keyword_table.html' %}
+
+        <div id="keyword_no_data">
+            <h4>没有关键词数据,请到<a href="/web/select_keyword/quick?adgroup_id={{adg.adgroup_id}}">选词</a>页面添加关键词</h4>
+        </div>
+    </div>
+</section>
+{%endblock%}

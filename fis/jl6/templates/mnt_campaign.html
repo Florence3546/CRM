@@ -1,0 +1,292 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% load rates %}
+{% block title %}计划详情{% endblock %}
+
+{% block content %}
+<input type="hidden" id="mnt_opter" value="{{mnt_opter}}">
+<input type="hidden" id="campaign_id" value="{{camp.campaign_id}}" />
+<input type="hidden" id="mnt_max_num" value="{{camp.max_num}}" />
+<input type="hidden" id="mnt_type" value="{{camp.mnt_type}}" />
+<input type="hidden" id="mnt_index" value="{{camp.mnt_index}}" />
+<input type="hidden" id="optimize_time" value="{{camp.optimize_time}}" />
+<input type="hidden" value="{{camp.mnt_type}}" id="page_type">
+<input type="hidden" value="{{ CONSULT_WW }}" id="CONSULT_WW" />
+
+<section class="container-fluid">
+    <ol class="breadcrumb">
+      <li><a href="../../web/web_home">首页</a></li>
+      <li class="dropdown" id="select_camp">
+         <a class="dropdown-toggle w200" data-trigger="hover" data-toggle="dropdown" href="#">
+            {% for c in mnt_list %}
+                {%if c.campaign_id == camp.campaign_id %}
+                    {% if c.mnt_type_name %}
+                        {{ c.mnt_type_name }}：</span>
+                    {%endif%}
+                    {{ c.name }}
+                {%endif%}
+            {%endfor%}
+            <span class="caret"></span>
+         </a>
+         <ul class="dropdown-menu ml20">
+            {% for c in mnt_list %}
+                <li><a value="{{c.campaign_id}}" href="/mnt/mnt_campaign/{{c.campaign_id}}">
+                    {% if c.mnt_type_name %}
+                        <span class="label label-gray f12">{{ c.mnt_type_name }}</span>
+                    {% endif %}
+                    {{c.name}}
+                    </a>
+                </li>
+            {%endfor%}
+         </ul>
+      </li>
+    </ol>
+    <div class="main_rpt_warp {%if camp.mnt_type != 0 %}pr290{% endif %}" id="campaign_warp">
+        <article class="box">
+            <header>
+                <div class="line_box">
+                    <span class="title">计划报表</span>
+                    <div class="dtr_picker_warp">
+                        <span class="tip" data-toggle="dtr_picker" id="select_days"></span>
+                    </div>
+                    {%if not camp.mnt_type %}
+                        <span id="budget" class="hide">{{budget}}</span>
+                        <a class="btn btn-default btn-sm mt-3"><span class="edit_camp_price" type="budget" data-budget="{{budget}}" data-smooth="{% if camp.is_smooth %}1{% else %}0{% endif %}" >设置日限额</span></a>
+                    {% endif %}
+                    <button class="btn btn-default btn-sm edit_platform mt-3">设置投放平台</button>
+                    <button class="btn btn-default btn-sm edit_schedule mt-3">设置分时折扣</button>
+                    <button class="btn btn-default btn-sm edit_area mt-3">设置投放地域</button>
+                    <a href="javascript:;" id="campaign_detail" class="sub">查看明细</a>
+                </div>
+            </header>
+            <div>
+                <div class="pl12 pr12">
+		            <table class="rt_rpt">
+		            </table>
+                </div>
+                <table class="total_rpt">
+                </table>
+            </div>
+        </article>
+
+        {%if camp.mnt_type == 1 or camp.mnt_type == 2 or camp.mnt_type == 3 or camp.mnt_type == 4  %}
+        <aside>
+            <div class="box" id="mnt_campaign_setting">
+            <header>
+                <div class="line_box">
+                    <span class="title">
+                        {% if camp.mnt_type == 1 %}长尾{% elif camp.mnt_type == 2 %}重点{% elif camp.mnt_type == 3 %}ROI{% elif camp.mnt_type == 4 %}无线{%endif%}托管策略设置
+                    </span>
+                </div>
+            </header>
+            {%if camp.mnt_type == 2 or camp.mnt_type == 4 %}
+            <div class="key">
+                <ul>
+                    <li>
+                        <span class="title">计划日限额：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span class="msg">
+                            <span id="budget">{% if budget == '20000000'  %}不限{% else %}{{budget}}元{% endif %}</span>
+                            <i class="iconfont edit_camp_price" type="budget" data-budget="{{budget}}" data-smooth="{% if camp.is_smooth %}1{% else %}0{% endif %}">&#xe609;</i>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="title">关键词限价：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span class="msg">
+                            <span id="max_price_pc" data-toggle="tooltip" title="PC端限价">{{camp.max_price}}</span>元
+                            <span id="max_price_yd" class="left_dotted pl5" data-toggle="tooltip" title="移动端限价">{{camp.mobile_max_price}}</span>元
+                            <i class="iconfont edit_camp_price" max_price_pc="{{camp.max_price}}" max_price_yd="{{camp.mobile_max_price}}" type="max_price">&#xe609;</i>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="title">计划推广状态：</span>
+                        <span class="msg lbl_online_status" >{% if camp.online_status == 'online' %}已开启{% else %}已暂停{% endif %}</span>
+                        <a href="javascript:;" class="online_status" {% if camp.online_status == 'online' %} mode="0" {% else %} mode="1" {% endif %} >
+                        {% if camp.online_status == 'online' %}暂停{% else %}开启{% endif %}</a>
+                    </li>
+                    <li>
+                        <span class="title">计划托管状态：</span>
+                        <span class="msg lbl_mnt_status" >托管中</span>
+                        <a href="javascript:;" class="mnt_status" mnt_days="{{ mnt_days }}">取消托管</a>
+                    </li>
+                     <!--<li>
+                        <span class="title">宝贝实时优化：</span>
+                        <span class="msg lbl_mnt_rt" >{% if camp.mnt_rt == 1 %}已开启{% else %}已关闭{% endif %}</span>
+                        <a href="javascript:;" class="mnt_rt" data-mntrt="{{ camp.mnt_rt }}">{% if camp.mnt_rt == 1 %}关闭{% else %}开启{% endif %}</a>
+                    </li>-->
+                    <li>
+                        <div class="title">宝贝推广意向：&nbsp;<span id="big_factor_name" class="ml10"></span>&nbsp;<span id="big_factor_value" class="hide b">0%</span></div>
+                        <div class="big_factor">
+                            <span class="l gray">ROI</span>
+                            <div class="jslider-box l ml10 w160">
+                                <input type="text" id="mnt_bid_factor" value="{{ camp.mnt_bid_factor }}">
+                            </div>
+                            <span class="l gray ml5">流量</span>
+                            <i class="iconfont l mt2 gray" data-toggle="tooltip" data-placement="left"
+                               title="偏ROI时，系统会以更低的价格带来有<br/>限的流量，以保证更高的ROI；偏流量<br/>时，系统会争取更多的有效精准流量&nbsp;&nbsp;">&#xe628;</i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {%endif%}
+            {%if camp.mnt_type == 1 or camp.mnt_type == 3 %}
+            <div class="long">
+                <ul>
+                    <li>
+                        <span class="title">计划日限额：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span class="msg">
+                            <span id="budget">{% if budget == '20000000'  %}不限{% else %}{{budget}}元{% endif %}</span>
+                            <i class="iconfont edit_camp_price" type="budget" data-budget="{{budget}}" data-smooth="{% if camp.is_smooth %}1{% else %}0{% endif %}">&#xe609;</i>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="title">关键词限价：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span class="msg">
+                            <span id="max_price_pc" data-toggle="tooltip" title="PC端限价">{{camp.max_price}}</span>元&nbsp;
+                            <span id="max_price_yd" class="left_dotted pl5"  data-toggle="tooltip" title="移动端限价">{{camp.mobile_max_price}}</span>元
+                            <i class="iconfont edit_camp_price" max_price_pc="{{camp.max_price}}" max_price_yd="{{camp.mobile_max_price}}" type="max_price">&#xe609;</i>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="title">计划推广状态：</span>
+                        <span class="msg lbl_online_status" >{% if camp.online_status == 'online' %}推广中{% else %}已暂停{% endif %}</span>
+                        <a href="javascript:;" class="online_status" {% if camp.online_status == 'online' %} mode="0" {% else %} mode="1" {% endif %} >
+                        {% if camp.online_status == 'online' %}暂停{% else %}开启{% endif %}</a>
+                    </li>
+                    <li>
+                        <span class="title">计划托管状态：</span>
+                        <span class="msg lbl_mnt_status" >托管中</span>
+                        <a href="javascript:;" class="mnt_status" mnt_days="{{ mnt_days }}">取消托管</a>
+                    </li>
+                    <li>
+                        <div class="title">宝贝推广意向：&nbsp;<span id="big_factor_name" class="ml10"></span>&nbsp;<span id="big_factor_value" class="hide b">0%</span></div>
+                        <div class="big_factor">
+                            <span class="l gray">ROI</span>
+                            <div class="jslider-box l ml10 w160">
+                                <input type="text" id="mnt_bid_factor" value="{{ camp.mnt_bid_factor }}">
+                            </div>
+                            <span class="l gray ml5">流量</span>
+                            <i class="iconfont l mt2 gray" data-toggle="tooltip" data-placement="left"
+                               title="偏ROI时，系统会以更低的价格带来有<br/>限的流量，以保证更高的ROI；偏流量<br/>时，系统会争取更多的有效精准流量&nbsp;&nbsp;">&#xe628;</i>
+                        </div>
+                    </li>
+                </ul>
+                <div class="quick_oper mt5 l {% if camp.online_status == 'offline' %}hide{% endif %}">
+                    <span class="title">人工干预：&nbsp;</span>
+                    {% if not camp.is_active or camp|is_recent:'quick_optime'%}
+                        <button class="btn btn-default disabled btn-sm">加大投入</button>
+                        <button class="btn btn-default disabled btn-sm">减少投入</button>
+                        <i class="iconfont mt10 sign-oper gray" data-toggle="tooltip" data-placement="left" title="今日已调整过，每日只能调整一次">&#xe628;</i>
+                    {% else %}
+                        <button class="btn btn-primary btn-sm quick_oper_long" stgy="1">加大投入</button>
+                        <button class="btn btn-primary btn-sm quick_oper_long" stgy="-1">减少投入</button>
+                        <i class="iconfont sign-oper gray" data-toggle="tooltip" data-placement="top" title="即时调整投入，每天只能调整一次">&#xe628;</i>
+                    {% endif %}
+                </div>
+            </div>
+            {%endif%}
+        </div>
+        </aside>
+        {% endif %}
+
+    </div>
+
+   <div class="box">
+       <header>
+            <div class="line_box">
+                <span class="title">宝贝列表
+                (共<span class="adgroup_count">0</span>个{%if camp.mnt_type == 1 or camp.mnt_type == 2 or camp.mnt_type == 3 or camp.mnt_type == 4 %}，已托管<span class="mnt_num">--</span>个宝贝，还可以托管<span class="new_num">--</span>个{% endif %})</span>
+                {%if camp.mnt_type == 1 or camp.mnt_type == 2 or camp.mnt_type == 3 or camp.mnt_type == 4 %}
+                    <span class="sign-left r">
+                        <a class="width100 animate r">
+                            <i class="iconfont f24">&#xe61a;</i>
+                            <span>自动托管中，{{ start_time }}加入托管，{% if camp.optimize_time == '0' %}目前尚未优化{% else %}上次优化：{{camp.optimize_time}}{% endif %}</span>
+                        </a>
+                    </span>
+                {% endif %}
+            </div>
+            <div class="operate">
+                <button class="btn btn-default btn-sm add_adgroup">添加宝贝</button>
+                <button class="btn btn-default btn-sm" id="show_kw">显示关键词数</button>
+                <button class="btn btn-default btn-sm" id="show_cr">显示创意数</button>
+                <div class="pull-right">
+                    <div class="form-inline" autocomplete="on">
+                      <div class="form-group">
+                          <div class="input-group">
+                              <div class="select_warp ml0" id="search_status_type">
+                                  <span class="tip form" data-toggle="dropdown">推广状态</span>
+                                  <ul class="dropdown-menu">
+                                      <li data-value=""><span>全部</span></li>
+                                      <li data-value="online"><span>推广中</span></li>
+                                      <li data-value="offline"><span>已暂停</span></li>
+                                      <li data-value="audit_offline"><span>违规下架</span></li>
+                                      <li data-value="crm_offline"><span>CRM下线</span></li>
+                                  </ul>
+                              </div>
+                          </div>&nbsp;&nbsp;
+                          {%if camp.mnt_type != 0 %}
+                          <div class="input-group">
+                              <div class="select_warp ml0" id="search_opt_type">
+                                  <span class="tip form" data-toggle="dropdown">优化状态</span>
+                                  <ul class="dropdown-menu">
+                                      <li data-value="-1"><span>全部</span></li>
+                                      <li data-value="1"><span>自动优化</span></li>
+                                      <li data-value="2"><span>只改价</span></li>
+                                      <li data-value="0"><span>未托管</span></li>
+                                  </ul>
+                              </div>
+                          </div>&nbsp;&nbsp;
+                          {% endif %}
+                          <div class="input-group">
+                              <div class="select_warp ml0" id="search_follow_type">
+                                  <span class="tip form" data-toggle="dropdown">宝贝分类</span>
+                                  <ul class="dropdown-menu">
+                                      <li data-value="-1"><span>全部</span></li>
+                                      <li data-value="1"><span>关注宝贝</span></li>
+                                      <li data-value="0"><span>普通宝贝</span></li>
+                                  </ul>
+                              </div>
+                          </div>&nbsp;&nbsp;
+                          <div class="input-group">
+                              <input type="text" class="form-control" autocomplete="on" id="search_val" placeholder="输入宝贝名称">
+                              <div class="btn input-group-addon" id="search_btn"><i class="iconfont">&#xe618;</i></div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+       <div class="ad-group-table">
+       </div>
+   </div>
+   <div class="page-tool pt10 tr"></div>
+</section>
+<div class="add_adg_box">
+
+    <div class="opt_var mt20 mb10 tr">
+        <div id="sign-alert" class="alert alert-warning tl mb10">
+           <a href="#" class="close" data-dismiss="alert">&times;</a>
+           <strong>免责声明：</strong>
+           <span>请确认所有推广内容符合直通车官方要求，如因违规造成的一切后果与精灵软件无关，详情请参考
+               <a href="http://rule.alimama.com/#!/announce/business/detail?id=8306451&knowledgeid=5857304">《淘宝\天猫直通车软件服务使用规范》</a></span>
+        </div>
+        <div class="opt_btn">
+            <button class="btn btn-primary submit_adgroup">提交</button>
+            <button class="btn btn-default cancle_add_adgroup">取消</button>
+        </div>
+
+    </div>
+    <div class="add_item_box">
+    {% include 'add_item_box.html' %}
+    </div>
+    <div class="result_box hide">
+        <div class="commit_result tc">
+            <span id="item_success_count">0</span>个宝贝加入计划成功<span class="red">，<span id="item_failed_count">0</span>个宝贝加入失败</span>，详情如下；
+            <span><a href="javascript:;" id="to_mnt_main">返回计划主页</a></span>
+        </div>
+        <div class="error_list tl mt10">
+
+        </div>
+    </div>
+
+</div>
+{%endblock%}

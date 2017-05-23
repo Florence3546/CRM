@@ -1,0 +1,37 @@
+{% load rates %}
+
+<span class="l f12">客户群：</span>
+<ul class="f12 ul_line pl60" id="client-group-list">
+    {%for c in all_client_group%}
+    <li class="mr10">
+        <input name="client_ids" id="client_ids" {%if c.id in client_id_list%}checked{%endif%} class="mr3" type="checkbox" value="{{c.id}}">
+        <div class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" data-trigger="hover"href="#">{{c.title}}</a> <i class="iconfont">&#xe626;</i>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li>
+                    <a href="javascript:;" class="add_client" data-title="{{c.title}}" data-id="{{c.id}}">添加客户</a>
+                </li>
+                <li>
+                    <a href="javascript:;">高级客户管理</a>
+                </li>
+                <li>
+                    <a href="javascript:;" client_id="{{c.id}}" class="delete">删除</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    {%endfor%}
+    <li class="r">
+        <a href="#create_client_group" data-toggle="modal">
+            创建客户群
+        </a>
+    </li>
+</ul>
+<div id="create_client_group" class="modal hide fade p10" data-width="w500">
+    <span class="mr10">客户群名称:</span>
+    <input type="text" id="client_group_name">
+    <a href="javascript:;" data-dismiss="modal" class="r btn ml10">取消</a>
+    <a href="javascript:;" class="btn r btn-primary" id="create_client_group_submit">提交</a>
+</div>
+
+

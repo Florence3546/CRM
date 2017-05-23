@@ -1,0 +1,49 @@
+
+<div class="modal fade" id="modal_confirm_win">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">以下为系统分析结果，请选择优化项目后正式提交：</h4>
+            </div>
+            <div class="modal-body" >
+            <div class="content">
+                <div id="div_update" class="h30 hide">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="chk_update">
+                        <label id="lbl_update" class="hide" for="chk_update"></label>
+                    </label>
+                    <div class="r">
+                        <span id="sp_update" class="hide base_color">提交成功</span>
+                        <img id="img_update" class="w24 h24 mr20 hide" src="/site_media/jl6/static/images/loading.gif" alt="" >
+                    </div>
+                </div>
+                <div id="div_del" class="h30 hide">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="chk_del"><label id="lbl_del" class="hide" for="chk_del"></span>
+                    </label>
+                    <div class="r">
+                        <span id="sp_del" class="hide base_color">提交成功</span>
+                        <img id="img_del" class="w24 h24 mr20 hide" src="/site_media/jl6/static/images/loading.gif" alt="" >
+                    </div>
+                </div>
+                <div id="div_add" class="h30 hide">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="chk_add"><label id="lbl_add" class="hide" for="chk_add"></label>
+                    </label>
+                    <div class="r">
+                        <span id="sp_add" class="hide base_color">提交成功</span>
+                        <img id="img_add" class="w24 h24 mr20 hide" src="/site_media/jl6/static/images/loading.gif" alt="" >
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <span id="error_onekey" class="red mr20 hide" ></span>
+                <button id="submit_onekey" type="button" class="btn btn-primary" adgroup_id="1">提交到直通车</button>
+                <button id="finish_onekey" type="button" class="btn btn-primary hide" data-dismiss="modal" adgroup_id="1">完成</button>
+                <button id="cancel_onekey" type="button" class="btn btn-default" data-dismiss="modal" adgroup_id="1">放弃优化</button>
+            </div>
+        </div>
+    </div>
+</div>

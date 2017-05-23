@@ -1,0 +1,12 @@
+
+<span class="pagination l">
+    每页显示{{ page_size }}条数据，共{{ page_count }}页
+</span>
+<ul class="pagination r mt10 mb10">
+  <input type="hidden" class="current_page" value="{{ page_row }}"/>
+  <li page_row="1" class="page_row"><a href="javascript:;" >&laquo;</a></li>
+  {{each page_list}}
+   <li page_row="{{ $value }}" class="page_row {{if $value==page_row}} active{{/if}}"><a href="javascript:;">{{ $value }}</a></li>
+  {{/each}}
+  <li page_row="{{ page_count}}" class="page_row"><a href="javascript:;">&raquo;</a></li>
+</ul>

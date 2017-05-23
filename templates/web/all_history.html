@@ -1,0 +1,84 @@
+<div class="fix">
+    <div class="r">
+
+        <div class="dropdown" id="drp_camp">
+          <a class="dropdown-toggle btn h20" data-toggle="dropdown" data-trigger="hover" data-type="select" href="#">
+          <span id="drp_camp_text" class="dropdown-value dib ell w100">
+          {% for c in main_list %}
+            {%if c.0 == cur_camp_id %}{{ c.1 }}{%endif%}
+          {%endfor%}
+          </span><i class="iconfont vn3">&#xe65b;</i></a>
+          <ul class="dropdown-menu" data-toggle="dropdown" role="menu" aria-labelledby="dLabel">
+            {% for c in main_list %}
+            <li><a value="{{c.0}}" href="javascript:;">{{c.1}}</a></li>
+            {%endfor%}
+          </ul>
+        </div>
+        <div class="dropdown" id="drp_opter">
+          <a class="dropdown-toggle btn h20" data-toggle="dropdown" data-trigger="hover" data-type="select" href="#" >
+	          <span id="drp_opter_text" class="dropdown-value dib ell w80">全部操作人</span>
+	          <i class="iconfont vn3">&#xe65b;</i>
+          </a>
+          <ul class="dropdown-menu" data-toggle="dropdown" role="menu" aria-labelledby="dLabel">
+          	<li><a value="-1" href="javascript:;">全部操作人</a></li>
+            <li><a value="0" href="javascript:;">系 统</a></li>
+            <li><a value="1" href="javascript:;">用 户</a></li>
+          </ul>
+        </div>
+        <div class="dropdown" id="drp_op_type">
+          <a class="dropdown-toggle btn h20" data-toggle="dropdown" data-trigger="hover" data-type="select" href="#" >
+	          <span id="drp_op_type_text" class="dropdown-value dib ell w100">数据类型</span>
+	          <i class="iconfont vn3">&#xe65b;</i>
+          </a>
+          <ul class="dropdown-menu" data-toggle="dropdown" role="menu" aria-labelledby="dLabel">
+          	<li><a value="-1" href="javascript:;">全部数据类型</a></li>
+            <li><a value="0" href="javascript:;">计 划</a></li>
+            <li><a value="1" href="javascript:;">推广组</a></li>
+            <li><a value="2" href="javascript:;">创 意</a></li>
+            <li><a value="3" href="javascript:;">关键词</a></li>
+          </ul>
+        </div>
+        <div class="dropdown adgroup_select_days" id="drp_days">
+          <a class="dropdown-toggle btn btn-normal" data-toggle="dropdown" data-autowidth="true" data-type="select" href="#"><i class="iconfont mr5"></i>
+          <span id="drp_days_text" class="dropdown-value">过去1天</span><i class="iconfont"></i></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a value="1" href="javascript:;">过去1天</a></li>
+            <li><a value="3" href="javascript:;">过去3天</a></li>
+            <li><a value="7" href="javascript:;">过去7天</a></li>
+            <li><a value="15" href="javascript:;">过去15天</a></li>
+          </ul>
+        </div>
+        <div class="input-append mb0 ml10">
+            <input class="w140" type="text" placeholder="请输入宝贝名称" id="txt_item" style="line-height:21px;">
+            <button class="btn" id="btn_item_search" type="button"> <i class="iconfont lh14"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered mt10" id="all_history_table">
+    <thead>
+        <tr>
+            <th><div class="th_wrapp tl">操作时间</div></th>
+            <th><div class="th_wrapp tl">操作人</div></th>
+            <th><div class="th_wrapp tl">数据类型</div></th>
+            <th><div class="th_wrapp tl">操 作</div></th>
+            <th class="pct50"><div class="th_wrapp tl">详 细</div></th>
+        </tr>
+    </thead>
+    <tbody id="history_table_tbody">
+    </tbody>
+</table>
+<script>
+    PT.All_history.init();
+</script>
+
+<script id="history_table_tr" type="text/html">
+<tr>
+    <td><div class="tac"><%=oper_time%></div></td>
+    <td><div class="tal"><%=opter%></div></td>
+    <td><div class="tal"><%=op_type%></div></td>
+    <td><div class="tal"><%=data_type%></div></td>
+    <td><div class="tal"><%=detail%></div></td>
+</tr>
+</script>
+

@@ -1,0 +1,45 @@
+{% extends "base_crm.html" %}
+{% block title%}
+    添加精灵币
+{% endblock %} 
+{% load rates %}
+
+{%block content %} 
+<div>
+    <span>用户ID：</span>
+    <input type="text" name="nick" id="input_nick" value="">
+    <span class="marl_12">精灵币数：</span>
+    <input type="text" name="point" id="input_point" value="">
+    <a href="javascript:void(0);" id="id_reset" class="btn marl_12">重置</a>
+    <a href="javascript:void(0);" id="id_submit_btn" class="btn btn green" >提交</a>
+</div>
+
+<div>
+    <table id="add_history" class="table table-bordered hide mart_24" style="width:600px;">
+        <thead>
+            <tr>
+                <th>用户ID</th>
+                <th>精灵币</th>
+                <th>操作时间</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="/site_media/jl/scripts/crm/crm_addpoint.js?v={{VERSION}}.js" type="text/javascript"></script> 
+{% endblock %}
+
+{% block custom_js %} 
+<script>
+jQuery(document).ready(function(){
+    PT.AddPoint.init();
+});
+
+</script> 
+{% endblock %}

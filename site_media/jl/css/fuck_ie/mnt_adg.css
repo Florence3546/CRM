@@ -1,0 +1,5 @@
+table td,table th{padding:8px;}
+.count_div{line-height:20px;display:inline-block; border:1px #CCC dashed; padding:6px; background-color:#eee;}
+.dataTables_paginate ul{margin-top:0}
+.text_input{border: none; background: #FFF; font-size: 14px;}
+.icon-play-circle{font-size:16px;}

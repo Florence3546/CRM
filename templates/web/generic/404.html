@@ -1,0 +1,25 @@
+﻿{#utf-8#}{% extends "base_jl5.html" %}
+{% block title %}页面不存在{% endblock %}
+
+{% block base_jl5 %}
+  <div id="header" class="navbar-static-top">
+    <div class="container-fluid">
+      <a  href="#"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+    </div>
+  </div>
+    <div class=" w800 h300 mb40 auto mt100 bg_white bbd">
+        <div class="fix mt20">
+            <i class="iconfont f250 l ml30 ">&#xe669;</i><div class=" w500 h24  l ml15 mt40">
+                <p class=" f55 b mb20 mt30 pt20">
+                SORRY，出错啦！</p>
+                <h3>ＯＨ，你访问的页面不存在</h3>
+                <a href="{%url 'web_home'%}" class="btn ml5 mt5" type="button">返回首页</a>
+                <a href="http://fuwu.taobao.com/ser/detail.htm?spm=0.0.0.154.b9f039&service_code=ts-25811&tracelog=kcjl_404" class="btn ml5 mt5 btn-primary" type="button">立即订购</a>
+                <span class="ml10 vn">联系顾问：</span><a class="w_color" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+            </div>
+        </div>
+        <div class="silver pl40">
+            {%if msg %}<span>错误信息：</span>{% autoescape off %}{{msg}}{% endautoescape %}{% endif %}
+        </div>        
+    </div>
+{% endblock %}

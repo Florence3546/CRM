@@ -1,0 +1,70 @@
+<input type="hidden" name="ad_position" value="bottombanner">
+<div class='mt10'>
+    <span class="w60 dib">广告名称：</span>
+    <input class="w600" data-rule="require" type="text" maxlength="50" value="{{main_ad.ad_title|default:''}}" name="ad_title" placeholder="请输入广告名称"><span class="red ml3 f12">*</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">是否显示：</span>
+    <div class="switch vn-3 {% if main_ad.ad_display %} on {% endif %}" data-toggle="switch">
+        <label class="db"></label>
+        <input type="checkbox" name="ad_display" value="1" {% if main_ad.ad_display %} checked="checked" {% endif %}>
+    </div>
+    <span class="ml20 gray f12">开启后才会在前台显示</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">有效时间：</span>
+    <input class="w140" data-rule="require"  placeholder="请选择开始时间" type="text" value="{{main_ad.ad_start_time|default:''}}" name="ad_start_time" ><span class="red ml3 f12">*</span>
+    <span class="w40 dib tc">到</span>
+    <input class="w140" data-rule="require"  placeholder="请选择结束时间" type="text" value="{{main_ad.ad_end_time|default:''}}" name="ad_end_time"><span class="red ml3 f12">*</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">权&emsp;&emsp;重：</span>
+    <input class="w40" data-rule="require range[0,99]" type="text" name="ad_weight" value="{{main_ad.ad_weight|default:'0'}}"><span class="red ml3 f12">*</span></span>
+    <span class="ml20 gray f12">权重相同则随机显示；不同则只显示权重高的一条</span>
+</div>
+<div class="mt10 vt">
+    <span class="w60 dib vt">广告内容：</span>
+    <textarea name="ad_content" placeholder="输入广告内容（html代码和javascript脚本）" class="w1100 h200" style="max-width: 1100px; min-height: 200px; max-height: 300px;">{{main_ad.ad_content|default:''}}</textarea>
+</div>
+<div class="mt20">
+    <button type="submit" class="btn btn-success submit">保存</button>
+    {% if check_limit %}
+    <a href="javascript:;" class="btn btn-primary check_main_ad" check_id="{{ a_id }}">审核</a>
+    {% endif %}
+    {% if put_out %}
+    <a href="javascript:;" class="btn btn-warning put_main_ad" put_id="{{ a_id }}">投放</a>
+    {% endif %}
+    <a href="../main_ad_manage" class="btn">返回</a>
+    <a class="custom_preview ml10" href="javascript:;">预览效果</a><span class="gray f12 ml5">效果在底部哦！</span>
+</div>
+<script id="BottomBanner_view" type="text/html">
+    <div class="auto bg_white tc" id="show_bottom_banner" style="overflow: hidden;position: relative; height: 0px; margin: 0 auto; background-color: #FF2B01">
+        <a class="r" href="javascript:;" id="hide_bottom_banner" style="position: absolute; top: -2px; right: 2px;"><i class="icon iconfont">&#xe621;</i></a>
+        <div id="bottom_banner_content">
+            <%==data%>
+        </div>
+    </div>
+</script>
+{% block custom_js %}
+<script>
+
+    //预览底部横条
+    function view_main_ad(){
+        $("#show_bottom_banner").remove();
+        var view_html = template.render("BottomBanner_view",{'data':$('textarea[ name=ad_content]').val()});
+        $('#foot').before(view_html);
+
+        var height = $('#bottom_banner_content').height();
+        height = Math.max(height,50);
+        $("#show_bottom_banner").animate({height:height},500);
+
+        $('#show_bottom_banner').on('click','#hide_bottom_banner',function(){
+            $("#show_bottom_banner").animate({height:0},500,function(){
+                $("#show_bottom_banner").remove();
+            });
+        });
+    }
+
+
+</script>
+{% endblock %}

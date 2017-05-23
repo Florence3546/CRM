@@ -1,0 +1,12 @@
+{{ each datas as value index }}
+<tr class="duplicate_keyword poi" index="{{ index }}">
+    <td class="tc choose_column"><input type="checkbox" class="child-select"/></td>
+    <td class="click_show">
+        <span class="hide dupl_times">{{ value.times }}</span>
+        <span class="keyword">{{ value.keyword }}</span>
+        <span class="r">
+            重复<span class="red b dupl_times">{{ value.times }}</span>次
+        </span>
+    </td>
+</tr>
+{{ /each }}

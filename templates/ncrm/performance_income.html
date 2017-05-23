@@ -1,0 +1,183 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}绩效表{% endblock %}
+{% block extra_style %}
+<style>
+.bg_theme {background-color: #4e89ba !important;}
+.data-calendar {display: none;}
+.ks-dtp {padding-top: 8px !important;}
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1200 auto pt20">
+  <div class="" style="border-bottom: 0px dashed #ccc;">
+    <h4>统计月份:
+      <form id="tj_month_form" action="" method="get" class="dib mb0">
+        <input class="w60 ml5 dib" name="tj_month" id="tj_month" type="text" value="{{date_month}}">
+        <a href="javascript:;" class="btn submit n">查&nbsp;询</a>
+      </form>
+      <a href="javascript:;" class="btn f14 ml20 n" onclick="$('.div_perf_cfg').slideToggle();">查看绩效配置表</a>
+    </h4>
+  </div>
+
+  <div class="mt10 div_perf_cfg hide">
+    <div class="">
+      <div>
+        <div id = 'score_total_count' class="silver f14 dib lh30">
+          <span class="b black">排名档位设置总名额：</span>
+          <span class="red mr5"></span>(<span></span>+<span></span>+<span></span>+<span></span>+<span></span>)
+        </div>
+        <div class="mb5 r {% if not is_modify %} hide {% endif %}">
+            <button class="btn w80 dryrun">预&nbsp;览</button>
+            {% if is_modify %}
+            <button class="btn w80 ml10 btn-primary save_cfg hide">保&nbsp;存</button>
+            {% endif %}
+        </div>
+      </div>
+      {% include "perf_cfg_table.html" %}
+      <div class="pt5 bg_white pl30" id="score_calc_div">
+        <label class="dib vt">积分计算公式：</label>
+        <div class="dib">
+          {% for m in metric_list %}
+          <label class="dib mr10 w180">
+            <input type="checkbox" name="indicator_name" value="{{ m.name }}" {% if m.is_use %}checked="checked"{% endif %}>
+            <span class="jq_indicator_name_cn">{{ m.name_cn }}</span>
+            <span>*</span>
+            <input type="text" value="{{m.multiplier}}" class="w30 p0_important jq_multiplier jq_check_num">
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="bg_white mt20">
+    <ul class="nav nav-tabs f14 bg_striped bdc">
+      <li class="active">
+        <a href="#xfgroup" data-toggle="tab">销服组绩效表</a>
+      </li>
+      <li>
+        <a href="#person" data-toggle="tab">个人绩效表</a>
+      </li>
+    </ul>
+
+    <div class="tab-content pt5 pb10">
+      <div class="tab-pane active" id="xfgroup">
+        <div id="group_sum_info" class="ml10"> </div>
+        {% if is_modify %}
+        <div class="r">
+          <button class="modify_score_level btn mb5 mr5">修改积分档位</button>
+          <button class="save_xfgroup btn btn-primary mb5 mr5 w80">保&nbsp;存</button>
+        </div>
+        {% endif %}
+        <table id="xfgroup_table" class="table-striped bdd">
+          <thead>
+            <tr>
+              <th class="w30"><div class="">部门</div></th>
+              <th class="w30"><div class="">销服组</div></th>
+              <th class="w30"><div class="">团队积分</div></th>
+              <th class="w20"><div class="">积分排名</div></th>
+              <th class="w20"><div class="">积分档位</div></th>
+              <th class="w30"><div class="">团队金额(元)</div></th>
+              <th class="w20"><div class="">金额排名</div></th>
+              <th class="w30"><div class="">金额档位</div></th>
+              <th class="w30"><div class="">团队退款</div></th>
+              <th class="w30"><div class="">团队提成点</div></th>
+              <th class="w30"><div class="">团队收入(元)</div></th>
+              <th class="w30"><div class="">顾问提成点</div></th>
+              <th class="w30"><div class="">顾问</div></th>
+              <th class="w30"><div class="">顾问业绩(元)</div></th>
+              <th class="w30"><div class="">销售</div></th>
+              <th class="w30"><div class="">销售业绩(元)</div></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="person">
+        <div class="w500">
+          <button class="btn btn-primary r mb5 mr5 w80" id="export_csv">导&nbsp;出</button>
+        </div>
+        <table id="person_table" class="table-striped bdd w500">
+          <thead>
+            <tr>
+              <th class="w30"><div class="tc">部门</div></th>
+              <th class="w30"><div class="tr mr10">姓名</div></th>
+              <th class="w30"><div class="tr mr10">业绩(元)</div></th>
+              <th class="w50"><div class="tr mr10">销服组</div></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block template%}
+<script id="xfgroup_table_tr" type="text/html">
+  <tr id="<%=xfgroup_id%>">
+    <td class="tc"><%=department%></td>
+    <td class="tc"><%=xfgroup_name%></td>
+    <td class="tr"><%=score%></td>
+    <td class="tr"><%=score_rank%></td>
+    <td class="tr person_score_level">
+      <select class="w50" disabled>
+        <option value='A' <% if (score_level == 'A') { %> selected <% } %> >A</option>
+        <option value='B' <% if (score_level == 'B') { %> selected <% } %> >B</option>
+        <option value='C' <% if (score_level == 'C') { %> selected <% } %> >C</option>
+        <option value='D' <% if (score_level == 'D') { %> selected <% } %> >D</option>
+        <option value='E' <% if (score_level == 'E') { %> selected <% } %> >E</option>
+      </select>
+    </td>
+    <td class="tr"><%=order_pay%></td>
+    <td class="tr"><%=order_pay_rank%></td>
+    <td class="tr"><%=order_pay_level%></td>
+    <td class="tr"><%=refund_pay%></td>
+    <td class="tr"><%=team_royalty%></td>
+    <td class="tr"><%=team_pay%></td>
+    <td class="tr"><%=consult_royalty%></td>
+    <td class="tr"><%=consult_name%></td>
+    <td class="tr"><%=consult_pay%></td>
+    <td class="tr"><%=seller_name%></td>
+    <td class="tr"><%=seller_pay%></td>
+  </tr>
+</script>
+
+
+<script id="group_sum_div" type="text/html">
+  <div>
+    <span class="dib w80"><span class="b red"><%=department%>: </span></span>
+    <span class="dib w120">团队金额<span class="ml5 b red"><%=order_pay%></span></span>
+    <span class="dib w120">退款<span class="ml5 b red"><%=refund_pay%></span></span>
+    <span class="dib w120">团队收入<span class="ml5 b red"><%=team_pay%></span></span>
+    <span class="dib w120">顾问业绩<span class="ml5 b red"><%=consult_pay%></span></span>
+    <span class="dib w120">销售业绩<span class="ml5 b red"><%=seller_pay%></span></span>
+  </div>
+</script>
+
+<script id="person_table_tr" type="text/html">
+  <tr id="">
+    <td class="tc"><%=department%></td>
+    <td class="tr"><%=name%></td>
+    <td class="tr"><%=pay%></td>
+    <td class="tr"><%=xfgroup_list%></td>
+  </tr>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/performance_income.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.PerformanceIncome.init();
+});
+</script>
+{% endblock %}

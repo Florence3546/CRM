@@ -1,0 +1,182 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}报表趋势图{% endblock %}
+
+{% block content %}
+<style type="text/css">
+    .w1287{width: 1287px;}
+</style>
+<div class="w1329 auto">
+    <div class="mt20">
+        <ul class="nav nav-tabs p0 rel">
+            <li class="active" data-type="day">
+                <a href="#rpt_day" data-toggle="tab">日报表(3天转化)</a>
+            </li>
+            <li data-type="week">
+                <a href="#rpt_week" data-toggle="tab">周报表</a>
+            </li>
+            <li data-type="month">
+                <a href="#rpt_month" data-toggle="tab">月报表</a>
+            </li>
+            <li data-type="day1">
+                <a href="#rpt_day1" data-toggle="tab">日报表(1天转化)</a>
+            </li>
+        </ul>
+
+        <div class="tab-content bg_white p20">
+            <div class="tab-pane active in" id="rpt_day">
+                <div class="gray f12 mb10">
+                    2015年3月27号前的报表均为1天转化数据。1天转化数据不一定准，因为有时淘宝效果数据延时。
+                </div>
+                <div class="gray f12">
+                    <span class="mr20 i">报表统计天数：</span>
+                    <label class="di ml20 i f12"><input type="radio" name="rpt_sum_days" class="mr5" value="1" checked>1天</label>
+                    <label class="di ml20 i f12"><input type="radio" name="rpt_sum_days" class="mr5" value="7">7天</label>
+                    <label class="di ml20 i f12"><input type="radio" name="rpt_sum_days" class="mr5" value="15">15天</label>
+                    <label class="di ml20 i f12 mr20"><input type="radio" name="rpt_sum_days" class="mr5" value="30">30天</label>
+                    <span class"i gray ">（影响以下所有图表；统计天数为7天时，表示该天的报表是当天以最近7天的报表和）</span>
+                </div>
+
+                <div class="mb30">
+                    <div class="b tc f20 p20">【全网】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_shop_all_day'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_mnt_day'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【未托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_unmnt_day'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_kcjl_day'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中不含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_no_kcjl_day'></div>
+                </div>
+                <div class="">
+                    <div class="b tc f20 p20">对比趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_compare_day'></div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane in" id="rpt_week">
+
+                <div class="mb30">
+                    <div class="b tc f20 p20">【全网】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_shop_all_week'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_mnt_week'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【未托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_unmnt_week'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_kcjl_week'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中不含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_no_kcjl_week'></div>
+                </div>
+                <div class="">
+                    <div class="b tc f20 p20">对比趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_compare_week'></div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane in" id="rpt_month">
+
+                <div class="mb30">
+                    <div class="b tc f20 p20">【全网】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_shop_all_month'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_mnt_month'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【未托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_unmnt_month'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_kcjl_month'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中不含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_no_kcjl_month'></div>
+                </div>
+                <div class="">
+                    <div class="b tc f20 p20">对比趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_compare_month'></div>
+                </div>
+
+            </div>
+
+
+            <div class="tab-pane in" id="rpt_day1">
+                <div class="gray">1天转化数据不一定准，因为有时淘宝效果数据延时，所以以下报表主要用来观察淘宝数据是否异常。</div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【全网】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_shop_all_day1'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_mnt_day1'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【未托管计划】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_unmnt_day1'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_kcjl_day1'></div>
+                </div>
+                <div class="mb30">
+                    <div class="b tc f20 p20">【托管中不含开车精灵】趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_has_no_kcjl_day1'></div>
+                </div>
+                <div class="">
+                    <div class="b tc f20 p20">对比趋势图</div>
+                    <div class="h250 w1287" id='trend_chart_camp_compare_day1'></div>
+                </div>
+            </div>
+
+            <div>
+                <span class="b mr20 i">比较类型：</span>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="roi" checked>投资回报比</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="ctr">点击率(%)</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="cpc">平均点击花费</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="impressions">展现量</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="click">点击量</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="cost">花费</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="pay">成交额</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="paycount">成交笔数</label>
+                <label class="di ml20 i"><input type="radio" name="rpt_field" class="mr5" value="count">统计数</label>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/trend_chart.js'|file_time_stamp}}" type="text/javascript"></script>
+<script src="{{'/site_media/jl5/ncrm_js/rpt_snap.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.RptSnap.init();
+});
+</script>
+{% endblock %}

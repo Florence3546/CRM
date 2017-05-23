@@ -1,0 +1,157 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}评论管理{% endblock %}
+{% block extra_style %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+  <div class="bg_white p10 mt20 mb10 bdd">
+    <form id="comment_form" action="" method="post" class="mb0">
+      <div>
+
+        <span class="">
+          <span class="hide">创建时间</span>
+          <input class="w70 ml3 f12" name="create_time_start" id="create_time_start" type="text" value="{{create_time_start}}">
+          -
+          <input class="w70 f12" name="create_time_end" id="create_time_end" type="text" value="{{create_time_end}}">
+        </span>
+
+        <select name="article_code" id="article_code" class="w90 f12 ml10">
+          <option value="">-订购类型-</option>
+          <option value="ts-25811" {% if not request.POST.article_code or request.POST.article_code == 'ts-25811' %}selected{% endif %}>开车精灵</option>
+          <option value="FW_GOODS-1921400" {% if request.POST.article_code == 'FW_GOODS-1921400' %}selected{% endif %}>无线精灵</option>
+        </select>
+
+        <input class="w140 f12 ml10" placeholder="店铺名/店铺id" name="nick" type="text" value="{{request.POST.nick}}">
+
+        <input type="text" class="psuser_input w150 f12 ml10" name="psuser_name_cn" link="#subscribe_psuser_id" placeholder="录入人" value="{{ request.POST.psuser_name_cn }}" autocomplete="off">
+        <input type="hidden" id="subscribe_psuser_id" name="subscribe_psuser_id" value="{{ request.POST.subscribe_psuser_id }}">
+
+        <input type="text" class="psuser_input w150 f12 ml10" name="duty_name_cn" link="#duty_person_id" placeholder="责任人" value="{{ request.POST.duty_name_cn }}" autocomplete="off">
+        <input type="hidden" id="duty_person_id" name="duty_person_id" value="{{ request.POST.duty_person_id }}">
+
+      </div>
+
+      <div class="mt10">
+        <span class="vm">评论类型：
+          <label class="dib mb0 vm"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="110" type="checkbox" class="mr3" {% if 110 in comment_type_list %}checked="checked"{% endif %}>日常好评</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="120" type="checkbox" class="mr3" {% if 120 in comment_type_list %}checked="checked"{% endif %}>踩好评</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="200" type="checkbox" class="mr3" {% if 200 in comment_type_list %}checked="checked"{% endif %}>差评</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="301" type="checkbox" class="mr3" {% if 301 in comment_type_list %}checked="checked"{% endif %}>5分无评语</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="302" type="checkbox" class="mr3" {% if 302 in comment_type_list %}checked="checked"{% endif %}>5分评语未去</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="303" type="checkbox" class="mr3" {% if 303 in comment_type_list %}checked="checked"{% endif %}>去评语评分未改</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="304" type="checkbox" class="mr3" {% if 304 in comment_type_list %}checked="checked"{% endif %}>未改全5分</label>
+          <label class="dib mb0 vm ml5"><input name="comment_type" value="305" type="checkbox" class="mr3" {% if 305 in comment_type_list %}checked="checked"{% endif %}>全5分好评</label>
+        </span>
+      </div>
+
+      <div class="mt10">
+        <span class="vm">当前版本：
+          <label class="dib mb0 vm"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="ztc" type="checkbox" class="mr3" {% if "ztc" in current_version_list %}checked="checked"{% endif %}>直通车托管</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="vip" type="checkbox" class="mr3" {% if "vip" in current_version_list %}checked="checked"{% endif %}>VIP专家托管</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="rjjh" type="checkbox" class="mr3" {% if "rjjh" in current_version_list %}checked="checked"{% endif %}>类目专家</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="qn" type="checkbox" class="mr3" {% if "qn" in current_version_list %}checked="checked"{% endif %}>千牛</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="kcjl" type="checkbox" class="mr3" {% if 'kcjl' in current_version_list %}checked="checked"{% endif %}>开车精灵</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="zz" type="checkbox" class="mr3" {% if "zz" in current_version_list %}checked="checked"{% endif %}>钻展托管</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="zx" type="checkbox" class="mr3" {% if "zx" in current_version_list %}checked="checked"{% endif %}>店铺装修</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="dyy" type="checkbox" class="mr3" {% if "dyy" in current_version_list %}checked="checked"{% endif %}>代运营</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="seo" type="checkbox" class="mr3" {% if "seo" in current_version_list %}checked="checked"{% endif %}>seo</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="kfwb" type="checkbox" class="mr3" {% if "kfwb" in current_version_list %}checked="checked"{% endif %}>客服外包</label>
+          <label class="dib mb0 vm ml5"><input name="current_version" value="other" type="checkbox" class="mr3" {% if "other" in current_version_list %}checked="checked"{% endif %}>补单</label>
+          <label class="dib mb0 vm ml5"><a href="javascript:;" class="hide" id="soft_biz_type">软件订单</a></label>
+          <label class="dib mb0 vm ml5"><a href="javascript:;" class="hide" id="person_biz_type">人工订单</a></label>
+        </span>
+      </div>
+
+    </form>
+  </div>
+  <div class="f16 b lh30 mb5">
+    总计：<span id="unsubscribe_count" class="red mr3">{{ comment_list|length }}</span>个
+    <button class="btn r btn-primary w100" onclick="javascript: $('#comment_form').submit();">搜&nbsp;&nbsp;索</button>
+    <button class="btn r mr20 hide" onclick="javascript;">导&nbsp;出</button>
+  </div>
+  <table class="bdd table-hover" id="id_comment_table">
+    <thead>
+      <tr>
+        <th class="tc w60"><div>创建时间</div></th>
+        <th class="tl w80"><div>店铺名称</div></th>
+        <th class="tl w40"><div>订购类型</div></th>
+        <th class="tl w40"><div>当前版本</div></th>
+        <th class="tl w80"><div>评论类型</div></th>
+        <th class="tl w120"><div>录入人</div></th>
+        <th class="tl w120"><div>责任人</div></th>
+        <th class="tl w60"><div>改好评时间</div></th>
+        <th class="tl w40"><div>踩好评次数</div></th>
+        <th class="tl w120"><div>备注</div></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for comment in comment_list %}
+      <tr comment_id={{comment.comment_id}}>
+        <td class="tc create_time" value="{{comment.create_time}}">{{comment.create_time}}</td>
+        <td class="tl nick" value="{{comment.shop_nick}}">{{comment.shop_nick}}</td>
+        <td class="tl article_code" value="{{comment.article_code}}">{{comment.article_code_display}}</td>
+        <td class="tl">{{comment.current_version_display}}</td>
+        <td class="tl comment_type" value="{{comment.comment_type}}">
+          {{comment.comment_type_display}}
+          {% if 'P' in request.session.perms %}
+            {% if comment.comment_type == 110 %}
+            <a class="ml5 jq_upgrade_comment" href="javascript:;">踩好评</a>
+            {% elif comment.comment_type == 120 %}
+            <a class="ml5 jq_demotion_comment" href="javascript:;">日常好评</a>
+            {% endif %}
+            <a class="ml5 jq_delete_comment" href="javascript:;">删除</a>
+          {% endif %}
+        </td>
+        <td class="tl">
+          {{comment.psuser.name_cn}}
+          {% if comment.xfgroup %}
+          <span class="i gray">({{comment.xfgroup.name}})</span>
+          {% endif %}
+        </td>
+        <td class="tl">
+          {{comment.duty_person.name_cn}}
+          {% if comment.duty_xfgroup %}
+          <span class="i gray">({{comment.duty_xfgroup.name}})</span>
+          {% endif %}
+        </td>
+        <td class="tl modify_comment_time" value="{{comment.modify_comment_time}}">{{comment.modify_comment_time|default:''}}</td>
+        <td class="tl top_comment_times" value="{{comment.top_comment_times}}">{{comment.top_comment_times|default:''}}</td>
+        <td class="tl">{{comment.note|safe}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div id="modal_upgrade_comment" class="modal hide fade" comment_id＝0 data-width="250">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h5>即将升级为［踩好评］</h5>
+    </div>
+    <div class="modal-body pl20">
+        <span>踩好评名次：</span>
+        <input type="text" name="top_comment_times" class="w50" />
+    </div>
+    <div class="modal-footer tc">
+        <button class="submit_upgrade_comment btn btn-primary">确定</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/comment_manage.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+  PT.CommentManage.init();
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,71 @@
+{#utf-8#}{% extends "base_main.html" %}
+{% block title %}开车精灵-专业直通车智能优化系统{% endblock %}
+
+{% block content %}
+    <div class="error_warp">
+        <div class="row">
+            <div class="tc">
+                <img src="/site_media/jl6/static/images/limit.png?t=1490089588990" class="image_info">
+                <div class="mt10 f16">您没有该页面访问权限<a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技" class="ml20">联系顾问</a></div>
+                {%if msg%}<div class="mt10 f12 text-muted">{% autoescape off %}错误信息：{{msg|default:'未知'}}{% endautoescape %}</div>{%endif%}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block base_js %}
+<script src="/site_media/qnyd/scripts/zepto.min.js"></script>
+<script type="text/javascript" src="http://g.tbcdn.cn/sj/qn/jssdk.js"></script>
+<script type="text/javascript" src="http://g.tbcdn.cn/sj/qn/lib/js/less.js"></script>
+<script type="text/javascript" src="http://l.tbcdn.cn/apps/top/c/sdk-mobile.js"></script>
+<script>
+$().ready(function(e) {
+    var url=window.location.href,type='';
+    if(url.indexOf('qnpc')!=-1||url.indexOf('qianniupc')!=-1){
+        type='qnpc';
+    }
+    if(url.indexOf('qnyd')!=-1||url.indexOf('authString')!=-1){
+        type='qnyd';
+    }
+
+    if(type!=''){
+        $('body').addClass(type);
+        $('.call_wangwang').parent().attr('href','javascript:;');
+        $('.call_wangwang').on('click',function(){
+            switch (type){
+                case 'qnpc':
+                    var nick="派生科技";
+                    QN.wangwang.invoke({
+                         category: 'wangwang',
+                         cmd: 'chat',
+                         param: {'uid':"cntaobao"+nick},
+                         success: function (rsp) {
+                            QN.wangwang.invoke({
+                                "cmd": "insertText2Inputbox",
+                                "param": {
+                                   uid:"cntaobao"+nick,
+                                   text:"\\C0x0000ff\\T来自千牛pc版：",
+                                   type:1
+                                }
+                            });
+                             return false
+                         },
+                         error: function (msg) {
+                            PT.alert('打开失败,请联系['+nick+']');
+                         }
+                     });
+                    break;
+                case 'qnyd':
+                    TOP.mobile.ww.chat({
+                        chatNick:'派生科技',
+                        text:'来自千牛移动：',
+                        domain_code:"taobao"
+                    });
+                    break;
+            }
+        });
+        return false;
+    }
+});
+</script>
+{% endblock %}

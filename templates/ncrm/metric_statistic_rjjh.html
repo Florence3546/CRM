@@ -1,0 +1,89 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}人机操作度量统计{% endblock %}
+{% block extra_style %}
+<style>
+    td[data_no]:hover>a.hover_show {
+        display: block;
+        float: right;
+        color: #e74049;
+    }
+    .dept_label {
+        display: inline-block;
+        vertical-align: top;
+        width: 60px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <div id="div_search">
+            <div>
+                起止日期：
+                <input class="w100" name="start_date" id="start_date" type="text" value=""> -
+                <input class="w100" name="end_date" id="end_date" type="text" value="">
+                <select name="period_type" id="period_type" class="w100 ml20 f12">
+                    <option value="">- 周　期 -</option>
+                    <option value="day">天</option>
+                    <option value="week">周</option>
+                    <option value="ps_week">周（派生）</option>
+                    <option value="month">月</option>
+                </select>
+            </div>
+            <div class="mt10">
+                <label class="dib vt">度量维度：</label>
+                <div class="dib w1200" id="metric_list">
+                    <label class="dib mr10">
+                        <input type="checkbox" value="all" class="checkbox_all"> 全选
+                    </label>
+                    {% for metric in metric_choices %}
+                    <label class="dib mr10" title="{{ metric.desc }}">
+                        <input type="checkbox" name="metric" value="{{ metric.name }}"> {{ metric.name_cn }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% for department, user_list in psuser_choices %}
+            <div class="mt10">
+                <label class="dept_label">{{ department }}：</label>
+                <div class="dib w1200">
+                    <label class="dib mr10">
+                        <input type="checkbox" value="all" class="checkbox_all"> 全选
+                    </label>
+                    {% for user in user_list %}
+                    <label class="dib mr10">
+                        <input type="checkbox" name="psuser_id" value="{{ user.id }}"> {{ user.name_cn }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <input type="hidden" name="refresh_flag" value="">
+            <div class="mt10">
+                <button class="btn btn-primary" type="button" id="search">查　询</button>
+            </div>
+        </div>
+        <table id="metric_statistic_table" class="table-bordered mt20"></table>
+    </div>
+</div>
+<div class="modal hide fade w800" id="modal_metric_chart">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="title_metric_chart"></h3>
+  </div>
+  <div class="modal-body p0">
+    <div id="div_metric_chart" class="w800"></div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/metric_statistic_rjjh.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.MetricStatisticRJJH.init();
+});
+</script>
+{% endblock %}

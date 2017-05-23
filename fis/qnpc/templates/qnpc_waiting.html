@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>开车精灵</title>
+    <link rel="stylesheet" href="/site_media/qnpc_temp/themes/theme.css__timeStamep>"/>
+</head>
+<body>
+    <!-- page 容器 -->
+    <div class="page" id="{{ PAGE_MARK.2 }}" >
+        <div id="carousel_box" >
+            <div id="owl-carousel" class="owl-carousel owl-theme">
+                <div class="item"><img src="../site_media/static/images/waiting1.jpg?__inline" alt=""></div>
+                <div class="item"><img src="../site_media/static/images/waiting2.jpg?__inline" alt=""></div>
+            </div>
+            <div class="sui-progress progress-striped progress-info active">
+              <div class="bar" id="download_progress" style="width: 0%; text-align: right; padding-right: 5px;">0%</div>
+            </div>
+            <div class="waiting">精灵正在努力下载中，请稍候......</div>
+            <div class="waiting">如果您是第一次登录，因数据较多，等待时间可能较长</div>
+        </div>
+
+    </div>
+    <script type="text/javascript" data-main="service/main" src="/site_media/static/js/require.js"></script>
+</body>
+</html>

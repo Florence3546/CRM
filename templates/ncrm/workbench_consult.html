@@ -1,0 +1,261 @@
+{#utf-8#}{% extends "workbench_base.html" %}
+{% load rates %}
+{% block extra_style %}
+<style>
+    /*#id_add_contact_layout .keyword,#id_add_contact_layout .isinitiative{display: none;}*/
+    #customer_edit_layout input[type=text], #customer_edit_layout select {font-size:12px;}
+    #customer_edit_layout th {padding:0;}
+    #customer_edit_layout td {padding:2px;}
+    table.nbb th, table.nbb td{border-bottom:none;}
+    #customer_edit_layout label {margin-right:5px;}
+    /*.ul_line>li.operater_name_cn.hide, .ul_line>li.consult_name_cn.hide{display: inline-block;}*/
+    ul.login_record>li:nth-child(even) {background-color: #ddd;}
+    ul.login_record>li:nth-child(even) hr {border:0; border-top: 1px solid #fff;}
+</style>
+{% endblock %}
+{% block search %}
+<div>
+    {% comment %}<input type="text" class="psuser_input w100 f12" name="name_cn" link="#server_id" placeholder="签单人/操作/顾问" value="{{ request.GET.name_cn }}" autocomplete="off">
+    <input type="hidden" id="server_id" name="server_id" value="{{ request.GET.server_id }}">{% endcomment %}
+
+    <input type="text" link="#saler_id" class="psuser_input w100 mr10 f12" name="saler_name" id="saler_name" placeholder="签单人" value="{{ request.GET.saler_name }}">
+    <input type="text" link="#operater_id" class="psuser_input w100 mr10 f12" name="operater_name" id="operater_name" placeholder="操作人" value="{{ request.GET.operater_name }}">
+    <input type="text" link="#consult_id" class="psuser_input w100 f12" name="consult_name" id="consult_name" placeholder="顾问" value="{{ request.GET.consult_name }}">
+
+    <input type="hidden" class="psuser_input w50 mr10 f12" name="saler_id" id="saler_id" value="{{ request.GET.saler_id }}">
+    <input type="hidden" class="psuser_input w50 mr10 f12" name="operater_id" id="operater_id" value="{{ request.GET.operater_id }}">
+    <input type="hidden" class="psuser_input w50 f12" name="consult_id" id="consult_id" value="{{ request.GET.consult_id }}">
+
+
+    <select name="serve_status" id="serve_status" class="w100 ml10 f12">
+        <option value="">-服务状态-</option>
+        <option value="1" {% if request.GET.serve_status == '1' %}selected{% endif %}>服务中</option>
+        <option value="2" {% if request.GET.serve_status == '2' %}selected{% endif %}>暂停服务</option>
+        <option value="3" {% if request.GET.serve_status == '3' %}selected{% endif %}>已流失</option>
+    </select>
+
+    <select name="credit_level" id="credit_level" class="w100 ml10 f12 hide">
+        <option value="">-信誉等级-</option>
+        <option value="0" {% if request.GET.credit_level == '0' %}selected{% endif %}>心级</option>
+        <option value="1" {% if request.GET.credit_level == '1' %}selected{% endif %}>钻级</option>
+        <option value="2" {% if request.GET.credit_level == '2' %}selected{% endif %}>蓝冠级</option>
+        <option value="3" {% if request.GET.credit_level == '3' %}selected{% endif %}>金冠级</option>
+    </select>
+
+    <select name="has_phone" id="has_phone" class="w100 ml10 f12 hide">
+        <option value="">-手机数据-</option>
+        <option value="1" {% if request.GET.has_phone == '1' %}selected{% endif %}>有手机号</option>
+        <option value="0" {% if request.GET.has_phone == '0' %}selected{% endif %}>无手机号</option>
+    </select>
+
+
+    <select class="w110 ml10 f12" name="category" id="category">
+        <option value="">-业务类型-</option>
+        <option value="kcjl" {%if request.GET.category == 'kcjl' %}selected="selected"{% endif %}>开车精灵</option>
+        <option value="rjjh" {%if request.GET.category == 'rjjh' %}selected="selected"{% endif %}>类目专家</option>
+        <option value="vip" {%if request.GET.category == 'vip' %}selected="selected"{% endif %}>VIP专家托管</option>
+        <option value="qn" {%if request.GET.category == 'qn' %}selected="selected"{% endif %}>千牛</option>
+        <option value="ztc" {%if request.GET.category == 'ztc' %}selected="selected"{% endif %}>直通车托管</option>
+        <option value="dyy" {%if request.GET.category == 'dyy' %}selected="selected"{% endif %}>代运营</option>
+    </select>
+
+    <input class="w90 ml10 f12" name="phone" id="phone" type="text" value="{{ request.GET.phone }}" placeholder="输入手机号">
+
+{#    <input class="w80 ml10 f12 mr2" name="qq" type="text" value="{{ request.GET.qq }}" placeholder="输入QQ号">#}
+
+
+{#    <select name="advertise_effect" id="advertise_effect" class="w100 ml10 f12">#}
+{#        <option value="">-推广效果-</option>#}
+{#        <option value="1" {% if request.GET.advertise_effect == '1' %}selected{% endif %}>优质客户</option>#}
+{#        <option value="2" {% if request.GET.advertise_effect == '2' %}selected{% endif %}>效果差</option>#}
+{#        <option value="0" {% if request.GET.advertise_effect == '0' %}selected{% endif %}>其他</option>#}
+{#    </select>#}
+
+    <input class="w30 mr3 ml10" name="last_login_days" type="text" value="{{ request.GET.last_login_days }}">天内登录过
+    <label class="dib"><input class="w30 ml15 m110" name="is_goldmember" type="checkbox"  {% if request.GET.is_goldmember or request.GET.is_goldmember == 'True' %}checked="checked"{% endif %}> 是否为黄金会员</label>
+{#    <input class="w30 mr3 ml10" name="no_contact_days" type="text" value="{{ request.GET.no_contact_days }}">天未联系#}
+{#    <input class="w30 mr3 ml10" name="to_expire_days" type="text" value="{{ request.GET.to_expire_days }}">天内到期#}
+
+{#    <label class="dib mb0 ml10"><input class="mr3" type="checkbox" name="contact_fail" id="contact_fail" {% if request.GET.contact_fail %}checked="checked"{% endif %} value="1">联系不上</label>#}
+{#    <label class="dib mb0 ml10"><input class="mr3" type="checkbox" name="bad_comment" id="bad_comment" {% if request.GET.bad_comment %}checked="checked"{% endif %} value="1">差评跟踪</label>#}
+{#    <label class="dib mb0 ml10"><input class="mr3" type="checkbox" name="is_pawn" id="is_pawn" {% if request.GET.is_pawn %}checked="checked"{% endif %} value="1">水军</label>#}
+{#    <label class="dib mb0 ml10"><input class="mr3" type="checkbox" name="unknown_subscribe" id="unknown_subscribe" {% if request.GET.unknown_subscribe %}checked="checked"{% endif %} value="1">未知订单</label>#}
+</div>
+<div class="mt20">
+    <input class="w140 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{nick_list.0}}"> <span class="ml5 mr5">,</span>
+    <input class="w140 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{nick_list.1}}"> <span class="ml5 mr5">,</span>
+    <input class="w140 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{nick_list.2}}"> <span class="ml5 mr5">,</span>
+    <input class="w140 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{nick_list.3}}"> <span class="ml5 mr5">,</span>
+    <input class="w140 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{nick_list.4}}">
+{#    <input class="w160 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{request.GET.nick}}">#}
+{#    <input class="w160 ml10 f12" name="shop_category" type="text" value="{{ request.GET.shop_category }}" placeholder="一级类目名">#}
+
+    <button class="w100 r btn f12" type="button" id="reset_form">重　置</button>
+</div>
+<div class="mt20">
+    订购时间
+    <input class="w80 ml3 f12" name="order_create_starttime" id="order_create_starttime" type="text" value="{{request.GET.order_create_starttime}}">
+    -
+    <input class="w80 mr10 f12" name="order_create_endtime" id="order_create_endtime" type="text" value="{{request.GET.order_create_endtime}}">
+    到期时间
+    <input class="w80 ml3 f12" name="order_end_starttime" id="order_end_starttime" type="text" value="{{request.GET.order_end_starttime}}">
+    -
+    <input class="w80 mr10 f12" name="order_end_endtime" id="order_end_endtime" type="text" value="{{request.GET.order_end_endtime}}">
+    实付金额
+    <input class="w50 ml3 f12" name="pay_start" type="text" value="{{request.GET.pay_start}}">
+    -
+    <input class="w50 mr10 f12" name="pay_end" type="text" value="{{request.GET.pay_end}}">
+
+    {# 分页选择 #}
+    每页显示
+    <select class="w50 f12" name="page_count" id="page_count">
+        <option value="20" {%if request.GET.page_count == '20' %}selected="selected"{% endif %}>20</option>
+        <option value="50" {%if request.GET.page_count == '50' or not request.GET.page_count %}selected="selected"{% endif %}>50</option>
+        <option value="100" {%if request.GET.page_count == '100' %}selected="selected"{% endif %}>100</option>
+        <option value="150" {%if request.GET.page_count == '150' %}selected="selected"{% endif %}>150</option>
+    </select> 条
+
+    <a href="javascript:;" class="hide btn btn-small f12 vba" id="search_checked_client">搜已选客户群</a>
+    <a href="javascript:;" class="hide btn btn-small f12 vba" id="search_my_customers">搜我的客户</a>
+    <button class="w100 r btn btn-primary f12" id="search_global">搜　索</button>
+</div>
+{% endblock %}
+
+{% block other_btn %}
+{#{% if '1' in myself.perms %}#}
+<a href="javascript:;" class="btn btn-small sync_order f12">同步订单</a>
+{#{% endif %}#}
+
+{#{% if 'E' in myself.perms %}#}
+{#    <div class="dropdown">#}
+{#        <button class="dropdown-toggle btn btn-small ml-1 bdrtl0 bdrbl0" data-toggle="dropdown" data-hold="true">导出Excel<i class="iconfont"></i></button>#}
+{#        <div class="dropdown-menu pl15 pr5 w200">#}
+{#            <label class="normal"><input id="export_last_subscribe" type="checkbox" class="mart_0" data-title="导出用户最后一笔订单信息"  value="1"><span class="ml5 f12 text">导出用户最后一笔订单信息</span></label>#}
+{#            <label class="normal"><input id="export_7days_data" type="checkbox" class="mart_0" data-title="导出7天报表数据"  value="2"><span class="ml5 f12 text">导出7天报表数据</span></label>#}
+{#            <div class="f12 w140">#}
+{#                <button class="btn btn-small btn-large l" id="report_export" data-role="ML">导出</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#{% endif %}#}
+
+<div class="btn-group">
+	<a id="order_view" href="javascript:;" class="btn btn-small active">订单视图</a>
+	<a id="report_view" href="javascript:;" class="btn btn-small">报表视图</a>
+</div>
+<a href="{% url 'login_users' %}" class="btn btn-small f12" target="_blank">今日登录客户</a>
+<div class="dropdown">
+    <button class="dropdown-toggle btn btn-small ml-1 bdrtl0 bdrbl0" data-toggle="dropdown" data-hold="true">同步关键词全网数据<i class="iconfont"></i></button>
+    <div class="dropdown-menu pl15 pr5 w180">
+        <input id='sync_kw_gdata' type="text" class="mart_0 w100 f12" placeholder="请输入关键词">
+        <button class="btn" onclick="javascript: var word=$('#sync_kw_gdata').val(); if (word == '') {PT.light_msg('', '请先输入需要同步的关键词');} else { PT.sendDajax({'function': 'ncrm_sync_kw_gdata', 'word': word}); PT.show_loading('正在同步数据');}">同步</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block event_table %}
+<table class="table-bordered user_table table-striped">
+    <thead>
+        <tr>
+            <th class="w80">所属客户群</th>
+            <th class="w180 tl">店铺信息</th>
+            <th class="tl w500 p0">
+                <ul class="ul_line lh30 order_info">
+                    <li class="w30 tc">版本</li>
+                    <li class="w30 tc">新/续</li>
+                    <li class="w40 tr">周期</li>
+                    <li class="w80 tc">订购时间</li>
+                    <li class="w80 tc">到期时间</li>
+                    <li class="w50 tr">实付</li>
+                    <li class="w50 tr">签单人</li>
+                    <li class="w50 tr">操作人</li>
+                    <li class="w50 tr">顾问</li>
+                </ul>
+                <ul class="ul_line lh30 account_report hide">
+                    <li class="w80 tr">花费(元)</li>
+                    <li class="w80 tr">点击</li>
+                    <li class="w60 tr">PPC(元)</li>
+                    <li class="w60 tr">CTR</li>
+                    <li class="w80 tr">成交(元)</li>
+                    <li class="w60 tr">转化</li>
+                    <li class="w40 tr">ROI</li>
+                </ul>
+            </th>
+            <th class="tl">备注</th>
+            <th class="w100">动作</th>
+        </tr>
+    </thead>
+    <tbody class="lh22">
+        {%for c in customer_list%}
+	        <tr shop_id="{{c.shop_id}}" nick="{{c.nick}}">
+	            {% include 'ncrm_common_user_list.html' %}
+	            <td class="vt" shop_id="{{c.shop_id}}" current_version = "{{c.current_highest_version}}">
+		            {% if myself.position == 'CONSULT' or myself.position == 'CONSULTLEADER' %}
+			        <div class="dropdown rel db" id="div_contact_fail">
+			            <a class="dropdown-toggle" id="a_contact_fail" role="button" data-toggle="dropdown" href="javascript:;">
+			                联系未回复<i class="iconfont">&#xe626;</i>
+			            </a>
+			            <ul class="dropdown-menu" role="menu" aria-labelledby="a_contact_fail">
+			                <li>
+			                    <a href="javascript:;" contact_type="ww" >旺旺</a>
+			                </li>
+                            <li>
+                                <a href="javascript:;" contact_type="qq">QQ</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" contact_type="phone">电话</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" contact_type="weixin">微信</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" contact_type="others">其他</a>
+                            </li>
+			            </ul>
+			        </div>
+			        {% endif %}
+		            {% if can_operate %}
+	                <a href="javascript:;" class="operate">添加操作事件</a><br/>
+	                {% endif %}
+	                <a href="javascript:;" class="contact">添加联系事件</a><br/>
+                    {% if '1' in myself.perms %}
+	                <a href="javascript:;" class="subscribe">录入人工签单</a><br/>
+                    {% endif %}
+<!-- 	                <a href="javascript:;" class="reintro">录入转介绍</a><br/> -->
+                    <a href="javascript:;" class="comment">评论跟踪</a><br/>
+<!--	                <a href="javascript:;" class="pause">暂停订单</a><br/>-->
+	                {#{%if c.order_info%}#}
+{#	                <a href="javascript:;" class="unsubscribe" data-order="#}
+{#	                {#}
+{#	                {%for order in c.order_info%}#}
+{#                        {% if not order.is_ended %}#}
+{#	                        '{{order.id}}':'{{order.create_time|date:'Y-m-d'}}　{%if order.item_code == 'tp-001' %} 直通车托管 {%endif%}{%if order.article_code == 'tp-002' %} 钻展托管 {%endif%}{%if order.article_code == 'tp-003' %} 店铺装修 {%endif%}{%if order.article_code == 'tp-004' %} 代运营 {%endif%}{%if order.article_code == 'tp-005' %} 其它 {%endif%}{%if order.item_code == 'ts-25811-1' %} 开车精灵四引擎 {%endif%}{%if order.item_code == 'ts-25811-3' %} 开车精灵单引擎 {%endif%}{%if order.item_code == 'ts-25811-6' %} 类目专家版 {%endif%}{%if order.item_code == 'ts-25811-8' %} 开车精灵双引擎 {%endif%}{%if order.item_code == 'ts-25811-v9' %} VIP专家托管 {%endif%}{%if order.article_code == 'FW_GOODS-1921400' %} 千牛 {%endif%}　{{ order.pay|divide:'100' }}元',#}
+{#                        {%endif%}#}
+{#	                {%endfor%}#}
+{#	                }#}
+{#	                ">录入退款</a><br/>#}
+	                {#{%endif%}#}
+	            </td>
+	        </tr>
+        {% empty%}
+	        <tr>
+	            <td colspan="5" class="tc">
+	            {% if request.GET.delay_search %}
+	                <span class="gray">确认过滤条件后，点击搜索</span>
+	            {% else %}
+	                <span class="gray">没有数据</span>
+	            {% endif %}
+	            </td>
+	        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{% endblock %}
+{% block workbench_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_workbench_consult.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmWorkbench_sh.init();
+});
+</script>
+{% endblock %}

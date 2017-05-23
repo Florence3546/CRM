@@ -1,0 +1,121 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}工作提醒{% endblock %}
+{% block extra_style %}
+<style>
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <form id="search_form" action="" method="GET" class="tr">
+            <span class="l">
+	            起止时间：
+	            <input class="w100" name="start_time" id="start_time" type="text" value="{{ request.GET.start_time }}"> -
+	            <input class="w100" name="end_time" id="end_time" type="text" value="{{ request.GET.end_time }}">
+            </span>
+	        <input type="text" name="psuser_name" class="psuser_input f12 w130 ml20" link="#server_id" placeholder="姓名" autocomplete="off" value="{{ psuser_name }}">
+	        <input type="hidden" id="server_id" name="server_id" value="{{ request.GET.server_id }}">
+            <select name="psuser_type" id="psuser_type" class="w140 f12">
+                <option value="">- 发送人/接收人 -</option>
+                <option value="1" {% if request.GET.psuser_type == '1' %}selected{% endif %}>发送人</option>
+                <option value="2" {% if request.GET.psuser_type == '2' %}selected{% endif %}>接收人</option>
+            </select>
+            <select name="department" id="department" class="w120 ml20 f12">
+                <option value="">- 接收人部门 -</option>
+                <option value="GROUP1" {% if request.GET.department == 'GROUP1' %}selected{% endif %}>销服一部</option>
+                <option value="GROUP2" {% if request.GET.department == 'GROUP2' %}selected{% endif %}>销服二部</option>
+                <option value="GROUP3" {% if request.GET.department == 'GROUP3' %}selected{% endif %}>销服三部</option>
+                <option value="GROUP4" {% if request.GET.department == 'GROUP4' %}selected{% endif %}>销服四部</option>
+                <option value="GROUP5" {% if request.GET.department == 'GROUP5' %}selected{% endif %}>销服五部</option>
+            </select>
+            <select name="position_type" id="position_type" class="w120 ml20 f12">
+                <option value="">- 接收人职位 -</option>
+                <option value="1" {% if request.GET.position_type == '1' %}selected{% endif %}>销　售</option>
+                <option value="2" {% if request.GET.position_type == '2' %}selected{% endif %}>操　作</option>
+                <option value="3" {% if request.GET.position_type == '3' %}selected{% endif %}>人　机</option>
+                <option value="4" {% if request.GET.position_type == '4' %}selected{% endif %}>售　后</option>
+            </select>
+            <select name="handle_status" id="handle_status" class="w120 ml20 f12">
+                <option value="">- 处理状态 -</option>
+                <option value="-1" {% if request.GET.handle_status == '-1' %}selected{% endif %}>未处理</option>
+                <option value="1" {% if request.GET.handle_status == '1' %}selected{% endif %}>已处理</option>
+            </select>
+	        <button class="btn btn-primary ml20" type="button" id="btn_search">查　询</button>
+	        <button class="btn btn-primary" type="button" id="btn_create">添　加</button>
+        </form>
+        <table id="table_work_reminder" class="table-bordered tc mt20">
+	        <thead>
+		        <tr>
+			        <th class="w150"><div>时间</div></th>
+			        <th class="w120"><div>发送人</div></th>
+			        <th class="w120"><div>接收人</div></th>
+			        <th>提醒内容</th>
+			        <th class="w120">处理状态</th>
+			        <th class="w120">操作</th>
+		        </tr>
+	        </thead>
+	        <tbody>
+	            {% for obj in reminder_list %}
+	            <tr reminder_id="{{ obj.id }}">
+	                <td>{{ obj.create_time|date:"Y-m-d H:i:s" }}</td>
+	                <td>{{ obj.sender_name }}</td>
+	                <td>{{ obj.receiver_name }}</td>
+	                <td class="tl">{{ obj.content }}</td>
+	                <td>{{ obj.handle_status_cn }}</td>
+	                <td>
+	                    {% if obj.handle_status == -1 %}
+	                    {% if obj.sender_id == request.session.psuser_id %}
+	                    <a href="javascript:;" class="remove_reminder mr5">删除</a>
+	                    {% endif %}
+                        {% if obj.receiver_id == request.session.psuser_id %}
+                        <a href="javascript:;" class="mark_reminder_handled">标记为已处理</a>
+                        {% endif %}
+	                    {% endif %}
+	                </td>
+	            </tr>
+	            {% empty %}
+                <tr>
+                    <td colspan="6">没有记录，请修改过滤条件再次搜索</td>
+                </tr>
+	            {% endfor %}
+	        </tbody>
+        </table>
+    </div>
+</div>
+<div id="modal_add_reminder" class="modal hide fade p10" data-width="500">
+    <table class="table-layout">
+        <tr>
+            <td class="w60">发送人</td>
+            <td name="sender_name">{{ request.session.psuser_name }}</td>
+        </tr>
+        <tr>
+            <td>接收人</td>
+            <td>
+	            <input type="text" name="receiver_name" class="psuser_input f12 w130" link="#receiver_id" placeholder="姓名" autocomplete="off" value="">
+	            <input type="hidden" id="receiver_id" name="receiver_id" value="">
+            </td>
+        </tr>
+        <tr>
+            <td class="vt">提醒内容</td>
+            <td>
+                <textarea name="content" rows="5" style="width:400px;resize:none;float:left;"></textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" id="submit_reminder" class="btn btn-primary f12">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/work_reminder.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.WorkReminder.init();
+});
+</script>
+{% endblock %}

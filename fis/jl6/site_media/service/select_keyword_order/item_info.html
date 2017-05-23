@@ -1,0 +1,22 @@
+<div class="head">
+    <a class="arrow" href="javascript:;">
+	    <i class="iconfont down">&#xe603;</i>
+	    <i class="iconfont up">&#xe616;</i>
+    </a>
+    <span id="item_title">{{title}}</span>
+    <span class="price">￥{{item_price}} 元</span>
+    <input type="hidden" id="nick" value="{{nick}}"/>
+</div>
+<div class="body">
+    <div class="abs">
+	    <img class="l m20" src="{{pic_url}}" height="200"/>
+	    <div class="l mt20 gray" style="width: 1000px;">
+	        <p class="mb20">所属类目：<span id="cat_info" cat_id="{{cat_id}}">{{cat_path}}</span></p>
+	        <ul id="ul_item_info">
+	            {{each property_list}}
+	            <li title="{{$value}}">{{$value | truncate:'30'}}</li>
+	            {{/each}}
+	        </ul>
+	    </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿{#utf-8#}{% extends "qnpc_base.html" %}  
+{% block title %}服务器内部错误{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="/site_media/assets/css/pages/error.css">
+{% endblock %}
+
+{% block content %}
+<div class="page-500" style="margin-top:100px;">
+    <div class="number error poa mart_0">
+        :(
+    </div>
+    <div class="details" style="padding-left:100px;">
+        <h4>亲，访问数据发生错误，请确认:</h4>
+        <div class="large">
+            {% autoescape off %}<div class="r_color">{{msg}}</div>{% endautoescape %}
+            <div class="mart_6">{%if user.nick%}您的登录名为：{{user.nick}}{%endif%}</div>
+            <div class="mart_6" style="line-height:30px; cursor:pointer;">您可以尝试重新登录，或隔一段时间再试，如果问题依旧，请联系管理员，我们将尽快解决<img src="/site_media/jl/img/online.ww.gif" class="call_wangwang pointer"></div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

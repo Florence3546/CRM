@@ -1,0 +1,36 @@
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">激活会员中心</h4>
+      </div>
+      <div class="modal-body">
+        {{if type== 'init'}}
+        <div class="red mb20">亲，您尚未激活会员特权！现在激活，立享多项会员特权，更有500积分相送！。</div>
+        {{/if}}
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="receiver" class="col-sm-2 p0 control-label">手机号</label>
+            <div class="col-sm-6 pr5">
+              <input type="text" data-rule="phone require" class="form-control" name="phone">
+            </div>
+            <div class="col-sm-2 p0 red mt5">*</div>
+          </div>
+          <div class="form-group">
+            <label for="receiver_phone" class="col-sm-2 p0 control-label">QQ号</label>
+            <div class="col-sm-6 pr5">
+              <input type="text" data-rule="digital" class="form-control" name="qq">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary">提交</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

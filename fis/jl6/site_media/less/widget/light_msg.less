@@ -1,0 +1,36 @@
+.light_msg{
+    position: fixed;
+    z-index: 1000;
+    padding: 10px 30px;
+    background-color: rgba(238,238,238,.9);
+    right: -20px;
+    border-radius:2px;
+    width: 300px;
+    .translate3d(100%,0,0);
+    .transition(all .3s);
+    .box-shadow(0 0 10px #777);
+
+    &.active{
+        .translate3d(0,0,0);
+        right:20px;
+    }
+
+    .content{
+        font-size: 12px;
+    }
+
+    &.default{
+      top: 28px;
+    }
+    &.bottom{
+      bottom: 20px
+    }
+
+  .close_light_msg{
+    position: absolute;
+    cursor: pointer;
+    font-weight: 900;
+    right: 2px;
+    top: -2px;
+  }
+}

@@ -1,0 +1,53 @@
+<div class="pagination">
+    <span>
+        <span class="non_link vas sepV_b">每页显示：
+            <input type="text" class="pagination_input hotspot" id="id_per_page" value="{{page_obj.paginator.per_page}}" onchange='change_per_page();' tip="每页显示的记录数必须在10~100之间"/>
+            条</span>
+        {% if page_obj.has_previous %}
+        <img src="/site_media/img/resultset_first.png" onclick="change_page_number(1);" alt="首页" title="首页"/>
+        <img src="/site_media/img/resultset_previous.png" onclick="change_page_number({{page_obj.previous_page_number}});" alt="上一页" title="上一页"/>
+        {% endif %}            
+        {% if page_obj.paginator.num_pages > 1 %}
+        <span class="non_link vas">第
+            <input type="text" class="pagination_input hotspot" id="id_page_number" value="{{page_obj.number}}" onchange='change_page_number(this.value);' tip="输入页码后回车跳转到指定页码"/>
+            页 / 共{{ page_obj.paginator.num_pages }}页</span>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <img src="/site_media/img/resultset_next.png" onclick="change_page_number({{page_obj.next_page_number}});" alt="下一页" title="下一页"/>
+        <img src="/site_media/img/resultset_last.png" onclick="change_page_number({{page_obj.paginator.num_pages}});" alt="最末页" title="最末页"/>
+        {% endif %}
+        <span class="r_color">{%for error in search_list_form.errors.page_no%}{{error}}{%endfor%}{%for error in search_list_form.errors.page_size%}{{error}}{%endfor%}</span>
+    </span>
+</div>
+<script type="text/javascript">
+function change_page_number(page_number){
+	$("#id_page_no").val(page_number);
+	form_submit_in_paginate();
+}
+
+function change_per_page(){
+	$("#id_page_no").val(1);
+	form_submit_in_paginate();
+}
+
+//提交分页查询，【必须保证】主页面有hidden的id_page_no、id_page_size和id_search_list_form
+function form_submit_in_paginate(){
+	var v_per_page = $("#id_per_page").val();
+	if(isNaN(v_per_page) || /^[0-9]\d*$/.test(v_per_page) == false || v_per_page<10 || v_per_page>100){
+		alert("每页显示的记录数必须在10~100之间");
+		$("#id_per_page").focus();
+		return false;
+	}
+	show_center_tip("正在执行查询");
+	$("#id_page_size").val(v_per_page);
+	$("#id_search_list_form").submit();
+}
+
+//管理页面提交分页查询，不校验每页显示条数，【必须保证】主页面有hidden的id_page_no、id_page_size和id_search_list_form
+function form_submit_by_admin(){
+	var v_per_page = $("#id_per_page").val();
+	show_center_tip("正在执行查询");
+	$("#id_page_size").val(v_per_page);
+	$("#id_search_list_form").submit();
+}
+</script> 

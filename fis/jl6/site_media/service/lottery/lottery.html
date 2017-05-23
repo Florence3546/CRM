@@ -1,0 +1,50 @@
+<link href="lottery.less" rel="stylesheet"/>
+<div id="show_decide_lottery" style="display: none;margin-top: -250px;">
+    <div id="lottery">
+        <div class="r" id="hide_lottery">
+            <a href="javascript:;" >关闭<strong><i class="icon iconfont">&#xe614;</i></strong></a>
+        </div>
+        <div id="lottery_title">
+            <button class="btn" id="share_btn">分享给朋友20元试用&raquo;</button>
+        </div>
+        <div id="lottery_box">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td class="lottery-unit lottery-unit-0"><img src="images/1.png?__inline"/><div></div></td>
+                        <td class="lottery-unit lottery-unit-1"><img src="images/2.png?__inline"/><div></div></td>
+                        <td class="lottery-unit lottery-unit-2"><img src="images/3.png?__inline"/><div></div></td>
+                        <td class="lottery-unit lottery-unit-3"><img src="images/4.png"/><div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="lottery-unit lottery-unit-9"><img src="images/10.png?__inline"/><div></div></td>
+                        <td colspan="2" id="start_lottery"></td>
+                        <td class="lottery-unit lottery-unit-4"><img src="images/5.png?__inline"/><div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="lottery-unit lottery-unit-8"><img src="images/9.png?__inline"/><div></div></td>
+                        <td class="lottery-unit lottery-unit-7"><img src="images/8.png?__inline"/><div></div></td>
+                        <td class="lottery-unit lottery-unit-6"><img src="images/7.png?__inline"/><div></div></td>
+                        <td class="lottery-unit lottery-unit-5"><img src="images/6.png?__inline"/><div></div></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="lottery_list">
+                <div id="lottery_rule">活动规则：</div>
+                <div id="lottery_rule_list">
+                    <span>1、每个客户只有一次抽奖机会。</span><br>
+                    <span>2、分享给朋友试用，订购后送2500积分。</span><br>
+                    <span>3、活动最终解释权归武汉派生科技所有。</span>
+                </div>
+                <div id="lottery_user">中奖名单</div>
+                <div id="lottery_user_list">
+                    <ul>
+                        {{each list}}
+                        <li><span class="lottery_user_name">{{ $value.nick }}</span><span class="lottery_user_result">{{ $value.awards_desc }}</span></li>
+                        {{ /each }}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

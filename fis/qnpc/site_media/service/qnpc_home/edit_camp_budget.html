@@ -1,0 +1,41 @@
+<div id="editBudgetModal" tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                <h4 class="modal-title">修改计划日限额</h4>
+            </div>
+            <div class="modal-body">
+                <form class="sui-form">
+                    <label class="n">
+                        <input type="radio" name="is_limit" {{ if budget==20000000}}checked{{/if}} value="unlimit">&ensp;不设置日限额
+                    </label>
+                    <br/>
+                    <label class="n">
+                        <input type="radio" name="is_limit" {{ if budget!=20000000}}checked{{/if}} value="limit">&ensp;设置日限额&ensp;
+                        <input class="input-small" name="budget" type="text"
+                               value="{{ if budget!=20000000}}{{ budget }}{{ else }}300{{/if}}"
+                               {{ if budget==20000000}}disabled
+                                {{/if}}>&ensp;元&ensp;<span class="g9">(范围为{{ budget_min }}~{{ budget_max }}元)</span>
+                    </label>
+                    <br/>
+
+                    <div style="margin-left:2em;" class="{{ if budget==20000000}}dn{{/if}}">
+                        <label class="n">
+                            <input type="radio" name="is_smooth" {{ if is_smooth == '0'}}checked{{/if}} value=0>&ensp;标准投放
+                        </label>
+                        <br/>
+                        <label class="n">
+                            <input type="radio" name="is_smooth" {{ if is_smooth == '1'}}checked{{/if}} value=1>&ensp;智能均匀投放
+                        </label>
+                        <br/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
+                <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

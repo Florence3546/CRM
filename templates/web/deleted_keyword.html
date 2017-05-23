@@ -1,0 +1,119 @@
+{#utf-8#}{% extends "base_adgjl5.html" %}
+{% load rates %}
+{% block title%}已删词管理{% endblock %}
+
+{% block content %}
+<img src='/site_media/jl/img/forecast_orde_ajax.gif' class="hide" /> <img src='/site_media/jl/css/img/icon-green.png' class="hide" />
+<input type="hidden" id="default_price" value="{{adg|div:'default_price,100,2'}}" />
+<input type="hidden" id="limit_price_max" value="{{adg|div:'limit_price_max,100,2'}}" />
+<input type="hidden" value="{{adg.campaign_id}}" id="campaign_id" />
+<input type="hidden" value="{{adg.mnt_type}}" id="mnt_type" />
+
+<div class="w1200 auto">
+
+  <!--keyword部分开始-->
+  <div class="rel">
+    <ul class="nav nav-tabs tab_title">
+      <li class="active"><a href="#history_keyword_box" data-toggle="tab" switch='1'>已删除的关键词<span class="ml3">(<span id="keyword_count" class="red f20">...</span>个)</span></a></li>
+    </ul>
+    <div class="tab-content">
+      <!--现有关键词开始-->
+      <div class="tab-pane active" id="history_keyword_box">
+            <!--搜索及提示开始-->
+            <div id="history_search_tip_box" class="pb90">
+                <div id="history_fixed_box1" class="rel">
+                    <div class="fixed_box t0 bg_white zx105 abs pct100">
+                      <div class="row-fluid pt10">
+                        <fieldset class="p10 nbl nbb l">
+                          <legend>筛选关键词</legend>
+                          <div class="input-append mb0">
+                            <input placeholder="请输入关键词" class="w140" type="text" id="history_search_val">
+                            <button class="btn" id="history_search_btn" type="button"><i class="iconfont lh14">&#xe645;</i></button>
+                          </div>
+                          <span class="b dn ml3">(搜到<span class="red f20" id='current_check_count'></span>个)</span>
+                        </fieldset>
+                        <fieldset class="p10 nbl nbb l">
+                          <legend>设置关键词</legend>
+                          <div class="input-prepend mb0">
+                            <span class="btn">关键词出价</span>
+                            <div class="dropdown" id="history_set_new_price">
+                              <div class="dropdown-toggle select-btn" data-toggle="dropdown" data-type="select" data-value="10"><span class="dropdown-value">1.0<span class="silver ml10">倍行业均价</span></span><i class="iconfont">&#xe626;</i></div>
+                              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                <li><a value="0" href="javascript:;">{{adg|div:'default_price,100,2'}}<span class="silver ml10">默认出价</span></a></li>
+                                <li><a value="0.3" href="javascript:;">0.3<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="0.4" href="javascript:;">0.4<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="0.5" href="javascript:;">0.5<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="0.6" href="javascript:;">0.6<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="0.7" href="javascript:;">0.7<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="0.8" href="javascript:;">0.8<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="0.9" href="javascript:;">0.9<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="1" href="javascript:;">1.0<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="1.3" href="javascript:;">1.3<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="1.5" href="javascript:;">1.5<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="2" href="javascript:;">2.0<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="2.5" href="javascript:;">2.5<span class="silver ml10">倍行业均价</span></a></li>
+                                <li><a value="3" href="javascript:;">3.0<span class="silver ml10">倍行业均价</span></a></li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div class="input-prepend input-append mb0 ml10">
+                            <span class="btn">关键词限价</span>
+                            <input class="w30" id="init_limit_price" type="text" value="{{ adg|div:'init_limit_price,100,2' }}" data-old="{{ adg|div:'init_limit_price,100,2' }}" maxlength="5" >
+                            <span class="add-on">元</span>
+                          </div>
+                          <div class="dropdown ml10" id="history_bulk_match_btn">
+                            <a class="dropdown-toggle btn" data-toggle="dropdown" data-type="select" href="#"><i class="icon-pt-calendar mr3"></i><span class="dropdown-value">广泛匹配</span><i class="iconfont">&#xe626;</i></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                              <li><a value="4" href="javascript:;">广泛匹配</a></li>
+                              <li><a value="2" href="javascript:;">中心匹配</a></li>
+                              <li><a value="1" href="javascript:;">精准匹配</a></li>
+                            </ul>
+                          </div>
+                        </fieldset>
+                        <div class="r pt20 mt5">
+                          <button class="btn btn-large btn-primary mr10" id="history_recover_kw">
+                            <i class="iconfont mr5">&#xe632;</i>恢复到当前宝贝
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!--搜索及提示结束-->
+            <table class="table table-bordered table-no-warp-border mt0 hide keyword pt90 bbd" id="common_table">
+                <thead>
+                    <tr>
+                        <th style="width:8px; padding:6px;"><input type="checkbox" class="father_box" link="common_table"/></th>
+                        <th class="w200"><div>关键词</div></th>
+                        <th><div>初始出价</div></th>
+                        <th><div>删除位置</div></th>
+                        <th><div>删除类型</div></th>
+                        <th><div>删除时间</div></th>
+                        <th><div>全网点击指数</div></th>
+                        <th><div>全网点击率</div></th>
+                        <th><div>全网市场均价</div></th>
+                        <th><div>全网竞争度</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+      </div>
+      <!--keyword部分开始-->
+    </div>
+
+<div id="id_set_filter_layer" class="mid_high hide large lh24"></div>
+
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    PT.Delete_keyword.init();
+});
+</script>
+{% endblock %}

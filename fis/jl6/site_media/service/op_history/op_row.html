@@ -1,0 +1,28 @@
+<tr>
+    <td>{{list.opt_time}}</td>
+    <td>{{list.opter}}</td>
+    <td>{{list.op_type}}</td>
+    <td>{{list.data_type}}</td>
+    <td>
+        {{list.detail_list[0]}}
+        {{ if list.detail_length > 1 }}
+            <span class="dropdown his_item">
+                <a href="javascript:;" data-toggle="dropdown" >
+                    <span class="dropdown-value">查看明细>></span>
+                </a>
+                <div class="dropdown-menu hold-on-click">
+                    <div class="modal-header">
+                        <button type="button" class="close btnx" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h5 class="modal-title">操作记录明细</h5>
+                    </div>
+                    <div class="sub_div">
+                    {{ each list.detail_list }}
+                    {{ if $index > 0}}<div>{{ $value }}</div>{{ /if }}
+                    {{ /each }}
+                    </div>
+                </div>
+            </span>
+        {{ /if }}
+    </td>
+</tr>
+

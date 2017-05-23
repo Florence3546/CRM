@@ -1,0 +1,120 @@
+<tr <%if(online_status=="offline"){ %> class="silver" <% } %> fix-ie="hover" id="<%=campaign_id%>" mnt_type="<%=mnt_type%>" mnt_index="<%=mnt_index%>">
+  <td class="tc link_inner_checkbox poi">
+    <input type="checkbox" value="<%=campaign_id%>" class="kid_box"/>
+  </td>
+  <td>
+    <div><a class="black" id="title_<%=campaign_id%>" <%if (mnt_index) { %>href='/mnt/mnt_campaign/<%=mnt_index%>'<% } else { %>href='/web/campaign/<%=campaign_id%>'<%}%> ><%=title%></a><i class="iconfont hover-show ml5 edit_title">&#xe60e;</i><i class="iconfont ml5 hover-show js_show_trend">&#xe60f;</i>
+    </div>
+  </td>
+  <td>
+  <input type="hidden" id="is_smooth_<%=campaign_id%>" value="<%=is_smooth%>"/>
+  <span class="hide" id="budget_value_hide_<%=campaign_id%>"><%=budget%></span>
+  <span id="budget_value_show_<%=campaign_id%>"><%if(budget<20000000){ %><%=budget%>元<% }else{ %>不限<% } %></span><i class="iconfont ml5 hover-show edit_budget">&#xe60e;</i>
+  </td>
+  <td class="n_colum">
+    <span class="hide"><%=total_cost%></span>
+    <div>
+      <span>总花费：<span class="total_cost b baseColor">￥<%=total_cost%></span></span>
+    </div>
+    <div>
+      <span class="w100 dib">展现量：<span class="impr"><%=impr%></span></span><br><span class="">点击量：<span class="click"><%=click%></span></span>
+    </div>
+    <div>
+      <span class="w100 dib">点击率：<span class="click_rate"><%=click_rate%>%</span></span><br><span>PPC：<span class="ppc"><%=ppc%></span></span>
+    </div>
+  </td>
+  <td class="n_colum">
+    <span class="hide"><%=total_pay%></span>
+      <div class="tips" title="直接成交金额 : <%=directpay%>元<br/>间接成交金额 : <%=indirectpay%>元<br/>直接成交笔数 : <%= directpaycount%>笔<br/>间接成交笔数 : <%=indirectpaycount%>笔<br/>店铺收藏次数 : <%=favshopcount%>次<br/>宝贝收藏次数 : <%=favitemcount%>次">
+      <div>
+        <span>成交额：<span class="total_pay b baseColor">￥<%=total_pay%></span></span>
+      </div>
+      <div>
+        <span class="w100 dib">成交量：<span class="paycount"><%=paycount%></span></span><br><span class="">收藏量：<span class="favcount"><%=favcount%></span></span>
+      </div>
+      <div>
+        <span class="w100 dib">转化率：<span class="conv"><%=conv%>%</span></span><br><span class="">ROI：<span class="roi"><%=roi%></span></span>
+      </div>
+    </div>
+  </td>
+    
+  <td class="rt_colum">    
+  	<span class="hide"><%=rt_cost%></span>
+    <div>
+      <span>总花费：<span class="rt_cost b baseColor">￥<%=rt_cost%></span></span>
+    </div>
+    <div>
+      <span class="w100 dib">展现量：<span class="rt_impression"><%=rt_impression%></span></span><br><span class="">点击量：<span class="rt_click"><%=rt_click%></span></span>
+    </div>
+    <div>
+      <span class="w100 dib">点击率：<span class="rt_ctr"><%=rt_ctr%>%</span></span><br><span>PPC：<span class="rt_cpc"><%=rt_cpc%></span></span>
+    </div>
+  </td>
+  <td class="rt_colum">
+    <span class="hide"><%=rt_transactiontotal%></span>
+    <div class="tips" title="直接成交金额 : <%=rt_directtransaction%>元<br/>间接成交金额 : <%=rt_indirecttransaction%>元<br/>直接成交笔数 : <%=rt_directtransactionshipping%>笔<br/>间接成交笔数 : <%=rt_indirecttransactionshipping%>笔<br/>店铺收藏次数 : <%=rt_favshoptotal%>次<br/>宝贝收藏次数 : <%=rt_favitemtotal%>次">    
+      <div>
+        <span>成交额：<span class="rt_transactiontotal b baseColor">￥<%=rt_transactiontotal%></span></span>
+      </div>
+      <div>
+        <span class="w100 dib">成交量：<span class="rt_transactionshippingtotal"><%=rt_transactionshippingtotal%></span></span><br><span class="">收藏量：<span class="rt_favtotal"><%=rt_favtotal%></span></span>
+      </div>
+      <div>
+        <span class="w100 dib">转化率：<span class="rt_coverage"><%=rt_coverage%>%</span></span><br><span class="">ROI：<span class="rt_roi"><%=rt_roi%></span></span>
+      </div>
+    </div>
+  </td>
+  
+  <td>
+    <div>
+      <%if (online_status=="online"){%>
+      <span>推广计划：推广中</span>
+      <a class="baseColor hover-show ml5 update_camp single" href="javascript:;" mode=0>暂停</a>
+      <% }else{ %>
+      <span>推广计划：已暂停</span>
+      <a class="baseColor hover-show ml5 update_camp single" href="javascript:;" mode=1>开启</a>
+      <% } %>
+    </div>        
+    <div>
+      <span class="hide lbl_rt_start <%if (rt_date == '' || rt_limit_price == '0.00') { %>hide<% } %>" camp_id=<%=campaign_id%> >实时改价：已启动</span>
+      <span class="hide lbl_rt_stop <%if (rt_date != '' && rt_limit_price != '0.00') { %>hide<% } %>" camp_id=<%=campaign_id%> >实时改价：未启动</span>
+    </div>        
+    <div>
+      <%if (mnt_index){%>
+      <span>全自动托管：<%=mnt_name%>中</span>      
+      <% }else{ %>
+      <span>全自动托管：未托管</span>
+      <% } %>
+    </div>
+  </td>
+  <td>
+    <div class="div_rt" camp_id=<%=campaign_id%> >
+      <div><%=adg_num%>个宝贝</div>
+      <%if (rt_date != '' && rt_limit_price != '0.00') {%>    
+      <div class="hide div_rt_price" camp_id=<%=campaign_id%> >实时限价￥<%=rt_limit_price%>元 <i class="iconfont ml5 hover-show edit_rt_price" camp_id=<%=campaign_id%> >&#xe60e;</i></div>
+      <% } %>
+    </div>
+    <%if (mnt_index) { %><div><%=mnt_index%>号<%=mnt_name%>引擎</div><% } %>
+  </td>
+  <td class="tc">
+    <div>
+      <div class="is_mnt <%if (! mnt_index) { %>dn<% } %>">  mnt_adg_dict:
+        <a href="/mnt/mnt_campaign/<%=mnt_index%>" target="_blank" class="btn btn-small btn-info pl10 pr10"><i class="iconfont mr3">&#xe607;</i>进入计划主页</a>        
+        <div class="mt10">      
+          <a href="javascript:;" class="change_camp_mnt btn btn-small btn-info pl10 pr10" type=0><i class="iconfont mr3">&#xe607;</i>取消自动托管</a>
+        </div>
+      </div>
+      <div class="no_mnt <%if (mnt_index) { %>dn<% } %>">
+        <a href="/web/campaign/<%=campaign_id%>" target="_blank" class="btn btn-small btn-info pl10 pr10"><i class="iconfont mr3">&#xe607;</i>进入计划主页</a>
+        <div class="mt10">   
+          <a href="javascript:;" class="change_camp_mnt btn btn-small btn-info pl10 pr10" type=1><i class="iconfont mr3">&#xe607;</i>开启自动托管</a>          
+        </div>
+      </div>
+      
+      <a href="javascript:;" class="hide open_rt btn btn-small btn-info pl10 pr10 mt10 <%if (rt_date != '' && rt_limit_price != '0.00') { %>hide<% } %>" camp_id=<%=campaign_id%> ><i class="iconfont mr3">&#xe607;</i>开启实时优化</a> 
+      
+      <a href="javascript:;" class="hide close_rt btn btn-small btn-info pl10 pr10 mt10 <%if (rt_date == '' || rt_limit_price == '0.00') { %>hide<% } %>" camp_id=<%=campaign_id%> ><i class="iconfont mr3">&#xe607;</i>关闭实时优化</a>	
+   
+    </div>
+  </td>
+</tr>

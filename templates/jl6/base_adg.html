@@ -1,0 +1,189 @@
+{#utf-8#}
+{% extends "base_jl6.html" %}
+{% load rates %}
+
+{% block base_jl5 %}
+    <!-- 预加载 -->
+    <img src="/site_media/jl6/static/images/small_ajax.gif" class="hidden">
+    <input type="hidden" value="{{adg.item.title}}" id="adgroup_title">
+    <input type="hidden" value="http://item.taobao.com/item.htm?id={{adg.item_id}}" id="item_url">
+    <header class="base_adg">
+        <input type="hidden" value="{{adg.adgroup_id}}" id="adgroup_id" />
+        <input type="hidden" value="{{adg.campaign_id}}" id="campaign_id" />
+        <input type="hidden" value="{{adg.item_id}}" id="item_id" />
+        <input type="hidden" value="{{adg.mnt_type}}" id="mnt_type" />
+        <div class="bg_layer"></div>
+        <!--顶部横条 end-->
+        <div id="siet_info">
+            <aside><a id="chart_link_ad" ad_id="{{ request.session.char_link.obj_id }}" href="{% if request.session.char_link.ad_url %}{{ request.session.char_link.ad_url }}{% else %}javascript:;{% endif %}" target="_blank">{{ request.session.char_link.ad_title }}</a></aside>
+            <!--文字链 start-->
+            {% if request.session.char_link %}
+                <div class="auto bg_white tc vm" id="show_chart_link_view">
+                    <div id="hide_chart_link_view"><a href="javascript:;"><i class="icon iconfont">&#xe614;</i></a></div>
+                    <div id="chart_link_content">
+                        {% autoescape off %}
+                        {{ request.session.char_link.ad_content }}
+                    {% endautoescape %}
+                </div>
+            </div>
+        {% endif %}
+        <!--文字链 end-->
+        <ul>
+            <li class="poptip">
+                <a href="javascript:;"><i class="iconfont">&#xe601;</i>设置</a>
+                <div class="popcontent animate" id="account_setting">
+                    <div class="themes">
+                        <a href="javascript:;" class="green"></a>
+                        <a href="javascript:;" class="dark_blue"></a>
+                        <a href="javascript:;" class="light_blue"></a>
+                        <a href="javascript:;" class="orange"></a>
+                    </div>
+                    <p class="pt10 pb5">
+                        账户异常情况发送短信提醒
+                        <span class="switch {%if request.session.remind == 1 %}on{%endif%} vm" data-toggle="switch"></span>
+                    </p>
+                    <div id="user_info" {%if request.session.remind == 0 %}class="hidden"{%endif%}>
+                        <div class="form-group">
+                            <label for="phone">手机号</label>
+                            <input type="text" class="form-control" name="phone" value="{{request.session.phone}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="nick">称&emsp;呼</label>
+                            <input type="text" class="form-control" name="nick" value="{{request.session.seller}}">
+                        </div>
+                    </div>
+                    <div class="tr">
+                        <button class="btn btn-sm btn-primary">保存</button>
+                    </div>
+                </div>
+            </li>
+            <li><a href="javascript:;" id="id_sync_data"><i class="iconfont">&#xe602;</i>下载全店数据</a></li>
+            <li><a href="{%url 'vip_home'%}"><i class="iconfont">&#xe663;</i>会员中心</a></li>
+            <li><a href="javascript:;" id="top_msg"><i class="iconfont">&#xe66f;</i>我的私信<span id="msg_count" class="round_mark hide">0</span></a></li>
+            <li class="poptip">
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe611;</i><span id="a_nick" >{{ request.user.nick }}</span><i class="iconfont animaite">&#xe605;</i>
+                </a>
+                <ul class="popcontent animate " id="drop_menu">
+                    <li><a href="/web/user_config" target="_blank">设置代理</a></li>
+                    <li><a href="http://shop{{ request.user.shop_id }}.taobao.com/" target="_blank">店铺首页</a></li>
+                    <li><a href="/router/top_logout/{{ request.session.theme|default:'orange' }}" id="top_logout">退出系统</a></li>
+                    <!-- <li><a href="">升级日志</a></li> -->
+<!--                    <li><a href="">退出系统</a></li>-->
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="adg_nav">
+        <aside>
+            <span class="adg_img_warp">
+	            <img src="{{adg.item.pic_url}}_320x320.jpg" class="abs">
+                <img src="{{adg.item.pic_url}}_60x60.jpg" class="w60 h60">
+            </span>
+            <div>
+                <div class="title adg_title ell pct100"><a href="http://item.taobao.com/item.htm?id={{adg.item_id}}" target="_blank" title="{{adg.item.title}}" id="item_title">{{adg.item.title}}</a></div>
+                <div class="sub">
+                    <span>￥{{adg.item.price|divide:'100'}}元</span>
+                    <span class="poptip">
+                        <a class="ml30 dib" href="javascript:;" style="margin-bottom: 7px;">宝贝信息</a>
+                        <div id="adg_info" class="popcontent animate">
+                            <table class="item_dark lh30">
+                                <tr>
+                                    <td class="w60">推广状态：</td>
+                                    <td>{{ adg.online_status_cn }}</td>
+                                </tr>
+                                <tr>
+                                    <td>托管状态：</td>
+                                    <td>{{ adg.mnt_opt_type_cn }}</td>
+                                </tr>
+                                <tr>
+                                    <td>所属计划：</td>
+                                    <td>{{ adg.campaign.title }}</td>
+                                </tr>
+                                <tr>
+                                    <td>所属类目：</td>
+                                    <td id="cat_info" cat_id="{{adg.direct_cat_id}}">{{ adg.cat_path }}</td>
+                                </tr>
+                                <tr>
+                                    <td>默认出价：</td>
+                                    <td>{{ adg.default_price|divide:"100" }}元</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </span>
+                    <a id="adg_rpt_detail" class="ml30" href="javascript:;">报表明细</a>
+                </div>
+            </div>
+        </aside>
+        <nav>
+            <ul>
+                {% if adg.mnt_type == 0 %}
+                <li {% if PAGE_MARK.2 == 'smart_optimize' %}class="active"{%endif%}>
+                    <a href="/web/smart_optimize/{{adg.id}}">
+                        <img src="/site_media/jl6/static/images/znyh.png?t=1490089588990" alt="">
+                        <span>智能优化</span>
+                    </a>
+                </li>
+                <li {% if PAGE_MARK.2 == 'bulk_optimize' %}class="active"{%endif%}>
+                    <a href="/web/bulk_optimize/{{adg.id}}">
+                        <img src="/site_media/jl6/static/images/tgxq.png?t=1490089588990" alt="">
+                        <span>批量优化</span>
+                    </a>
+                </li>
+                {% else %}
+                <li {% if PAGE_MARK.2 == 'adgroup_data' %}class="active"{%endif%}>
+                    <a href="/mnt/adgroup_data/{{adg.id}}">
+                        <img src="/site_media/jl6/static/images/tgxq.png?t=1490089588990" alt="">
+                        <span>托管详情</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="poptip {% if PAGE_MARK.2 == 'select_keyword' %}active{%endif%}">
+                    <a href="javascript:;">
+                        <img src="/site_media/jl6/static/images/xc.png?t=1490089588990" alt="">
+                        <span>选词</span>
+                    </a>
+                    <ul class="popcontent animate">
+                        <li><a href="{%url 'select_keyword' 'quick'%}?adgroup_id={{adg.adgroup_id}}">快速选词</a></li>
+                        <li><a href="{%url 'select_keyword' 'precise'%}?adgroup_id={{adg.adgroup_id}}">精准淘词</a></li>
+                        <li><a href="{%url 'select_keyword' 'combine'%}?adgroup_id={{adg.adgroup_id}}">手工组词</a></li>
+                        <li><a href="{%url 'select_keyword' 'manual'%}?adgroup_id={{adg.adgroup_id}}">手工加词</a></li>
+                    </ul>
+                </li>
+                <li {% if PAGE_MARK.2 == 'title_optimize' %}class="active"{%endif%}>
+                    <a href="/web/title_optimize/?adgroup_id={{adg.id}}">
+                        <img src="/site_media/jl6/static/images/btyh.png?t=1490089588990" alt="">
+                        <span>标题优化</span>
+                    </a>
+                </li>
+                <li {% if PAGE_MARK.2 == 'image_optimize' %}class="active"{%endif%}>
+                    <a href="/web/image_optimize/{{adg.id}}?t=list">
+                        <img src="/site_media/jl6/static/images/cyyh.png?t=1490089588990" alt="">
+                        <span>创意优化</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="open_manage_elemword" id="manage_elemword_{{adg.item_id}}" adg_id="{{adg.item_id}}">
+                        <img src="/site_media/jl6/static/images/gjcsz.png?t=1490089588990" alt="">
+                        <span>关键词设置</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" id="id_sync_adg_data" adg_id="{{adg.adgroup_id}}" camp_id="{{adg.campaign_id}}">
+                        <img src="/site_media/jl6/static/images/tbsj.png?t=1490089588990" alt="">
+                        <span>下载宝贝数据</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+{% block content %}{%endblock%}
+
+{% endblock %}
+
+<!-- 关键词设置 -->
+{% block manage_elemword %}
+    {% include 'manage_elemword.html' %}
+{% endblock %}
+

@@ -1,0 +1,37 @@
+<div style="width: 600px; margin-left: -300px; left:50%;" tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade"  id="real_time">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                <h4 class="modal-title">“{{word}}”抢排名趋势，<span class="finished_status">正在抢......，请勿关闭窗口</span></h4>
+            </div>
+            <div class="modal-body">
+                <table class="main_info">
+                    <tr>
+                        <td><span class="img">&emsp;</span>{{if platform == 'pc'}}计算机{{else}}移动{{/if}}出价：<span class="price">--</span>&ensp;元</td>
+                        <td class="msg">&emsp;</td>
+                        <td>
+                            <div class="show_model">
+                                <a class="active" data-type="rob_chat"><i class="iconfont b">&#xe60d;</i></a>
+                                <a data-type="rob_sub_info"><i class="iconfont b">&#xe60e;</i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div id="rob_chat" class="mt10" style="min-width:300px;height:240px"></div>
+                <div class="sub_info hide" id="rob_sub_info">
+                    <ol>
+                    </ol>
+                </div>
+                <div class="gray f12" style="margin-top:10px;">
+                    当前设置：{{if method == 'manual'}}手动{{else}}自动{{/if}}，{{if platform == 'pc'}}计算机{{else}}移动{{/if}}，{{rank_start_name}}~{{rank_end_name}}
+                </div>
+                <div class="red f12 mt5 hide" id="rob_tips">设置抢排名成功，正在测试</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="sui-btn btn-bordered btn-xlarge btn-primary reset">重新设置</button>
+                <button type="button" class="sui-btn btn-xlarge btn-primary submit" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

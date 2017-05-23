@@ -1,0 +1,267 @@
+{#utf-8#}{% extends "base_adgjl5.html" %}
+{% load rates %}
+{% block title%}
+    托管宝贝详情
+{% endblock %}
+
+{% block extra_style %}
+<!-- <link href="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+<link href="/site_media/jl/plugins/tour/css/bootstrap-tour.min.css" rel="stylesheet" type="text/css" />-->
+<!-- <link href="/site_media/jl/css/fuck_ie/mnt_adgroup_data.css?v={{VERSION}}.css" rel="stylesheet" type="text/css"/> -->
+<style>
+.changed {color:red;}
+.deleted {color:gray; text-decoration:line-through; }
+.new {color:green;}
+
+.match {color: #AE28CF;}
+</style>
+{% endblock %}
+
+{% block content %}
+<!--预加载开始-->
+<img src='/site_media/jl/img/forecast_orde_ajax.gif' class="hide" />
+<!--预加载结束-->
+<!-- BEGIN PAGE HEADER-->
+<input type="hidden" value="{{adg|div:'default_price,100,2'}}" id="default_price_hide" />
+<input type="hidden" value="{{adg.campaign_id}}" id="campaign_id" />
+<input type="hidden" value="{{adg.mnt_type}}" id="mnt_type" />
+<!-- END PAGE HEADER-->
+
+<div class="">
+
+    <div class="rel">
+        <a href="javascript:;" id="id_record_keyword" hide_value="{{is_recorded}}" class="btn btn-large btn-block mb10 {% if not is_recorded %} btn-primary {% endif %}">{% if is_recorded %}取消监控{%else%}开始监控{% endif %}</a>
+
+        {% if is_recorded %}
+        <ul class="nav nav-tabs tab_title">
+            <li class="active">
+                <a href="#keyword_box" data-toggle="tab" switch='1'>关键词
+                    <span class="ml3">(<span id="keyword_count" class="red f20">{{kw_list|length}}</span>个)</span>
+                </a>
+            </li>
+            <li>
+                <div class="mb10 abs r0">
+                <span>选择监控日期</span>
+                <select id="id_select_days" onchange="change_date(this);" class="w120">
+                    {% for snap_date in snap_date_list %}
+                    <option value="{{snap_date}}">{{snap_date}}</option>
+                    {% endfor %}
+                </select>
+                </div>
+
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="keyword_box">
+                <div class="info_and_submit r tr"></div>
+                <!--关键词表格开始-->
+                <table class="table-bordered table-no-warp-border table-hover mini keyword mt10" id="common_table">
+                    <thead>
+                        <tr>
+                            <th class="w20 nbl"><input class="father_box" type="checkbox" link="common_table"></th>
+                            <th class="w200 rel">
+                                <div class="input-append t0">
+                                    <input class="w140 search_val" type="text" placeholder="请输入关键词">
+                                    <button class="btn search_btn" type="button"><i class="iconfont lh14 black">&#xe645;</i></button>
+                                </div>
+                            </th>
+                            <th class="w40"><div>当前<br>出价</div></th>
+                            <th class="w80"><div>质量得分</div></th>
+                            <th class="w50"><div>报表<br />天数</div></th>
+                            <th class="w50"><div>展现量</div></th>
+                            <th class="w50"><div>点击量</div></th>
+                            <th class="w50"><div>点击率</div></th>
+                            <th class="w50"><div>总花费</div></th>
+                            <th class="w50"><div>PPC</div></th>
+                            <th class="w50"><div>收藏量</div></th>
+                            <th class="w50"><div>成交量</div></th>
+                            <th class="w50"><div>成交额</div></th>
+                            <th class="w50"><div>转化率</div></th>
+                            <th class="w50"><div>ROI</div></th>
+                            <th class="w50"><div>全网展<br>现指数</div></th>
+                            <th class="w50"><div>全网点<br>击指数</div></th>
+                            <th class="w50"><div>全网<br>点击率</div></th>
+                            <th class="w50"><div>全网市<br>场均价</div></th>
+                            <th class="w50"><div>全网<br>竞争度</div></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for kw in kw_list %}
+                        <tr id="{{kw.keyword_id}}" adgroup_id="{{adg.adgroup_id}}" cat_id="{{adg.category_ids}}" item_id="{{adg.item_id}}" campaign_id="{{adg.campaign_id}}" default_price="{{adg|div:'default_price,100,2'}}" fix-ie="hover">
+                            <td class="tc custom link_inner_checkbox"><span class="hide">0</span><input type="checkbox" name="idx" class="kid_box"/></td>
+                            <td class="keyword_td">
+                                <div class="por">
+                                    <span class="match" match_scope="{{kw.match_scope}}"></span>
+                                    <span class="keyword_box">
+                                        <span class="keyword poi ml3 {{kw.opt_flag}} tips" id="word_{{kw.keyword_id}}" title="{{kw.detail}}">{{kw.word}}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="custom" style="text-align:center;">
+                                <span class="max_price r ml3">{{kw.max_price}}</span>
+                            </td>
+                            <td class="tr qscore">{{kw.qscore}}</td>
+                            <td class="tr">{{kw.sum_days}}</td>
+                            <td class="tr base_data impressions">{{kw.impressions}}</td>
+                            <td class="tr base_data click">{{kw.click}}</td>
+                            <td class="tr base_data ctr">
+                                <span class="hide">{{kw.ctr}}</span>
+                                {{kw.ctr}}%
+                            </td>
+                            <td class="tr base_data cost">{{kw.cost}}</td>
+                            <td class="tr base_data cpc">{{kw.cpc}}</td>
+                            <td class="tr conv_data favcount">{{kw.favcount}}</td>
+                            <td class="tr conv_data paycount">{{kw.paycount}}</td>
+                            <td class="tr conv_data pay">{{kw.pay}}</td>
+                            <td class="tr conv_data conv">
+                                <span class="hide">{{kw.conv}}</span>
+                                {{kw.conv}}%
+                            </td>
+                            <td class="tr conv_data roi">{{kw.roi}}</td>
+                            <td class="tr g_data g_pv">{{kw.g_pv}}</td>
+                            <td class="tr g_data g_click">{{kw.g_click}}</td>
+                            <td class="tr g_data g_ctr">{{kw.g_ctr}}%</td>
+                            <td class="tr g_data g_cpc">{{kw.g_cpc}}</td>
+                            <td class="tr g_data g_competition">{{kw.g_competition}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!--</div>-->
+<script type="text/html" id="id_snap_kw_template">
+<% for(var i=0;i<snap_list.length;i++){ %>
+<tr id="<%=snap_list[i].keyword_id%>" adgroup_id="<%=snap_list[i].adgroup_id%>" campaign_id="<%=snap_list[i].campaign_id%>" fix-ie="hover">
+    <td class="tc custom link_inner_checkbox"><span class="hide">0</span><input type="checkbox" name="idx" class="kid_box"/></td>
+    <td class="keyword_td">
+        <div class="por">
+            <span class="match" match_scope="<%=snap_list[i].match_scope%>"></span>
+            <span class="keyword_box">
+                <span class="keyword pointer ml3 <%=snap_list[i].opt_flag%> tips" id="word_<%=snap_list[i].keyword_id%>" title="<%=snap_list[i].detail%>"><%=snap_list[i].word%></span>
+            </span>
+        </div>
+    </td>
+    <td class="tc custom">
+        <span class="max_price r ml3"><%=snap_list[i].max_price%></span>
+    </td>
+    <td class="tr qscore"><%=snap_list[i].qscore%></td>
+    <td class="tr"><%=snap_list[i].sum_days%></td>
+    <td class="tr base_data impressions"><%=snap_list[i].impressions%></td>
+    <td class="tr base_data click"><%=snap_list[i].click%></td>
+    <td class="tr base_data ctr"><span class="hide"><%=snap_list[i].ctr%></span><%=snap_list[i].ctr%>%</td>
+    <td class="tr base_data cost"><%=snap_list[i].cost%></td>
+    <td class="tr base_data cpc"><%=snap_list[i].cpc%></td>
+    <td class="tr conv_data favcount"><%=snap_list[i].favcount%></td>
+    <td class="tr conv_data paycount"><%=snap_list[i].paycount%></td>
+    <td class="tr conv_data pay"><%=snap_list[i].pay%></td>
+    <td class="tr conv_data conv"><span class="hide"><%=snap_list[i].conv%></span><%=snap_list[i].conv%>%</td>
+    <td class="tr conv_data roi"><%=snap_list[i].roi%></td>
+    <td class="tr g_data g_pv"><%=snap_list[i].g_pv%></td>
+    <td class="tr g_data g_click"><%=snap_list[i].g_click%></td>
+    <td class="tr g_data g_ctr"><%=snap_list[i].g_ctr%>%</td>
+    <td class="tr g_data g_cpc"><%=snap_list[i].g_cpc%></td>
+    <td class="tr g_data g_competition"><%=snap_list[i].g_competition%></td>
+</tr>
+<% } %>
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<!--<script src="/site_media/assets/plugins/data-tables/FixedHeader.min.js" type="text/javascript"></script>-->
+<!--<script src="/site_media/assets/plugins/data-tables/TableTools.js" type="text/javascript"></script>-->
+{% endblock %}
+
+{% block custom_js %}
+<script>
+
+function render_matchscope(){
+    var match_dict = {'1':'精','2':'中', '4':'广'};
+    $('.match').each(function(){
+        var match_scope = $(this).attr('match_scope');
+        $(this).text(match_dict[match_scope]);
+    });
+}
+
+function change_date(obj){
+    var date = $(obj).val();
+    PT.show_loading('获取数据中');
+    PT.sendDajax({'function':'mnt_get_snap_keyword_list', 'date':date, 'adgroup_id':parseInt($('#adgroup_id').val())});
+}
+
+function init_table (){
+    $('#common_table').dataTable({
+        "bRetrieve": true,
+        "bPaginate": false,
+        "fnDrawCallback":function(){
+            $('.tips').tooltip();
+        },
+        "aoColumns": [
+            {"bSortable": false},
+            {"bSortable": false},
+            {"bSortable": true,"sSortDataType": "dom-text", "sType": "numeric"},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true,"sSortDataType": "dom-text", "sType": "numeric"},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true,"sSortDataType": "dom-text", "sType": "numeric"},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+            {"bSortable": true},
+        ],
+    });
+}
+
+
+function record_keyword_callback(result){
+    var obj = $('#id_record_keyword');
+    msg = parseInt(result)===0?'开始监控':'取消监控';
+    obj.text(msg);
+    obj.attr('hide_value', result);
+    obj.toggleClass('btn-primary');
+}
+
+function layout_snap_keyword(snap_list){
+    var html = template.render('id_snap_kw_template', {'snap_list':snap_list});
+    $('#common_table>tbody').html(html);
+    init_table();
+    render_matchscope();
+    $('.tips').tooltip();
+}
+
+function record_adg_keyword(adgroup_id, is_recorded) {
+    PT.show_loading('正在切换监控状态');
+    PT.sendDajax({'function':'mnt_record_adg_keyword', 'adgroup_id':adgroup_id, 'is_recorded':is_recorded});
+}
+
+jQuery(document).ready(function() {
+    $('#id_record_keyword').click(function(){
+        var action = 1 - parseInt($(this).attr('hide_value')),
+            adgroup_id = $('#adgroup_id').val();
+        if (action) {
+            record_adg_keyword(adgroup_id, action);
+        } else {
+            var msg = '确定要取消监控吗？将会清除已监控数据！';
+            PT.confirm(msg, record_adg_keyword, [adgroup_id, action]);
+        }
+    });
+    render_matchscope();
+    init_table();
+});
+</script>
+{% endblock %}

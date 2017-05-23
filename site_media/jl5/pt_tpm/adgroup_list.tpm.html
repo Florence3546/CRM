@@ -1,0 +1,156 @@
+<tr id="<%=adgroup_id%>" is_quick_opered = <%=is_quick_opered%> mnt_type=<%=mnt_type%> fix-ie="hover">
+  <td class="tc nbl link_inner_checkbox poi"><input class="kid_box" type="checkbox" value="<%=adgroup_id%>" online_status="<%=online_status%>" name="adg_checkbox"></td>
+  <td>
+    <a target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>'><img class="item_pic_url l" src="<%=item_pic_url%>_100x100.jpg" height="100" width="100"></a>
+  </td>
+  <td>
+    <div class="gray"><%=campaign_title%></div>
+    <div>
+      <a class="item_title black" target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>'><%=item_title%></a>
+    </div>
+    <div>￥<span class="item_price"><%=item_price%></span></div>
+  </td>
+  <td>
+    <span class="hide"><%=cost%></span>
+    <div>
+      <span>总花费：<span class="cost b baseColor">￥<%=cost%></span></span>
+    </div>
+    <div>
+      <span class="w100 dib">展现量：<span class="impr"><%=impr%></span></span><br><span>点击量：<span class="click"><%=click%></span></span>
+    </div>
+    <div>
+      <span class="w200 dib">
+	      点击率：<span class="click_rate"><%=click_rate%>%</span>
+	      <%if (click>=3 && click_rate<=0.3) { %>
+<!--	      <a href="/cf/home/?item_id=<%=item_id%>&ppc=<%=ppc%>" class="r btn btn-primary btn-mini" target="_blank">优化创意图片</a>-->
+<!--	      <a href="javascript:void(0);" class="optm_crt_img r btn btn-primary btn-mini" item_id="<%=item_id%>">优化创意图片</a>-->
+		  <a class="r btn btn-primary btn-mini" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao<%=CONSULT_WW%>">优化分析</a>
+	      <% }%>
+      </span>
+      <br>
+      <span>PPC：<span class="ppc"><%=ppc%></span></span>
+    </div>
+  </td>
+  <td>
+    <span class="hide"><%=pay%></span>
+    <div class="tips" title="直接成交金额 : <%=directpay%>元<br/>间接成交金额 : <%=indirectpay%>元<br/>直接成交笔数 : <%= directpaycount%>笔<br/>间接成交笔数 : <%=indirectpaycount%>笔<br/>店铺收藏次数 : <%=favshopcount%>次<br/>宝贝收藏次数 : <%=favitemcount%>次">
+      <div>
+        <span>成交额：<span class="pay b baseColor">￥<%=pay%></span></span>
+      </div>
+      <div>
+        <span class="w100 dib">成交量：<span class="paycount"><%=paycount%></span></span><br><span>收藏量：<span class="favcount"><%=favcount%></span></span>
+      </div>
+      <div>
+        <span class="w100 dib">转化率：<span class="conv"><%=conv%>%</span></span><br><span>ROI：<span class="roi"><%=roi%></span></span>
+      </div>
+    </div>
+  </td>
+  <td class="lh24">
+
+    <span class="hide"><% if(online_status=='online'){ %>1<%}%> <% if(online_status=='offline'){ %>2<%}%></span>
+    <% if(online_status=='online'){ %>
+    <span id='status_<%=adgroup_id%>'>推广中</span>
+    <a class="baseColor hover-show ml5 update_adg single" href="javascript:;" name="stop">暂停</a>
+    <%}%>
+    <% if(online_status=='offline'){ %>
+    <span class="red" id='status_<%=adgroup_id%>'>已暂停</span>
+    <a class="baseColor hover-show ml5 update_adg single" href="javascript:;" name="start">开启</a>
+    <%}%>
+    <a class="baseColor hover-show ml5 update_adg single red" href="javascript:;" name="del">删除</a>
+    <% if(error_descr) {%>
+    <br/><span class="red"><%=error_descr%></span>
+    <%}%>
+    <% if (page_type + mnt_type == 0) {%>
+    <div>上次优化&nbsp;&nbsp;<% if (optm_submit_time) { %><%=optm_submit_time%><% }else{ %>尚未优化<%}%></div>
+    <%}%>
+    <span class="keyword_count hide">0</span>
+    <div class="keyword_count_str hide">
+      <img src="/site_media/jl/img/ajax-loader.gif" class="w20 h20 dib">正在查询</div>
+    <span class="creative_count hide">0</span>
+    <div class="creative_count_str hide">
+      <img src="/site_media/jl/img/ajax-loader.gif" class="w20 h20 dib">正在查询</div>
+
+    <% if(mob_enabled){ %>
+    <div class="adg_mobdiscount">
+      <span>移动折扣：
+        <span id="adg_mobdiscount_<%=adgroup_id%>" campaign_id="<%=campaign_id%>"><%=mobile_discount%></span>%
+        <i class="iconfont ml5 hover-show edit_mobdiscount baseColor"></i>
+      </span>
+    </div>
+    <% } %>
+
+  </td>
+  <td>
+  <div id="mnt_type_<%=adgroup_id%>">
+    <span class="hide">
+      <% if (mnt_type > 0) {%>
+        1
+      <%}%>
+    <% if (mnt_type == 0) {%>
+      <% if (page_type + camp_mnt_type > 0) {%>
+        2
+      <%}else{%>
+        0
+      <%}%>
+    <%}%>
+    </span>
+    <% if (mnt_type > 0) {%>
+      <% if (mnt_opt_type == 2) {%>
+      <span class="baseColor">只优化价格</span>
+      <%} else {%>
+      <span class="baseColor">自动优化中</span>
+      <%}%>
+    <%}%>
+    <% if (mnt_type == 0) {%>
+      <% if (page_type + camp_mnt_type > 0) {%>
+        <span class="red">不自动优化</span>
+      <%}else{%>
+        <span>未托管</span>
+      <%}%>
+    <%}%>
+    <% if (page_type != 0) {%>
+    <i class="iconfont hover-show ml5 change_mnt_type"  mnt_type="<%=mnt_type%>" page_type="<%=page_type%>" mnt_opt_type="<%=mnt_opt_type%>">&#xe60e;</i>
+    <%}%>
+  </div>
+  <% if (page_type == 2){ %>
+  <div class="<% if (mnt_type == 0){ %>dn<%}%>">
+      限价<span class="ml5 limit_price"><%=limit_price%></span><i class="iconfont hover-show ml5 show_price_popover">&#xe60e;</i>
+  </div>
+  <%}%>
+  </td>
+  <td class="tc">
+    <% if (page_type + mnt_type == 0) {%>
+    <div class="lh24">
+      <ul>
+        <li><a href="/web/smart_optimize/<%=adgroup_id%>" target='_blank' >智能优化</a></li>
+        <li><a href="/web/bulk_optomize/<%=adgroup_id%>" target='_blank'>批量优化</a></li>
+      </ul>
+      <div class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" data-trigger="hover" href="javascript:;"><span class="dropdown-value">更多</span><i class="iconfont">&#xe65b;</i></a>
+        <ul class="dropdown-menu ml-20" role="menu" aria-labelledby="dLabel">
+          <li><a href="/web/select_keyword/quick?adgroup_id=<%=adgroup_id%>" target='_blank' >快速选词</a></li>
+          <li><a href="/web/select_keyword/precise?adgroup_id=<%=adgroup_id%>" target="_blank" >精准淘词</a></li>
+          <li><a href="/web/rob_rank/<%=adgroup_id%>" target="_blank">极速排名</a></li>
+          <li><a href="/web/title_optimize/?adgroup_id=<%=adgroup_id%>" target="_blank">标题优化</a></li>
+          <li><a href="/web/image_optimoze/<%=adgroup_id%>" target='_blank'>创意优化</a></li>
+        </ul>
+      </div>
+    </div>
+    <%} else {%>
+        <% if (mnt_type > 0) {%>
+          <div><a href="/mnt/adgroup_data/<%=adgroup_id%>" item_id="<%=item_id%>" target='_blank' class="btn btn-small">进入优化</a></div>
+          <% if (page_type>0){ %>
+            <div id="set_key_work_<%=item_id%>">
+                 <a href="javascript:;" class="open_manage_elemword <% if (mnt_type!=2){ %>hide<%}%>" id="manage_elemword_<%=item_id%>">关键词设置</a>
+            </div>
+
+          <%}%>
+          <%}else{%>
+          <a href="/web/smart_optimize/<%=adgroup_id%>" item_id="<%=item_id%>"  target='_blank' class="btn btn-small">进入优化</a>
+             <div id="set_key_work_<%=item_id%>">
+            </div>
+        <% } %>
+    <% } %>
+  </td>
+</tr>
+

@@ -1,0 +1,220 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}订单管理{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="hide">
+        <h2>订单认领需要哪些功能呢？</h2>
+        <ul>
+            <li>1，列出未认领的订单</li>
+            <li>2，点击该订单，列出客户【还是想确认订单究竟跟客户如何绑定呢？只与nick相关吗？】</li>
+            <li>3，认领订单，在备注里标明原因，并写上我的名字</li>
+        </ul>
+    </div>
+
+    <div class="mt20">
+       <span class="b f16">订单条数(<span style="color:red;">{{total_count}}</span>个)</span>
+       <button class="btn r btn-primary ml5" id="search_order" >查询订单</button>
+{#       {% if '1' in psuser.perms %}#}
+       <a class="sync_order btn r" >同步订单</a>
+{#       {% endif %}#}
+    </div>
+    <div class="m0 bg_white p10 mt20 fix mb20 bdd">
+        <form class="m0" action="" method="post" id="form_search_order">
+            <input type="text" class="mr10 w120" value="{{form.nick.value}}" name="nick" placeholder="店铺名/店铺id"/>
+            {% comment %}<input type="text" class="psuser_input mr10 w130" name="name_cn" link="#owner" placeholder="签单人/操作人/顾问" value="{{form.name_cn.value|default:''}}" autocomplete="off">
+            <input type="hidden" id="owner" name="owner" value="{%if form.name_cn.value%}{{form.owner.value}}{%endif%}">{% endcomment %}
+            <input type="text" link="#saler_id" class="psuser_input w100 mr10 f12" name="saler_name" id="saler_name" placeholder="签单人" value="{{form.saler_name.value|default:''}}">
+            <input type="text" link="#operater_id" class="psuser_input w100 mr10 f12" name="operater_name" id="operater_name" placeholder="操作人" value="{{form.operater_name.value|default:''}}">
+            <input type="text" link="#consult_id" class="psuser_input w100 f12" name="consult_name" id="consult_name" placeholder="顾问" value="{{form.consult_name.value|default:''}}">
+
+            <input type="hidden" class="psuser_input w50 mr10 f12" name="saler_id" id="saler_id" value="{%if form.saler_id.value%}{{form.saler_id.value}}{%endif%}">
+            <input type="hidden" class="psuser_input w50 mr10 f12" name="operater_id" id="operater_id" value="{%if form.operater_id.value%}{{form.operater_id.value}}{%endif%}">
+            <input type="hidden" class="psuser_input w50 f12" name="consult_id" id="consult_id" value="{%if form.consult_id.value%}{{form.consult_id.value}}{%endif%}">
+            {{form.category}}
+            订购时间：<input class="w80" type="text" value="{{form.start_date.value}}" id="id_start_date" name="start_date"/> - <input class="w80 mr10" type="text" id="id_end_date" value="{{form.end_date.value}}" name="end_date"/>
+            {{form.source_type}}
+            {{form.biz_type}}
+{#            {{form.approval_status}}#}
+            {{form.page_no}}
+        </form>
+    </div>
+    <table class="bdd" id="table_subscribe">
+        <thead>
+            <tr>
+                <th class="w100">店铺主旺旺</th>
+                <th class="w160">业务类型</th>
+                <th class="w80">创建时间</th>
+                <th class="w80">周期</th>
+                <th class="w80">开始时间</th>
+                <th class="w80">结束时间</th>
+                <th class="w60">原价(元)</th>
+                <th class="w60">实付款(元)</th>
+                <th class="w60">订单类型</th>
+                <th class="w60">成交方式</th>
+                <th class="w60">签单人</th>
+                <th class="w60">操作人</th>
+                <th class="w60">顾问</th>
+                <!--
+                <th class="w160">备注</th>
+                 -->
+                <th class="w160">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in order_list %}
+            <tr class="tc" id="{{order.id}}">
+                <td>{{order.shop.nick}}</td>
+                <td>
+                    {%if order.category == 'kcjl' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+                    {%endif%}
+                    {%if order.category == 'rjjh' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe685;</i>
+                    {%endif%}
+                    {%if order.category == 'vip' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+                    {%endif%}
+                    {%if order.category == 'qn' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+                    {%endif%}
+                    {%if order.category == 'ztc' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+                    {%endif%}
+                    {%if order.category == 'zz' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe692;</i>
+                    {%endif%}
+                    {%if order.category == 'zx' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe695;</i>
+                    {%endif%}
+                    {%if order.category == 'dyy' %}
+                        <i class="iconfont inherit mr5 ml5">&#xe694;</i>
+                    {%endif%}
+                    <span class="category">
+                        {{ order.get_category_display }}
+                    </span><br/>
+                    <span class="item_code ml5">{{ order.item_code }}</span>
+                </td>
+                <td class="create_time">{{order.create_time}}</td>
+                <td>{{order.cycle}}</td>
+                <td class="start_date">{{order.start_date}}</td>
+                <td class="end_date">{{order.end_date}}</td>
+                <td class="fee">{{order.fee|divide:'100'}}</td>
+                <td class="pay">{{order.pay|divide:'100'}}</td>
+                <td class="biz_type">{{order.get_biz_type_display}}</td>
+                <td class="source_type">{{order.get_source_type_display}}</td>
+                <td>
+                    <span class="psuser">{{order.psuser.name_cn}}</span>
+                    <input type="hidden" id="id_{{order.id}}_psuser_id" org_value="{{order.psuser.id}}">
+                    <input type="text" class="psuser_input hide w50" link="#id_{{order.id}}_psuser_id" autocomplete="off">
+                </td>
+                <td>
+                    <span class="operater">{{order.operater.name_cn}}</span>
+                    <input type="hidden" id="id_{{order.id}}_operater_id" org_value="{{order.operater.id}}">
+                    <input type="text" class="psuser_input hide w50" link="#id_{{order.id}}_operater_id" autocomplete="off">
+                </td>
+                <td>
+                    <span class="consult">{{order.consult.name_cn}}</span>
+                    <input type="hidden" id="id_{{order.id}}_consult_id" org_value="{{order.consult.id}}">
+                    <input type="text" class="psuser_input hide w50" link="#id_{{order.id}}_consult_id" autocomplete="off">
+                </td>
+{#                <td class="ovh">{{order.note|default:''|safe}}</td>#}
+                <td>
+{#                    {% if psuser == order.psuser or psuser == order.operater or psuser == order.consult or '1' in psuser.perms %}#}
+{#                    <a href="javascript:void(0);" class="btn btn-small edit_subscribe" subscribe_id="{{order.id}}">编辑</a>#}
+{#                    {% elif psuser.position == 'RJJHLEADER' and order.operater_id == 53 %}#}
+{#                    <a href="javascript:void(0);" class="btn btn-small edit_subscribe" subscribe_id="{{order.id}}">编辑</a>#}
+{#                    {% elif psuser.position == 'TPLEADER' %}#}
+{#                    <a href="javascript:void(0);" class="btn btn-small edit_subscribe" subscribe_id="{{order.id}}">编辑</a>#}
+{#                    {% endif %}#}
+                  {% if psuser == order.psuser or psuser == order.operater or psuser == order.consult or '1' in psuser.perms or psuser.position == 'RJJHLEADER' or psuser.position == 'TPLEADER' %}
+                    <a href="javascript:void(0);" class="btn btn-mini edit_subscribe" subscribe_id="{{order.id}}" nick="{{order.shop.nick}}">编辑</a>
+                    {% endif %}
+                    {% if order.end_date > today %}
+                        {% if  order.operater %}
+                            {% if psuser == order.operater or '1' in psuser.perms %}
+		                    <a href="javascript:void(0);" class="btn btn-mini end_subscribe" subscribe_id="{{order.id}}">终止</a>
+		                    {% endif %}
+		                {% else %}
+			                {% if psuser == order.consult or '1' in psuser.perms %}
+		                    <a href="javascript:void(0);" class="btn btn-mini end_subscribe" subscribe_id="{{order.id}}">终止</a>
+		                    {% endif %}
+	                    {% endif %}
+	                {% endif %}
+	                {% if order.order_id == 0 %}
+                        {% if '1' in psuser.perms and psuser.department == order.psuser.department %}
+		                    <a href="javascript:void(0);" class="btn btn-mini delete_subscribe" subscribe_id="{{order.id}}">删除</a>
+                        {% elif 'B' in psuser.perms %}
+		                    <a href="javascript:void(0);" class="btn btn-mini delete_subscribe" subscribe_id="{{order.id}}">删除</a>
+                        {% endif %}
+	                {% else %}
+                        {% if '2' in psuser.perms %}
+                            <a href="javascript:void(0);" class="btn btn-mini delete_subscribe" subscribe_id="{{order.id}}">删除</a>
+                        {% endif %}
+                    {% endif %}
+{#                    <a href="javascript:void(0);" class="btn edit">编辑</a>#}
+{#                    <a  href="javascript:void(0);" class="btn allocate" type="saler">认领签单</a>#}
+{#                    <a  href="javascript:void(0);" class="btn allocate" type="operater">分配操作</a>#}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+<div id="id_allocate_order_layout" class="modal hide fade p10" data-width="w400" >
+    <input type="hidden" id="id_hide_order_id">
+    <input type="hidden" id="id_hide_psuser_id">
+    <input type="hidden" id="id_hide_psuser_type">
+    <table>
+        <tr>
+            <td style="width:80px;"><span id="id_type_display"></span></td>
+            <td>
+                <select id="id_select_psuser"></select>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary" id="id_submit_allocate">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+    </div>
+</div>
+
+<div id="subscribe_edit_layout" class="modal hide fade" data-width="700">
+    <div id="subscribe_edit_box"></div>
+</div>
+
+<div id="modal_end_subscribe" class="modal hide fade" sub_id="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h5>精灵提醒</h5>
+    </div>
+    <div class="modal-body">
+        <p>确定要终止这笔订单吗，订单的结束时间会修改为今天</p>
+        <label class="dib"><input type="checkbox" class="frozen_kcjl"> 禁止使用软件</label>
+        <label class="dib ml10"><input type="checkbox" class="unmnt_all"> 取消托管计划</label>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="end_subscribe btn btn-primary">确定</button>
+    </div>
+</div>
+
+<script id="id_user_selector_template" type="text/html">
+    <% for(var i=0;i<user_list.length;i++) { %>
+    <option value="<%=user_list[i].id%>"><%=user_list[i].position%>：<%=user_list[i].name_cn%></option>
+    <% } %>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/order_manage.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.OrderManage.init();
+});
+</script>
+{% include 'sync_order.html' %}
+{% endblock %}
+

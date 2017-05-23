@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webfontloader tests</title> 
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/tools/jasmine/jasmine.css?t=1490089588990" />
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/spec/fixtures/fonts/nullfont.css?t=1490089588990" />
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/spec/fixtures/fonts/nullfont1.css?t=1490089588990" />
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/spec/fixtures/fonts/nullfont2.css?t=1490089588990" />
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/spec/fixtures/fonts/nullfont3.css?t=1490089588990" />
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/spec/fixtures/fonts/sourcesansa.css?t=1490089588990" />
+    <link rel="stylesheet" href="/site_media/jl6/plugins/webfontloader/spec/fixtures/fonts/sourcesansc.css?t=1490089588990" />
+</head>
+ <body>  
+<script>
+      CLOSURE_NO_DEPS = true;
+    </script>
+<script src="/site_media/jl6/plugins/webfontloader/tools/jasmine/jasmine.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/tools/jasmine/jasmine-html.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/tools/jasmine-phantomjs/terminal-reporter.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/tools/jasmine-browserstack/jasmine-browserstack.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/tools/compiler/base.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/deps.js?t=1490089588990"></script>
+<script>
+      goog.require('webfont');
+    </script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/domhelper_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/cssclassname_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/fontmoduleloader_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/eventdispatcher_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/font_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/fontruler_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/fontwatchrunner_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/nativefontwatchrunner_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/fontwatcher_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/core/webfont_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/google/fontapiparser_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/google/fontapiurlbuilder_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/google/googlefontapi_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/custom_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/fontdeck_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/monotype_spec.js?t=1490089588990"></script>
+<script src="/site_media/jl6/plugins/webfontloader/spec/modules/typekit_spec.js?t=1490089588990"></script>
+<script>
+      (function () {
+        var env = jasmine.getEnv();
+
+        env.updateInterval = 1000;
+
+        var htmlReporter = new jasmine.HtmlReporter(),
+            terminalReporter = new jasmine.TerminalReporter({
+              verbosity: 3,
+              color: true
+            }),
+            browserStackReporter = new jasmine.BrowserStackReporter();
+
+        if (/PhantomJS/.test(navigator.userAgent)) {
+          env.addReporter(terminalReporter);
+        }
+        env.addReporter(htmlReporter);
+        env.addReporter(browserStackReporter);
+        env.specFilter = function (spec) {
+          return htmlReporter.specFilter(spec);
+        };
+
+        var currentOnload = window.onload;
+
+        window.onload = function () {
+          if (currentOnload) {
+            currentOnload();
+          }
+          env.execute();
+        };
+      }());
+    </script>
+</body>
+</html>

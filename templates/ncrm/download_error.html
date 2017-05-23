@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+  <head>
+    <title>订单下载</title>
+    <link href="http://g.alicdn.com/kissy/k/5.0.1/css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/ncrm/bootstrap.min.css'|file_time_stamp}}" />
+    {%if DEBUG%}
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.css'|file_time_stamp}}" />
+    {%else%}
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.min.css'|file_time_stamp}}" />
+    {%endif%}
+    {% block extra_style %} {% endblock %}
+    <script src="/site_media/jl5/js/jquery-1.10.1.min.js"></script>
+  </head>
+  <body>
+    <input type="hidden" id="psuser_id" value="{{request.session.psuser_id}}">
+    {%if DEBUG%}
+      <script src="{{'/site_media/jl5/js/bootstrap.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/ptui.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/templates.js'|file_time_stamp}}"></script>
+    {%else%}
+      <script src="{{'/site_media/jl5/js/bootstrap.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/ptui.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/templates.min.js'|file_time_stamp}}"></script>
+    {%endif%}
+    <script src="{{'/site_media/jl5/ncrm_js/ncrm_base.js'|file_time_stamp}}"></script>
+    <script>
+      $().ready(function(){
+        PT.alert('每次最多能下载2000条数据，当前共{{ total }}条，请选择合适的下载条件！',null,function(){
+            window.close();
+        });
+      });
+    </script>
+  </body>
+</html>
+

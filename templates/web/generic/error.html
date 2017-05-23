@@ -1,0 +1,23 @@
+﻿{#utf-8#}{% extends "base_jl5.html" %}
+{% block title %}访问错误{% endblock %}
+
+{% block base_jl5 %}
+    <div id="header" class="navbar-static-top">
+        <div class="container-fluid">
+            <a  href="#"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class=" w800 h300 mb40 auto mt100 bg_white bbd">
+            <div class="fix mt20">
+                <i class="iconfont f150 mt50 l ml30">&#xe678;</i><div class=" w500 h24  l ml15 mt40">
+                    <p class=" f36 b  mt30 mb30">亲，访问数据发生错误！</p>
+                    <h5 class="red f20">{{msg}}</h5>
+                    <div class="mt5 lh24">
+                        <span class="vn">{%if user.nick%}亲爱的{{user.nick}}{%endif%}，您可以尝试重新登录，或隔一段时间再试，如果问题依旧，请联系管理员，我们将尽快解决</span><a class="ml10" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a><a href="{%url 'web_home'%}" class="btn btn-small ml10">返回首页</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

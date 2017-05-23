@@ -1,0 +1,239 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}编辑员工信息{% endblock %}
+
+{% block content %}
+<div class="w900 auto rel">
+	<div class="bg_white bdd mt20">
+		<div class="modal-header bg_lighterBaseColor" >
+		  <span class="f20 b">{{info}}</span>
+		  （<span class="red">＊号标注的为必填项，初始密码为ps123456，请通知员工通过“我的信息”功能，及时修改个人信息和密码</span>）
+		</div>
+		<div id="all" class="mt10 tab-content nba pt10 pr30 pb10 pl80">
+          <div class="tab-pane active" id="supplier">
+          <form action="./" method="post" id="add_supplier">
+            <table class="table-layout ct">
+              <tbody>
+               <tr>
+                  <td>
+                    <input id="psuser_id_update" type="hidden" name="id" value="{{psuser.id|default:''}}"/>
+                  	<span class="w80 f16 tr">用&ensp;户&ensp;名:</span>
+                  	{% if update %}
+                  	<input class="p10" name="name" id="name" type="text" data-rule="minlength[2] maxlength[18] nomalstr" placeholder="请输入企业邮箱‘@’前的部分" readonly="readOnly" value="{{psuser.name|default:''}}">
+                  	{% else %}
+                  	<input class="p10" name="name" id="name" type="text" data-rule="minlength[2] maxlength[18] nomalstr" placeholder="请输入企业邮箱‘@’前的部分" value="{{psuser.name|default:''}}">
+                  	{% endif %}
+                  	<span class="red"><strong>*</strong></span>
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">中&ensp;文&ensp;名:</span>
+                  	<input class="p10" name="name_cn" require="true" id="name_cn" type="text" data-rule="require" placeholder="请输入姓名" value="{{psuser.name_cn|default:''}}">
+                  	<span class="red"><strong>*</strong></span>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                  	<span class="w80 f16 tr">生&emsp;&emsp;日:</span>
+                  	<input class="p10" name="birthday" id="birthday" id="birthday" type="text" value="{{psuser.birthday|default:''}}">
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">性&emsp;&emsp;别:</span>
+                  	<select name="gender" id="gender" data-rule="require"   class="tl mb3 w220">
+                  		{% if not psuser%}
+              				<option selected="selected" value="">------------请选择------------</option>
+              			{% endif %}
+              			{% for gd in gender %}
+              				{% if psuser and psuser.gender == gd.0 %}
+              					<option value="{{gd.0}}" selected="selected">{{gd.1}}</option>
+              				{% else %}
+                  				<option value="{{gd.0}}">{{gd.1}}</option>
+                  			{% endif %}
+						{%endfor%}
+					</select>
+					<span class="red"><strong>*</strong></span>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                  	<span class="w80 f16 tr">部&emsp;&emsp;门:</span>
+                  	<select name="department" data-rule="require"  id="department"   class="w220">
+              			<option selected="selected" value="">------------请选择------------</option>
+              			{% for dpt in department %}
+              				{% if psuser and psuser.department == dpt.0 %}
+              					<option value="{{dpt.0}}" selected="selected">{{dpt.1}}</option>
+              				{% else %}
+                  				<option value="{{dpt.0}}">{{dpt.1}}</option>
+                  			{% endif %}
+						{%endfor%}
+					</select>
+					<span class="red"><strong>*</strong></span>
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">岗&emsp;&emsp;位:</span>
+                  	<select name="position" data-rule="require"  id="position" class="w220">
+                  		{% if not psuser%}
+              				<option selected="selected" value="" perms=''>------------请选择------------</option>
+              			{% endif %}
+              			{% for pst in position %}
+                  			<option value="{{pst.0}}" perms="{{ pst.2 }}" {% if psuser and psuser.position == pst.0 %}selected="selected"{% endif %}>{{pst.1}}</option>
+                  		{%endfor%}
+					</select>
+					<span class="red"><strong>*</strong></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                  	<span class="w80 f16 tr">权&ensp;限&ensp;码:</span>
+                  	<input class="p10" id="perms" name="perms" type="text" data-rule="nomalstr" value="{{psuser.perms}}">
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">旺&emsp;&emsp;旺:</span>
+                  	<input class="p10" name="ww" type="text" value="{{psuser.ww|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="w80 f16 tr">手&ensp;机&ensp;号:</span>
+                    <input class="p10" name="phone" type="text" data-rule="phone" value="{{psuser.phone|default:''}}">
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">&emsp;&emsp;&nbsp;QQ:</span>
+                  	<input class="p10" name="qq" type="text" data-rule="digital" value="{{psuser.qq|default:''}}">
+                  </td>
+                 </tr>
+                 <tr>
+                  <td>
+                  	<span class="w80 f16 tr">办公电话:</span>
+                  	<input class="p10" name="tel" type="text" value="{{psuser.tel|default:''}}">
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">上&emsp;&emsp;级:</span>
+                  	<input class="p10" name="manager" type="text" value="{{psuser.manager|default:''}}">
+                  </td>
+                 </tr>
+                 <tr>
+                  <td>
+                    <span class="w80 f16 tr">权&emsp;&emsp;重:</span>
+                    <input class="p10" name="weight" readonly="readOnly" type="text" value="{{psuser.weight|default:0}}">
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">服务用户:</span>
+                  	<input class="p10" name="now_load" readonly="readOnly" type="text" value="{{psuser.now_load|default:''}}">
+                  </td>
+                 </tr>
+                 <tr>
+                  <td>
+                  	<span class="w80 f16 tr">分配用户:</span>
+                  	<input class="p10" name="cycle_load" readonly="readOnly" type="text" value="{{psuser.cycle_load|default:''}}">
+                  </td>
+                  <td>
+                  	<span class="w80 f16 tr">入职日期:</span>
+                  	<input class="p10" name="entry_date" id="entry_date" type="text" value="{{psuser.entry_date|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="w80 f16 tr">转正考核:</span>
+                    <input class="p10" name="probation_date" id="probation_date" type="text" value="{{psuser.probation_date|default:''}}">
+                  </td>
+                  <td>
+                    <span class="w80 f16 tr">合同开始:</span>
+                    <input class="p10" name="contract_start" id="contract_start" type="text" value="{{psuser.contract_start|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                  	<span class="w80 f16 tr">合同截止:</span>
+                  	<input class="p10" name="contract_end" id="contract_end" type="text" value="{{psuser.contract_end|default:''}}">
+                  </td>
+                  <td>
+                    <span class="w80 f16 tr">身份证号:</span>
+                    <input class="p10" name="id_no" type="text" value="{{psuser.id_no|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="w80 f16 tr">雇佣状态:</span>
+                    <select name="status" id="status"   class="w220">
+                        {% if not psuser%}
+                            <option selected="selected" value="">------------请选择------------</option>
+                        {% endif %}
+                        {% for st in status %}
+                            {% if psuser and psuser.status == st.0 %}
+                                <option value="{{st.0}}" selected="selected">{{st.1}}</option>
+                            {% else %}
+                                <option value="{{st.0}}">{{st.1}}</option>
+                            {% endif %}
+                        {%endfor%}
+                    </select>
+                  </td>
+                  <td>
+                    <span class="w80 f16 tr">学&emsp;&emsp;历:</span>
+                    <select name="education" id="education"   class="w220">
+                        {% if not psuser%}
+                            <option selected="selected" value="">------------请选择------------</option>
+                        {% endif %}
+                        {% for edu in education %}
+                            {% if psuser and psuser.education == edu.0 %}
+                                <option value="{{edu.0}}" selected="selected">{{edu.1}}</option>
+                            {% else %}
+                                <option value="{{edu.0}}">{{edu.1}}</option>
+                            {% endif %}
+                        {%endfor%}
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                  	<span class="w80 f16 tr">毕业院校:</span>
+                  	<input class="p10" name="school" type="text" value="{{psuser.school|default:''}}">
+                  </td>
+                  <td>
+                    <span class="w80 f16 tr">专&emsp;&emsp;业:</span>
+                    <input class="p10" name="major" type="text" value="{{psuser.major|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <span class="w80 f16 tr">户籍地址:</span>
+                    <input class="p10 w600" name="residence" type="text" value="{{psuser.residence|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  <td  colspan="2">
+                    <span class="w80 f16 tr">备&emsp;&emsp;注:</span>
+                    <input class="p10 w600" name="note" type="text" value="{{psuser.note|default:''}}">
+                  </td>
+                </tr>
+                <tr>
+                  {% if update %}
+                  <td class="tr">
+                    <button class="btn btn-primary btn-large w200 fr mr10" id="submit" type="submit" >保  存</button>
+                  </td>
+                  <td class="tl">
+                    <button class="btn btn-block  btn-large w200 fl ml10"  type="button" id="reset_pass" >初始化密码</button>
+                  </td>
+                  {% else %}
+                  <td colspan="2">
+                    <button class="btn btn-primary btn-block  btn-large w600 ml50" id="submit" type="submit" >保  存</button>
+                  </td>
+                  {% endif %}
+                </tr>
+              </tbody>
+            </table>
+          </form>
+          </div>
+        </div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_add_psuser.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmAddPSUser.init();
+});
+</script>
+{% endblock %}

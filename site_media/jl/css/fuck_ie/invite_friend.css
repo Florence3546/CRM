@@ -1,0 +1,40 @@
+#div_bdshare>a{width: 100px !important; margin-bottom: 12px !important;}
+.bdshare_popup_box {display: none !important;}
+
+.portfolio-block{width:800px;}
+.portfolio-block .portfolio-info{color:#000; width:100px; padding: 12px 25px !important;}
+.portfolio-info span{ margin-top: 10px;}
+
+/*.portfolio-info.pad_0 span {font-size:20px !important;}*/
+/*portfolio button*/
+.portfolio-btn a {
+  padding: 18px;
+  margin-left: 10px;
+  line-height: 34px;
+  min-width: 100px;
+  text-align: center;
+  background:#1d943b !important;
+}
+
+.portfolio-btn a.disabled {
+    background: #666 !important;
+}
+
+.portfolio-btn{
+  padding: 6px 0;
+}
+
+.portfolio-btn span {
+  color:#fff;
+}
+
+.portfolio-info span {font-size:50px;}
+
+/*table tr:hover td{background-color: #F5F5F5; height: 30px; font-size: 14px; font-weight: bold;}*/
+/*table th,table td{ border-right-style:none !important; border-left-style:none !important; height: 26px;}*/
+/*table {border-left-style: none !important;}*/
+/*table th {border-top-style: none !important; font-size: medium;}*/
+/*#table_redeem td { height: 40px; vertical-align: middle; }*/
+ 
+/*#tab_1, #tab_2, #tab_3 {margin: 0 auto; width: 880px;}*/
+/*#tab_1>div, #tab_2>div, #tab_3>div{margin-top:24px; margin-bottom:24px;}*/

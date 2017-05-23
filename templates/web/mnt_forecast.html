@@ -1,0 +1,262 @@
+{#utf-8#}{% extends "base_adgjl5.html" %}
+{% load rates %}
+{% block title%}
+  预测
+{% endblock %}
+{% block content %}
+  <input type="hidden" value="{{adg|div:'default_price,100,2'}}" id="default_price_hide" />
+  <input type="hidden" value="{{adg.campaign_id}}" id="campaign_id" />
+  <input type="hidden" value="{{adg.mnt_type}}" id="mnt_type" />
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#forecast" data-toggle="tab">现有关键词 <span class="f24" id="keyword_count">--</span>个</a>
+    </li>
+    <li>
+      <div class="mt10 ml10 ">
+        <div class="dropdown l hide" id="keyword_select_days">
+          <a class="dropdown-toggle btn btn-info btn-small" data-toggle="dropdown" data-autowidth="true" data-type="select" href="#"><i class="iconfont mr5">&#xe61e;</i><span class="dropdown-value">过去7天</span><i class="iconfont">&#xe626;</i></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a value="1" href="javascript:;">过去1天</a></li>
+            <li><a value="3" href="javascript:;">过去3天</a></li>
+            <li><a value="7" href="javascript:;">过去7天</a></li>
+            <li><a value="15" href="javascript:;">过去15天</a></li>
+          </ul>
+        </div>
+        <span class="ml10">关键词最高出价提醒：</span>
+        <div class="input-append m0" id="user_limit_price">
+          <input class="w50 " type="text" disabled value="{%if adg.limit_price%}{{adg|div:'limit_price,100,2'}}{% else %}5.00{%endif%}">
+          <span class="add-on">元</span>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane fade active in bg_white" id="forecast">
+
+      <!-- 关键词开始 -->
+        <div class="pt10 mt5">
+          <ul class="ul_line pr10 mt20 pt5 l">
+            <li class="select_status ml5 poi" mode="0"><span class="gray">加价</span><span class="f24 ml3" id="plus_count">0</span></li>
+            <li class="select_status ml5 poi" mode="1"><span class="gray">降价</span><span class="f24 ml3" id="fall_count">0</span></li>
+            <li class="select_status ml5 poi" mode="2"><span class="gray">删除</span><span class="f24 ml3" id="del_count">0</span></li>
+            <li class="select_status ml5 poi" mode="3"><span class="gray">修改匹配</span><span class="f24 ml3" id="match_count">0</span></li>
+          </ul>
+        </div>
+      </div>
+      <!-- 关键词表格简单信息显示及控制 -->
+      <div class="row-fluid bg_white pt20 pb10 btd">
+        <span class="f16 ml10 vt hide">关键词自动分类：</span>
+        <div class="switch on vm dn" id="keyword_seitch" data-toggle="switch">
+            <label></label>
+            <input type="checkbox" checked="">
+        </div>
+        <ul class="pt-tag with-x dib vt" id="filter_tag">
+        </ul>
+        <span class="ml20 vt">当前选中：<span class="linkColor f24 vt" id="batch_optimize_count">0</span></span>
+        <div class="btn-group mr10 r">
+          <a class="btn btn-mini rel mr5 hide" id="save_as_csv"><i class="iconfont mr2">&#xe67e;</i>导出关键词</a>
+          <div class="dropdown">
+            <button class="dropdown-toggle btn btn-mini" id="select_column_show_btn" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe635;</i>更多数据</button>
+            <div class="dropdown-menu pl5 pr5 right" id="select_column">
+              <ul class="ul_line mt10">
+                <li class="title">
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox">
+                  <span class="marl_3 b">基础数据</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="8">
+                  <span class="marl_3">展现量</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="9">
+                  <span class="marl_3">点击量</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="10">
+                  <span class="marl_3">点击率</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="11">
+                  <span class="marl_3">总花费</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="12">
+                  <span class="marl_3">PPC</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="13">
+                  <span class="marl_3">千次展现花费</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="14">
+                  <span class="marl_3">昨日平均排名</span></label>
+                </li>
+              </ul>
+              <ul class="ul_line mt10">
+                <li class="title">
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox">
+                  <span class="marl_3 b">转化数据</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="15">
+                  <span class="marl_3">收藏量</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="16">
+                  <span class="marl_3">收藏率</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="17">
+                  <span class="marl_3">收藏成本</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="18">
+                  <span class="marl_3">成交量</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="19">
+                  <span class="marl_3">成交额</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="20">
+                  <span class="marl_3">转化率</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="21">
+                  <span class="marl_3">ROI</span></label>
+                </li>
+              </ul>
+              <ul class="ul_line mt10">
+                <li class="title">
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox">
+                  <span class="marl_3 b">全网数据</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="22">
+                  <span class="marl_3">全网展现指数</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="23">
+                  <span class="marl_3">全网点击指数</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="24">
+                  <span class="marl_3">全网点击率</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="25">
+                  <span class="marl_3">全网市场均价</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="26">
+                  <span class="marl_3">全网竞争度</span></label>
+                </li>
+              </ul>
+              <ul class="ul_line mt10">
+                <li class="title">
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox">
+                  <span class="marl_3 b">其他数据</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="6" checked="checked">
+                  <span class="marl_3">质量得分</span></label>
+                </li>
+                <li>
+                  <label>
+                    <input class="mt-3 ml10" type="checkbox" value="7" checked="checked">
+                  <span class="marl_3">养词天数</span></label>
+                </li>
+              </ul>
+              <ul class="ul_line">
+                <li class="r">
+                  <!-- <button class="btn mr5 select_column_btn" mode="show">确定</button> -->
+                  <button class="btn select_column_btn" mode="show">确定</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-fluid bg_white">
+        <!-- 关键词分类的表格 -->
+        <table class="table-bordered table-no-warp-border table-hover mini keyword hide" id="common_table">
+            <thead>
+                <tr>
+                    <th class="w20 nbl"><input class="father_box" type="checkbox" link="common_table"></th>
+                    <th class="w200"><div><span class="mr5">关键词</span></div></th>
+                    <th class="w80"><div>新出价</div></th>
+                    <th class="w80 hide"><div>预估排名</div></th>
+                    <th class="w40"><div>当前<br>出价</div></th>
+                    <th class="w60 hide"><div>当前<br>排名</div></th>
+                    <th class="w80 {%if 'qscore' in custom_column %}hide{%endif%}"><div>质量得分</div></th>
+                    <th class="w50 {%if 'create_days' in custom_column %}hide{%endif%}"><div>养词<br>天数</div></th>
+                    <th class="w50 {%if 'impressions' in custom_column %}hide{%endif%}"><div>展现量</div></th>
+                    <th class="w50 {%if 'click' in custom_column %}hide{%endif%}"><div>点击量</div></th>
+                    <th class="w50 {%if 'ctr' in custom_column %}hide{%endif%}"><div>点击率</div></th>
+                    <th class="w50 {%if 'cost' in custom_column %}hide{%endif%}"><div>总花费</div></th>
+                    <th class="w50 {%if 'ppc' in custom_column %}hide{%endif%}"><div>PPC</div></th>
+                    <th class="w50 {%if 'cpm' in custom_column %}hide{%endif%} hide"><div>千次展<br>现花费</div></th>
+                    <th class="w50 {%if 'avgpos' in custom_column %}hide{%endif%} hide"><div>昨日平<br>均排名</div></th>
+                    <th class="w50 {%if 'favcount' in custom_column %}hide{%endif%}"><div>收藏量</div></th>
+                    <th class="w50 {%if 'favctr' in custom_column %}hide{%endif%}"><div>收藏率</div></th>
+                    <th class="w50 {%if 'favpay' in custom_column %}hide{%endif%}"><div>收藏<br>成本</div></th>
+                    <th class="w50 {%if 'paycount' in custom_column %}hide{%endif%}"><div>成交量</div></th>
+                    <th class="w50 {%if 'pay' in custom_column %}hide{%endif%}"><div>成交额</div></th>
+                    <th class="w50 {%if 'conv' in custom_column %}hide{%endif%}"><div>转化率</div></th>
+                    <th class="w50 {%if 'roi' in custom_column %}hide{%endif%}"><div>ROI</div></th>
+                    <th class="w50 {%if 'g_pv' in custom_column %}hide{%endif%}"><div>全网展<br>现指数</div></th>
+                    <th class="w50 {%if 'g_click' in custom_column %}hide{%endif%}"><div>全网点<br>击指数</div></th>
+                    <th class="w50 {%if 'g_ctr' in custom_column %}hide{%endif%}"><div>全网<br>点击率</div></th>
+                    <th class="w50 {%if 'g_cpc' in custom_column %}hide{%endif%}"><div>全网市<br>场均价</div></th>
+                    <th class="w50 {%if 'g_competition' in custom_column %}hide{%endif%}"><div>全网<br>竞争度</div></th>
+                </tr>
+            </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <div id="loading_keyword">
+          <div class="tc f20 p10 mb30 mt30">
+            <img src="/site_media/jl5/images/ajax-loader.gif" width="32" height="32">正在获取关键词信息.......</div>
+        </div>
+        <div id="no_keyword" class="hide">
+          <div class="tc f20 p10 mb30 mt30"> 亲，该宝贝没有关键词</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block custom_js %}
+  <script src="/site_media/jl5/plugins/data-tables/ZeroClipboard.js"></script>
+  <script src="/site_media/jl5/plugins/data-tables/TableTools.js"></script>
+  <script>
+    jQuery(document).ready(function() {
+      PT.MntForecast.init();
+    });
+  </script>
+{% endblock %}

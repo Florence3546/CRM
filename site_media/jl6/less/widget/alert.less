@@ -1,0 +1,35 @@
+#alert_modal_fixed {
+    padding-right: 17px;
+}
+.modal.js_alert {
+    &.success, &.info, &.error {
+        h4 {
+            position: relative;
+            padding-left: 45px;
+            &:after {
+                .iconfont;
+                position: absolute;
+                top: 0;
+                left: 0;
+                margin-top: -6px;
+                font-size: 30px;
+            }
+        }
+    }
+    &.success {
+        h4 {
+            &:after {
+                color: @green;
+                content: '\e662';
+            }
+        }
+    }
+    &.error {
+        h4 {
+            &:after {
+                color: @red;
+                content: '\e664';
+            }
+        }
+    }
+}

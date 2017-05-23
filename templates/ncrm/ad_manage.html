@@ -1,0 +1,151 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}推广管理{% endblock %}
+{% block content %}
+<style type="text/css" media="screen">
+    label{display: inline;}
+    table{table-layout:auto;}
+    .hovershow{display: none;}
+    .hover .active .hovershow{display: block;}
+    li.rel.active{z-index:2;}
+    .header .hor-menu ul.nav li a,.header .nav > li.dropdown .dropdown-toggle{padding: 9px 18px;}
+    .header .nav > li.dropdown{padding-left: 0;padding-right: 0;}
+
+    .ks-dtp table{width: auto;}
+    .ks-dtp select{padding: 0;height: auto;}
+</style>
+<div class="mt20 w1200 auto">
+    <div class="gray">
+        <i class="iconfont mr5">&#xe659;</i>图片请先上传到淘宝图片空间，然后直接引用链接，上传图片前请压缩图片，避免用户加载时间过长<br>
+    </div>
+    <ul class="nav nav-tabs mt20 pl0" id="editor_tabs" fix-ie="hover">
+    {%for msg in msg_list%}
+        <li class="rel {%if forloop.counter == 1 %}active{%endif%}">
+            <a href="#tab_{{msg.id}}" data-toggle="tab" editor_id='{{msg.id}}' >{{msg.title}}</a>
+            <i class="iconfont abs t0 r0 red mt-5 mr-10 f18 poi hovershow del_tab">&#xe623;</i>
+        </li>
+    {%endfor%}
+    <li id="add_tab">
+        <a href="javascript:;" ><i class="iconfont f18 ml10">&#xe624;</i></a>
+    </li>
+    </ul>
+    <div class="tab-content mb20">
+    {%for msg in msg_list%}
+        <div class="tab-pane p10 fade {%if forloop.counter == 1 %}active{%endif%} in" id="tab_{{msg.id}}">
+            <form id="form_{{msg.id}}">
+<!--                 <div class="mt10">
+                    <span class="w80 dib">审核状态：</span>
+                    <span class="gray">{%if msg.flag %}已审核{%else%}未审核{%endif%}</span>
+                </div> -->
+                <div class="mt10">
+                    <span class="w80 dib">推广标题：</span>
+                    <span class="dib w250"><input class="w200" data-rule="require" maxlength="8" type="text" id="title_{{msg.id}}" value="{{msg.title}}"><span class="red ml3 f12">*</span></span>
+                    <span class="ml20 gray f12">该标题会直接在软件左侧主导航显示，限制不超过8个字符</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">是否显示：</span>
+<!--                     <span class="dib w250"><input type="checkbox" id="flag_{{msg.id}}" {%if msg.flag %}checked{%endif%}></span>
+                    <span class="ml20 gray f12">如果不勾选，则只会保存，不会在软件中显示出来</span> -->
+                      <div class="switch vn-3 {%if msg.flag %}on{%else%}off{%endif%}" data-toggle="switch" >
+                        <label class="db"></label>
+                        <input type="checkbox" id="flag_{{msg.id}}" {%if msg.flag %}checked="checked"{%endif%}>
+                      </div>
+                      <span class="ml20 gray f12">开启后将立即在前台显示</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">顺序：</span>
+                    <span class="dib "><input class="w40" data-rule="require" type="text" id="weight_{{msg.id}}" value="{{msg.weight|default:1}}"><span class="red ml3 f12">*</span></span>
+                    <span class="ml20 gray f12">可以调整所有广告的先后顺序</span>
+                </div>
+                <div class="mt20" id="{{msg.id}}_editor">
+                    <div class="editor_wating">
+                        <img src="/site_media/jl5/images/forecast_orde_ajax.gif">
+                        <span class="ml5">组件加载中</span>
+                    </div>
+                </div>
+                <div class="mt20">
+                    <button type="submit" class="btn btn-primary submit" disabled>保存</button>
+                    <!-- <a class="btn btn-primary release" disabled>审核发布</a> -->
+                </div>
+            </form>
+        </div>
+    {%endfor%}
+    </div>
+</div>
+<div class="hide">
+{%for msg in msg_list%}
+    <div id="init_msg_{{msg.id}}">
+        {{msg.html}}
+    </div>
+{%endfor%}
+</div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}
+{% block custom_js %}
+<script>
+
+
+require('pt/pt-editor', function(editor){
+    var editors={};
+
+    //加载完成删除wating提示
+    $('.editor_wating').remove();
+    $('.submit').removeAttr('disabled');
+    $('.release').removeAttr('disabled');
+
+    $('#editor_tabs').on('shown',function(){
+        var obj=$(this).find('li.active a'),id=obj.attr('editor_id'),ed;
+        if(obj.attr('switch')==='1'||id==undefined){
+            return;
+        }
+
+        ed=new editor({render:'#'+id+'_editor'});
+        ed.initData($('#init_msg_'+id).text());
+        ed.render();
+
+        editors[id]=ed;
+
+        obj.attr('switch',1);
+        //开启验证
+        $('#form_'+id).vaildata({call_back:function(){
+            var obj=$('#editor_tabs li.active a'),id=obj.attr('editor_id'),title=$('#title_'+id).val(),weight=$('#weight_'+id).val(),flag=$('#flag_'+id)[0].checked;
+
+            if($.trim(editors[id].value())==''){
+                PT.light_msg('你他妈在逗我？','内容为空，不允许提交')
+                return;
+            }
+            PT.sendDajax({'function':'ncrm_set_ad_manage','id':id,'title':title,'html':editors[id].value(),'weight':weight,'flag':flag?1:0});
+        }});
+    });
+
+    //立即显示一个编辑器
+    $('#editor_tabs').trigger('shown');
+
+    $('#add_tab').on('click',function(){
+        PT.show_loading('正在创建新标签')
+        PT.sendDajax({'function':'ncrm_add_menu_ad','is_manual':1,'type':'menu'})
+    });
+
+    $('.release').on('click',function(){
+        var id=$('#editor_tabs li.active a').attr('editor_id');
+        PT.sendDajax({'function':'ncrm_release_ad','id':id});
+    });
+
+    $('.del_tab').on('click',function(){
+        PT.confirm('您确定要删除一个推广内容吗？', function() {
+            if($('#editor_tabs li').length<3){
+                PT.light_msg('请注意','请保留最少一个标签');
+                return;
+            }
+            PT.show_loading('正在删除数据');
+            var id=$('#editor_tabs li.active a').attr('editor_id');
+            PT.sendDajax({'function':'ncrm_del_ad_manage','id':id})
+        });
+
+    });
+})
+
+
+</script>
+{% endblock %}

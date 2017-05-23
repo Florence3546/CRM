@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta charset="utf-8" />
+        <title>精灵词霸-开车精灵</title>
+        <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+        <link rel="stylesheet" href="../site_media/themes/orange/theme.less"/>
+        <link id="systheme" rel="stylesheet" href="../site_media/static/css/quickLayout.css" />
+        <style>
+@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1447050708_4724574.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1447050708_4724574.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1447050708_4724574.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1447050708_4724574.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1447050708_4724574.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+        </style>
+    </head>
+    <body id="select_keyword_order" style="overflow-y: auto;">
+        <input id="systhemes" type="hidden" value="orange"/>
+        <input id="fellback_source" type="hidden" value="0"/>
+        <section id="main_content " class="pb10 rel" style="min-height: 800px;">
+	        <div id="top_advs">
+	            <div class="" style="height: 415px;background-color: #FF5855;">
+	                <a href="http://tb.cn/CNJeKkx" target="_blank"><img height="415" src="https://img.alicdn.com/imgextra/i1/836440495/TB2ow6zhXXXXXbrXpXXXXXXXXXX-836440495.jpg"></a>
+	            </div>
+	            <div class="inactive" style="height: 75px;background-color: #F95150;">
+	                <a href="http://tb.cn/CNJeKkx" target="_blank"><img height="75" src="https://img.alicdn.com/imgextra/i1/836440495/TB2c365hXXXXXXqXXXXXXXXXXXX-836440495.jpg"></a>
+	            </div>
+	        </div>
+	        <div id="top_bar">
+		        <div class="w1280 auto">
+		            <img src="../site_media/static/images/top_logout/logo.png?__inline" alt="" class="ml50">
+		            <ul id="top_menu">
+		                <li><a class="active" href="#">选词预览<div class="arrow"><i class="iconfont">&#xe616;</i></div></a></li>
+		                <li><a href="http://www.paithink.com/" target="_blank">公司官网</a></li>
+		                <li><a href="https://fuwu.taobao.com/ser/detail.html?spm=a1z13.1113643.51052018.59.d8CM8y&service_code=ts-25811&tracelog=category&scm=1215.1.1.51052018" target="_blank">开车精灵</a></li>
+		                <li><a href="https://sy.taobao.com/serviceDetail.htm?service_code=FW_GOODS-1000039616&tracelog=tracelog" target="_blank">装修设计</a></li>
+		                <li><a href="https://sy.taobao.com/serviceDetail.htm?service_code=FW_GOODS-1000118074&tracelog=tracelog" target="_blank">摄影服务</a></li>
+		                <li><a href="https://weike.taobao.com/service/fwDetail.htm?code=FW_GOODS-1000047541&tracelog=tracelog&spm=" target="_blank">客服外包</a></li>
+		                <li><a href="https://weike.taobao.com/service/fwDetail.htm?code=FW_GOODS-1000075893&tracelog=tracelog&spm=" target="_blank">店铺代运营</a></li>
+		            </ul>
+		        </div>
+	        </div>
+	        <div class="w1280 auto">
+
+	            <div class="mt30 tc">
+                    <div class="auto pb10" style="margin-left: -60px; color: #FF6600">可以为任意店铺的任意宝贝选词！非精灵用户只能使用20次，精灵用户不仅可以无限制使用，还拥有一系列更强大的性感功能，欢迎订购！</div>
+	                <input type="text" id="item_url" name="item_url" placeholder="输入淘宝店铺的宝贝链接https://item.taobao.com/item.htm...">
+	                <button id="btn_quick_select" style="margin-left: -5px;">快搜一下</button>
+	                <button id="btn_precise_tao" class="ml1">精准淘词</button>
+	            </div>
+                <div class="tc">
+	                <div id="div_core_keyword" class="hidden">
+	                    <textarea id="core_keyword" class="hide"></textarea>
+	                    <button id="btn_precise_tao2" style="margin-left: -5px;">开始淘词</button>
+	                    <div id="select_box" class="up">
+	                    <!--选词框-->
+	                    </div>
+	                </div>
+                </div>
+	            <div id="div_item_info" class="vh">
+	            <!--宝贝信息-->
+	            </div>
+	            <div id="alert_info" class="alert alert-warning mt20 vh" style="border-radius: 0;">
+                    精灵词库已经将淘宝关键词一网打尽，收集了淘宝下拉框，淘宝推荐词、淘宝热搜、TOP20万...所有你能想到的来源，请亲尽情选用。如果选词不准，请点击<a href="javascript:;" class="b" id="select_feedback">[ 这里 ]</a>反馈意见！
+                </div>
+		        <div id="keyword_selecter" class="vh">
+		            <div class="top_operation lh30">
+		                <span class="b">关键词<span class="keyword_count">200</span>个</span>
+                        <div id="mode_switch" class="r">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn filter btn-primary active" data-mode="precise"><i class="iconfont f18 mr2">&#xe65e;</i>精准模式</button>
+                                <button type="button" class="btn filter btn-default" data-mode="traffic"><i class="iconfont f18 mr2">&#xe65d;</i>流量模式</button>
+                            </div>
+                        </div>
+		            </div>
+		            <div class="top_operation">
+		                <span class="dropdown">
+		                    <button class="btn btn-default btn-sm" data-toggle="dropdown"><i class="iconfont mr5">&#xe615;</i>批量筛选</button>
+		                    <div class="dropdown-menu db vh hold-on-click mt5 w500">
+		                        <div class="modal-header p10">
+		                            <h4>拉动滑竿过滤关键词<span class="ml5">(<span class="keyword_count b">200</span>个)</span></h4>
+		                        </div>
+		                        <div class="modal-body">
+		                            <div class="f12 text-info">滑竿越往右，符合条件的关键词越多，但是词的质量会越差</div>
+		                            <div class="mt20 pr20" id="filter_sliders"></div>
+		                        </div>
+		                    </div>
+		                </span>
+		                <div id="filter_group" class="btn-group ml10" role="group">
+		                    <button type="button" class="btn filter btn-default btn-sm" data-type="sys">系统推荐</button>
+		                    <button type="button" class="btn filter btn-default btn-sm" data-type="roi">&ensp;转化包&ensp;</button>
+		                    <button type="button" class="btn filter btn-default btn-sm" data-type="imp">&ensp;流量包&ensp;</button>
+		                    <button type="button" class="btn filter btn-default btn-sm" data-type="mobile">&ensp;移动包&ensp;</button>
+		                    <button type="button" class="btn filter btn-default btn-sm" data-type="hppr">高性价比包</button>
+		                    <button type="button" class="btn filter btn-default btn-sm active" data-type="all">全部候选词</button>
+		                </div>
+		                <div class="r">
+		                    <div class="input-group w200 l mr10">
+                                <input type="text" class="form-control" id="filter_include" placeholder="包含" style="width:81px;">
+                                <input type="text" class="form-control" id="filter_uninclude" placeholder="不包含" style="width:81px;border-left: none;border-right: none;">
+		                        <span class="input-group-btn">
+		                            <button class="btn btn-default btn-sm btn_search f16" type="button"><i class="iconfont">&#xe618;</i></button>
+		                        </span>
+		                    </div>
+		                    <button id="copy_btn" class="btn btn-sm btn-default mr5">复制关键词</button>
+                            <a id="export_btn" class="btn btn-sm btn-default lh22" download="精灵词霸.csv">导出关键词</a>
+		                </div>
+		            </div>
+                    <table id="table_select_keyword" class="table">
+                        <thead>
+	                        <tr>
+	                            <th class="hidden">排序值</th>
+	                            <th class="hidden"><input type="checkbox" id="check_all"><label for="check_all">全选</label></th>
+	                            <th class="tc"><div>关键词</div></th>
+	                            <th class="w140"><div>匹配度</div></th>
+	                            <th class="w140"><div>市场均价</div></th>
+	                            <th class="w140"><div>展现指数</div></th>
+	                            <th class="w140"><div>点击指数</div></th>
+	                            <th class="w140"><div>竞争指数</div></th>
+	                            <th class="w140"><div>市场点击率</div></th>
+	                            <th class="w140"><div>市场转化率</div></th>
+	                        </tr>
+                        </thead>
+                        <tbody>
+                        <!--关键词数据-->
+                        </tbody>
+                    </table>
+		            <div class="bottom">
+		                <span id="pagination_info"></span>
+		                <div id="pagination_bar" class="r">
+		                </div>
+		            </div>
+		        </div>
+	        </div>
+            <footer>
+                <p>
+                    Copyright@2015&emsp;www.paithink.com Inc.All Rights Reserved.武汉派生科技有限公司&emsp;保留一切权利
+                </p>
+            </footer>
+        </section>
+    </body>
+    <script type="text/javascript" data-main="service/main" src="jl6/site_media/static/js/require.js"></script>
+</html>

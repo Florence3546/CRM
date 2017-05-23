@@ -1,0 +1,26 @@
+<div class="p10">
+    <div class="mt10" id="div_prdtword">
+        <strong class="l lh25">产品词：</strong>
+        <ul class="pt-tag">
+            {{if prdtword_list}}
+            {{each prdtword_list}}
+            <li><a value="{{$value}}" name="prdtword" href="javascript:;">{{$value}}</a></li>
+            {{/each}}
+            {{else}}
+            <li><span class="lh25">暂无数据</span></li>
+            {{/if}}
+        </ul>
+    </div>
+    <div class="mt10" id="div_propword">
+        <strong class="l lh25">属性词：</strong>
+        <ul class="pt-tag">
+            {{if dcrtword_list}}
+            {{each dcrtword_list}}
+            <li><a value="{{$value}}" name="propword" href="javascript:;">{{$value}}</a></li>
+            {{/each}}
+            {{else}}
+            <li><span class="lh25">暂无数据</span></li>
+            {{/if}}
+        </ul>
+    </div>
+</div>

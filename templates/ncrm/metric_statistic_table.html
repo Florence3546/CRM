@@ -1,0 +1,47 @@
+{#utf-8#}
+<table id="metric_statistic_table" class="table-bordered mt20">
+    <thead>
+        <tr>
+            <th class="w100">姓名</th>
+            <th class="w140">度量指标</th>
+            <th class="w100">总计</th>
+            {% for start_date, end_date in period_list %}
+                {% if start_date == end_date %}
+                <th>{{ start_date|date:'m-d' }}</th>
+                {% else %}
+                <th>{{ start_date|date:'m-d' }} 至 {{ end_date|date:'m-d' }}</th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in metric_data %}
+        <tr psuser_id="{{ row.psuser_id }}" psuser_name_cn="{{ row.psuser_name_cn }}" metric_name="{{ row.metric_name }}" metric_name_cn="{{ row.metric_name_cn }}" metric_unit="{{ row.metric_unit }}">
+            {% if row.metric_no == 0 %}
+            <td class="tc psuser_name" rowspan="{{ metric_manager.metric_list|length }}">{{ row.psuser_name_cn }}</td>
+            {% endif %}
+            <td>
+                <a href="javascript:;" class="metric_chart">{{ row.metric_name_cn }}（{{ row.metric_unit }}）</a>
+            </td>
+            <td data_no="">
+                {% if row.details %}
+                    <a href="javascript:;" class="search_shops" title="在工作台搜索店铺">{{ row.result }}</a>
+                    <a href="javascript:;" class="hover_show hide export_data mr3" period_str="{{ row.period_str }}">导出</a>
+                {% else %}
+                    {{ row.result }}
+                {% endif %}
+            </td>
+            {% for data in row.data_list %}
+            <td data_no="{{ forloop.counter0 }}">
+                {% if data.details %}
+                    <a href="javascript:;" class="search_shops" title="在工作台搜索店铺">{{ data.result }}</a>
+                    <a href="javascript:;" class="hover_show hide export_data mr3" period_str="{{ data.period_str }}">导出</a>
+                {% else %}
+                    {{ data.result }}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,97 @@
+{#utf-8#}{% extends "base_jl5.html" %}
+{% load rates %}
+{% block title%}
+    推荐有礼
+{% endblock %}
+
+{% block base_jl5 %}
+  <div id="header" class="navbar-static-top container-fluid">
+      <a href="{%url 'web_home'%}"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+      <ul class="ul_line ar mr10">
+        <li><a id="open_msg" href="{%url 'web_home'%}"><i class="iconfont f18 mr3">&#xe606;</i>返回首页</a>
+        </li>
+        <li>
+          <div class="dropdown rel">
+            <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;">
+              <i class="iconfont f18 mr5">&#xe640;</i>{{request.user.nick}}<i class="iconfont">&#xe626;</i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li><a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+              </li>
+              <li><a href="{%url 'top_logout'%}">退出系统</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+  </div>
+<div class="container-fluid pl0">
+
+    <div class="mt20 w800 auto">
+    <div class=" mb40">
+        <ul class="breadcrumb p0">
+            <li>
+                <a href="{%url 'web_home'%}">首页</a>
+                <span class="divider">/</span>
+            </li>
+            <li>
+                <a href="{%url 'vip_home'%}">会员中心</a>
+                <span class="divider">/</span>
+            </li>
+            <li class="active">
+                推荐有礼
+            </li>
+        </ul>
+
+        <div class="f16 lh30">
+            <h3 class=" mt20"><i class="iconfont f30 mr5">&#xe602;</i>推荐给好友<span class="f14 n ml10 black">（当前积分：<span class="point_count">{{usable_point|default:0}}</span>）</span></h3>
+
+            <div class="gray"><span class="b">推荐规则：</span>小伙伴订购后，小伙伴可获得1000或2000积分，您可获得2000或5000积分 <i class="iconfont ml10 gray poi tips ml3" title="" data-original-title="小伙伴购买月/季度，返您2000积分，小伙伴得1000积分；半年/年，返您5000积分，小伙伴得2000积分。">&#xe647;</i> </div>
+            
+            <div class="pb10 bg_white bdd mt30"> 
+		      <div class="box">
+		        <div class="box_hd">
+		          <span class="box_l">推荐方式一：不指定店铺名，任何开通了直通车的店铺都可以订购</span>		         
+		        </div>		
+				<p class="m0 p10 lh30" id="id_content">
+                	最近我使用了开车精灵，直通车操作方便省事，全自动托管效果很不错。你也开通了直通车的话，推荐你也试试：http://tb.cn/r5Tt1By
+                </p>
+                <a href="javascript:;" class="btn btn-primary ml10 mt-10" id="button_copy" type="button"><i class="iconfont f18 mr3">&#xe697;</i>复制推荐文本</a>
+		      </div>  
+        	</div>
+            
+        	<div class="bg_white bdd mt30"> 
+		      <div class="box">
+		        <div class="box_hd">
+		          <span class="box_l">推荐方式二：指定店铺名，只能指定的店铺订购</span>
+		          <span class="box_r">
+		          <a href="javascript:;" class="btn btn-primary btn-small js_create_camp" id="btn_add_new" type="button"><i class="iconfont mr3">&#xe61a;</i>添加一条</a>
+		          </span>
+		        </div>		
+				<table id="shop_table">	                
+                  <tbody id="tb1">	                 
+                    <tr>
+                      <td class="pl10">
+                        <input type="text" class="span4 mr2 txt_aliww_0" placeholder="请输入店铺掌柜ID">   
+                        <button class="btn btn-primary btn_shop_copy_0" idx="0">复制推荐文本</button>
+                      	<label class="box_r f16 mr20 mt5"></label>
+                      </td>	                   
+                    </tr>                    
+                  </tbody>
+                </table>
+		      </div>  
+        	</div>
+        	
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block custom_js %}
+<script src="/site_media/assets/plugins/data-tables/ZeroClipboard_3.js" type="text/javascript"></script>
+<script src="/site_media/jl5/plugins/zclip/jquery.zclip.min.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        PT.InviteFriend.init();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,228 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}客户群管理{% endblock %}
+
+{% block content %}
+<input type="hidden" name="client_group_id" id="client_group_id" value="{{clients.id}}">
+<input type="hidden" id="last_search_type" value="{{request.POST.search_type}}">
+<div class="w1329 auto">
+    <div class="mt20">
+        {%if error%}
+        <div class="red mt10">
+            <i class="iconfont mr5 f18">&#xe622;</i>{{error}}<br>
+        </div>
+        {%endif%}
+
+        <div class="bg_white bdd p10 lh24 hide" id="help_content">
+            <h5>查询帮助文档</h5>
+            <div class="pl20">
+                {%for k,v in help_dict.items%}
+                <div><span class="b black dib w140">{{k}}</span><span class="f12 gray">{{v}}</span></div>
+                {%endfor%}
+            </div>
+        </div>
+<!--         {%if not customer%}
+        <div class="orange mt10 mb20">
+            <i class="iconfont mr5 f18">&#xe622;</i>用户群不存在，请使用下面的查询器找出相关客户，并加入到客户群中<br>
+        </div>
+        {%endif%} -->
+<!--
+        <div class="fix lh30 pt10 ">
+            <span class="f16"> <i class="iconfont mr5">&#xe685;</i>
+                高级筛选
+            </span>
+            <a href="javascript:;" class="r btn" id="show_help"><i class="iconfont mr3 f18">&#xe68b;</i>显示帮助文档</a>
+        </div>
+
+        <table class="table-layout table-bordered mini mt10" id="search_area_box">
+            <form action="./" method="post" id="query_form">
+            <thead>
+                <th class="pct90">筛选条件</th>
+                <th>动作</th>
+            </thead>
+            <tr>
+                <td>
+                    <textarea class="h80 p0 pct100 f16 bd_none b" style="resize:none;overflow-y:none;" spellcheck="false" name="query" id="query">{{request.POST.query|default:clients.query}}</textarea>
+                    <input type="hidden" name="search_type" value="query">
+                </td>
+                <td class="tc">
+                    <button id="search_query" style="background-color:white;color:#305f87;border:0;">查询用户</button><br>
+                    <a class="mt10" href="javascript:;" id="save_query">保存查询条件</a><br>
+                    <a class="mt10" href="javascript:;" id="generate_id_list">生成客户群</a><br>
+                </td>
+            </tr>
+            </form>
+        </table>
+  -->
+
+        <div class="fix lh30 pt10 ">
+            <span class="f16"> <i class="iconfont mr5">&#xe640;</i>
+                按指定条件筛选
+            </span>
+        </div>
+
+        <div class="bg_white p20 bdd mt10">
+            <form class="m0" action="./" method="post" id="condition_search">
+                <input type="hidden" name="search_type" value="unquery">
+                店铺ID：
+                <input class="w100 mr10" name="shop_id" type="text" value="{{request.POST.shop_id}}">
+                用户名：
+                <input class="w160 mr10" placeholder="可输入'淘**店'模糊查询" name="nick" type="text" value="{{request.POST.nick}}">
+                QQ：
+                <input class="w100 mr10" name="qq" type="text" value="{{request.POST.qq}}">
+                电话：
+                <input class="w100 mr10" name="phone" type="text" value="{{request.POST.phone}}">
+                <button class="btn r ml5" id="id_list_btn"> <i class="iconfont">ID列表</i></button>
+                <button class="btn r" id="search_cond_btn"> <i class="iconfont">&#xe645;</i></button>
+
+               <div>
+				   <table class="table-layout table-bordered mini mt10 {%if not request.POST.id_list_textarea or request.POST.id_list_textarea == ""%} dn {% endif %} " id="search_id_list">
+				        <thead>
+				            <tr>
+				                <th class="pct90">客户ID列表</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr>
+				                <td>
+				                    <textarea class="h160 p0 pct100 f16 bd_none b rsn ofyn" name="id_list_textarea" spellcheck="false" >{{request.POST.id_list_textarea}}</textarea>
+				                </td>
+				            </tr>
+				        </tbody>
+				    </table>
+			    </div>
+            </form>
+        </div>
+
+        {%if customer%}
+        <div class="fix lh30 pt10 pb10 mt10">
+            <span class="f16"> <i class="iconfont mr5">&#xe61c;</i>
+                用户列表
+                <span>({{page_info.record_count}})</span>
+            </span>
+            <span class="r">
+                <span class="mr10">当前选中<span id="checked_num">0</span>个</span>
+                <a class="btn mr10 btn-primary" id="bluk_submit_ids" href="javacsript:;">批量添加客户</a>
+                <a class="btn mr10 btn-primary" id="open_manual_layout" href="javacsript:;">手动添加客户</a>
+            </span>
+        </div>
+
+        <table class="table-bordered" id="user_table">
+            <thead>
+                <tr>
+                    <th class="w20 nbl tc"><input type="checkbox" class="father_box" link="user_table"></th>
+                    <th class="tl w500 p0">
+                        <ul class="ul_line lh30">
+                            <li class="w80 tc">新/续</li>
+                            <li class="w40 tc">周期</li>
+                            <li class="w80 tr">订购时间</li>
+                            <li class="w80 tr">到期时间</li>
+                            <li class="w60 tr">实付</li>
+                            <li class="w60 tr">操作人</li>
+                            <li class="w60 tr">顾问</li>
+                        </ul>
+                    </th>
+                    <th class="tl">备注</th>
+                    <th class="w100">动作</th>
+                </tr>
+            </thead>
+            <tbody class="lh22">
+                {%if customer%}
+                        {%for c in customer%}
+                            <tr shop_id="{{c.shop_id}}">
+                                <td class="tc">
+                                    <input type="checkbox" class="kid_box">
+                                </td>
+                                {% include 'ncrm_common_user_list.html' %}
+                                <td class="tc" shop_id="{{c.shop_id}}">
+                                    {%if c.select%}
+                                    <span class="gary">已添加</span>
+                                    {%else%}
+                                    <a class="btn btn-mini singel_add" id="singel_add_{{c.shop_id}}" href="javascript:;">添加</a>
+                                    {%endif%}
+                                </td>
+                            </tr>
+            {%endfor%}
+                    {%else%}
+            <tr>
+                <td colspan="4" class="tc">暂无数据</td>
+            </tr>
+            {%endif%}
+        </tbody>
+        </table>
+
+        <div class="fix">
+            <span>当前：{{page_info.page}}/{{page_info.page_count}}</span>
+            <div class="pagination mt10 r">
+                <ul>
+                    <li {%if page_info.page == 1%}class="active"{%endif%}>
+                      <!--  <a href="{%url 'add_client' clients.id 1%}?{{request.environ.QUERY_STRING}}">首页</a> -->
+                      <button class="form_search_url btn " submit_url="{%url 'add_client' clients.id 1%}">首页</button>
+                    </li>
+                    {%for p in page_info.page_xrange%}
+                    <li {%if p == page_info.page%}class="active"{%endif%}>
+                        <!-- <a href="javacript:;" class="form_search_url" submit_url="{%url 'add_client' clients.id p%}">{{p}}</a> -->
+                        <button class="form_search_url btn " submit_url="{%url 'add_client' clients.id p%}">{{p}}</button>
+                    </li>
+                    {%endfor%}
+                    <li {%if page_info.page == page_info.page_count%}class="active"{%endif%}>
+                     <!--   <a href="{%url 'add_client' clients.id page_info.page_count%}?{{request.environ.QUERY_STRING}}">尾页</a> -->
+                        <button class="form_search_url btn " submit_url="{%url 'add_client' clients.id page_info.page_count%}">尾页</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {%else%}
+<!--         <div class="bg_white mt20 bdd p20 gray fix">
+            <div class="w400 auto">
+
+            <i class="iconfont l f64">&#xe66f;</i>
+            <div class="l ml20">
+
+                <h4>没有找到可用的客户，请输入查询条件</h4>
+            </div>
+            </div>
+
+
+        </div> -->
+        {%endif%}
+    </div>
+</div>
+
+<div id="id_manual_add_customer_layout" class="modal hide fade p10" data-width="w800" >
+    <div class="fix lh30 pt10 ">
+        <span class="f16 b"> <i class="iconfont mr5"></i>
+            手动批量添加客户
+        </span>
+        <span class="r "><i class="iconfont mr3 f18"></i><span class="f14 b">用户ID以","号分割</span>，示例：98930,703514,742940,745299,789201</span>
+    </div>
+   <table class="table-layout table-bordered mini mt10" >
+        <thead>
+            <tr>
+                <th class="pct90">客户ID列表</th>
+            </tr>
+        </thead>
+        <tbody>
+	        <tr>
+	            <td>
+	                <textarea class="h200 p0 pct100 f16 bd_none b rsn ofyn" id="id_list_textarea" spellcheck="false" ></textarea>
+	            </td>
+	        </tr>
+        </tbody>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary" id="manual_submit_ids">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="close_model btn">关闭</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_add_client.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmAddClient.init();
+});
+
+</script>
+{% endblock %}

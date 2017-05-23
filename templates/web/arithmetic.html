@@ -1,0 +1,91 @@
+{% if not arithmetic.is_get and arithmetic.is_extract  %}
+<link href="/site_media/jl/css/lottery.css" rel="stylesheet" type="text/css"/>
+{% endif %} 
+{% if not arithmetic.is_get and not arithmetic.is_remind and arithmetic.is_extract  %}
+    <div class="alert alert-success fade in large">
+      <button class="close" data-dismiss="alert"></button>
+      <strong class="alert-heading bigger">温馨提示：</strong><span class="marl_24 normal s_color"></span>
+      <div class='normally' class="pad_12 mart_6" style="line-height:25px;">
+          <div class="larger indent">热烈庆祝开车精灵包揽金牌淘拍档和AMP技术奖两项大奖，现对所有开车精灵的老用户开展“感谢有您，有礼相送”的抽大奖活动，点击进入即可获得抽奖机会！！！<a onclick="load_lottery()" class="btn blue mini marl_12">抽奖入口</a></div>
+      </div>
+    </div>
+{% endif %}
+{% if not arithmetic.is_get and not arithmetic.is_remind and not arithmetic.is_extract and arithmetic.award_type != 3 and arithmetic.award_type != 7%}
+    <div class="alert alert-error fade in large" >
+      <button class="close" data-dismiss="alert"></button>
+      <strong class="alert-heading bigger">温馨提示：</strong><span class="marl_24 normal s_color"></span>
+      <div class="larger indent">
+          <div class="marb_12 mart_12 larger">亲，恭喜您赢得开车精灵“感谢有您，有礼相送”的活动奖励！点击这里即可进入领取奖励！<a href="{{arithmetic.http_url}}" target="_blank" class="btn yellow mini marl_12">立即领取</a></div>
+          <div class="normal_size s_color">附：中奖后无法领取？请及时联系我们工作人员的旺旺 <a class="marl_12" target="_blank" href="http://www.taobao.com/webww/ww.php?spm=0.0.0.0.lxlC4a&ver=3&touid=派生科技&siteid=cntaobao&status=1&charset=utf-8" /><img class="vm_4" src="/site_media/jl/img/online.ww.gif"></a></div>
+      </div>
+    </div>
+{% endif %}
+
+{% if not arithmetic.is_get and arithmetic.is_extract %}
+    <div style="display:none;" id="win" >
+      <div style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1040; background-color: #000;opacity: 0.7;filter: alpha(opacity=70);" ></div>
+      <div style="position:absolute; top:0; left:0; right:0; bottom:0; margin: auto; z-index: 100000;  width:320px;height:220px; text-align: center; height: 0%; font-size: 18px;}" >
+        <div style="margin-top:-110px">
+          <div> <img src="/site_media/jl/lottery/finish_lottery.gif"/> </div>
+          {% if arithmetic.award_type != 3 and arithmetic.award_type != 7 %}
+          <div style="font-size:14px;margin-top:-150px;">
+            <div style="margin:30px 0px;text-align:center;font-size:21px;font-weight:bold"> 恭喜您已抽中 <span style="color:red">{{arithmetic.award_name}}</span> ! </div>
+            <div> <a href="{{arithmetic.http_url}}" id="get_it" target="_blank"><img id="get_it_img" src="/site_media/jl/lottery/get_it_start.gif" /></a> </div>
+          </div>
+          {% else %}
+          <div style="font-size:14px;margin-top:-130px;">
+            <div style="margin:30px 0px;text-align:center;font-size:21px;font-weight:bold">很遗憾，您未中奖 !</div>
+          </div>
+          {% endif %}
+          <div style="float:right;margin-top:-145px;margin-right:20px;z-index: 999999;position:relative; "> <a id="close_info"><img id="close_info_img" src="/site_media/jl/lottery/close_up.gif" /></a> </div>
+        </div>
+      </div>
+    </div>
+    <div id="lottery" style="padding-top:10px;display:none;width:1024px;background-image:url(/site_media/jl/lottery/background.jpg);">
+      <div class="fr marr_12 w_color mart_12">
+      <input id="is_remind" type="checkbox" class="vm_3 marr_6" value="{% if arithmetic.is_remind %}0{% else %}1{% endif %}"/>不再提醒
+        <input id="is_extract" type="hidden" value="{% if arithmetic.is_extract %}0{% else %}1{% endif %}"/>
+      </div>
+      <div style="margin-top:23%">
+        <div id="" class="lottery_flow" style="margin-left:7%;;background-image:url(/site_media/jl/lottery/notice.jpg)">
+          <div style="width:415px; height:370px;">
+            <div style="height:172px;"></div>
+            <div id="notice_board" class="lottery_box" style="border:0px;padding-left:80px;margin-top: 20px;height: 120px;">
+              <ul>
+                {% for info in arithmetic.lottery_info %}
+                <li>
+                  <ul style="list-style:none;padding: 0 %">
+                    <li class="lottery_flow" style="width:40%">{{info.user_name}}</li>
+                    <li class="lottery_flow" style="width:20%"></li>
+                    <li class="lottery_flow" style="width:40%">{{info.award_name}}</li>
+                  </ul>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="loop_cell" class="lottery_flow" style="margin-left:5%;margin-top:5%;width:340px"> </div>
+      </div>
+      <div id="rule_detail">
+        <p>抽奖规则：</p>
+        <ol>
+          <li>奖品领取有效期15天，仅限本帐号领取，不得转赠。</li>
+          <li>因淘宝没有免费链接，一个月，季度中奖者需支付0.01元钱进行领奖。</li>
+          <li>若受到淘宝官方指令，网络攻击或系统故障等导致活动无法正常进行，派生科技无需为此进行赔偿或补偿。</li>
+          <li>本活动最终解释权归武汉派生科技有限公司所有。</li>
+        </ol>
+      </div>
+    </div>
+	<script src="/site_media/jl/scripts/lottery.js" type="text/javascript"></script>     
+    <script>
+	{% if not arithmetic.is_get and arithmetic.is_extract %} 
+		 // 抽奖
+		 init_lottery('start_button','is_remind','close_info','get_it',{{arithmetic.award_type}});
+		{% if arithmetic.is_remind %}
+			load_lottery();
+		{% endif %}	     
+	 {% endif %}	
+	</script>
+
+{% endif %}

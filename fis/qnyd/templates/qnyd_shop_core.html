@@ -1,0 +1,75 @@
+<div class="page" style="display:none;" id="shop_core" ng-controller="shopCoreCtrl">
+  <!-- 标题栏 -->
+  <header class="bar-nav top-nav">
+      <div class="searchbar" id="rob_rank_search">
+        <a class="searchbar-cancel">取消</a>
+        <div class="search-input">
+          <label class="icon icon-search" for="search"></label>
+          <input type="search" ng-model="keyword" placeholder='输入关键词' ng-change="search(keyword)"/>
+        </div>
+      </div>
+  </header>
+    <!-- 这里是页面内容区 -->
+    <div class="content" style="-webkit-transform: translate3d(0, 0, 0);transform: translate3d(0, 0, 0);">
+        <div class="top_bar" ng-show="keyword_list.length">
+            <div class="warpper">
+                <a class="button" href="javascript:;" class="external" ng-class="{'button-fill':rob}" ng-model="rob" ng-init="rob=true" style="display: inline-block" ng-click="rob=true">
+                    抢排名
+                </a>
+                <a class="button" href="javascript:;" class="external" ng-class="{'button-fill':!rob}" style="display: inline-block" ng-click="rob=false">
+                    改价
+                </a>                
+                <a class="button" ng-if="!adgroupIdList.length" href="javascript:;" class="external" style="display: inline-block" ng-click="chooseShopCore()">按宝贝筛选</a>                
+                <a class="button" ng-if="adgroupIdList.length" href="javascript:;" class="external" style="display: inline-block" ng-click="cancleShopCore()">显示全部</a>                
+                <span class="select_days">
+                    <span class="button">今日实时</span>
+                    <select ng-change="selectDays(day)" ng-model="day">
+                        <option value="0">今日实时</option>
+                        <option value="1">昨天</option>
+                        <option value="3">过去3天</option>
+                        <option value="7">过去7天</option>
+                        <option value="15">过去15天</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <div class="top_bar" ng-show="keyword_list.length&&!rob">
+            <div class="warpper">
+                <span class="content-block-title" style="margin:0;">PC已改价<span class="base_color">{?changeNum?}</span>个</span>
+                <span class="content-block-title" style="margin:0;">移动已改价<span class="base_color">{?mobileChangeNum?}</span>个</span>
+                <span class="select_days">
+                    <a href="#" class="button button-fill" ng-disabled="rob" ng-click="commit()">提交</a>
+                </span>
+            </div>
+        </div>
+
+        <div class="list" id="shop_core_list" ng-if="keyword_list.length>=0;" style="margin-top: 10px;">
+            <ul ng-if="keyword_list.length>=0;">
+                <li ng-repeat="kw in keyword_list|filter:{word:keyword}|myFilter:{adgroup_id:adgroupIdList}" ng-class="{'up':kw.up,'down':kw.down,'limit':kw.limit,'mobileUp':kw.mobileUp,'mobileDown':kw.mobileDown,'mobileLimit':kw.mobileLimit}">
+                    <div>
+                        <div>{?kw.word?}</div>
+                    </div>
+                    <div>
+                        <div><span class="kw-title">点击量</span>{?kw.click?}</div>
+                        <div><span class="kw-title">成交量</span>{?kw.paycount?}</div>
+                        <div><span class="kw-title">花费</span>￥{?kw.pay?}</div>
+                    </div>
+                    <div>
+                        <div ng-hide="!rob" style="display: flex;justify-content: space-between;">
+                            <a class="button button-fill" href="javascript:;" class="external" ng-click="rob_rank()">设置抢排名</a>
+                            <span class="button button-fill button-warning" ng-show="kw.is_locked">已设为自动抢</span>
+                        </div>
+                        <div ng-hide="rob">
+                            <span class="kw-title">PC出价</span><input class="pc" type="text" ng-model="kw.custum_price" ng-blur="inputBlur(kw.custum_price,1)">&emsp;
+                            <span class="kw-title">移动出价</span><input class="mobile" type="text" ng-model="kw.custum_mobiles_price" ng-blur="inputBlur(kw.custum_mobiles_price,2)">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <p ng-if="keyword&&adgroupIdList.length&&(keyword_list|filter:{word:keyword}|myFilter:{adgroup_id:adgroupIdList})==0" class="no-data">没有符合的关键词，请重新输入</p>
+        <p ng-if="keyword_list.length==0" class="no-data">{?errMsg||'您最近可能没有开直通车，暂时无核心词数据'?}</p>
+    </div>
+</div>
+

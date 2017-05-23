@@ -1,0 +1,51 @@
+<table class="main-data" id="base_data">
+  <tr>
+    <td>
+      <div class="title ml5">总花费(元)</div>
+      <div class="data linkColor b">￥<span class="cost"><%=cost%></span></div>
+    </td>
+    <td>
+      <div class="title">展现量(次)</div>
+      <div class="data impr"><%=impr%></div>
+    </td>
+    <td>
+      <div class="title">点击量(次)</div>
+      <div class="data click"><%=click%></div>
+    </td>
+    <td>
+      <div class="title">点击率</div>
+      <div class="data"><span class="ctr"><%=ctr%></span>%</div>
+    </td>
+    <td>
+      <div class="title">PPC(元)<i class="iconfont tips ml3" data-toggle="tooltip" title="平均点击花费">&#xe62b;</i>
+      </div>
+      <div class="data">￥<span class="cpc"><%=cpc%></span></div>
+    </td>
+  </tr>
+</table>
+<table class="main-data" id="transformation_data">
+  <tr>
+    <td>
+      <div class="title ml5">成交额(元)</div>
+      <div class="data linkColor b tips l" title="直接成交金额: <%=directpay%><br/>间接成交金额: <%=indirectpay%>">￥<span class="pay"><%=pay%></span> </div> </td>
+    <td>
+      <div class="title">收藏量(次)</div>
+      <div class="data favcount tips l" title="店铺收藏数: <%=favshopcount%><br/>宝贝收藏数: <%=favitemcount%>">
+      <%=favcount%>
+      </div>
+    </td>
+    <td>
+      <div class="title">成交数(笔)</div>
+      <div class="data paycount tips l" title="直接成交笔数: <%=directpaycount%><br/>间接成交笔数: <%=indirectpaycount%>"><%=paycount%></div>
+    </td>
+    <td>
+      <div class="title">点击转化率</div>
+      <div class="data"><span class="conv"><%=conv%></span>%</div>
+    </td>
+    <td>
+      <div class="title">ROI<i class="iconfont tips ml3" title="投资回报率">&#xe62b;</i>
+      </div>
+      <div class="data roi"><%=roi%></div>
+    </td>
+  </tr>
+</table>

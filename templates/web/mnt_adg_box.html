@@ -1,0 +1,215 @@
+<div id="fancybox_mnt_adgroup" class="hide marr_6"  style="height:550px;">
+	<div class="mnt_description">
+		<span class="bld larger lh_36 marr_12"><span name="mnt_name"></span> - 选择计划内已推广宝贝</span>
+		<span class="r_color">
+            <strong>托管说明：</strong>
+<!--            <span mnt_type="1">为了避免对算法的干扰，系统会在每次优化时删除该计划下未托管的宝贝；后期添加的宝贝如果未加入托管，系统也会自动删除。</span>-->
+            <span mnt_type="1">系统不会删除长尾托管计划下未托管的宝贝，但为了避免对长尾托管的干扰，建议您自行删除或暂停未托管的宝贝。</span>
+            <span mnt_type="2">系统不会删除重点托管计划下未托管的宝贝，但为了避免对重点托管的干扰，建议您自行删除或暂停未托管的宝贝。</span>
+		</span>
+	</div>
+    <div class="in_block" style="width:600px;">
+	    <div class="statistic_div">
+	        <div class="row-fluid">
+		        <div class="span4 pad_6" style="line-height:27px">
+		            <span class="bld">候选宝贝</span>(<span class="total_adg_count red_num bld" init_value="">---</span>个)
+		        </div>
+		        <div class="span8 tar pad_3">
+		            <input class="title_search_box" type="text" placeholder="请输入宝贝标题查询" id="search_adg_input"><button class="btn" type="button" id="search_adg_btn"><i class="icon-search"></i></button>
+		        </div>
+	        </div>
+	    </div>
+	    <div class="row-fluid" style="height:465px;overflow-y:scroll;">
+	        <table source="adgroup_table" class="table pof table_4fixedhead" style="width:583px;z-index:5;">
+	        </table>
+	        <table id="adgroup_table" class="table">
+	            <thead style="background-color:#eee;">
+	                <tr style="height:43px;">
+	                    <th class="tac" style="width:96px;">
+	                        <button class="batch_set_mnt btn blue pad_3 mini" style="height:27px;">批量托管<span class="batch_adg_num">50</span>个</button>
+	                        <span>宝贝图片</span>
+	                    </th>
+	                    <th class="tac" style="width:195px;">宝贝标题</th>
+	                    <th class="tac" style="width:145px;">7天基础数据</th>
+	                    <th class="tac" style="width:146px;">7天转化数据</th>
+	                </tr>
+	            </thead>
+	            <tbody class="lh_24"></tbody>
+	        </table>
+	        <div class="tac large"><a href="javascript:void(0);" id="load_more_adg" class="hide">加载更多宝贝。。。</a></div>
+	    </div>
+    </div>
+
+    <div class="in_block marl_12" style="width:540px;">
+        <div class="statistic_div">
+	        <div class="row-fluid">
+	            <div class="span10 pad_6" style="line-height:27px">
+	                <span class="bld">已选宝贝</span>(<span class="mnt_adg_count red_num bld">0</span>个，还可添加<span class="mnt_count red_num bld">---</span>个)
+	            </div>
+	            <div class="span2 tar pad_3">
+	                <button class="btn blue btn_OK">确定</button>
+	            </div>
+	        </div>
+        </div>
+        <div class="row-fluid" style="height:465px;overflow-y:scroll;">
+            <table source="mnt_adgroup_table" class="table pof table_4fixedhead" style="width:523px;z-index:5;">
+            </table>
+            <table id="mnt_adgroup_table" class="table">
+                <thead style="background-color:#eee;">
+                    <tr style="height:43px;">
+                        <th class="tac" style="width:96px;">宝贝图片</th>
+                        <th class="tac" style="width:426px;">宝贝标题</th>
+                    </tr>
+                </thead>
+                <tbody class="lh_24"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 设置关键词最高限价 -->
+<div class="modal hide fade" id="modal_limit_price" adgroup_id="">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3>设置关键词最高限价</h3>
+  </div>
+  <div class="modal-body lh_36">
+    <div class="cat_path">
+      <span class="bld">宝贝所属类目：</span>
+      <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_path"></span>
+    </div>
+    <div class="cat_avg_cpc">
+      <span class="bld">行业市场均价：</span>
+      <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_avg_cpc"></span>元
+      <span class="s_color">(建议关键词最高限价设为行业市场均价的1.2倍)</span>
+    </div>
+    <div>
+      <span class="bld">关键词最高限价：</span>
+      <input type="text" id="adg_limit_price" maxlength="5" class="keyup_restore" style="width:60px;"> 元
+      <span class="in_block" style="width:14px;"><i class="icon-exclamation-sign hide tooltips"></i></span>
+      <span class="s_color" style="margin-left:-15px;">(<span class="limit_price_min">0.80</span>~<span class="limit_price_max">20.00</span> 元)</span>
+    </div>
+<!--    <div class="r_color mart_6 lh_24 bld">
+      注意：系统将删除该宝贝7天无点击的关键词。
+    </div>-->
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:void(0);" class="btn blue" id="submit_impt_adg">确定</a>
+    <a href="javascript:void(0);" class="btn" data-dismiss="modal">取消</a>
+  </div>
+</div>
+
+<!-- 临时回收站  -->
+<div class="hide">
+    <table id="adgroup_recycle_bin">
+    </table>
+</div>
+
+<!-- 确定删除宝贝对话框 -->
+<div class="modal hide fade" id="modal_del_unmnt_adg">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h3><!--删除-->未托管宝贝</h3>
+    </div>
+    <div class="modal-body lh_24">
+        <div class="normally">
+            <i class="icon-warning-sign y_color large marr_6"></i>
+            <div class="in_block vat r_color">
+	            <div>还有<span class="total_adg_count red_num">---</span>个宝贝未选入托管<!--，设置完成后将会在系统例行优化时被删除-->！</div>
+	            <!--<div>请仔细确认，避免误删！</div>-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="btn blue" id="return_2set_mnt_adg">返回选择已推广宝贝</a>
+        <a href="javascript:void(0);" class="btn red into_next_step">确定并进入下一步</a>
+        <a href="javascript:void(0);" class="btn red btn_OK2" confirmed="0">确定</a>
+    </div>
+</div>
+
+<script id="adgroup_tr" type="text/html">
+<%for (var i in data) { %>
+<tr adgroup_id="<%=data[i].adgroup_id%>" item_id="<%=data[i].item_id%>" cat_id="<%=data[i].cat_id%>" limit_price="<%=data[i].limit_price%>">
+    <td class="por">
+        <a href='javascript:void(0);' name='adgroup'>
+	        <img src="<%=data[i].pic_url%>_100x100.jpg" width="100" height="100"/>
+	        <img src="/site_media/jl/css/img/circle_ok.png" class="poa hide opert_tag" style="bottom: 0;right: 0;" title="点击托管该宝贝"/>
+        </a>
+    </td>
+    <td>
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+        <div class="o_color">￥<%=data[i].price%></div>
+    </td>
+    <td class="padl_6">
+        <div>总花费 <span class="bld"><%=data[i].total_cost%></span></div>
+        <div>点击量 <span class="marl_3"><%=data[i].click%></span></div>
+        <div>点击花费 <span class="marl_3"><%=data[i].ppc%></span></div>
+    </td>
+    <td class="padl_6 por">
+        <div>成交额 <span class="bld"><%=data[i].total_pay%></span></div>
+        <div>成交量 <span class="marl_3"><%=data[i].paycount%></span></div>
+        <div>投资回报率 <span class="marl_3"><%=data[i].roi%></span></div>
+        <a href="javascript:void(0);" class="set_mnt poa marr_3 hide opert_tag" style="top:0px;right:0px">加入托管</a>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="mnt_adgroup_tr" type="text/html">
+<%for (var i in data) { %>
+<tr adgroup_id="<%=data[i].adgroup_id%>" item_id="<%=data[i].item_id%>">
+    <td class="pad_0">
+        <a href='javascript:void(0);' class="por block" style="padding:1px;border-bottom:#ddd 1px solid;">
+            <img name='creative_img' src="<%=data[i]['item_imgs'][0]%>_100x100.jpg" width="100" height="100" title="点击换图" />
+            <span class="poa w_color bld hide opert_tag" style="top: 0;right: 3px;">1</span>
+        </a>
+        <a href='javascript:void(0);' class="por block" style="padding:1px;">
+        <%if (mnt_type=='2') { %>
+            <span name="creative_img" class="none_crt_img in_block w_color bgc_ddd tac bigger bld" style="width: 100%;padding: 22.5px 0;">选 择<br>图 片</span>
+        <% } else { %>
+            <img name='creative_img' src="<%=data[i]['item_imgs'][0]%>_100x100.jpg" width="100" height="100" title="点击换图" />
+        <% }%>
+            <span class="poa w_color bld hide opert_tag" style="top: 0;right: 3px;">2</span>
+        </a>
+		<ul class="hide" name="item_imgs">
+		<%for (var j in data[i]['item_imgs']) { %>
+		    <li><%=data[i]['item_imgs'][j]%></li>
+		<% }%>
+		</ul>
+    </td>
+    <td class="padl_6 por">
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+	    <%if (mnt_type=='2') { %>
+        <div>
+			<span class="bld">关键词限价：</span>
+			<span class="o_color">￥<span name="limit_price"><%=data[i].limit_price%></span></span>
+        </div>
+	    <% }%>
+        <div class="adg_title lh_30">
+            <span class="bld">创意标题1 </span>
+            <span class="loading_tag s_color">正在查询<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide normal_size pad_0 vab" style="width:275px;">
+            <span name="title_length_prompt" class="hide"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <div class="adg_title lh_30">
+            <span class="bld">创意标题2 </span>
+            <span class="loading_tag s_color">正在查询<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide normal_size pad_0 vab" style="width:275px;">
+            <span name="title_length_prompt" class="hide"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <div class="error_list lh_30 r_color bld hide">
+        </div>
+        <span class="g_color poa marr_3 hide opert_tag" style="top:0px;left:0px;padding:0 3px;"><i class="icon-chevron-left marr_3"></i>点击图片换图</span>
+        <a href="javascript:void(0);" class="set_unmnt poa marr_3 hide opert_tag" style="top:0px;right:0px">取消托管</a>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="ul_item_imgs" type="text/html">
+<ul class="hide" name="item_imgs">
+<%for (var i in item_imgs) { %>
+	<li><%=item_imgs[i]%></li>
+<% }%>
+</ul>
+</script>

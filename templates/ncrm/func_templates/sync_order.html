@@ -1,0 +1,147 @@
+<div id="id_sync_order_layout" class="modal hide fade p10" data-width="w800" >
+    <div class="fix lh30 pt10 ">
+        <span class="f16 b"> <i class="iconfont mr5"></i>
+            手动批量添加同步订单客户
+        </span>
+        <span class="r "><i class="iconfont mr3 f18"></i><span class="f14 b">昵称以回车分割</span></span>
+    </div>
+   <table class="table-layout table-bordered mini mt10" >
+        <thead>
+            <tr>
+                <th class="pct90">客户昵称列表</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <textarea class="h200 p0 pct100 f16 bd_none b rsn ofyn" id="sync_order_ids_textarea" client_group_id="-1" spellcheck="false"  placeholder=""></textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="success_show_div" class="dn h200 mt20">
+        <ul class="ul_line f14" style="background-color:#E3E3E3;">
+            <li class="w180 b">昵称</li>
+            <li class="w180 tc b">订购项</li>
+            <li class="w100 tc b">订购类型</li>
+            <li class="w100 tc b">开始时间</li>
+            <li class="w100 tc b">结束时间</li>
+        </ul>
+        <div class="pct100 h200 content ova lh24" style="color:gray;">
+        </div>
+    </div>
+
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="sync_order_submit">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="close_model btn f12">关闭</a>
+    </div>
+</div>
+
+<script id="success_show_div_tr" type="text/html">
+    <ul class="ul_line">
+        <li class="w180 " ><%=nick%></li>
+        <li class="w180 ">
+            <% if(article_code== 'ts-25811'){ %>
+                <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+            <%} else if(article_code== 'ts-25811-6') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe685;</i>
+            <%} else if(article_code== 'FW_GOODS-1921400') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+            <%} else { %>
+                其他
+            <% }%>
+            <% if(article_item_name.length > 10){ %>
+                <%=article_item_name.substring(0,10)+"....."%>
+            <% } else {%>
+                <%=article_item_name.substring(0,10)%>
+            <%} %>
+        </li>
+        <li class="w100 tc ">
+            <% if(biz_type== 1){ %>
+                新订
+            <% } else if(biz_type== 2){ %>
+                续订
+            <% }  else if(biz_type== 3){ %>
+                升级
+            <% }  else if(biz_type== 4){ %>
+                后台赠送
+            <% } else if(biz_type== 5){ %>
+                自动续订
+            <%} %>
+        </li>
+        <li class="w100 tc "><%=order_cycle_start.substring(0,10)%></li>
+        <li class="w100 tc "><%=order_cycle_end.substring(0,10)%></li>
+    </ul>
+</script>
+
+<script>
+    PT.namespace('SyncOrder');
+    PT.SyncOrder = function() {
+        var init_plug = function(){
+	        $('.sync_order').on('click', function() {
+	            // $("#id_list_textarea").val(""); 暂不做清理工作
+	            $("#id_sync_order_layout").modal();
+	            $("#sync_order_submit").show();
+	        });
+	        
+	        $("#sync_order_submit").on('click',function(){
+	           var nicks = $("#id_sync_order_layout #sync_order_ids_textarea");
+	           var nick_list = nicks.val().split("\n");
+	           var send_nicks = new Array();
+	           for(var i = 0 ; i < nick_list.length ; i ++){
+	               var nick = nick_list[i];
+	               if( nick != undefined  && nick != ""){
+	                   nick = $.trim(nick);
+	                   send_nicks.push(nick);
+	               }
+	           }
+	           if ( send_nicks.length > 0){
+	               PT.show_loading("正在同步订单");
+	               PT.sendDajax({
+	                   "function":"ncrm_sync_order",
+	                   "nick_list":$.toJSON(nick_list),
+	                   "call_back":"PT.SyncOrder.sync_order_back",
+	               });
+	           } else {
+	               PT.alert("请按照规范来输入需要同步的店铺");
+	           }
+	        
+	        });
+	
+        };
+        
+        return {
+            init : init_plug,
+            sync_order_back : function(json){
+                PT.hide_loading();
+                if ( json.error != ""){
+                    PT.alert(json.error);
+                } else {
+                    var order_list= json.data;
+                    if(order_list.length > 0){
+	                    console.log(json);
+	                    var opera = $("#success_show_div .content");
+	                    var html = "";
+	                    for ( var i = 0 ; i < order_list.length ; i ++ ){
+	                        var order = order_list[i];
+	                        html += template.render("success_show_div_tr",order);
+	                    }
+	                    opera.html(html);
+	                    $("#success_show_div").show();
+	                    $("#sync_order_submit").hide();
+                    } else {
+                        PT.alert("未能同步任何订单到我们系统，请过一段时间重试");                    
+                    }
+                }
+            }
+        }
+    }();
+    
+    $().ready(function(){
+         PT.SyncOrder.init();
+	});
+</script>
+
+
+

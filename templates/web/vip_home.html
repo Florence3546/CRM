@@ -1,0 +1,365 @@
+{% extends "base_jl5.html" %}
+{% block title%}会员中心{% endblock %}
+{% block extra_style %}
+<style>
+    .left_line{
+        border-left: 3px solid #4a79db;
+    }
+    .user_img_box{
+        position: relative;
+        border-radius: 60px;
+        width: 60px;
+        height: 60px;
+        background-color: #fff;
+        margin: 5px auto 10px auto;
+        overflow: hidden;
+        border:3px solid #fff;
+        box-shadow: 1px 1px 1px #aaa;
+        cursor: pointer;
+    }
+    .user_img_box:hover:after{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -15px;
+        margin-top: -15px;
+        font-size: 30px;
+        color: #fff;
+        content:'\e60e';
+        font-family: "iconfont";
+        font-style: normal;
+        font-weight: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+    }
+    .user_img_box:hover:before{
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #222;
+        filter:alpha(opacity=40);
+        -moz-opacity:0.4;
+        opacity:0.4;
+    }
+    .h181{
+        height: 181px;
+    }
+</style>
+{% endblock %}
+
+{%block base_jl5%}
+<input type="hidden" value="{{data.is_need_phone}}" id="is_need_phone">
+<div id="header" class="navbar-static-top container-fluid">
+    <a href="{%url 'web_home'%}">
+        <img class="db l" src="/site_media/jl5/images/logo.png"></a>
+    <ul class="ul_line ar mr10">
+        <li>
+            <a id="open_msg" href="{%url 'web_home'%}"> <i class="iconfont f18 mr3">&#xe606;</i>
+                返回首页
+            </a>
+        </li>
+        <li>
+            <div class="dropdown rel">
+                <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;"> <i class="iconfont f18 mr5">&#xe640;</i>
+                    {{request.user.nick}}
+                    <i class="iconfont">&#xe626;</i>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li>
+                        <a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'top_logout'%}">退出系统</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="container-fluid mt20">
+
+    <div class="w1100 auto">
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="brd h181 tc">
+                    <div class="user_img_box">
+                        {%if request.user.shop.pic_path%}
+                            <img src="http://img01.taobaocdn.com/imgextra/{{request.user.shop.pic_path}}_100x100.jpg" width="100">
+                        {%else%}
+                            <img src="/site_media/jl5/images/vip_user_default.png" width="100">
+                        {%endif%}
+                    </div>
+                    <p class="f16 b">亲爱的，{{request.user.nick}}</p>
+                    <p class="f16">欢迎回来，您已连续签到<span id="get_attendance_day">{{data.get_attendance_day}}</span>天</p>
+                    <p class="f16">
+                        {%if data.is_sign_today %}
+                            <a class="btn btn-mini btn-primary mt3 disabled" id="sign_point"><i class="iconfont mr5">&#xe698;</i><span>已签到</span></a>
+                        {%else%}
+                            <a class="btn btn-mini btn-primary mt3" id="sign_point"><i class="iconfont mr5">&#xe698;</i><span>签到</span></a>
+                        {%endif%}
+                    </p>
+                </div>
+            </div>
+            <div class="span6 pl40 brd h181">
+                <div>
+                    <span class="f16">您当前的积分：</span>
+                    <p style="line-height:50px;font-size:40px">
+                        <span class="baseColor point_count">{{data.point_count}}</span>
+                    </p>
+                </div>
+                <p class="f16">您当前的等级：
+                    <div>
+                        {%if data.grade == '金牌'%}
+                            <img src="/site_media/jl5/images/gold_medal.png" width="60" height="60" alt="金牌">
+                        {%endif%}
+                        {%if data.grade == '银牌'%}
+                            <img src="/site_media/jl5/images/silver_medal.png" width="60" height="60" alt="银牌">
+                        {%endif%}
+                        {%if data.grade == '铜牌'%}
+                            <img src="/site_media/jl5/images/bronze_medal.png" width="60" height="60" alt="铜牌">
+                        {%endif%}
+                        {{data.grade}}<i class="iconfont ml10 gray poi tips ml3" title="" data-original-title="<div class='tl'>当前历史最高积分{{data.history_highest_point}}<br>等级划分是根据历史最高积分的<br>金牌[大于50000]<br>银牌[10000-49999]<br>铜牌[0-9999]<br></div>">&#xe647;</i>
+
+                    </div>
+                </p>
+<!--                 {%if data.next_grade > 0 %}
+                    <p>距离升级还有：{{data.next_grade}}积分<a class="ml10" href="{% url 'point_detial' %}?type=jfgl" target="_blank">去升级</a></p>
+                {%else%}
+                    <p>&emsp;</p>
+                {%endif%} -->
+            </div>
+            <div class="span6 brd h181 pl20">
+                <div class="f16 pl5">推荐特权（<a target="_blank" href="{%url 'point_mall'%}">更多请到积分商城</a>）</div>
+                    <div class="mt15">
+                        <div class="span10 mr20">
+                            <a href="{%url 'point_mall'%}" class="bg_white db pt10 pb10 tc bdd" target="_blank">
+                                <img src="/site_media/jl5/images/phone_calls.gif" width="60" height="85"></a>
+                                {%if data.phone_cost20_num%}
+                                    <div class="gray mt10 tc">{{data.phone_cost20_num}}人领取</div>
+                                {%endif%}
+                        </div>
+                        <div class="span10">
+                            <a href="{%url 'point_mall'%}" class="bg_white db pt10 pb10 tc bdd" target="_blank">
+                                <img src="/site_media/jl5/images/vip_djq.jpg" width="60" height="85"></a>
+                            <div class="gray mt10 tc">{{data.discount_num}}人领取</div>
+                        </div>
+                    </div>
+            </div>
+            <div class="span6 h181 pl40 pr40">
+            	<a href="{% url 'point_detial' %}?type=jfgl" class="btn btn-large mt40 btn-block" target="_blank">积分攻略</a>
+                <div class="mt10">
+                    <a href="{% url 'point_detial' %}?type=jfjl" class="btn btn-large btn-block" target="_blank">积分记录</a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row-fluid mt40 btd">
+            <h3><i class="iconfont mr5">&#xe685;</i>会员专属</h3>
+            <div>
+                <div class="span6 p5 pl0">
+                    <a href="{%url 'point_mall'%}" class="bg_white db tc pt40 pb40 bdd" target="_blank">
+                        <img src="/site_media/jl5/images/vip_jfsc.gif" alt="">
+                    </a>
+                </div>
+                <div class="span6 p5">
+                    {%if request.session.item_code == 'ts-25811-3'%}
+                    <a class="bg_white db tc pt40 pb40 bdd"  target="_blank" href="/web/upgrade_suggest/?referer=upgrade&item_code=ts-25811-8">
+                        <img src="/site_media/jl5/images/vip_sjxd.gif" alt="">
+                    </a>
+                    {%else%}
+                    <a class="bg_white db tc pt40 pb40 bdd"  target="_blank" href="/web/upgrade_suggest/?referer=upgrade&item_code={{request.session.item_code}}">
+                        <img src="/site_media/jl5/images/vip_sjxd.gif" alt="">
+                    </a>
+                    {%endif%}
+                </div>
+                <div class="span6 p5 pr0">
+                    <a href="{%url 'invite_friend'%}" class="bg_white db tc pt40 pb40 bdd" target="_blank">
+                        <img src="/site_media/jl5/images/vip_tjfx.gif" alt="">
+                    </a>
+                </div>
+                <div class="span6 p5 pr0">
+                    <a href="{%url 'point_praise'%}" class="bg_white db tc pt40 pb40 bdd" target="_blank">
+                        <img src="/site_media/jl5/images/vip_tjyl.gif" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="perfect_phone">
+        <div class="modal-header">
+            <h5>激活会员中心</h5>
+        </div>
+        <div class="modal-body">
+            <div class="red mb20 lh24"> <i class="iconfont"></i>
+                <span class="ml5">亲，您尚未激活会员特权！现在激活，立享多项会员特权，更有500积分相送！。</span>
+            </div>
+
+            <div class="mt20">
+                <span class="w50 dib">手机号</span>
+                <input type="text" name="phone" id="id_phone" maxlength="12" value="">
+                <span class="red ml5">*</span>
+            </div>
+
+            <div class="mt20">
+                <span class="w50 dib">QQ号</span>
+                <input type="text" name="qq" id="id_qq" maxlength="11" value="">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="id_submit_info">立即激活</button>
+            <button class="btn" data-dismiss="modal">取消</button>
+        </div>
+</div>
+
+<div class="modal fade hide" data-width="w460" id="perfect_info">
+    <div class="modal-header">
+        <h5>完善信息后有惊喜</h5>
+    </div>
+    <form class="m0" action="">
+    <div class="modal-body">
+        <div class="pl10">
+                <div class="mt10">
+                    收&ensp;件&ensp;人：<input class="ml10" data-rule="require" name="receiver" id="receiver" type="text" value="{{data.info_dict.receiver}}"><span class="red mr5 ml10">*</span>
+                </div>
+                <div class="mt10">
+                    手&ensp;机&ensp;号：<input class="ml10" data-rule="phone" name="receiver_phone" id="receiver_phone" type="text" value="{{data.info_dict.receiver_phone}}"><span class="red mr5 ml10">*</span>
+                </div>
+                <div class="mt10">
+                    邮&emsp;&emsp;编：<input class="ml10" data-rule="require" type="text" name="zip_code" id="zip_code" value="{{data.info_dict.zip_code}}"><span class="red mr5 ml10">*</span>
+                </div>
+                <div class="mt10">
+                    详细地址：<textarea  class="ml10 w300" data-rule="require" cols="30" name="receive_address" id="receive_address" rows="3">{{data.info_dict.receive_address}}</textarea><span class="red mr5 ml10">*</span>
+                    <div class="ml10 gray f12">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;请填写详细的地址，以免寄丢了哦！</div>
+                </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" >提交</button>
+        <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+     </form>
+</div>
+{%endblock%}
+
+
+{% block custom_js %}
+<script>
+PT.namespace('vipHome');
+PT.vipHome=function(){
+    var init_dom=function(){
+
+        $('#sign_point').on('click',function(){
+
+            if ($('#sign_point').hasClass('disabled')) {
+                PT.light_msg('精灵提示','今天已经签过了，明天再来吧！');
+                return false;
+            }
+
+            $('#sign_point').addClass('disabled');
+
+            PT.sendDajax({
+                'function': 'web_sign_point',
+                'callback': 'PT.vipHome.sign_point_callback'
+            });
+
+        });
+
+
+        $('.user_img_box').on('click',function(){
+            $('#perfect_info').modal();
+        });
+
+
+        $('#perfect_info form').vaildata({'placement':'right','call_back':function(obj){
+            var receiver,receiver_phone,receive_address,zip_code;
+
+            receiver=$('#receiver').val();
+            receiver_phone=$('#receiver_phone').val();
+            receive_address=$('#receive_address').val();
+            zip_code=$('#zip_code').val();
+
+            PT.sendDajax({
+                'function': 'web_perfect_info',
+                'receiver':receiver,
+                'receiver_phone':receiver_phone,
+                'receive_address':receive_address,
+                'zip_code':zip_code,
+                'callback': 'PT.vipHome.perfect_info_callback'
+            });
+
+            $('#perfect_info').modal('hide');
+        }});
+
+         $(document).on('click', '#id_submit_info', function(){
+            var qq = $.trim($('#id_qq').val());
+            var phone = $.trim($('#id_phone').val());
+
+            if(isNaN(phone) || !(/^1[3|4|5|7|8]\d{9}$/.test(phone))){
+                PT.alert("手机号码填写不正确！");
+                return false;
+            }
+
+            PT.sendDajax({'function':'web_submit_userinfo', 'phone':phone, 'qq':qq});
+        });
+
+         if($('#is_need_phone').val()=='1'){
+            $('#perfect_phone').modal();
+         }
+
+         $('.tips').tooltip({html:true});
+    }
+
+    return {
+        init:function(){
+            init_dom();
+        },
+        sign_point_callback:function(data){
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                $('.point_count').each(function(){
+                    var point=Number($(this).text());
+                    $(this).text(point+data.data.point);
+                });
+                $('#get_attendance_day').text(data.data.attendance_day);
+                PT.light_msg('签到成功','赠送积分'+data.data.point+',连续签到'+data.data.attendance_day+'天');
+            }
+        },
+        perfect_info_callback:function(data){
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                if(data.data.add_point_is_valid){
+                    $('.point_count').each(function(){
+                        var point=Number($(this).text());
+                        $(this).text(point+data.data.point);
+                    });
+                }
+                PT.light_msg('完善信息','更新成功');
+            }
+        },
+        submit_userinfo_back:function(){
+            $('#perfect_phone').modal('hide');
+            $('.point_count').each(function(){
+                var point=Number($(this).text());
+                $(this).text(point+500);
+            });
+        }
+    }
+
+}();
+
+PT.vipHome.init();
+</script>
+{% endblock %}

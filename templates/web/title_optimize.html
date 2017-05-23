@@ -1,0 +1,221 @@
+{% extends "base_adgjl5.html" %}
+{% load rates %}
+{% block title%}
+  标题优化
+{% endblock %}
+{% block extra_style %}
+
+{% endblock %}
+{% block content %}
+<div class="w1200 auto">
+
+  <div class="orange mb10">
+      <span class="poi ml10" id="title_optimize_help" data-toggle="modal" data-target="#title_optimize_help_box" data-keyboard="false">
+        <i class="iconfont f18">&#xe62b;</i>
+        <span>帮助和注意事项</span>
+      </span>
+  </div>
+  <form class="m0">
+    <input type="hidden" id="adgroup_id" value="{{ adg.adgroup_id }}">
+    <input type="hidden" id="item_id" value="{{ item.item_id }}">
+    <input type="hidden" id="item_title" value="{{ item.title }}">
+    <input type="hidden" id="title_word_str" value="{{ title_word_str }}">
+    <input type="hidden" id="update_convwrod_flag" value="{{ update_convwrod_flag }}">
+  </form>
+<div id="div_total">
+  <div class="box">
+    <div class="box_hd">
+        <span class="b">标题优化</span>
+      <span class="r">
+        <a href="javascript:;" id="adgroup_property">查看宝贝属性<i class="iconfont ml5">&#xe614;</i></a>
+      </span>
+    </div>
+    <div class="box_bd hide" id="adgroup_property_box">
+      <ul class="ul_line lh24 f12">
+        {% for property in item.property_list %}
+          <li class="pct24" title="{{ property }}">{{ property|truncatechars_ch:30 }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="box_bd p0 nbl">
+      <fieldset class="p10 nbr nbb nbl" id="div_elemword">
+            <legend><span class="f14">第1步：<span class="n">筛选关键词</span></span></legend>
+              <div class="mt10" id="div_brand">
+                <span class="l ml5">品牌词：</span>
+                <ul class="pt-tag with-x pl60">
+                  {% for brand in item.brand_list %}
+                  <li>
+                    <a value="{{ brand }}" name="brand"  href="javascript:;" class="poi popovers red"  data-trigger="hover" data-placement="top" data-content="1. 如果您不是该品牌的授权代理商或旗舰店，可能会被淘宝系统排查，请慎重选择。<br>2. 非知名品牌不建议选择。">{{ brand }}</a>
+                  </li>
+                  {% empty %}
+                  <li>暂无数据</li>
+                  {%endfor%}
+                </ul>
+              </div>
+
+              <div class="mt10" id="div_prmtword">
+                <span class="l ml5">促销词：</span>
+                <ul class="pt-tag with-x pl60">
+                  {% for word in promotion_words %}
+                  <li {%if forloop.counter > 13%}style="display:none;"{%endif%}><a value="{{ word }}" name="prmtword" href="javascript:;" {% if word in flagship_prmtwords %}class="poi popovers red"  data-trigger="hover" data-placement="top" data-content="非品牌授权代理商或旗舰店请勿用"{%endif%} >{{ word }}</a></li>
+                  {% empty %}
+                  <li>暂无数据</li>
+                  {%endfor%}
+                </ul>
+              </div>
+
+              <div class="mt10" id="div_dcrtword">
+                <span class="l ml5">修饰词：</span>
+                <ul class="pt-tag with-x pl60">
+                  {% for word, hot in item.dcrtword_hot_list %}
+                  <li {%if forloop.counter > 13%}style="display:none;"{%endif%}><a value="{{ word }}" name="dcrtword" href="javascript:;">{{ word }}</a></li>
+                  {% empty %}
+                  <li>暂无数据</li>
+                  {%endfor%}
+                </ul>
+              </div>
+
+              <div class="mt10" id="div_propword">
+                <span class="l ml5">属性词：</span>
+                <ul class="pt-tag with-x pl60">
+                  {% for word, hot in item.propword_hot_list %}
+                  <li {%if forloop.counter > 13%}style="display:none;"{%endif%}><a value="{{ word }}" name="propword" href="javascript:;">{{ word }}</a></li>
+                  {% empty %}
+                  <li>暂无数据</li>
+                  {%endfor%}
+                </ul>
+              </div>
+
+              <div class="mt10" id="div_prdtword">
+                <span class="l ml5">产品词：</span>
+                <ul class="pt-tag with-x pl60">
+                  {% for word, hot in item.prdtword_hot_list %}
+                  <li {%if forloop.counter > 13%}style="display:none;"{%endif%}><a value="{{ word }}" name="prdtword" href="javascript:;">{{ word }}</a></li>
+                  {% empty %}
+                  <li>暂无数据</li>
+                  {%endfor%}
+                <div id="prdtword_warning" class="hide mini_t">
+                  <i class="iconfont red f20">&#xe679;</i>产品词个数超过3个，请检查是否<a href="http://bbs.taobao.com/catalog/thread/1338197-258434799.htm" target="_blank" title="点击了解哪些行为会被淘宝判定为关键词堆砌">堆砌关键词</a>，避免被淘宝降权
+                </div>
+                </ul>
+              </div>
+
+              <div class="mt10" id="div_convword">
+                <span class="l ml5">转化词：</span>
+                <ul class="pt-tag with-x pl60">
+                  <li>暂无数据</li>
+                </ul>
+              </div>
+
+              <div class="gray f12 ml5 mt15">
+                修饰词：根据宝贝在全网中的定位而推荐的属性词。 属性词：来源于宝贝自身被定义的属性，可提高标题属性相关性。 转化词：根据统计数据推荐给您该宝贝在直通车里高转化率的关键词
+              </div>
+      </fieldset>
+      <fieldset class="p10 nbr nbb nbl">
+          <legend><span class="f14">第2步：<span class="n">微调宝贝标题</span><i class="iconfont popovers ml3 gray poi" data-trigger="hover" data-placement="top" data-content="在第1步中选择或取消词根，组合框中会自动组合出新标题，也可以点击拖动里面的词根调整顺序">&#xe647;</i></span></legend>
+          <div id="div_preview_title" class="row-fluid lh_36 marb_24">
+            <div class="row-fluid group_keyword_box">
+              <div class="fix">
+                <ul class="lh_24 w800">
+                </ul>
+                <div class="l ml30">
+                  <div class="mt-20 gray"><span id="remain_char_prompt">你还可选</span><span class="red" id="remain_char_count">--</span>个汉字</div>
+                  <button type="button" class="btn mt5 " id="btn_clear_title">清空</button>
+                  <button type="button" class="btn mt5 btn-primary" id="btn_create_title">生成测试标题</button>
+                </div>
+              </div>
+              <div class="mt10">
+               {% if optimize_prompt %}
+                  <i class="iconfont f16 mr3 red">&#xe679;</i><span class="f12">{{ optimize_prompt }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+      </fieldset>
+      <fieldset class="p10 nbr nbb nbl">
+          <legend><span class="f14">第3步：<span class="n">提交新标题</span><i class="iconfont popovers ml3 gray poi" data-trigger="hover" data-placement="top" data-content="选择好引流能力强的标题，提交到淘宝">&#xe647;</i></span></legend>
+          <div class="portlet marl_0" id="div_titles">
+            <div class="portlet-body no-more-tables">
+              <table id="table_titles" class="table table-bordered table-condensed cf">
+                <thead class="cf">
+                  <tr>
+                    <th width="10%"><div>编号</div></th>
+                    <th><div>参考标题</div></th>
+                    <th width="15%"><div>引流能力<i class="iconfont popovers f14 ml3 gray" data-placement="top" data-trigger="hover" data-content="对宝贝标题的关键字组合评分，分数之和即引流能力，引流能力越高越好。">&#xe647;</i></div></th>
+                    <th width="11%"><div>操作</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr title_num="0">
+                    <td data-title="编号" class="tac">0</td>
+                    <td data-title="参考标题">
+                      <span class="title poi">{{ item.title }}</span><i class="icon-pencil poi ml5 edit_title"></i>
+                    </td>
+                    <td data-title="引流能力"><span class="title_traffic_score"></span><i class="icon-add poi ml5"></i></td>
+                    <td data-title="操作">
+	                    <a class="current_title" href="javascript:;">当前标题</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+      </fieldset>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal fade hide" id="title_optimize_help_box">
+  <div class="modal-header">
+    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+    <h4>标题优化说明</h4>
+  </div>
+  <div class="modal-body">
+    <table>
+      <tbody>
+      <tr>
+          <td class="w60 nbb">功能介绍</td>
+          <td class="nbb"> 这是新版开车精灵推出的一款优化宝贝标题的简便工具，帮助用户提升自然流量。 </td>
+      </tr>
+      <tr>
+          <td class="vt nbb">使用步骤</td>
+          <td class="nbb">
+               1. 勾选各类词根组合标题（同类词根中越靠前的热度越大，促销词除外）》2. 点击“生成测试标题”按钮 》3. 对比多个标题后选出中意的，根据需要进行微调 》4. 点击“提交”按钮更新宝贝标题
+          </td>
+      </tr>
+      <tr>
+          <td class="vt nbb">注意事项</td>
+          <td class="nbb">
+              <span class="r_color bold">1. 不要优化已经是爆款和热销宝贝的标题。</span><br>
+              2. 不要过于频繁优化宝贝标题,一般7天优化一次最好。<br>
+              3. 不要选择跟宝贝类目和属性不相关的关键词。<br>
+              4. 不要使用他人品牌的关键词，原单、高仿的类似的关键词慎用。商城用户请尤其禁用外贸、原单之类的关键词！<br>
+              5. 不要刻意堆砌和滥用关键词。<br>
+              <a href="http://bangpai.taobao.com/group/thread/400769-22206785.htm" target="_blank">点击这里了解具体哪些行为会导致宝贝被淘宝降权</a>
+          </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script id="html_convword" type="text/html">
+<span class="l ml5">转化词：</span>
+  <ul class="pt-tag with-x pl60">
+    <%for(var i=0;i<convword_list.length;i++){ %>
+      <li><a value="<%=convword_list[i]%>" name="convword" href="javascript:;"><%=convword_list[i]%></a></li>
+    <% }%>
+  </ul>
+</script>
+
+{% endblock %}
+{% block custom_js %}
+<script src="/site_media/jl5/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function() {
+    PT.TitleOptimize.init();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+<div style="width: 600px; margin-left: -300px; left:50%;" tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade" id="rob_rank">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>"{{word}}"抢排名设置</h4>
+            </div>
+            <div class="modal-body" style="overflow: initial">
+                <form class="sui-form" style="margin-top:10px;">
+                    <div>
+                        抢位方式：
+                        <input type="radio" name="method" value="manual" {{if method=="manual"}}checked{{/if}}>手动&emsp;
+                        <input type="radio" name="method" value="auto" {{if method=="auto"}}checked{{/if}} style="margin-left: 30px;">自动
+                        <span class="text-muted ml20 manual_info hide">(手动抢排名时，请不要刷新界面)</span>
+                        <div class="slider" style="width: 200px;margin-left: 20px;vertical-align: 2px; display: none">
+                            <input type="text" value="{{if start_time!=undefined }}{{start_time}}{{else}}480{{/if}};{{if end_time!=undefined }}{{end_time}}{{else}}1024{{/if}}">
+                        </div>
+                    </div>
+                    <div class="mt15">
+                        抢位平台：
+                        <input type="radio" name="platform" value="pc" {{if platform=="pc"}}checked{{/if}}/>计算机
+                        <span class="ml20">
+                          （当前出价：{{maxPrice}}元，{{qscore}}分，<span class="pc_rank">{{pc_rank_desc}}</span>）
+                        </span>
+                    </div>
+                    <div class="mt15">
+                        抢位平台：
+                        <input type="radio" name="platform" value="yd" {{if platform=="yd"}}checked{{/if}}/>移动
+                          <span class="ml20">
+                              （当前出价：{{maxMobilePrice}}元，{{if wirelessQscore>0 }}{{wirelessQscore}}分{{/if}}，<span class="yd_rank">{{ydRank}}</span>）
+                          </span>
+                    </div>
+                    <div class="mt15">
+                        期望排名：
+                        <span class="sui-dropdown dropdown-bordered select">
+                            <span class="dropdown-inner">
+                                <a role="button" data-toggle="dropdown" href="javascript:void(0);" class="dropdown-toggle">
+                                    <input value="{{rank_start}}" id="rank_start" name="rank_start" type="hidden" class="rank_value"><span class="rank_name">{{rank_start_name}}</span><i class="iconfont fr">&#xe603;</i>
+                                </a>
+                                <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu rank_item_start">
+                                </ul>
+                            </span>
+                        </span>&ensp;至&ensp;
+                            <span class="sui-dropdown dropdown-bordered select">
+                            <span class="dropdown-inner">
+                                <a role="button" data-toggle="dropdown" href="javascript:void(0);" class="dropdown-toggle">
+                                    <input value="{{rank_end}}"  id="rank_end" name="rank_end" type="hidden" class="rank_value"><span class="rank_name">{{rank_end_name}}</span><i class="iconfont fr">&#xe603;</i>
+                                </a>
+                                <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu rank_item_end">
+                                </ul>
+                            </span>
+                        </span>
+                        <!--<input type="text" autocomplete="off" name="rank_start" maxlength="3" class="input-mini" value="{{rank_start}}">
+                        <input type="text" autocomplete="off" name="rank_end" maxlength="3" class="input-mini" value="{{rank_end}}">&ensp;名-->
+                    </div>
+                    <div class="mt15">
+                        最高限价：
+                        <input type="text" autocomplete="off" maxlength="5" name="limit" class="input-mini" value="{{limit}}">&ensp;元
+                    </div>
+                    <div class="mt15">
+                        抢位失败：
+                        <input type="radio" name="nearly_success" {{if nearly_success=="1"|| nearly_success == undefined }}checked{{/if}} value="1">接近期望排名时保留出价
+                        <input type="radio" name="nearly_success" {{if nearly_success=="0"}}checked{{/if}} value="0" style="margin-left: 20px;">恢复为原价
+                    </div>
+                </form>
+                <div class="red mt15">免责声明：抢位可能导致花费过高，如因抢排名导致效果不佳，与精灵无关</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="sui-btn btn-bordered btn-xlarge btn-primary" data-dismiss="modal">取消</button>
+                {{if method == "auto"}}
+                    <button type="button" class="sui-btn btn-bordered btn-xlarge btn-primary rob_cancle">取消自动抢</button>
+                {{/if}}
+                <button type="button" class="sui-btn btn-xlarge btn-primary submit">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

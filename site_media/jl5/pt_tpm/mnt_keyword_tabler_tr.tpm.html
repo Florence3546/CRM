@@ -1,0 +1,45 @@
+<tr id="<%=keyword_id%>" label_code="<%=label_code%>">
+  <td class="tc nbl"><span class="hide">0</span><input class="kid_box" name="idx" type="checkbox"></td>
+  <td class="rel pr40">
+    <span class="hide"><%=match_scope%></span>
+    <span class="word" id="word_<%=keyword_id%>"><%=word%></span>
+    <i class="iconfont abs r0 mr2 t50 mt-7 baseColor icon-ban-circle">&#xe67f;</i>
+  </td>
+  <td class="hide">
+    <span class="hide optm_type"><%=optm_type%></span>
+    <input class="input-small new_price" type="text" value="<%=max_price%>">
+    <i class="iconfont remove red">&#xe639;</i>
+  </td>
+  <td class="hide"></td>
+  <td><span class="max_price l ml3"><%=max_price%></span></td>
+  <td class="hide"><a href="javascript:;" class="check_ranking" switch="1">查排名</a></td>
+  <td class="tr qscore"><%=qscore%></td>
+  <td class="tr"><%=create_days%></td>
+  <td class="tr bg_striped impressions"><%=impressions%></td>
+  <td class="tr bg_striped click"><%=click%></td>
+  <td class="tr bg_striped ctr"><%=ctr%>%</td>
+  <td class="tr bg_striped cost"><%=cost%></td>
+  <td class="tr bg_striped cpc"><%=cpc%></td>
+  <td class="tr bg_striped cpm"><%=cpm%></td>
+  <td class="tr bg_striped avgpos"><%=avgpos%></td>
+  <td class="tr favcount"><%=favcount%></td>
+  <td class="tr favctr"><%=favctr%>%</td>
+  <td class="tr favpay"><%=favpay%></td>
+  <td class="tr paycount"><%=paycount%></td>
+  <td class="tr pay"><%=pay%></td>
+  <td class="tr conv"><%=conv%>%</td>
+  <td class="tr roi">
+    <span class="hide custom"><%if(cost>0&&roi>0){ %><%=roi%><% }%><%if(cost>0&&roi==0){ %>0.001<% }%></span>
+    <span class="keyword_cys">
+        <%if(roi>1){%>
+        <span class="red l">盈</span>
+        <%}%>
+    </span>
+    <%=roi%>
+  </td>
+  <td class="tr bg_striped g_pv"><%=g_pv%></td>
+  <td class="tr bg_striped g_click"><%=g_click%></td>
+  <td class="tr bg_striped g_ctr"><%=g_ctr%>%</td>
+  <td class="tr bg_striped g_cpc"><%=g_cpc%></td>
+  <td class="tr bg_striped g_competition"><%=g_competition%></td>
+</tr>

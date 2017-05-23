@@ -1,0 +1,76 @@
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modal_set_adg_cfg" >
+    <div class="modal-dialog">
+      <div class="modal-content" style="width: 680px; margin-left: 50%; left: -340px;">
+         <div class="modal-header">
+            <button type="button" class="close"
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title b f16">
+               <strong>宝贝托管设置</strong>
+            </h4>
+         </div>
+         <div class="modal-body f13">
+             <table>
+                 <tr>
+                     <td><strong>算法优化方式：</strong></td>
+                     <td>
+                         <div class="select">
+                             <span class="select_div">
+                                 <input type="radio" name="mnt_opt_type" {{ if options.mnt_opt_type==1 }}checked{{ /if }} value="1">&nbsp;自动优化(改价&nbsp;+&nbsp;选词)&nbsp;
+                             </span>
+                             <i class="iconfont poi" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="" data-original-title="系统会根据您设置的算法目标使用不同的选词和改价算法">&#xe628;</i>
+                         </div>
+                         <div class="select">
+                             <span class="select_div">
+                                 <input type="radio" name="mnt_opt_type" {{ if options.mnt_opt_type==2 }}checked{{ /if }} value="2">&nbsp;只改价(只改价，不选词)
+                             </span>
+                         </div>
+                         {{ if options.opt_adgroup }}
+                         <div class="select">
+                             <span class="select_div">
+                                 <input type="radio" name="mnt_opt_type" {{ if options.mnt_opt_type==0 }}checked{{ /if }} value="0">&nbsp;不托管(不改价，不换词)
+                             </span>
+                          </div>
+                         {{ /if }}
+                     </td>
+                 </tr>
+                 <tr>
+                     <td class="pt10">
+                         <strong>关键词最高限价(元):&nbsp;</strong>
+                     </td>
+                     <td class="pt10">
+                         <div class="select">
+                             <span class="select_div">
+                                 <input type="radio" name="use_camp_limit" {{ if options.camp_limit==1 }}checked {{ /if }} value="1">&nbsp;计划默认设置
+                             </span>
+                             PC：<span class="mnt_default_price">{{ options.default_price_pc }}</span>元&nbsp;&nbsp;
+                             移动：<span class="mnt_default_price">{{ options.default_price_yd }}</span>元
+                         </div>
+                         <div class="select">
+                             <span class="select_div">
+                                 <input type="radio" name="use_camp_limit" {{ if options.camp_limit==0 }}checked {{ /if }} value="0">&nbsp;自定义设置&nbsp;
+                                 <i class="iconfont poi" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="最高限价不是实际出价，设置高一点有利于提升投放效果" >&#xe628;</i>&nbsp;
+                                 (推荐<span class="suggest_price">{{ options.suggest_price }}</span>元，最低<span class="min_price">{{ options.min_price }}</span>元，
+                                 <span class="poi" data-toggle="tooltip" data-placement="top" data-trigger="hover"
+                                       data-original-title="该宝贝行业均价{{ options.avg_price }}元，为保证推广效果，建议重点/无线宝贝限价不低于行<br/>业均价的30%（即{{ options.min_price }}元），推荐为行业均价的2.0~3.0倍，即{{ options.suggest_price }}元">查看规则</span>)<br>
+                             </span>
+                             <div class="pt10 pl15 set_customer_price  {{ if options.camp_limit==1 }}hide{{ /if }}">
+                                PC：<input type="text" maxlength="5" name="customer_price_pc" class="customer_price w50" value="{{ options.customer_price_pc }}"/>&nbsp;&nbsp;&nbsp;
+                                移动：<input type="text" maxlength="5" name="customer_price_yd" class="customer_price w50" value="{{ options.customer_price_yd }}"/>&nbsp;
+                             </div>
+
+                         </div>
+
+                     </td>
+                 </tr>
+             </table>
+         </div>
+         <div class="modal-footer tc">
+            <button class="btn r" data-dismiss="modal" aria-hidden="true">取消</button>
+            <button class="btn btn-primary r mr10" id="set_adg_cfg">确定</button>
+         </div>
+      </div>
+    </div>
+</div>

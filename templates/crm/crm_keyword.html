@@ -1,0 +1,576 @@
+{#utf-8#}{% extends "base_crm.html" %}
+{% block title%}
+	关键词列表
+{% endblock %}
+{% block content %}
+<input type="hidden" value="3" name="source_type" />
+<input type="hidden" value="{{source_type}}" id="source_type" />
+
+<div id="conditions_template">{% include 'template_condition.html'  %}</div>
+
+<div class="portlet box grey">
+	<div class="portlet-title">
+  	<div class="caption"><i class="icon-reorder"></i>关键词查询结果</div>
+    <div class="mal_6">
+    	<span>（共<span class="page_count">0</span>页/<span class="total_count">0</span>个关键词，涉及到<span class="account_count">0</span>个店铺，<span class="camp_count">0</span>个计划，<span class="adg_count">0</span>个宝贝）</span>
+    	<span id="user_limit_price" class="fr">新出价超过<input type="text" value="5" style="height:10px; width:35px; margin:0;"/>元时，提交前提醒我</span>
+    </div>
+
+  </div>
+  <div class="portlet-body" id="kw_result">
+    <div id="summary_rpt">
+        <div class="hide tac" style="border:#ccc solid 1px;" id="summary_info_tip">
+            <img src="/site_media/jl/img/ajax-loader.gif" width="32" height="32" style="display:inline-block">正在统计结果，请稍候......
+        </div>
+        <div id="summary_rpt_table" class="hide">
+        	<table class="table table-bordered">
+            	<thead>
+                	<tr>
+                    	<th>平均展现量</th>
+                    	<th>平均点击量</th>
+                    	<th>平均点击率</th>
+                    	<th>平均总花费</th>
+                    	<th>平均PPC</th>
+                    	<th>平均收藏量</th>
+                    	<th>平均成交量</th>
+                    	<th>平均成交额</th>
+                    	<th>平均转化率</th>
+                    	<th>平均ROI</th>
+                	</tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  <!--关键词趋势图弹出层 开始 -->
+<div id="modal_kw_trend"  class="modal hide fade" tabindex="-1" z-index='9999999' data-width="900"  style="height:400px;">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	  <h4 class="tac"><span  id="kw_trend_title"></span>&nbsp;&nbsp;趋势图</h4>
+	</div>
+	<div class="modal-body">
+		<div id="kw_trend_chart" style="height:300px;width:870px;"></div>
+    </div>
+</div>
+<!--关键词趋势图弹出层 结束 -->
+
+  <!--搜索及提示开始-->
+		<div id="search_tip_box" class="por">
+                    <div id="fixed_box">
+                        <div class="fl serach_box">
+                            <span class="fl current_count marr_6">当前选中<span id="batch_optimize_count">0</span>个</span>
+                            <div class="btn-group marb_0 fl" id="batch_optimiz">
+	                            <button class="btn blue" id="kw_rpt_repair" style="margin-right:5px;">修复昨日关键词报表<i class="icon-save marl_3"></i></button>
+                                <a href="javascript:;" class="btn blue " id="batch_optimize_btn" >批量优化<i class="icon-angle-down marl_3"></i></a>
+                                <div class="dropdown-menu setup1" id="batch_optimize_box">
+                                    <div class="portlet-body fuelux" >
+                                            <div id="batch_optimize">
+                                               <!--<div class="alert alert-info marb_0 mart_12"><span>您已经修改了<span class="change_count">0</span>个关键词,如果您要取消修改，请点击</span><button class="btn mini bulk_recover_all_btn marl_6">重置全部未提交操作</button></div>-->
+                                               <div class="batch_optimize_operate fl" id="batch_optimize_operate" fix-ie="hover">
+                                                <!--<div class="larger marb_6">针对选中的<span class="r_color bigger bld" id="current_check_count">0</span>个关键词，执行如下操作：</div>-->
+                                                <div class="tabbable tabbable-custom marb_0 fl">
+                                                    <ul class="nav nav-tabs tabs-left">
+                                                        <li class="active"><a href="#bulk_price" data-toggle="tab">改价</a></li>
+                                                        <li><a href="#keyword_del" data-toggle="tab">删词</a></li>
+                                                        <li><a href="#keyword_match" data-toggle="tab">匹配方式</a></li>
+                                                        <li class="hide"><a href="#forecast_price" data-toggle="tab">预估排名</a></li>
+                                                        <li class="hide"><a href="#rob_rank" data-toggle="tab">抢排名</a></li>
+                                                        <!--
+                                                        <li style="margin-left:43%;margin-top:3px"><button class="btn mini red" id="submit_all_kw">一键提交</button></li>
+                                                         -->
+                                                    </ul>
+                                                <div class="tal tab-content">
+
+                                                <!--批量加价开始-->
+                                                <div class="tab-pane active large" id="bulk_price">
+                                                    <ul class="tabs">
+                                                        <li>
+                                                          <label class="fl">
+                                                            <input type="radio" name="bulk_radio" value="plus" id="bulk_up_price_radio"/>
+                                                            <span class="marr_3">加价</span>
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                          <label class="fl">
+                                                            <input type="radio" name="bulk_radio" value="fall" id="bulk_fall_price_radio"/>
+                                                            <span class="marr_3">降价</span>
+                                                            </label>
+
+                                                        </li>
+                                                        <li><label class="fl"><input type="radio" name="bulk_radio" value="custom"/>自定义</label></li>
+                                                        <!--<li><label class="fl"><input type="radio" name="bulk_radio" id="default_price_val"/><span class="marl_3">默认出价</span></label></li>-->
+                                                    </ul>
+                                                    <ul class="content">
+                                                      <li class="hide" id="bulk_up_price_box">
+                                                                <span>基于</span>
+                                                                <select class="marb_0 marr_3" id="bulk_up_price_base" disabled="disabled"><option value="max_price" selected="selected">当前出价</option><option value="g_cpc">市场均价</option></select>
+                                                                <span class="marr_3">，加价</span>
+                                                                <input type="text" class="smaller marb_0 marr_3" id="bulk_up_price_delta"/>
+                                                                <select class="marr_3 marb_0" id="bulk_up_price_mode"><option value="int" selected="selected">元</option><option value="percent">%</option></select>
+                                                                <span class="marr_3">最高限价</span>
+                                                                <input type="text" class="smaller marb_0" id="bulk_up_price_limit"/>
+                                                                <span>元</span>
+                                                        </li>
+                                                        <li class="hide" id="bulk_fall_price_box">
+                                                                <span>基于</span>
+                                                                <select class="marb_0 marr_3" id="bulk_fall_price_base" disabled="disabled"><option value="max_price" selected="selected">当前出价</option>								<option value="g_cpc">市场均价</option></select>
+                                                                <span class="marr_3">，降价</span>
+                                                                <input type="text" class="smaller marb_0 marr_3" id="bulk_fall_price_delta"/>
+                                                                <select class="marr_3 marb_0" id="bulk_fall_price_mode"><option value="int" selected="selected">元</option><option value="percent">%</option></select>
+                                                                <span class="marr_3">最低限价</span>
+                                                                <input type="text" class="smaller marb_0" value='0.05' id="bulk_fall_price_limit"/>
+                                                                <span>元</span>
+                                                        </li>
+                                                        <li class="hide tac"><span class="marl_3">请设置自定义出价</span><input type="text" class="smaller marl_10 marb_0 marb_0 marr_3" id="custom_price" /><span>元</span><span class="marl_12 s_color">(不推荐使用)</span></li>
+                                                        <li class="hide tac">您当前默认出价为<span id="default_price_text"></span>元</span></li>
+                                                    </ul>
+                                                    <button class="btn blue fr location_btn" id="bulk_btn">确定</button>
+                                                </div>
+                                                <!--批量加价结束-->
+                                                <!--批量删除开始-->
+                                                <div class="tab-pane" id="keyword_del">
+                                                  <div class=" mart_24 tac larger"></div>
+                                                    <button class="btn red location_btn" id="bulk_del_btn">删除<i class="icon-trash"></i></button>
+                                                </div>
+                                                <!--批量删除结束-->
+                                                <!--批量匹配开始-->
+                                                <div class="tab-pane" id="keyword_match">
+                                                    <label class="marl_12 marb_0 mart_6 fl"><input class="mart_0" type="radio" name="bulk_match_radio" value="1"  checked="checked"/><span class="marl_3">精准匹配</span></label>
+                                                    <label class="marl_12 marb_0 mart_6 fl"><input class="mart_0" type="radio" name="bulk_match_radio" value="4" /><span class="marl_3">广泛匹配</span></label>
+                                                    <label class="marl_12 marb_0 mart_6 fl"><input class="mart_0" type="radio" name="bulk_match_radio" value="2" /><span class="marl_3">中心匹配</span></label>
+                                                    <button class="btn blue mart_0 location_btn" id="bulk_match_btn">确定</button>
+                                                </div>
+                                                <!--批量匹配结束-->
+                                                <!--批量预估排名开始-->
+                                                <div class="tab-pane" id="forecast_price">
+                                                    期望排名为
+                                                    <select class="marb_0" id="bulk_worder_select">
+                                                        <option value="1-5">第1-5名</option>
+                                                        <option value="6-8">第6-8名</option>
+                                                        <option value="9-13">第1页底部</option>
+                                                        <option value="14-21">第2页右侧</option>
+                                                        <option value="22-26">第2页底部</option>
+                                                        <option value="27-39">第3页</option>
+                                                        <option value="40-52">第4页</option>
+                                                        <option value="53-65">第5页</option>
+                                                        <option value="66-78">第6页</option>
+                                                        <option value="79-91">第7页</option>
+                                                        <option value="92-100">第8页</option>
+                                                        <option value="101">100名后</option>
+                                                    </select>
+                                                    <span class="mart_12">但出价不高于<input type="text" class="smaller marl_6 marb_0" id="bulk_worder_limit" /><button class="btn blue location_btn" id="bulk_worder_btn">确定</button></span>
+
+                                                </div>
+                                                <!--批量预估排名结束-->
+                                                <!--批量抢排名开始-->
+                                                <div class="tab-pane" id="rob_rank">
+                                                   <!-- <span class="label label-important marb_6">注意：请分别设置下方表格中期望的排名，如果不设置则不抢该关键词</span>-->
+                                                    <ul class="large">
+                                                        <li class="r_color">1.抢排名只在手动设置后生效一次，不是系统自动锁排名</li>
+                                                        <li class="r_color">2.抢排名会即时修改出价，可能导致花费过高，请谨慎使用</li>
+                                                        <li class="r_color">3.由于淘宝算法延时，可能抢不到排名或不能马上搜到宝贝</li>
+                                                    </ul>
+
+                                                    <!--<div class="mart_6 hide" id="rob_info">
+                                                        <div class="fl">执行结果：</div>
+                                                        <span>达到期望排名<span class="marl_6" id="rob_info_change"></span>个</span>
+                                                        <span class="marl_12">未达期望排名<span class="marl_6" id="rob_info_unchange"></span>个</span>
+                                                        <span class="marl_12">失败<span class="marl_6" id="rob_info_error"></span>个</span>
+                                                    </div> -->
+<!--                                                        <div class="fl bdt bdl bdr bdb" id="rob_worder_box">
+                                                        期望排名：
+                                                        <select class="marb_0" id="rob_worder_select">
+                                                            <option value="1-5">第1-5名</option>
+                                                            <option value="6-8">第6-8名</option>
+                                                            <option value="9-13">第1页底部</option>
+                                                            <option value="14-21">第2页右侧</option>
+                                                            <option value="22-26">第2页底部</option>
+                                                            <option value="27-39">第3页</option>
+                                                            <option value="40-52">第4页</option>
+                                                            <option value="53-65">第5页</option>
+                                                            <option value="66-78">第6页</option>
+                                                            <option value="79-91">第7页</option>
+                                                            <option value="92-100">第8页</option>
+                                                            <option value="101">100名后</option>
+                                                      </select>
+                                                        统一限价：<input type="text" class="smaller marl_6 marb_0" id="rob_worder_input" >元
+                                                        <div class="mart_3 s_color">
+                                                          建议批量设置后，再针对每个关键词单独设置
+
+                                                        </div>
+                                                    </div>-->
+                                                    <button class="btn blue fl mart_12 marl_12 location_btn" id="show_rob_box">开始设置</button>
+                                                </div>
+                                                <!--批量抢排名结束-->
+                                            </div>
+                                            <!--各种操作结束-->
+                                                </div>
+                                                 <br class="clearb" />
+                                              </div>
+
+                                            </div>
+
+
+                                        <button class="btn closer mini poa" type="button"><i class="icon-remove"></i></button>
+                                       <!-- <button class="btn closer poa special" type="button">关闭</button>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--
+                            <div class="fl btn-group" style="margin-bottom:0 !important" id="repair_data">
+                              <a href="javascript:;" class="btn blue" data-toggle="dropdown">修复关键词数据<i class="icon-angle-down marl_3"></i></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="javascript:;" data_type=0 class="repair_data">修复【结构】</a></li>
+                                <li><a href="javascript:;" data_type=1 class="repair_data">修复【报表】</a></li>
+                              </ul>
+                            </div>
+                             -->
+
+                            <div class="fl btn-group hide" id="id_suggest_box">
+                                <a href="javascrip:void(0);" class="btn blue" data-toggle="dropdown">系统建议<i class="icon-angle-down marl_3"></i></a>
+                                <div class="dropdown-menu hold-on-click" style="height:80px;">
+                                    <div class="tac mart_12">
+                                        <span>优化策略：</span>
+                                        <input type="radio" name="strategy" checked="checked" value="routine">
+                                        <span class="marl_6 marr_12">例行优化</span>
+                                        <input type="radio" name="strategy" value="plus">
+                                        <span class="marl_6 marr_12">加价引流</span>
+                                        <input type="radio" name="strategy" value="fall">
+                                        <span class="marl_6 marr_12">降价省油</span>
+                                    </div>
+                                    <!-- <div>
+                                        <span>统计天数：</span>
+                                    </div> -->
+                                    <div class="tac mart_12">
+                                        <a id="id_sys_suggest" class="btn blue mini">获取系统建议操作</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fl marl_48" style="border:1px #ccc dashed; border-right:none; padding:6px;">
+                                <span class="marl_6 r_color">加价<span class="marl_6" id="plus_count">0</span>个</span>
+                                <span class="marl_6 safe_color">降价<span class="marl_6" id="fall_count">0</span>个</span>
+                                <span class="marl_6 s_color">删除<span class="marl_6" id="del_count">0</span>个</span>
+                                <span class="marl_6 b_color">修改匹配<span class="marl_6" id="match_count">0</span>个</span>
+                            </div>
+                                <button class="btn red" id="id_curwords_submit">提交到直通车<i class="icon-save marl_3"></i></button>
+                        </div>
+                        <div class="info_and_submit fr" style="text-align:right;">
+                            <!--定制列开始-->
+                            <div class="btn-group marb_0">
+                              <!--<a class="por btn marr_6 mini mart_6" id="save_as_csv">批量导出</a>	-->
+                                <a class="btn mini mart_6" href="#" data-toggle="dropdown" id="select_column_show_btn">
+                更多数据
+                                    <i class="icon-angle-down"></i>
+                                </a>
+                                <div id="select_column" class="dropdown-menu hold-on-click pull-right">
+                                    <ul>
+                                        <li class="title"><label><input type="checkbox"/><span class="marl_3 bld">基础数据</span></label></li>
+                                        <li><label><input type="checkbox" value="7" /><span class="marl_3">展现量</span></label></li>
+                                        <li><label><input type="checkbox" value="8" /><span class="marl_3">点击量</span></label></li>
+                                        <li><label><input type="checkbox" value="9" /><span class="marl_3">点击率</span></label></li>
+                                        <li><label><input type="checkbox" value="10" /><span class="marl_3">总花费</span></label></li>
+                                        <li><label><input type="checkbox" value="11" /><span class="marl_3">平均点击花费</span></label></li>
+                                        <li><label><input type="checkbox" value="12" /><span class="marl_3">千次展现花费</span></label></li>
+                                        <li><label><input type="checkbox" value="13" /><span class="marl_3">昨日平均排名</span></label></li>
+                                    </ul>
+                                    <ul>
+                                        <li class="title"><label><input type="checkbox"/><span class="marl_3 bld">转化数据</span></label></li>
+                                        <li><label><input type="checkbox" value="14" /><span class="marl_3">收藏量</span></label></li>
+                                        <li><label><input type="checkbox" value="15" /><span class="marl_3">成交量</span></label></li>
+                                        <li><label><input type="checkbox" value="16" /><span class="marl_3">成交额</span></label></li>
+                                        <li><label><input type="checkbox" value="17" /><span class="marl_3">转化率</span></label></li>
+                                        <li><label><input type="checkbox" value="18" /><span class="marl_3">投资回报</span></label></li>
+                                    </ul>
+                                    <ul>
+                                        <li class="title"><label><input type="checkbox"/><span class="marl_3 bld">全网数据</span></label></li>
+                                        <li><label><input type="checkbox" value="19" /><span class="marl_3">全网展现指数</span></label></li>
+                                        <li><label><input type="checkbox" value="20" /><span class="marl_3">全网点击指数</span></label></li>
+                                        <li><label><input type="checkbox" value="21" /><span class="marl_3">全网点击率</span></label></li>
+                                        <li><label><input type="checkbox" value="22" /><span class="marl_3">全网市场均价</span></label></li>
+                                        <li><label><input type="checkbox" value="23" /><span class="marl_3">全网竞争度</span></label></li>
+                                    </ul>
+                                    <ul>
+                                        <li class="title"><label><input type="checkbox"/><span class="marl_3 bld">其他数据</span></label></li>
+                                        <li><label><input type="checkbox" value="5" /><span class="marl_3">质量得分</span></label></li>
+                                        <li><label><input type="checkbox" value="6" /><span class="marl_3">养词天数</span></label></li>
+                                    </ul>
+                                    <ul>
+                                     <li class="fr"><button class="btn blue marr_6 select_column_btn" mode="save">确定</button></li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <!--定制列结束-->
+                        </div>
+                    </div>
+                    <br class="clearb"/>
+                </div>
+                <!--搜索及提示结束-->
+
+
+                <div id="loading_keyword" class="hide">
+                    <div class="tac bigger">请选择过滤条件后，点击搜索按钮</div>
+                </div>
+
+                <div id="no_keyword" class="hide">
+                    <div class="tac bigger mart_12">
+                      <div style="width:549px; margin:0 auto; line-height:60px;"><span class="marl_12">搜索结果为空，请适当调节过滤条件</span></div>
+                    </div>
+                </div>
+                <!--关键词表格开始-->
+                <table class="table table-bordered" id="common_table">
+                    <thead>
+                        <tr>
+                          <th class="th_width00 tac"><input type="checkbox" class="father_box" link="common_table"/></th>
+                            <th class="th_width01"><input class="m-wrap marb_0 vam search_val" type="text" placeholder="请输入关键词"><button class="btn search_btn" type="button"><i class="icon-search"></i></button></th>
+                            <th class="th_width04">新出价</th>
+                            <th class="th_width02 hide">预估<br />排名</th>
+                            <th class="th_width04">当前<br />出价</th>
+                            <th class="th_width2">质量<br />得分</th>
+                            <th class="th_width2">养词<br />天数</th>
+                            <th class="th_width2">展现<br />量</th>
+                            <th class="th_width2">点击<br />量</th>
+                            <th class="th_width3">点击<br />率</th>
+                            <th class="th_width2">总花<br />费</th>
+                            <th class="th_width2">平均<br />点击<br />花费</th>
+                            <th class="th_width2">千次<br />展现<br />花费</th>
+                            <th class="th_width2">昨日<br />平均<br />排名</th>
+                            <th class="th_width2">收藏<br />量</th>
+                            <th class="th_width2">成交<br />量</th>
+                            <th class="th_width2">成交<br />额</th>
+                            <th class="th_width2">转化<br />率</th>
+                            <th class="th_width2">投资<br />回报</th>
+                            <th class="th_width2">全网<br />展现<br />指数</th>
+                            <th class="th_width2">全网<br />点击<br />指数</th>
+                            <th class="th_width2">全网<br />点击<br />率</th>
+                            <th class="th_width2">全网<br />市场<br />均价</th>
+                            <th class="th_width2">全网<br />竞争<br />度</th>
+                        </tr>
+        </thead>
+
+                    <tbody>
+<tr class="unsort noSearch" id="nosearch_table">
+                    <td></td>
+                    <td>{% if json_nosraech_data %}<span style="font-size:12px;color:red;">定向数据仅显示7天数据</span>{% endif%}</td>
+                    <td class="tac"><button class="btn blue mini bulk_recover_all_btn" type="button">全部重置</button></td>
+                    <td class="tac hide"><button type="button" class="btn blue mini" id="bulk_forecast_order">批量预估</button></td>
+                    <td class="tac">
+                        <select class="small m-wrap hide" id="ip_zone">
+                            <option value="">选地区</option>
+                            <option value="localhost">当地</option>
+                            <option value="202.96.0.133">北京</option>
+                            <option value="202.96.199.132">上海</option>
+                            <option value="110.76.46.215">杭州</option>
+                            <option value="202.96.128.143">广州</option>
+                            <option value="202.99.96.68">天津</option>
+                            <option value="218.2.135.1">南京</option>
+                            <option value="61.128.128.68">重庆</option>
+                            <option value="202.103.24.68">武汉</option>
+                            <option value="202.98.96.68">成都</option>
+                            <option value="202.96.134.133">深圳</option>
+                            <option value="222.172.200.68">云南</option>
+                            <option value="222.74.242.189">内蒙</option>
+                            <option value="219.149.194.56">吉林</option>
+                            <option value="218.6.145.111">四川</option>
+                            <option value="202.100.96.68">宁夏</option>
+                            <option value="202.102.192.68">安徽</option>
+                            <option value="202.102.134.68">山东</option>
+                            <option value="219.149.190.60">山西</option>
+                            <option value="220.192.32.103">广东</option>
+                            <option value="202.103.224.68">广西</option>
+                            <option value="61.128.99.133">新疆</option>
+                            <option value="202.102.29.3">江苏</option>
+                            <option value="202.101.224.68">江西</option>
+                            <option value="202.99.160.68">河北</option>
+                            <option value="202.102.227.68">河南</option>
+                            <option value="202.96.102.3">浙江</option>
+                            <option value="202.100.209.123">海南</option>
+                            <option value="202.103.24.68">湖北</option>
+                            <option value="202.103.100.206">湖南</option>
+                            <option value="61.178.152.40">甘肃</option>
+                            <option value="202.101.115.55">福建</option>
+                            <option value="202.98.224.68">西藏</option>
+                            <option value="119.1.42.35">贵州</option>
+                            <option value="221.202.189.57">辽宁</option>
+                            <option value="124.115.214.58">陕西</option>
+                            <option value="202.100.138.68">青海</option>
+                            <option value="202.45.84.58">香港</option>
+                            <option value="202.175.3.8">澳门</option>
+                            <option value="168.95.1.1">台湾</option>
+                            <option value="202.97.224.69">黑龙江</option>
+                        </select>
+                    </td>
+                    {% if not json_nosraech_data %}
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+                    {% else %}
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+                    	<td class="tar ">{{ json_nosraech_data.impressions }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.click }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.ctr }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.cost }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.cpc }}</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">{{ json_nosraech_data.avgpos }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.favcount }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.paycount }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.pay }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.conv }}</td>
+	                    <td class="tar ">{{ json_nosraech_data.roi }}</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+	                    <td class="tar ">-</td>
+                    {% endif %}
+                </tr>
+                    </tbody>
+                </table>
+      <div class="row-fluid">
+        <div class="span6 dataTables_info" id="page_info">
+           每页显示<span class="page_size">---</span>个关键词，共<span class="page_count">0</span>页/<span class="total_count">0</span>个关键词
+        </div>
+        <div class="span6">
+          <div class="dataTables_paginate pagination" id="dynamic_pager"></div>
+        </div>
+      </div>
+                <!--关键词表格结束-->
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/jquery.bootpag.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/FixedHeader.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/common_table_crm.js?v={{VERSION}}.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/crm_keyword.js?v={{VERSION}}.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/template_condition.js?v={{VERSION}}.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function(){
+	PT.CrmKeyword.init();
+	PT.CrmCondition.init();
+	PT.CrmCondition.init_condition({{base_condition|safe}},{{filter_condition|safe}});
+});
+
+</script>
+{% endblock %}
+
+{% block template %}
+<script id="template_common_table_tr" type="text/html">
+	<tr id="<%=kw_id%>" adgroup_id="<%=adg_id%>" item_id="<%=item_id%>" campaign_id="<%=camp_id%>" shop_id="<%=shop_id%>" default_price=""  fix-ie="hover" >
+		<td class="tac custom link_inner_checkbox"><span class="hide">0</span><input type="checkbox" name="idx" class="kid_box"/></td>
+		<td class="keyword_td">
+			<div class="por">
+				<span class="hide"><%=match_scope%></span>
+				<span class="pointer match" onselectstart="return false;" scope="<%=match_scope%>" ><%=$filter_match(match_scope)%></span>
+				<span class="keyword_box">
+					<span class="keyword pointer marl_3" id="word_<%=kw_id%>"><%=word%></span>
+					<span><i class="icon-bar-chart zoom marl_6 open_charts pointer"></i></span>
+					<span class='hide'>
+						<i class="<% if( !is_freeze){ %> icon-unlock <%} else {%> icon-lock <% } %> zoom marl_6 pointer lock_keyword"></i>
+					</span>
+				</span>
+				<!--<i class="icon-eye-open <%if(!is_focus){ %>s_color<% }%> fr mart_3 pointer"></i>-->
+			</div>
+		</td>
+		<td>
+			<div class="new_price_box">
+				<input type="text" class="smaller new_price fl" value="<%=$format(max_price,100,1,2)%>">
+				<span class="marl_3">
+					<i class="icon-remove pointer" onselectstart="return false;" title="删除"></i>
+					<i class="icon-undo pointer" onselectstart="return false;" title="恢复"></i>
+					<!--<i class="icon-warning-sign r_color fix_img_6 tooltips" data-placement="top" data-original-title="新出价超过自定义限价"></i>-->
+				</span>
+			</div>
+		</td>
+		<td class="hide" style="text-align:center;"><button type="button" class="btn mini forecast_order_btn">预估排名</button></td>
+		<td class="custom" style="text-align:center;">
+			<span class="max_price fl marl_3"><%=$format(max_price,100,1,2)%></span><button type="button" class="btn mini marr_3 hide check_ranking fr" switch="1">查</button>
+		</td>
+		<td class="tar qscore"><%=qscore%></td>
+		<td class="tar"><%=create_days%></td>
+		<td class="tar base_data impressions"><% if (impressions) { %><%=impressions%><% }else{ %>0<% } %></td>
+		<td class="tar base_data click"><% if (click) { %><%=click%><% }else{ %>0<% } %></td>
+		<td class="tar base_data ctr"><% if (ctr) { %><%=$format(ctr,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+		<td class="tar base_data cost"><% if (cost) { %><%=$format(cost,100,1,2)%><% }else{ %>0.00<% } %></td>
+		<td class="tar base_data cpc"><% if (cpc) { %><%=$format(cpc,100,1,2)%><% }else{ %>0.00<% } %></td>
+		<td class="tar base_data cpm"><% if (impressions&&cost) { %><%=$format(cost,impressions,10,2)%><% }else{ %>0.00<% } %> </td>
+		<td class="tar base_data avgpos"><%=avgpos%></td>
+		<td class="tar conv_data favcount"><% if (favcount) { %><%=favcount%><% }else{ %>0<% } %></td>
+		<td class="tar conv_data paycount"><% if (paycount) { %><%=paycount%><% }else{ %>0<% } %></td>
+		<td class="tar conv_data pay"><% if (pay) { %><%=$format(pay,100,1,2)%><% }else{ %>0.00<% } %></td>
+		<td class="tar conv_data conv"><% if (conv) { %><%=$format(conv,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+		<td class="tar conv_data roi">
+			<span class="hide custom"><% if (roi) { %><%=$format(roi,1,1,2)%><% }else{ %>0.00<% } %></span>
+			<span class="keyword_cys">
+					<%if(roi>1){%>
+					<span class="label label-important">盈</span>
+					<%}%>
+			</span>
+			<% if (roi) { %><%=$format(roi,1,1,2)%><% }else{ %>0.00<% } %>
+		</td>
+		<td class="tar g_data g_pv"><%=g_pv%></td>
+		<td class="tar g_data g_click"><%=g_click%></td>
+		<td class="tar g_data g_ctr"><% if (g_click&&g_pv) { %><%=$format(g_click,g_pv,100,2)%><% }else{ %>0.00<% } %>%</td>
+		<td class="tar g_data g_cpc"><% if (g_cpc) { %><%=$format(g_cpc,100,1,2)%><% }else{ %>0.00<% } %></td>
+		<td class="tar g_data g_competition"><%=g_competition%></td>
+	</tr>
+</script>
+
+<script id="template_forecast_select" type="text/html">
+	<select class="small m-wrap" id="forecast_order_<%=kw_id%>">
+		<%for(var i=0;i<result.length;i++){%>
+            <option value="<%=result[i].page%>" ><%=$page_dict(result[i].page)%>：<%=result[i].price%>元</option>
+        <%}%>
+	</select>
+</script>
+
+<script id="template_forecast_select_fail" type="text/html">
+	<select class="small m-wrap">
+		<option>99.99元排101名后</option>
+	</select>
+</script>
+
+<script id="summary_rpt_table_td" type="text/html">
+<td class="tar base_data"><%=impressions%></td>
+<td class="tar base_data"><%=click%></td>
+<td class="tar base_data"><%=ctr%>%</td>
+<td class="tar base_data"><%=cost%></td>
+<td class="tar base_data"><%=cpc%></td>
+<td class="tar conv_data"><%=favcount%></td>
+<td class="tar conv_data"><%=paycount%></td>
+<td class="tar conv_data"><%=pay%></td>
+<td class="tar conv_data"><%=conv%>%</td>
+<td class="tar conv_data"><%=roi%></td>
+</script>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+/* CSS Document */
+.table th,.table td{ padding:8px; }
+.dupl_table{margin-top:0;}
+.dupl_table input{margin:0;}
+.dupl_table .lock{margin-left:3px; vertical-align:-2px;}
+#dupl_kw_list>tbody tr .sorting_1 div{height:20px; min-height:20px;}
+#dupl_kw_list{table-layout:fixed !important;}
+#dupl_kw_list .info_row .dataTables_wrapper.form-inline {padding:0 10px 0 20px ;}
+#condition select{margin-bottom:0 !important;}
+#condition{overflow:hidden;}
+.dataTable .row-details {  
+  margin-top: 3px;
+  display: inline-block;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.dataTable .row-details.row-details-close {
+  background: url("../img/datatable-row-openclose.png") no-repeat 0 0;
+}
+
+.dataTable .row-details.row-details-open {  
+  background: url("../img/datatable-row-openclose.png") no-repeat 0 -23px !important;
+}
+
+.dataTable .details {
+  background-color: #eee !important;
+}

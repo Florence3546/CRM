@@ -1,0 +1,138 @@
+#show_decide_lottery{
+  position: fixed;
+  width: 900px;
+  height: 500px;
+  left: 50%;
+  top: 50%;
+  margin-left: -450px;
+  margin-top: -250px;
+  z-index: 1000;
+  #lottery {
+    background: url(images/bg.png?__inline) no-repeat;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    #hide_lottery{
+      position: absolute;
+      text-align: center;
+      width: 50px;
+      top: 5px;
+      right: 5px;
+      z-index: 3;
+      background-color: #434343;
+      opacity: 0.8;
+      cursor: pointer;
+      a {
+        color: #ffffff;
+        i {
+          font-weight: 900;
+        }
+      }
+    }
+    #lottery_title{
+      height: 125px;
+      width: 100%;
+      text-align: right;
+      padding-right: 15px;
+      #share_btn{
+        cursor: pointer;
+        margin-top: 75px;
+        background-color: #FD5D9D;
+        color: #ffffff;
+        border: 1px solid #FF80CD;
+      }
+    }
+
+    #lottery_box{
+      margin: 15px 0px 15px 15px;
+      table{
+        float: left;
+        td {
+          text-align: center;
+          vertical-align: middle;
+          color: #333;
+          padding: 1px 1px 0px 0px;
+          position: relative;
+        }
+        td.active{
+          div{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            top: 0;
+            opacity:0.5;
+            filter:Alpha(opacity=50);
+            border: 1px solid #cccccc;
+          }
+        }
+        #start_lottery{
+          cursor: pointer;
+          background: url("images/btn_start.png") no-repeat;
+        }
+        #start_lottery.un_click{
+          background: url("images/un_click.png") no-repeat;
+        }
+      }
+
+      #lottery_list{
+        float: left;
+        padding: 10px;
+        margin-left: 15px;
+        margin-top: 2px;
+        background: url("images/lottery_list.png") no-repeat;
+        width: 272px;
+        height: 322px;
+        #lottery_rule{
+          font-size: 18px;
+          color: #FEFB00;
+          font-weight: 900;
+          margin-bottom: 10px;
+        }
+        #lottery_rule_list{
+          color: #FFFFFF;
+          span{
+            line-height: 26px;
+            font-family: sans-serif;
+            font-size: 13px;
+          }
+        }
+        #lottery_user{
+          font-size: 18px;
+          color: #000000;
+          font-weight: 900;
+          text-align: center;
+          width: 100%;
+        }
+        #lottery_user_list{
+          height: 140px;
+          overflow: hidden;
+          background-color: #FFFFFF;
+          margin: 2px 5px;
+          padding-top: 5px;
+          ul{
+            li{
+              width: 240px;
+              margin-left: -40px;
+              float:left;
+              line-height:22px;
+              list-style: none;
+            }
+          }
+          span{
+            width: 50%;
+            font-size: 12px;
+          }
+          .lottery_user_name{
+            float: left;
+            width: 100px;
+            padding-left: 20px;
+          }
+          .lottery_user_result{
+            float: right;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,474 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}积分兑换{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20 bdd p10">
+        <form method="POST" action="" id="search_from" class="m0">
+            <input type="hidden" name="page" value="1" id="page_index" />
+            <input type="hidden" id="server_id" name="server_id" value="{{ request.POST.server_id }}">
+            <ul class="ul_line">
+                <li>
+                    类型:
+                </li>
+                <li class="ml5">
+                    <ul class="ul_line" id="filter_types">
+                        {% for type, desc in type_choices %}
+                            <li class="ml10">
+                                <label for="{{type}}">
+                                    <input type="checkbox" id="{{type}}" class="sub_item" name="{{type}}"
+                                      {% if type in check_types %}
+                                          checked='checked'
+                                      {% endif %}
+                                    > {{desc}}
+                                </label>
+                            </li>
+                        {% endfor %}
+                        <li class="ml10">
+                           <label for="all_type" class="b">
+                                <input type="checkbox" id="all_type" name="all_type" 
+                                    {% if 'all_type' in request.POST %}
+                                        checked="checked"
+                                    {% endif %}
+                                > 全选
+                            </label>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+	        <div class="mt10">
+	            店铺ID/昵称：<input type="text" class="psuser_input w140 f12" name="user_info" value="{{ request.POST.user_info }}" autocomplete="off"> &nbsp;
+	            所属顾问：<input type="text" class="psuser_input w160 f12" name="name_cn" link="#server_id" value="{{ request.POST.name_cn }}" autocomplete="off"> &nbsp;
+	            积分状态：
+	            <select class="w120 tc" name="is_freeze">
+	              <option value="">不限</option>
+	              <option value="0" 
+	                   {% if is_freeze == 0 %}
+	                       selected="selected"
+	                   {% endif %}
+	              >有效</option>
+	              <option value="1"
+	                   {% if is_freeze == 1 %}
+                           selected="selected"
+                       {% endif %}
+	              >无效</option>
+	            </select>&nbsp;
+	            时间范围：
+			    <input class="w80 ml3 f12" name="create_starttime" id="create_starttime" type="text" value="{{create_starttime}}">
+			    -
+			    <input class="w80 mr10 f12" name="create_endtime" id="create_endtime" type="text" value="{{request.POST.create_endtime}}">
+			    <button class="w100 ml10 btn btn-primary f12" id="search_global">搜　索</button>
+	        </div>
+        </form>
+    </div>
+    
+    <div class="mt20 fix mb10">
+        <span class="b f16">
+            积分兑换列表(共
+            <span style="color:red;">{{page_info.record_count}}</span>
+            条)
+        </span>
+
+        <button class="btn btn-primary r" id="change_point">修改积分</button>
+    </div>
+
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th class="w180">店铺</th>
+                <th class="w100">手机号</th>
+                <th>描述</th>
+                <th class="w120">类型</th>
+                <th class="w80">所属顾问</th>
+                <th class="w80">时间</th>
+                <th class="w100">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for d in detial_list%}
+            <tr class="tc">
+                <td>
+                    <span>{{d.nick}}</span>
+                    <span class="ml10">{{d.shop_id}}</span>
+                </td>
+                <td>
+                    {{d.phone}}
+                </td>
+                <td class="tl">
+                    {{d.desc}}
+                    {% if d.type == 'gift' %}
+                        {% if d.logistics_name %}物流公司：{{d.logistics_name}}{%endif%}
+                        {% if d.logistics_id %}物流公司：{{d.logistics_id}}{%endif%}
+                        {% if d.receiver %}收件人：{{d.receiver}}{%endif%}
+                        {% if d.zip_code %}邮编：{{d.zip_code}}{%endif%}
+                        {% if d.receive_address %}收货地址：{{d.receive_address}}{%endif%}
+                        {%if d.logistics_state%}
+                            【已发货】
+                        {%else%}
+                            【未发货】
+                        {%endif%}
+                    {%endif%}
+
+                    {% if d.type == 'virtual' %}
+                        {%if d.exchange_status%}
+                            【已兑换】
+                        {%else%}
+                            【未兑换】
+                        {%endif%}
+                    {%endif%}
+                </td>
+                <td>{{d.type_desc}}</br>
+                    （
+                    {% if not d.is_freeze %}
+	                    {% if d.point >= 0 %}
+	                        <span class="green">
+	                            +{{d.point}}
+	                        </span>
+	                    {% else %}
+	                        <span class="red">
+	                            {{d.point}}
+	                        </span>
+	                    {% endif %}
+	                 {% else %}
+	                      <span class="red">
+	                           无效
+	                      </span>
+	                 {% endif %}
+                ）</td>
+                <td>{{d.consult_name}}</td>
+                <td>
+                    {{d.create_time|date:'Y-m-d'}}<br>
+                    {{d.create_time|date:'H:i:s'}}
+                </td>
+                <td>
+                    {% if d.type == 'gift' %}
+                        {%if d.logistics_state%}
+                            <a href="javascript:;" data-id="{{d.id}}" class="edit_logistics">修改物流信息</a>
+                        {%else%}
+                            <a href="javascript:;" data-id="{{d.id}}" class="add_logistics">填写物流信息</a>
+                            <a href="javascript:;" data-id="{{d.id}}" class="remove hide">删除</a>
+                        {%endif%}
+                    {%endif%}
+                    {% if d.type == 'virtual' %}
+                        {%if d.exchange_status%}
+                            【已兑换】
+                        {%else%}
+                            <a href="javascript:;" data-id="{{d.id}}" class="mark">标记为兑换</a>
+                            <a href="javascript:;" data-id="{{d.id}}" class="remove hide">删除</a>
+                        {%endif%}
+                    {%endif%}
+                </td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="tc">
+                        无任何积分记录
+                    </td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <div class="row mt20 mb20 pagination ">
+        <nav class="pl20 pr20">
+          <span>共{{page_info.record_count}}条信息，{{page_info.page_count}}页</span>
+          {%if page_info.record_count %}
+          <ul class="pagination pull-right mt0 mb0">
+            <li>
+              <a href="javascript:;" page_index="1" class="page_action">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+                {%for p in page_info.page_xrange%}
+                <li {%if p == page_info.page%}class="active"{%endif%}>
+                    <a href="javascript:;" page_index="{{p}}" class="page_action">{{p}}</a>
+                </li>
+                {%endfor%}
+            <li>
+               <a href="javascript:;" page_index="{{page_info.page_count}}" class="page_action">
+                <span aria-hidden="true">&raquo;</span>
+               </a>
+            </li>
+          </ul>
+          {%endif%}
+        </nav>
+    </div>
+</div>
+
+<div class="modal fade hide" id="perfect_info">
+    <div class="modal-header">
+        <h5>完善物流信息</h5>
+    </div>
+    <div class="modal-body">
+        <div class="ml10 red">注意：填写物流信息后，将自动标记为已发货</div>
+        <div class="pl10">
+                <div class="mt10">
+                    物流单号：<input class="ml10" data-rule="require" name="logistics_id" id="logistics_id" type="text"><span class="ml10 gray f12"><span class="red mr5">*</span>请填写</span>
+                </div>
+                <div class="mt10">
+                    物流公司：<input class="ml10" data-rule="phone" name="logistics_name" id="logistics_name" type="text"><span class="ml10 gray f12"><span class="red mr5">*</span>请填写</span>
+                </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" id="submit_logistics">提交</button>
+        <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+</div>
+
+<div class="modal fade hide" id="change_point_box">
+    <div class="modal-header">
+        <h5>修改积分</h5>
+    </div>
+    <div class="modal-body">
+        <div class="ml10 red">请输入时一定要看清积分数量哦</div>
+        <div class="pl10">
+                <div class="mt10">
+                    店&ensp;铺&ensp;ID：<input class="ml10" data-rule="require" name="change_point_id" id="change_point_id" type="text"><span class="ml10 gray f12"><span class="red mr5">*</span>请填写</span>
+                </div>
+                <div class="mt10">
+                    积分类型：<input class="ml10 change_type" type="radio" name="change_type" value="up" checked> 加
+                              <input class="ml20 change_type" type="radio" name="change_type" value="down"> 减
+                </div>
+                <div class="mt10">
+                    积分数量：<input class="ml10" data-rule="phone" name="change_point_pouint" id="change_point_pouint" type="text"><span class="ml10 gray f12"><span class="red mr5">*</span>请填写</span>
+                </div>
+                <div class="mt10 hide">
+                    描&emsp;&emsp;述：<select name="change_point_desc" class="ml10" id="change_point_desc">
+                        <option value="活动赠送">活动赠送</option>
+                        <option value="参加YY培训">参加YY培训赠送</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="mt10">
+                    自定描述：<textarea class="ml10" data-rule="require" cols="30" name="change_other_point_desc" id="change_other_point_desc" rows="3"></textarea>
+                </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" id="submit_change_point">提交</button>
+        <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block custom_js %}
+<script>
+PT.namespace('NcrmExchange');
+PT.NcrmExchange=function(){
+
+    var current_id;
+
+    var init_dom=function(){
+        
+        //日期时间选择器
+        require(['dom', 'gallery/datetimepicker/1.1/index'], function(DOM, Datetimepicker) {
+            new Datetimepicker({
+                start: '#create_starttime',
+                timepicker: false,
+                closeOnDateSelect : true
+            });
+            new Datetimepicker({
+                start: '#create_endtime',
+                timepicker: false,
+                closeOnDateSelect : true
+            });
+        });
+        
+        $(".sub_item").click(function(){
+            var obj = $(this);
+		    if( obj.attr('checked') == undefined ){
+		         $("#all_type").removeAttr('checked');
+		    } 
+        });
+        
+        $("#all_type").click(function(){
+               var obj = $(this);
+               var ch_list = obj.parents("ul:first").find("input[type=checkbox]");
+               if( obj.attr('checked') == undefined ){
+                    ch_list.removeAttr('checked');
+               } else {
+                    ch_list.attr('checked','checked');
+               }
+        });
+        
+        $(".page_action").click(function(){
+            var obj = $(this);
+            var page_index = obj.attr('page_index');
+            $("#page_index").val(page_index);
+            $("#search_global").click();
+        });
+        
+        $("#search_global").click(function(){
+            $("search_from").submit();
+        });
+        
+        $('.edit_logistics').on('click',function(){
+            current_id=$(this).attr('data-id');
+            $('#perfect_info').modal();
+        });
+
+        $('.add_logistics').on('click',function(){
+            $("#logistics_id").val("");
+            $("#logistics_name").val("");
+                
+            current_id=$(this).attr('data-id');
+            $('#perfect_info').modal();
+        });
+
+        $('.mark').on('click',function(){
+
+            current_id=$(this).attr('data-id');
+
+            if(confirm('确定标记为已兑换？')){
+                PT.sendDajax({
+                    'function': 'ncrm_mark_virtual_record',
+                    'id':current_id,
+                    'callback': 'PT.NcrmExchange.mrak_virtual_record_callback'
+                });
+            }
+
+        });
+
+        $('.remove').on('click',function(){
+
+            current_id=$(this).attr('data-id');
+
+            if(confirm('确定删除？')){
+                PT.sendDajax({
+                    'function': 'ncrm_remove_gift_record',
+                    'id':current_id,
+                    'callback': 'PT.NcrmExchange.remove_gift_record_callback'
+                });
+            }
+
+        });
+
+        $('#submit_logistics').on('click',function(){
+            var logistics_id,logistics_name;
+
+            logistics_id=$.trim($('#logistics_id').val());
+            logistics_name=$.trim($('#logistics_name').val());
+
+            if (logistics_id=="" || logistics_name==""){
+                PT.alert('请完善信息之后提交')
+                return false;
+            }
+
+            PT.sendDajax({
+                'function': 'ncrm_perfect_logistics',
+                'id':current_id,
+                'logistics_id':logistics_id,
+                'logistics_name':logistics_name,
+                'callback': 'PT.NcrmExchange.perfect_logistics_callback'
+            });
+
+            PT.show_loading('正在提交');
+        });
+
+        $('#change_point').on('click',function(){
+            $("#change_point_id").val("");
+            $("#change_point_pouint").val("");
+            $("#change_other_point_desc").val("");
+            $("input[name=change_type]:nth-child(1)").attr('checked','checked')
+            $('#change_point_box').modal();
+        });
+
+        $('.change_type').on('change',function(){
+            var value=$(this).val();
+            if(value=='up'){
+                $('#change_point_desc').removeAttr('disabled');
+                $('#change_other_point_desc').attr('disabled','disabled');
+            }else{
+                $('#change_point_desc').attr('disabled','disabled');
+                $('#change_other_point_desc').removeAttr('disabled');
+            }
+        });
+
+
+        $('#submit_change_point').on('click',function(){
+            var shop_id,modal,point,desc,other_desc;
+
+            shop_id=parseInt($.trim($('#change_point_id').val()));
+            modal=$('input[name=change_type]:checked').val()
+            point= parseInt($.trim($('#change_point_pouint').val()));
+            desc=$.trim($('#change_point_desc').val());
+            other_desc=$.trim($('#change_other_point_desc').val());
+
+            if (shop_id == "" || point == "" || desc == ""){
+                PT.alert('请完善信息之后提交');
+                return false;
+            } else if ( isNaN(shop_id) ){
+                PT.alert('请输入正确的 店铺ID ');
+                return false;
+            }  else if ( isNaN(point) ){
+                PT.alert('积分数量必须是数字');
+                return false;
+            }
+            
+            if(modal == 'up'){
+                desc ='【'+desc+'】' + other_desc;
+                point=Math.abs(point);
+            }else{
+                desc ='【其他】' + other_desc;
+                point = -Math.abs(point);
+            }
+
+            PT.sendDajax({
+                'function': 'ncrm_change_point',
+                'shop_id':shop_id,
+                'point':point,
+                'desc':other_desc,
+                'callback': 'PT.NcrmExchange.submit_change_point_callback'
+            });
+
+            PT.show_loading('正在提交');
+        });
+    }
+
+    return {
+        init:function(){
+            init_dom();
+        },
+        mrak_virtual_record_callback:function(data){
+            if(data.msg!=''){
+                PT.alert(data.msg);
+            }else{
+                alert('标记成功')
+                window.location.reload()
+            }
+        },
+        remove_gift_record_callback:function(data){
+            if(data.msg!=''){
+                PT.alert(data.msg);
+            }else{
+                alert('删除成功')
+                window.location.reload()
+            }
+        },
+        perfect_logistics_callback:function(data){
+            if(data.msg!=''){
+                PT.alert(data.msg);
+            }else{
+                alert('填写成功')
+                window.location.reload()
+            }
+        },
+        submit_change_point_callback:function(data){
+            if(data.msg!=''){
+                PT.alert(data.msg);
+            }else{
+                alert('添加成功')
+                window.location.reload()
+            }
+        }
+    }
+}();
+
+PT.NcrmExchange.init();
+
+</script>
+{% endblock %}

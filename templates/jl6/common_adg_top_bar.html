@@ -1,0 +1,26 @@
+<ol class="breadcrumb">
+    <li><a href="/web/web_home">首页</a></li>
+    <li><a href="/mnt/mnt_campaign/{{adg.campaign_id}}" id="campaign_title">
+        {%if adg.mnt_campaign.mnt_type == 1 %}
+        长尾：
+        {% elif adg.mnt_campaign.mnt_type == 2 %}
+        重点：
+        {% elif adg.mnt_campaign.mnt_type == 3 %}
+        ROI：
+        {% elif adg.mnt_campaign.mnt_type == 4 %}
+        无线：
+        {% else %}
+         手动：
+        {% endif %}{{adg.campaign.title}}</a>
+</li>
+<li class="active">
+    {%if adg.mnt_type != 0 %}
+        {%if adg.mnt_opt_type == 1 %}
+        自动优化：
+        {% elif adg.mnt_opt_type == 2 %}
+        只改价：
+        {% endif %}
+    {% endif %}
+    {{adg.item.title}}
+</li>
+</ol>

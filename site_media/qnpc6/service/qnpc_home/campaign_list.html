@@ -1,0 +1,55 @@
+{{each list}}
+<tr data-id="{{$value.campaign_id}}"  id="{{$value.campaign_id}}" mnt_type="{{$value.mnt_type}}" mnt_index="{{$value.mnt_index}}" {{if $value.online_status=="offline"}}class="gray_light"{{/if}}>
+    <td class="check_column" style="border-left: none; text-align: center"><input type="checkbox" value="{{$value.campaign_id}}"></td>
+    <td class="tl">
+      <span class="title">{{$value.title}}</span><br>
+      {{ if $value.mnt_type == 0 }}
+          <span class="sui-label label-">手动</span>
+      {{ else }}
+          <span class="sui-label label-info">
+          {{ if $value.mnt_type == 1}} 长尾
+          {{else if $value.mnt_type == 2}} 重点
+          {{else if $value.mnt_type == 3}} ROI
+          {{else if $value.mnt_type == 4}} 无线
+          {{/if}}
+          </span>
+      {{/if}}
+
+      <span class="ml10">({{$value.adg_num}}个宝贝)</span>
+    </td>
+    <td>
+      <span class="budget">
+          <span class="hidden">{{$value.budget}}</span>
+        {{if $value.budget==20000000}}
+          不限
+        {{else}}
+          {{$value.budget}}元
+        {{/if}}
+      </span>
+      <i class="iconfont edit_budget hover_show" data-budget="{{$value.budget}}" data-smooth="{{$value.is_smooth}}">&#xe604;</i>
+    </td>
+    <td><span class="hide">{{$value.impr}}</span>{{$value.impr}}</td>
+    <td><span class="hide">{{$value.click}}</span>{{$value.click}}</td>
+    <td><span class="hide">{{$value.ctr}}</span>{{$value.ctr}}%</td>
+    <td><span class="hide">{{$value.cost}}</span>￥{{$value.cost}}</td>
+    <td><span class="hide">{{$value.cpc}}</span>￥{{$value.cpc}}</td>
+    <td><span class="hide">{{$value.favcount}}</span>{{$value.favcount}}</td>
+    <td><span class="hide">{{$value.paycount}}</span>{{$value.paycount}}</td>
+    <td><span class="hide">{{$value.conv}}</span>{{$value.conv}}%</td>
+    <td><span class="hide">{{$value.pay}}</span>￥{{$value.pay}}</td>
+    <td><span class="hide">{{$value.roi}}</span>{{$value.roi}}</td>
+    <td>
+
+        <span class="b">
+        {{if $value.online_status=="offline"}}
+        <span>已暂停</span>&emsp;<a href="javascript:;" opt="1" class="hover_show set_online_status">开启</a>
+        {{else}}
+        <span>推广中</span>&emsp;<a href="javascript:;" opt="0" class="hover_show set_online_status">暂停</a>
+        {{/if}}
+        </span>
+        {{ if $value.error_descr }}
+        <br/>{{ $value.error_descr }}
+        {{ /if }}
+    </td>
+</tr>
+{{/each}}

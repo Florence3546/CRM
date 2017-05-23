@@ -1,0 +1,236 @@
+{% extends "base_jl5.html" %}
+{% block title%}设置代理{%endblock%}
+{%block base_jl5%}
+  <div id="header" class="navbar-static-top container-fluid">
+      <a href="{%url 'web_home'%}"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+      <ul class="ul_line ar mr10">
+        <li><a id="open_msg" href="{%url 'web_home'%}"><i class="iconfont f18 mr3">&#xe606;</i>返回首页</a>
+        </li>
+        <li>
+          <div class="dropdown rel">
+            <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;">
+              <i class="iconfont f18 mr5">&#xe640;</i>{{request.user.nick}}<i class="iconfont">&#xe626;</i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li><a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+              </li>
+              <li><a href="{%url 'top_logout'%}">退出系统</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+  </div>
+<div class="container-fluid pl0">
+
+<div class="mt20 w800 auto">
+<div class="marb_12 dp100">
+    <div class="formEl_a" id="id_agent_setting">
+
+            <h3><i class="iconfont mr5">&#xe62d;</i>设置精灵代理账号</h3>
+            <div><span class="b">说明：</span>给精灵设置一个代理账号，可以让别人帮忙操作开车精灵。【请谨慎设置，代理用户名和密码请务必保密！】</div>
+            <div class="mt5">设置好之后，代理用户可以通过<a href="http://www.ztcjl.com/daili">http://www.ztcjl.com/daili</a>登录到精灵，登录后拥有与您相同的开车精灵使用权限。</div>
+            <div class="p20 bg_white bdd mt10">
+                <div class="mt10">
+                    <span>代&nbsp;&nbsp;理&nbsp;&nbsp;名:</span>
+                    <select id="id_select_agent" onChange="auto_load();" class="w200" style="padding:5px 8px;">
+                        {% for ag in agent_list %}
+                        <option value="{{ag.id}}">{{ag.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <span>
+                        <a href="javascript:void(0);" class="btn marl_12" onclick="edit_agent(this);">编辑</a>
+                    </span>
+                    <span>
+                        <a href="javascript:void(0);" class="btn marl_12" onclick="delete_agent(this);">删除</a>
+                    </span>
+                    <span>
+                        <a href="javascript:void(0);" class="btn marl_12" onclick="add_agent(this);">增加</a>
+                    </span>
+                </div>
+                <div class="hide " id="id_edit_box">
+                    <ul>
+                        <li class="mt10">
+                            <span>用&nbsp;&nbsp;户&nbsp;&nbsp;名:</span>
+                            <input type='text' class="w180" db_id = "" id="id_name" value="" onfocus="show_msg(this);" />
+                            <span class="hint hide" id="id_name_hint">用户名必须是淘宝网账号(5~25个字符)</span>
+                        </li>
+                        <li class="mt10">
+                            <span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</span>
+                            <input type='password' class="w180" id="id_password" maxlength="16" value="" onfocus="show_msg(this);"/>
+                            <span class="hint hide" id="id_password_hint">6~16个字符，建议使用字母加数字或符号的组合密码</span>
+                            <input type='hidden' id="id_password_bak" value=""/>
+                        </li>
+                        <li class="mt10">
+                            <span>确认密码:</span>
+                            <input type='password' class="w180" id="id_repsd" maxlength="16" value="" onfocus="show_msg(this);"/>
+                            <span class="hint hide" id="id_repsd_hint">再输一次密码</span>
+                        </li>
+                        <li class="mt10" style="margin-left:60px;">
+                            <a href="javascript:void(0);" class="btn btn-primary marl_12" onclick="submit_agent();">保存</a>
+                            <a class="btn" href="javascript:void(0);" onclick="$('#id_edit_box').slideUp('fast');">隐藏</a>
+                        </li>
+                        <input type="hidden" id="agent_id" value=""/>
+                    </ul>
+                </div>
+            </div>
+
+    </div>
+</div>
+    </div>
+</div>
+{%endblock%}
+
+{% block custom_js %}
+<script type="text/javascript">
+
+function auto_load(){
+    $('#id_name').val($('#id_select_agent').find("option:selected").text());
+}
+
+function show_msg(obj){
+    var id = '#'+$(obj).attr('id')+'_hint';
+    $(id).removeClass('hide');
+}
+
+function edit_agent(obj){
+    removeAllClass();
+    $(obj).addClass('btn-info');
+    if($('#id_select_agent option').length>0){
+        clear_hint();
+        $('#id_name').val($.trim($('#id_select_agent').find("option:selected").text()));
+        $('#id_password').val('');
+        $('#id_repsd').val('');
+        $('#agent_id').val($('#id_select_agent').val());
+        //$('#id_edit_box').removeClass('hide');
+        $('#id_edit_box').fadeIn('fast');
+        $('#id_name').focus();
+    }else{
+        add_agent();
+    }
+}
+
+function add_agent(obj){
+    removeAllClass();
+    $(obj).addClass('btn-info');
+    clear_hint();
+    $('#id_name').val('');
+    $('#id_password').val('');
+    $('#id_repsd').val('');
+    $('#agent_id').val('');
+//  $('#id_edit_box').removeClass('hide');
+    $('#id_edit_box').fadeIn('fast');
+    $('#id_name').focus();
+}
+
+function delete_agent(obj){
+    removeAllClass();
+    $(obj).addClass('btn-info');
+    var name = $.trim($("#id_select_agent").find("option:selected").text());
+    if(confirm("确认删除您的代理用户["+name+"]吗？")){
+        PT.sendDajax({'function':'web_delete_agent','agent_id':$('#id_select_agent').val()});
+    }
+}
+
+function clear_hint(){
+    name_hint = $('#id_name_hint');
+    name_hint.addClass('hide');
+    name_hint.text('用户名必须是淘宝网账号(5~25个字符)');
+    name_hint.css('color','#666');
+    psd_hint = $('#id_password_hint');
+    psd_hint.addClass('hide');
+    psd_hint.text('6~16个字符，建议使用字母加数字或符号的组合密码');
+    psd_hint.css('color','#666');
+    repsd_hint = $('#id_repsd_hint');
+    repsd_hint.addClass('hide');
+    repsd_hint.text('再输一次密码');
+    repsd_hint.css('color','#666');
+}
+
+function change_hint(obj,status,msg){
+    $(obj).removeClass('hide');
+    $(obj).css('color',status?'#4B4':'#F00');
+    $(obj).text(msg);
+}
+
+function submit_agent(){
+    var name = $.trim($("#id_name").val());
+    var psd = $.trim($("#id_password").val());
+    var repsd = $.trim($("#id_repsd").val());
+    var agent_id = $("#agent_id").val();
+    function base_check(){
+        clear_hint();
+
+        var name_hint = $('#id_name_hint');
+        var psd_hint = $('#id_password_hint');
+        var repsd_hint = $('#id_repsd_hint');
+        
+        if(name=='' || name == null){
+            change_hint(name_hint,0,'用户名不能为空');
+            return false;
+        }else if(len(name,1)<5 || len(name,1)>25){
+            change_hint(name_hint,0,'代理用户名长度为'+len(name,1)+'，请'+(len(name,1)<5?'增加':'减少')+'字数');
+            return false;
+        }else if(psd == null || psd == ''){
+            change_hint(psd_hint,0,'密码不能为空');
+            return false;
+        }else if(len(psd,0)<6 || len(psd,0)>25){
+            change_hint(psd_hint,0,"密码长度为"+len(psd,0)+"，请"+(len(psd,0)<6?"增加":"减少")+"字数");
+            return false;
+        }else if(psd!=repsd){
+            change_hint(repsd_hint,0,'两次输入的密码不一致');
+            return false;
+        }else{
+            return true;
+        }
+    }
+    function new_name_check(){
+        if(agent_id==''){
+            var op_list = $('#id_select_agent option');
+            for(var i=0;i<op_list.length;i++){
+                if(name==$(op_list[i]).text()){
+                    clear_hint();
+                    change_hint(name_hint,0,'用户名不能和已有用户相同');
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return true;
+        }
+    }
+    
+    if(base_check() && new_name_check()){
+        PT.sendDajax({'function':'web_submit_agent','name':name,'password':psd,'agent_id':agent_id});
+    }
+}
+function len(str,type) {
+    var l = 0;
+    for(var i=0;i<str.length;i++){
+        if(str[i].charCodeAt(0)<299){
+            l++;
+        }
+        else{
+            if(type==1){
+                l+=2;
+            }
+            else{
+                return -1;
+            }
+        }
+    }
+    return l;
+}
+function removeAllClass(){
+    $('#id_select_agent').parent().find('a.btn').removeClass('btn-info');
+}
+
+function submit_call_back(flag,msg){
+    PT.alert(msg,'',function(){
+        if(flag){
+            window.location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}

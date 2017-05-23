@@ -1,0 +1,54 @@
+<div class="qscore_details black">
+    <h4><%if (score_type=='pc') {%>计算机<%}else{%>移动<%}%>质量得分（1-10）<a class='r f12' href="http://help.alimama.com/?spm=0.0.0.0.qBtsv9#!/ztc/faq/detail?id=5704101" target="_blank">了解详情>></a></h4>
+    <div class="dib mt10">
+        <div class="l mr20" style="color:#FA8F23;">
+            <span class="f64 lh98"><%=qscore%></span>分
+        </div>
+        <div class="l">
+            <div>
+                <div class="l b f13">基础分：</div>
+                <div class="w250" style="margin-left:4.5em;">
+                    根据直通车账户近期的关键词推广效果给出的动态得分。
+                    <div class="l mt5 mb10">
+                    <%for (var i=0;i<5;i++) { %>
+                        <span class="l <%if (i<cust_score) { %>orange<% } else { %>gray<% }%>"></span>
+                    <% }%>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="l b f13">创意效果：</div>
+                <div class="w250" style="margin-left:4.5em;">
+                    推广创意近期的关键词动态点击反馈。
+                    <div class="l mt5 mb10">
+                    <%for (var i=0;i<5;i++) { %>
+                        <span class="l <%if (i<creative_score) { %>orange<% } else { %>gray<% }%>"></span>
+                    <% }%>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="l b f13">相关性：</div>
+                <div class="w250" style="margin-left:4.5em;">
+                    关键词与宝贝类目、属性及文本等信息的相符程度。
+                    <div class="l mt5 mb10">
+                    <%for (var i=0;i<5;i++) { %>
+                        <span class="l <%if (i<rele_score) { %>orange<% } else { %>gray<% }%>"></span>
+                    <% }%>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="l b f13">买家体验：</div>
+                <div class="w250" style="margin-left:4.5em;">
+                    根据买家在店铺的购买体验给出的动态反馈。
+                    <div class="l mt5 mb10">
+                    <%for (var i=0;i<5;i++) { %>
+                        <span class="l <%if (i<cvr_score) { %>orange<% } else { %>gray<% }%>"></span>
+                    <% }%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

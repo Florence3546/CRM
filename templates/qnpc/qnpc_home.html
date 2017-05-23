@@ -1,0 +1,210 @@
+{#utf-8#}{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block title%}
+	首页
+{% endblock %}
+{% block extra_style %}
+<link href="/site_media/assets/css/pages/profile.css?v={{VERSION}}" rel="stylesheet" type="text/css">
+<link href="/site_media/jl/plugins/tour/css/bootstrap-tour.min.css?v={{VERSION}}" rel="stylesheet" type="text/css" />
+<link href="/site_media/assets/plugins/fancybox/source/jquery.fancybox.css?v={{VERSION}}" rel="stylesheet" />
+<link href="/site_media/qnpc/css/home.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+<div class="alert fade hide in large marb_12">
+    <button class="close" data-dismiss="alert"></button>
+    <strong class="alert-heading">温馨提示：</strong><span class="marl_24 normal s_color"></span>
+    <div class='normally' style="width:100%;padding-left:12px; margin-top:6px;">
+        <ul style="list-style:none;">
+            <li style="line-height:25px;">亲，Q牛版功能受限平台！Web版功能更全、效果更佳！现体验Web版全功能仅需39元！体验请点击<a href="http://tb.cn/U6ZBe5y" target="_blank">[这里]</a></li>
+        </ul>
+     </div>
+</div>
+
+{% if common_msg_list%}
+  <div style="height: auto;" id="home_accordion" class="accordion collapse">
+
+      {% for msg in common_msg_list %}
+      <div class="accordion-group">
+          <div class="accordion-heading large">
+              <a href="#{{msg.id}}_1" data-parent="#home_accordion" data-toggle="collapse" class="accordion-toggle collapsed  {% if msg.is_prompt %}close_msg{% endif %}"><i class="marr_6 icon-info-sign normally {% if msg.is_prompt %}r_color{% else %}s_color{% endif %}"></i>系统公告：{{ msg.title }}
+              </a>
+          </div>
+          <div class="accordion-body collapse normally" id="{{msg.id}}_1">
+              <div class="accordion-inner lh_24">{% autoescape off %}{{msg.message}}{{msg.content}}{% endautoescape %}</div>
+              <div class="tar">
+                  <span class="marl_12">{{msg.last_modified}}</span>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+
+</div>
+{% endif %}
+
+<ul class="breadcrumb mart_0 marb_0">
+  <li>
+    <span class="larger"> <span >直通车余额：</span> <span class="r_color" >￥{{account.balance}}</span> </span>
+  </li>
+  <li class="fr no-text-shadow">
+    <div id="dashboard-report-range" class="dashboard-date-range no-tooltip-on-touch-device  responsive mart_0"> <i class="sui-icon icon-touch-date-sign"></i> <span>统计天数：<span class="date_value">过去1天</span></span><i class="sui-icon icon-pc-chevron-bottom"></i>
+      <form action="./" method="post" class="hide" post_mode="ajax" post_fuc="PT.Home.select_call_back">
+        <input type="hidden" name="last_day" value="1" />
+      </form>
+    </div>
+  </li>
+
+</ul>
+<div class="row-fluid " id="account_p"> </div>
+<div class="PT_warp">
+  <div id='account_trend_chart'></div>
+</div>
+
+<table class="table PT_warp" id="detailed_table">
+  <thead>
+    <tr>
+      <th>日期</th>
+      <th>展现量</th>
+      <th>点击量</th>
+      <th>点击率</th>
+      <th>PPC</th>
+      <th>总花费</th>
+      <th>成交额</th>
+      <th>成交量</th>
+      <th>收藏量</th>
+      <th>ROI</th>
+      <th>转化率</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {%for rpt in rpt_list%}
+  <tr class="tar">
+    <td class="tac">{{rpt.date|date:"Y-m-d"}}</td>
+    <td class="base_data">{{rpt.impressions}}</td>
+    <td class="base_data">{{rpt.click}}</td>
+    <td class="base_data">{{rpt.ctr|floatformat:'2'}}%</td>
+    <td class="base_data">{{rpt.cpc|divide:'100'}}</td>
+    <td class="base_data">{{rpt|div:'cost,100,2'}}</td>
+    <td class="conv_data"><div class="tooltips" data-original-title="直接成交金额 : {{rpt|div:'directpay,100,2'|floatformat:'2'}}元</br>间接成交金额 : {{rpt|div:'indirectpay,100,2'|floatformat:'2'}}元">{{rpt.pay|divide:'100'|floatformat:'2'}}</div></td>
+    <td class="conv_data"><div class="tooltips" data-original-title="直接成交笔数 : {{rpt.directpaycount}}笔</br> 间接成交笔数 : {{rpt.indirectpaycount}}笔">{{rpt.paycount}}</div></td>
+    <td class="conv_data"><div class="tooltips" data-original-title="店铺收藏次数 : {{rpt.favshopcount}}次</br>宝贝收藏次数 : {{rpt.favitemcount}}次">{{rpt.favcount}}</div></td>
+    <td class="conv_data">{{rpt.roi|floatformat:'2'}}</td>
+    <td class="conv_data">{{rpt.conv|floatformat:'2'}}%</td>
+  </tr>
+  {%endfor%}
+    </tbody>
+
+</table>
+
+{% if isneed_phone %}
+<div id="modal_phone"  class="sui-modal container hide fade" data-backdrop="static" data-width="500" tabindex="-1" aria-hidden="false">
+  <div class="modal-header">
+    <button type="button" data-dismiss="modal" aria-hidden="true" class="close"></button>
+    <h5 class="marl_12 mart_10" style="font-weight:bold; font-size:14px;">为您的效果负责是精灵不懈的追求，<br>为了方便与您的沟通和及时向您反馈软件效果，请留下您的联系方式！</h5>
+  </div>
+  <div class="modal-body">
+    <div class="tac">
+      <ul class="ls_none">
+        <li class="mart_12">
+          <span>手机号<span style="color:red;">*</span></span>
+          <input type="text" class="inpt_b" name="phone" id="id_phone" maxlength="11" value="">
+        </li>
+        <li class="mart_12">
+          <span>QQ号码&nbsp;</span>
+          <input type="text" class="inpt_b" name="qq" id="id_qq" maxlength="12" value="">
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" id="id_submit_info" class="sui-btn btn-large btn-danger">提交</button>
+    <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-btn btn-large hide" >取消</button>
+  </div>
+</div>
+{% endif %}
+
+<div id="popup_win" class="hide marr_6"  style="height:300px; width:400px;">
+    <img src="/site_media/qnpc/img/qnpc_ad_1.png?v={{VERSION}}" usemap="#map1" alt="" >
+    <map name="map1" id="map1">
+        <area shape="rect" coords="0,290,400,230" target="_blank" href ="http://tb.cn/KGtG0gx"/>
+    </map>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/date.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/plugins/tour/js/bootstrap-tour.min.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/home.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+  jQuery(document).ready(function() {
+	 PT.Home.init();
+	 //PT.Home.initIntro();
+	 PT.draw_trend_chart( 'account_trend_chart' ,{{category_list|safe}},{{series_cfg_list|safe}});
+
+  {% if common_msg_list%}
+      $('#home_accordion').find('.accordion-toggle').first().click();
+  {% endif %}
+
+    {% if isneed_phone %}
+      $('#modal_phone').modal();
+    {% endif %}
+
+  });
+</script>
+{% endblock %}
+
+{% block template %}
+<script id="account_c" type="text/html">
+
+<div class="PT_warp">
+    <table id="account_detail" class="table table_dashed">
+      <thead>
+        <tr>
+          <th>总花费</th>
+          <th>展现量</th>
+          <th>点击量</th>
+          <th>点击率</th>
+          <th>PPC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>￥<%=cost%></td>
+          <td><%=impr%></td>
+          <td><%=click%></td>
+          <td><%=ctr%>%</td>
+          <td>￥<%=cpc%></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="PT_warp">
+    <table id="account_detail" class="table table_dashed">
+      <thead>
+        <tr>
+          <th>成交额</th>
+          <th>收藏量</th>
+          <th>成交量</th>
+          <th>转化率</th>
+          <th>ROI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>￥<%=pay%></td>
+          <td><%=favcount%></td>
+          <td><%=paycount%></td>
+          <td><%=conv%>%</td>
+          <td><%=roi%></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</script>
+{% endblock %}

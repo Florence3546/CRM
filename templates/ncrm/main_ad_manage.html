@@ -1,0 +1,236 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}广告管理{% endblock %}
+{% block content %}
+<style>
+td{
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+}
+</style>
+<div class="m20 auto">
+    <div id="searchdiv" class="mt20 mr40 ml40 tr" >
+		<form id="search_form">
+            显示位置：
+            <select name="search_ad_position" id="search_ad_position"  class="w120">
+                <option selected="selected" value="">请选择...</option>
+                {% for ad_position in ad_positions %}
+                <option value="{{ad_position.1.0}}">{{ad_position.1.0}}</option>
+                {%endfor%}
+            </select>&nbsp;&nbsp;
+            当前状态：
+            <select name="search_ad_status" id="search_ad_status" class="w120">
+                <option selected="selected" value="">请选择...</option>
+                <option value="未审核">未审核</option>
+                <option value="已审核">已审核</option>
+                <option value="投放中">投放中</option>
+                <option value="已屏蔽">已屏蔽</option>
+            </select>
+            <a id="reset" class="btn">重置</a>
+            <div class="dropdown rel">
+               <a class="btn btn-primary dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;">
+                    创建&nbsp;<span class="caret"></span>
+               </a>
+               <ul class="dropdown-menu" role="menu"  aria-labelledby="dLabel">
+                   {% for index, ad_position in ad_positions %}
+                       <li><a href="{% url 'create_main_ad' %}?ad_position={{forloop.counter}}" >{{ad_position.0}}</a></li>
+                   {%endfor%}
+               </ul>
+            </div>
+		</form>
+	</div>
+    <div class="mr40 ml40">
+		<table id="main_ad_table">
+			<thead>
+				<tr>
+                <th class="hide">序号</th>
+				<th class="w80 tl">
+					<div>显示位置</div>
+				</th>
+				<th class="w140 tl">
+					<div>名称</div>
+				</th>
+				<th class="w60 tc">
+					<div>是否显示</div>
+				</th>
+				<th class="w100 tc">
+					<div>有效时间</div>
+				</th>
+				<th class="w40 tc">
+                    <div>权重</div>
+                </th>
+                <th class="w60 tc">
+                    <div>显示频率</div>
+                </th>
+                <th class="w60 tc">
+                    <div><strong>当前状态</strong></div>
+                </th>
+                <th class="w50 tc">
+                    <div>展现量</div>
+                </th>
+                <th class="w50 tc">
+                    <div>点击量</div>
+                </th>
+                <th class="w50 tc">
+                    <div>点击率</div>
+                </th>
+                <th class="w110 tl">
+                   <div>修改人/时间</div>
+                </th>
+                <th class="w110 tl">
+                    <div>审核人/时间</div>
+                </th>
+                <th class="w100 tc">
+                    操作
+                </th>
+			</thead>
+			<tbody>
+
+			{% for main_ad in main_ad_list %}
+			<tr  class="success" id="{{ main_ad.a_id }}">
+                <td class="hide">{{main_ad.a_id}}</td>
+				<td>{{main_ad.ad_position}}</td>
+                <td title="{{main_ad.ad_title}}">{{main_ad.ad_title}}</td>
+                <td class="tc">{{main_ad.ad_display}}</td>
+                <td class="tc">{{main_ad.ad_start_time}}<br/>{{main_ad.ad_end_time}}</td>
+                <td class="tc">{{main_ad.ad_weight}}</td>
+                <td class="tc">{{main_ad.ad_frequency}}</td>
+                <td class="tc"><strong>{{main_ad.ad_status}}</strong></td>
+                <td class="tc">{{main_ad.ad_show_times}}</td>
+                <td class="tc">{{main_ad.ad_click_times}}</td>
+                <td class="tc"><span class="hide">{{main_ad.ad_ctr}}</span>{{main_ad.ad_ctr}}%</td>
+                <td class="tl">{{main_ad.ad_updater}}<br/>{{main_ad.ad_update_time}}</td>
+                <td class="tl">
+                    {% if main_ad.ad_checker == 0%}
+                        未审核
+                    {% else %}
+                        {{main_ad.ad_checker}}<br/>{{main_ad.ad_check_time}}</td>
+                    {% endif %}
+                </td>
+
+                <td class="tc">
+                    <a href="../update_main_ad?id={{main_ad.a_id}}" class="btn btn-primary btn-mini">修改</a>
+                    <a href="javascript:;" class="btn btn-danger btn-mini del_main_ad" del_id="{{ main_ad.a_id }}">删除</a>
+                </td>
+			</tr>
+			{%endfor%}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}
+{% block custom_js %}
+<script>
+    $(function(){
+        init_table = function() {
+            $('#main_ad_table').dataTable({
+                'autoWidth': false,
+                'bDestroy': true,
+                "bSortable": true,
+                'iDisplayLength': 1000,
+                'sDom': "<'row-fluid't<'row-fluid mt10'<'span12 pl10'i><'span12 pr10 tr'p>>",
+                'aaSorting': [[ 0, "desc" ]],
+                'aoColumns': [
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": true,
+                     "sType":'custom',
+                     "sSortDataType":"custom-text"
+                    },
+                    {"bSortable": true},
+                    {"bSortable": true},
+                    {"bSortable": false}
+                ],
+                'oLanguage': {
+                    'sInfo': '总共_TOTAL_条记录',
+                    'sInfoEmpty': '',
+                    'sEmptyTable': '暂无数据.',
+                    'sZeroRecords': '暂无数据',
+                    'sInfoFiltered': '(从 _MAX_ 条记录中过滤)',
+                    'oPaginate': {
+                        'sNext': '下一页',
+                        'sPrevious': '上一页'
+                    }
+                }
+            });
+            $('#main_ad_table tbody').on('mouseover','tr',function () {
+                $(this).addClass( 'bg_striped');
+            }).on( 'mouseleave','tr',function () {
+                $(this).removeClass('bg_striped');
+            });
+        }
+        init_table();
+
+        //条件查询
+        $("#search_form").on('change',function(){
+            get_data_by_params();
+        });
+        //重置条件
+        $("#reset").on('click',function(){
+            $("#search_ad_position").val('');
+            $("#search_ad_status").val('');
+            get_data_by_params();
+        });
+        //删除
+        $('.del_main_ad').on('click',function(){
+            var obj_id = $(this).attr('del_id');
+            PT.confirm('确定要删除该广告吗?',function(){
+                var params = {
+                              'function':'ncrm_del_main_ad',
+                              'callback':'del_ad_callback',
+                              '_id':obj_id
+                }
+                PT.sendDajax(params);
+            });
+        });
+    });
+
+    var del_ad_callback = function(data){
+        if(data.result){
+            window.location.href='../main_ad_manage';
+        }else{
+            PT.alert(data.msg);
+        }
+    };
+
+    var get_data_by_params = function(){
+        var ad_position = $("#search_ad_position").val();
+        var ad_status = $("#search_ad_status").val();
+
+        var all_tr = $("#main_ad_table tbody tr");
+        var result_size = 0;
+
+        all_tr.each(function(){
+            var flag = true;
+            var _ad_position = $(this).children('td').eq(1).html();
+            var _ad_status = $(this).children('td').eq(7).html();
+            if(_ad_position.indexOf(ad_position)<0){
+                flag = false;
+            }
+            if(_ad_status.indexOf(ad_status)<0){
+               flag = false;
+            }
+            //当所有条件都满足时则显示，只要有一个条件不满足，则不显示
+            if(flag){
+                $(this).show();
+                result_size+=1;
+            }else{
+                $(this).hide();
+            }
+        })
+        $("#main_ad_table_info").html("总共"+result_size+"条记录");
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,513 @@
+{#utf-8#}{% extends "base_jl5.html" %}
+{% load rates %}
+{% block title%}
+    帮助中心
+{% endblock %}
+{% block base_jl5 %}
+<div id="header" class="navbar-static-top container-fluid">
+    <a href="{%url 'web_home'%}"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+    <ul class="ul_line ar mr10">
+      <li><a id="open_msg" href="{%url 'web_home'%}"><i class="iconfont f18 mr3">&#xe606;</i>返回首页</a></li>
+      <li>
+        <div class="dropdown rel">
+          <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;">
+            <i class="iconfont f18 mr5">&#xe640;</i>{{request.user.nick}}<i class="iconfont">&#xe626;</i>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+            </li>
+            <li><a href="{%url 'top_logout'%}">退出系统</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+</div>
+<div class="container-fluid mt20">
+    <div class="row-fluid auto" style="max-width:1200px;">
+        <div class="span5" id="sidenav">
+            <ul class="nav sidenav affix w250" data-spy="affix" data-offset-top="20" style="top:20px;">
+                <h4 class="pl20">概览</h4>
+                <li>
+                    <a href="#about_us">一、关于开车精灵</a>
+                    <ul class="nav bgeb">
+                        <li>
+                            <a href="#home_page_report">新版首页介绍</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#versions">二、开车精灵版本</a>
+                </li>
+                <li>
+                    <a href="#login">三、如何进入软件</a>
+                </li>
+                <li>
+                    <a href="#mnt_campaign">四、全自动托管</a>
+                    <ul class="nav bgeb">
+                        <li>
+                            <a href="#gsw">1. 长尾托管</a>
+                            <ul class="nav">
+                                <li>
+                                    <a href="#gsw_feature">• 特点</a>
+                                </li>
+                                <li>
+                                    <a href="#gsw_settings">• 设置</a>
+                                </li>
+                                <li>
+                                    <a href="#gsw_adgroup_details">• 已托管宝贝列表</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#impt">2. 重点托管</a>
+                            <ul class="nav">
+                                <li>
+                                    <a href="#impt_feature">• 特点</a>
+                                </li>
+                                <li>
+                                    <a href="#impt_settings">• 设置</a>
+                                </li>
+                                <li>
+                                    <a href="#impt_adgroup_details">• 已托管宝贝列表</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#select_keyword">五、选词功能</a>
+                    <ul class="nav bgeb">
+                        <li>
+                            <a href="#quick_select_keyword">1. 快速选词</a>
+                        </li>
+                        <li>
+                            <a href="#precise_tao_keyword">2. 精准淘词</a>
+                        </li>
+                        <li>
+                            <a href="#combine_keyword">3. 手工组词</a>
+                        </li>
+                        <li>
+                            <a href="#manual_add_keyword">4. 手工加词</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#manual_optimize">六、手动优化</a>
+                    <ul class="nav bgeb">
+                        <li>
+                            <a href="#smart_optimize">1. 智能优化</a>
+                        </li>
+                        <li>
+                            <a href="#bulk_optimize">2. 批量优化</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#more_feature">七、更多功能</a>
+                    <ul class="nav bgeb">
+                        <li>
+                            <a href="#title_optimize">1. 标题优化</a>
+                        </li>
+                        <li>
+                            <a href="#creative_optimize">2. 创意优化</a>
+                        </li>
+                        <li>
+                            <a href="#rob_rank">3. 极速排名</a>
+                        </li>
+                        <li>
+                            <a href="#deleted_keyword">4. 已删词管理</a>
+                        </li>
+                        <li>
+                            <a href="#duplicate_check">5. 重复词排查</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#FAQs">八、常见问题 FAQs</a>
+                    <ul class="nav bgeb">
+                        <li>
+                            <a href="#FAQs_on_ztcjl">• 开车精灵软件相关</a>
+                        </li>
+                        <li>
+                            <a href="#FAQs_on_subway">• 直通车相关</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="span18 bg_white rel pl40 pr40">
+            <h3 class="tc">开车精灵帮助中心</h3>
+            <div id="about_us" class="pt20">
+                <h4 class="mb20">一、关于开车精灵</h4>
+                <div class="pl20">
+	                <p>直通车是淘宝竞价排名系统，开车精灵是直通车辅助软件。</p>
+	                <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/1/e/1/t/1/19981258.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+	                <div id="home_page_report" class="pt20">
+	                    <p class="b f16">新版首页介绍</p>
+	                    <p>1）查看报表，可以按照时间进行筛选（过去1天/3天/7天/15天）。</p>
+	                    <p>2）首页下方显示计划列表，显示详细的计划数据，不仅能查询开车精灵托管计划下的数据，也可以查询到该账户直通车其他计划的数据。</p>
+	                    <p>3）为了方便各位掌柜快捷操作，首页的右侧，提供了直通车余额、充值入口，以及开车精灵使用时间、续费入口。</p>
+	                    <img src="/site_media/jl5/images/help/home_page_report1.jpg" width="600" class="mb20 bdd bw3">
+	                </div>
+                </div>
+            </div>
+            <div id="versions" class="pt20">
+                <h4 class="mb20">二、开车精灵版本</h4>
+                <div class="pl20">
+	                <p>双引擎：2个计划，根据需求可以选择【重点计划】或是【长尾计划】,其他计划手工操作。</p>
+	                <p>四引擎：4个计划，根据需求可以选择【重点计划】或是【长尾计划】，或手工操作。</p>
+	                <p>类目专家版：4个计划都是可以设置为【重点（专家）计划】或是【长尾计划】,专家可以辅助掌柜选款，结合您的需求，利用软件调整关键词出价，专家会帮助监测软件加词质量，有需要手动微调，定期查看数据。</p>
+                </div>
+            </div>
+            <div id="login" class="pt20">
+                <h4 class="mb20">三、如何进入软件</h4>
+                <p>1. 购买开车精灵后，掌柜登陆淘宝账号，通过卖家中心进入我购买的服务。</p>
+                <img src="/site_media/jl5/images/help/login_step1.jpg" width="600" class="mb20 ml20 bdd bw3">
+                <p>2. 点击开车精灵进入软件进行授权，再次进入软件就可以啦。</p>
+                <img src="/site_media/jl5/images/help/login_step2.jpg" width="400" class="mb20 ml20 bdd bw3">
+            </div>
+            <div id="mnt_campaign" class="pt20">
+                <h4 class="mb20">四、全自动托管</h4>
+                <p>全自动托管功能的类型分为长尾托管和重点托管。</p>
+                <p>当掌柜想要托管的宝贝在10款以内，建议您选择重点托管；超过10款以上的宝贝，建议您选择长尾托管。</p>
+                <p>(温馨提示：全自动托管计划下只放托管中的宝贝,手动的宝贝建议放在其他计划下,这样便于您更好的查看和操作管理。)</p>
+                <div id="gsw" class="pt10 pl20">
+                    <p class="b f16">1. 长尾托管</p>
+                    <div>长尾托管采用低价引流策略，一般适合店铺一般宝贝引流推广，主推宝贝的推广测试，推广的策略是低价引流、花费较少。</div>
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/20468729.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <div id="gsw_feature" class="pt10">
+                        <p class="b f16">• 特点</p>
+                        <div>
+                            <p>1）长尾词精准引流</p>
+                            <p>2）一键批量托管宝贝</p>
+                            <p>3）一键设置关键词限价</p>
+                            <p>4）可托管500个宝贝</p>
+                            <p>5）低价引流，低投入高回报</p>
+                            <p>6）智能限价，每日花费轻松掌握</p>
+                        </div>
+                    </div>
+                    <div id="gsw_settings" class="pt20">
+                        <p class="b f16">• 设置</p>
+                        <div>
+                            <p>1）选择一个未启动的引擎，点击进入</p>
+                            <p>2）设置托管计划，勾选托管类型（长尾托管），选择托管计划，填写关键词限价和日限额（温馨提示：长尾计划日限额需要根据您的宝贝托管个数来进行设置，若您的托管宝贝数量较多，请将日限额设置高一些。例如50~100个宝贝，日限额设为100~300元； 300个宝贝以上，日限额300~500元等）</p>
+                            <img src="/site_media/jl5/images/help/gsw_settings1.jpg" width="600" class="mb20 bdd bw3">
+                            <p>3）选择托管宝贝，批量添加宝贝</p>
+                            <img src="/site_media/jl5/images/help/gsw_settings2.jpg" width="600" class="mb20 bdd bw3">
+                            <p>4）确认提交信息，立即托管</p>
+                            <img src="/site_media/jl5/images/help/gsw_settings3.jpg" width="600" class="mb20 bdd bw3">
+                        </div>
+                    </div>
+                    <div id="gsw_adgroup_details" class="pt20">
+                        <p class="b f16">• 已托管宝贝列表</p>
+                        <div>
+                            <p class="b">1）添加新宝贝</p>
+                            <img src="/site_media/jl5/images/help/add_adgroup.jpg" width="600" class="mb20 bdd bw3">
+                            <p class="b">2）投放设置</p>
+                            <p class="mb20" style="text-indent:1.5em;">可以设置投放平台、投放时间、投放地域，与直通车后台保持一致。</p>
+                            <p class="b">3）屏蔽词设置</p>
+                            <p style="text-indent:1.5em;">将无关词设为屏蔽词，比如设置“2013”，则会删除<span class="red b ml3 mr3">该计划下所有宝贝</span>中包含'2013'的所有关键词（不包括7天内有转化的关键词），且选词、加词的结果都不会包含“2013”。注意屏蔽词是计划层面适用的，一旦设置，计划下所有宝贝都会屏蔽您设置的屏蔽词。</p>
+                            <img src="/site_media/jl5/images/help/gsw_blackword.jpg" width="500" class="mb20 bdd bw3">
+                            <p class="b">4）加大/减少投入</p>
+                            <p style="text-indent:1.5em;">根据后续的推广数据报表，如觉得长尾计划流量比较大，花费高于预期，那么我们就可以使用“减少投入”按钮，进行人工干预。如果觉得当前长尾计划流量不够，那么我们也可以选择“加大投入”按钮。注意“加大投入”或“减少投入”，都是每天仅能调整一次。</p>
+                            <img src="/site_media/jl5/images/help/gsw_quick_oper1.jpg" width="600" class="mb20 bdd bw3">
+                            <p class="b">5）暂停推广或删除</p>
+                            <p style="text-indent:1.5em;">如果您需要暂停或删除某款宝贝，可以勾选宝贝，点击暂停推广/删除按钮，或者鼠标滑到这行宝贝，推广状态，会出现“暂停”、“删除”，点击即可。暂停推广中的宝贝参与推广也是这样操作。</p>
+                            <img src="/site_media/jl5/images/help/gsw_quick_oper2.jpg" width="600" class="mb20 bdd bw3">
+                            <p class="b">6）显示关键词数/创意数</p>
+                            <p style="text-indent:1.5em;">点击显示关键词数和创意数，方便查看宝贝有多少个关键词，即时刷新。</p>
+                            <img src="/site_media/jl5/images/help/gsw_quick_oper3.jpg" width="600" class="mb20 bdd bw3">
+                            <p class="b">7）设置优化状态</p>
+                            <p style="text-indent:1.5em;">自动优化会进行加减关键词，调价格；不自动优化，需要自己手动优化。鼠标滑到需要改动的这行宝贝，优化状态点击铅笔图标进行自定义优化状态。</p>
+                            <img src="/site_media/jl5/images/help/gsw_quick_oper4.jpg" width="600" class="mb20 bdd bw3">
+                        </div>
+                    </div>
+                </div>
+                <div id="impt" class="pt20 pl20">
+                    <p class="b f16">2. 重点托管</p>
+                    <div>重点托管一般适合店铺内主推宝贝重点推广，选取热门关键词强力引流，提供高效的自动优化服务。</div>
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/20468718.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <div id="impt_feature" class="pt10">
+                        <p class="b f16">• 特点</p>
+                        <div>
+                            <p>1）热搜词强力引流</p>
+                            <p>2）智能管控重点宝贝</p>
+                            <p>3）个性化设置宝贝限价</p>
+                            <p>4）最多可托管10个宝贝</p>
+                            <p>5）重点照顾，引入更多流量</p>
+                            <p>6）根据预算，自动调整推广策略</p>
+                        </div>
+                    </div>
+                    <div id="impt_settings" class="pt20">
+                        <p class="b f16">• 设置</p>
+                        <div>
+                            <p>1）选择一个未启动的引擎，点击进入</p>
+                            <p>2）设置托管计划，勾选托管类型（重点托管），选择托管计划，填写日限额</p>
+                            <img src="/site_media/jl5/images/help/impt_settings1.jpg" width="600" class="mb20 bdd bw3">
+                            <p>3）选择托管宝贝，点击添加宝贝，填写关键词最高限价。（温馨提示：请掌柜根据实际情况合理设置关键词限价，限价过低会导致没有流量没有转化。建议关键词最高限价设置为行业市场均价的1.2倍。）</p>
+                            <img src="/site_media/jl5/images/help/impt_settings2.png" width="600" class="mb20 bdd bw3">
+                            <p>4）确认提交信息，立即托管</p>
+                        </div>
+                    </div>
+                    <div id="impt_adgroup_details" class="pt20">
+                        <p class="b f16">• 已托管宝贝列表</p>
+                        <div>
+                            <p class="b">1）添加新宝贝</p>
+                            <p class="b">2）投放设置</p>
+                            <p class="mb20" style="text-indent:1.5em;">可以设置投放平台、投放时间、投放地域，与直通车后台保持一致。</p>
+                            <p class="b">3）算法设置</p>
+                            <p style="text-indent:1.5em;">根据对宝贝推广的意向，选择投资回报导向或流量导向。系统默认的是投资回报导向，因为重点托管的本来就是主推的宝贝，以获得较高的投资回报为目的的，但是这里也不排除有些掌柜不在乎花费，主要就想要流量，那您也是可以设置为流量导向。</p>
+                            <img src="/site_media/jl5/images/help/impt_algorithm.jpg" width="500" class="mb20 bdd bw3">
+                            <p class="b">4）加大/减少投入</p>
+                            <p style="text-indent:1.5em;">根据后续的推广数据报表，如觉得托管计划流量比较大，花费高于预期，那么我们就可以使用“减少投入”按钮，进行人工干预。如果觉得当前长尾计划流量不够，那么我们也可以选择“加大投入”按钮。注意“加大投入”或“减少投入”，都是<span class="red b ml3 mr3">每天仅能调整一次</span>。</p>
+                            <img src="/site_media/jl5/images/help/impt_quick_oper1.jpg" width="600" class="mb20 bdd bw3">
+                            <p class="b">5）暂停推广或删除</p>
+                            <p style="text-indent:1.5em;">如果您需要暂停或删除某款宝贝，可以勾选宝贝，点击暂停推广/删除按钮，或者鼠标滑到这行宝贝，推广状态，会出现“暂停”、“删除”，点击即可。暂停推广中的宝贝参与推广也是这样操作。</p>
+                            <p class="b">6）显示关键词数/创意数</p>
+                            <p style="text-indent:1.5em;">点击显示关键词数和创意数，方便查看宝贝有多少个关键词，<span class="red b ml3 mr3">即时刷新</span>。</p>
+                            <p class="b">7）设置优化状态</p>
+                            <p style="text-indent:1.5em;">自动优化会进行加减关键词，调价格；只优化价格，不加减词，只对关键词进行调价；不自动优化，需要自己手动优化；鼠标滑到需要改动的这行宝贝，优化状态点击铅笔图标进行自定义优化状态。</p>
+                            <img src="/site_media/jl5/images/help/impt_quick_oper2.jpg" width="600" class="mb20 bdd bw3">
+                            <p class="b">8）关键词设置</p>
+                            <p style="text-indent:1.5em;">宝贝列表操作栏中的“关键词设置”可以对宝贝添加产品词以及设置屏蔽词。</p>
+                            <img src="/site_media/jl5/images/help/impt_quick_oper3.jpg" width="600" class="mb20 bdd bw3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="select_keyword" class="pt20">
+                <h4 class="mb20">五、选词功能</h4>
+                <p>为了方便掌柜使用，了解长尾/重点托管下的宝贝详情，我们提供选词功能。精灵选词功能分为：快速选词功能、精准淘词功能、手工组词、手工加词。</p>
+                <div id="quick_select_keyword" class="pt10 pl20">
+                    <p class="b f16">1. 快速选词</p>
+                    <p>快速选词功能是系统基于该宝贝的类目、属性、标题、类目全网热搜词、精灵大词库获取出来的关键词。</p>
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/19990717.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <div class="pt20">
+                        <p class="b">快速选词--操作方法：</p>
+                        <p>1）点击精灵推荐，勾选推荐的热词。</p>
+                        <p>2）系统筛选出关键词，可以通过滑竿筛选，通过不同的维度筛选掌柜想要的词。</p>
+                        <p>3）关键词过滤后，筛选更精确的关键词，或在输入过滤条件后，通过滑竿结合不同的维度筛选更精准的词。</p>
+                        <p>4）设置关键词出价，滑竿移动出价。</p>
+                        <p>5）复制关键词，可以复制所选的关键词存在Excel表中，方便以后分析。</p>
+                        <img src="/site_media/jl5/images/help/quick_select_keyword.jpg" width="600" class="mb20 bdd bw3">
+                    </div>
+                </div>
+                <div id="precise_tao_keyword" class="pt20 pl20">
+                    <p class="b f16">2. 精准淘词</p>
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/19990971.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <p>精准淘词主要用于掌柜有一点的操作思路，对产品属性比较熟悉，淘出比较精准的关键词。</p>
+                    <div class="pt20">
+                        <p class="b">精准淘词--操作方法：</p>
+                        <p>1）点击选择产品词，属性词，开始淘词（属性词不要输入过多，否则可能淘不出词）。</p>
+                        <p>2）淘出的词筛选关键词可参照“快速选词”的操作方法。</p>
+                        <img src="/site_media/jl5/images/help/precise_tao_keyword.jpg" width="600" class="mb20 bdd bw3">
+                    </div>
+                </div>
+                <div id="combine_keyword" class="pt20 pl20">
+                    <p class="b f16">3. 手工组词</p>
+                    <p>手工组词系统会根据宝贝的属性默认显示产品词及修饰词进行拆分组合出有流量的关键词。</p>
+                    <div>
+                        <p class="b">手工组词--操作方法：</p>
+                        <p>1）根据默认的产品词和修饰词，点击‘开始组词’，系统会组出一些词。</p>
+                        <p>2）可以在想要的输入框输入需要的关键词，删除不要的词，点击‘开始组词’，系统会组出一些词。</p>
+                        <p>3）组出的词筛选关键词可参照“快速选词”的操作方法。</p>
+                        <img src="/site_media/jl5/images/help/combine_keyword.jpg" width="600" class="mb20 bdd bw3">
+                    </div>
+                </div>
+                <div id="manual_add_keyword" class="pt20 pl20">
+                    <p class="b f16">4. 手工加词</p>
+                    <p>手工加词适合会操作直通车的掌柜，可以在直通车后台找关键词，或淘宝热搜词，需要手动输入关键词，点击“查询数据”按钮。查询的词筛选关键词可参照“快速选词”的操作方法。</p>
+                    <img src="/site_media/jl5/images/help/manual_add_keyword.jpg" width="600" class="mb20 bdd bw3">
+                </div>
+            </div>
+            <div id="manual_optimize" class="pt20">
+                <h4 class="mb20">六、手动优化</h4>
+                <div id="smart_optimize" class="pt10 pl20">
+                    <p class="b f16">1. 智能优化</p>
+                    <p style="text-indent:2em;">智能优化功能是系统根据该宝贝的关键词在一定期限（默认七天）内的表现，结合系统的优化算法，按照既定的策略（系统提供例行优化，加价引流，降价省油三种优化策略）对宝贝的关键词进行自动优化，将优化结果和优化理由呈现在用户面前，最终由用户决定并提交到直通车后台。该功能的特点是软件系统会自动的优化好宝贝的关键词出价，用户需要做的就是查看并确定优化理由是否符合自己的优化思路，并最终提交到直通车后台。智能优化适用于没有太多时间操作直通车的掌柜。</p>
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/20059702.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <div>
+                        <p class="b">智能优化优化策略：</p>
+                        <p><span class="b">1）例行优化</span> --- 在没有任何操作之前，系统通过智能算法给该宝贝出的优化建议，条件幅度按照百分比设置，选择好后，点击右上的“确认提交”按钮。</p>
+                        <p><span class="b">2）加价引流</span> --- 这个策略是针对目前宝贝急需引流、快速提升排名，想获取更多的流量设置的，优化方法和例行优化一样的。</p>
+                        <p><span class="b">3）降价省油</span> --- 该这里适合在流量大、基础销量较少、转化不好的宝贝来使用，优化方法和例行优化一样的。在使用降价省油策略时，建议选择调价比例不要太高，降价幅度10%--5%。需要注意，该宝贝使用智能优化功能后，不要再使用批量优化功能，以免价格与思路出现混乱。</p>
+                        <img src="/site_media/jl5/images/help/smart_optimize.jpg" width="600" class="mb20 bdd bw3">
+                    </div>
+                </div>
+                <div id="bulk_optimize" class="pt20 pl20">
+                    <p class="b f16">2. 批量优化</p>
+                    <p style="text-indent:2em;">批量优化功能是精灵软件手动优化模块中最重要的一种优化方式，适合对直通车推广有自己优化思路的掌柜，并帮助您省时高效的推广。批量优化的操作流程分为三步，分别是：高级筛选——批量操作——确认提交。</p>
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/20059704.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <div>
+                        <p class="b">批量优化操作：</p>
+                        <p><span class="b">1）高级筛选</span> --- 筛选出符合掌柜优化思路的关键词，分为七个子维度，可以结合多维度筛选，也可以按照单一维度来操作。</p>
+                        <p><span class="b">2）批量优化</span> --- 高级筛选选出目标关键词后，进行批量操作，可以对目标关键词进行批量优化，系统提供加价、降价、自定义、删除、修改匹配、预估排名六个修改方式。</p>
+                        <p><span class="b">3）确认提交</span> --- 批量完成操作后要确认提交，在软件中修改的只是暂时记录在软件，需要点击确认提交按钮才会一键提交到直通车后台并生效。</p>
+                        <img src="/site_media/jl5/images/help/bulk_optimize.jpg" width="600" class="mb20 bdd bw3">
+                    </div>
+                </div>
+            </div>
+            <div id="more_feature" class="pt20">
+                <h4 class="mb20">七、更多功能</h4>
+                <div id="title_optimize" class="pt10 pl20">
+	                <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/20031913.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <p class="b f16">1. 标题优化</p>
+                    <p style="text-indent:2em;">宝贝标题会影响到掌柜店铺的自然搜索排名，也会影响到直通车关键词的质量得分，优化标题是宝贝优化的一个重要环节。在开车精灵里，标题优化主要分为三步，第一步筛选关键词，第二部微调报表标题，第三步提交新标题。</p>
+                    <img src="/site_media/jl5/images/help/title_optimize.jpg" width="600" class="mb20 bdd bw3">
+                </div>
+                <div id="creative_optimize" class="pt20 pl20">
+                    <p class="b f16">2. 创意优化</p>
+                    <p style="text-indent:2em;">创意优化是精灵软件分析类工具中的双创意数据对比功能，进行AB测试，直接在精灵软件操作就能同步到直通车后台。点击图片修改推广图，点击标题旁的铅笔图标，即可修改推广标题。</p>
+                    <img src="/site_media/jl5/images/help/creative_optimize.jpg" width="600" class="mb20 bdd bw3">
+                </div>
+                <div id="rob_rank" class="pt20 pl20">
+                    <p class="b f16">3. 极速排名</p>
+                    <p style="text-indent:2em;">如果掌柜资金雄厚，库存充足，经验老道，只想关注几个重点大流量关键词，那就可以用极速排名功能。宝贝关键词列表中，可以按照点击量、点击率、转化率、成交金额以及ROI升降序排列找到想要极速排名的关键词，“期望排名”处选择掌柜期望排名区间，以及最高限制价格，这里可以选择系统建议的限价，设置好之后点击开始抢排名，系统会在这时自动帮您调整关键词出价极速排名到您希望的位置，如果没排到也没关系，系统会返回您当前的出价，避免您出现没抢到排名却出高价的情况。</p>
+                    <img src="/site_media/jl5/images/help/rob_rank.jpg" width="600" class="mb20 bdd bw3">
+                </div>
+                <div id="deleted_keyword" class="pt20 pl20">
+                    <embed width="780" height="480" src="http://cloud.video.taobao.com/play/u/836440495/p/2/e/1/t/1/20060164.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    <p class="b f16">4. 已删词管理</p>
+                    <p style="text-indent:2em;">如果掌柜在使用软件优化过程中误删了某些关键词，可以在该宝贝的更多功能中找到已删词管理。直接勾选需要恢复的关键词，掌柜自行设置出价和匹配方式，点击恢复到当前宝贝即可。</p>
+                    <img src="/site_media/jl5/images/help/deleted_keyword.jpg" width="600" class="mb20 bdd bw3">
+                </div>
+                <div id="duplicate_check" class="pt20 pl20">
+                    <p class="b f16">5. 重复词排查</p>
+                    <p style="text-indent:2em;">如果掌柜的宝贝太多，同步的宝贝多，重复词太多，可以使用重复词排查功能。在首页的菜单栏点击进入该功能。系统会自动分析出除开长尾托管外的所有宝贝中的重复关键词。主要分为三个模块，一键删除垃圾词、高级批量删除重复词、手工批量删除重复词。</p>
+                    <p style="text-indent:2em;"><span class="b">1）一键删除垃圾词</span>：一键删除淘宝直通车判定的垃圾词（即连续15天展现为0且未激活）我们在这里如果需要删除这些关键词，只需点击批量删除按钮即可。</p>
+                    <img src="/site_media/jl5/images/help/duplicate_check1.jpg" width="600" class="mb20 bdd bw3">
+                    <p style="text-indent:2em;"><span class="b">2）高级批量删除重复词</span>：根据我们筛选的筛选条件，展现符合条件的重复词。例如：设置删词次数大于4且过去5天展现量为0，意思是系统帮我们删除的词，一定是重复数次数大于4以上的且过去5天没有展现量的关键词。</p>
+                    <img src="/site_media/jl5/images/help/duplicate_check2.jpg" width="600" class="mb20 bdd bw3">
+                    <p style="text-indent:2em;"><span class="b">3）手工批量删除重复词</span>：展开重复词，手动解锁，则可以一键删除重复词。</p>
+                    <img src="/site_media/jl5/images/help/duplicate_check3.jpg" width="600" class="mb20 bdd bw3">
+                </div>
+            </div>
+            <div id="FAQs" class="pt20">
+                <h4>八、常见问题 FAQs</h4>
+                <div id="FAQs_on_ztcjl" class="pt10 pl20">
+                    <p class="b f16">• 开车精灵软件相关</p>
+                    <div class="pt10">
+                        <p class="f18 orange">1. 我订购了开车精灵，还要订购直通车吗？</p>
+                        <p>答：首先没有开通直通车无法使用开车精灵的。开车精灵是辅助操作直通车引流的软件，是数据是实时同步的！</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">2. 我不会操作直通车，开车精灵难吗？</p>
+                        <p>答：很简单的，我们软件主要是全自动结合半自动使用的，操作简单易懂易学，顾问细心指导包教包会！同时有视频教程文档教程让您省心放心！</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">3. 开车精灵有几种托管方式？这几种方式有什么区别？</p>
+                        <p>答：主要是两种托管方式【长尾】及【重点】，重点托管一般适合店铺内主推宝贝重点推广，选取热门关键词强力引流，提供高效的自动优化服务。长尾托管采用低价引流策略，一般适合店铺一般宝贝引流推广，新款宝贝的测试，推广的策略是低价引流、花费较少。建议掌柜先预估托管宝贝个数,托管宝贝在10款以内的设置为重点托管,超过10款的设置为长尾托管。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">4. 类目专家版本怎么样？</p>
+                        <p>答：类目专家服务版是“软件自动优化+人工干预”的操作模式，软件稍后会自动加词，同时人工会去检查词的质量，人工微调和优化。可以和专家保持联系，帮助您更好的优化，您也能从中学到一些适合您宝贝的优化思路！</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">5. 我已经托管了，还需要做什么？</p>
+                        <p>答：如果您已经进行长尾/重点托管，2-3天后，登陆系统来看效果即可后，可以进行一些辅助微调，也可以随时联系您的专属顾问帮您分析数据！</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">6. 托管中的宝贝，会自动调整价格吗？</p>
+                        <p>答：会。托管中的宝贝，会根据推广一段时间的效果结合市场来进行调整价格。如果词没有足够展现，会一定程度加价；若词的出价过高了，系统会降低出价。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">7. 托管中的宝贝，关键词会调整吗？</p>
+                        <p>答：会。系统会根据推广一段时间的效果，来删除或替换的操作。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">8. 重点托管中的只优化价格是什么意思？</p>
+                        <p>答：只优化价格，系统不会进行增加或删减关键词及匹配方式，只会根据推广的一段时间效果来调整价格。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">9. 不自动优化是什么意思？</p>
+                        <p>答：软件不会再进行干预此宝贝的优化操作。这个适合会操作直通车的掌柜，根据自己的优化思路去操作直通车。<span class="b">建议您将不自动优化的宝贝放在其他计划下进行手动优化，这样便于您查看和操作管理。</span></p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">10. 如何在1号引擎[长尾托管]中添加新宝贝怎么办？</p>
+                        <p>答：点击菜单栏进入1号引擎[长尾托管]进入托管宝贝界面，点击【添加新宝贝】按钮进行添加即可。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">11. 我已经投放了2天了，为什么点击少？</p>
+                        <p>答：刚开始投放属于测试期，出价会比较低，测试展示3天，后面系统会根据这几天的数据做出相应的操作，如调整出价或换词。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">12. 系统进行优化，后台的算法是依据什么来的？</p>
+                        <p>答：开车精灵的算法是根据与我们合作的淘大讲师3年的实操经验总结的重ROI算法来进行设置的，其中涉及了很多的类目，欢迎大家使用我们的重点托管功能！</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">13. 我设置的限价为3元，系统优化的时候关键词出价会超过3元吗？</p>
+                        <p>答：系统自动优化关键词的价格，不会超过掌柜设置的关键词限价。掌柜可以自行排除以下内容（分时折扣、手动操作等影响）。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">14. 关于推荐有礼的问题？</p>
+                        <p>答：推荐有礼是针对已购买的老用户来推荐新用户的送出的福利，表现方式是通过精灵币的赠送，新老用户都能得到相应的精灵币奖励，此精灵币只限于抵消后期续订软件的部分金额，类似于淘宝代金券的使用！</p>
+                    </div>
+                </div>
+                <div id="FAQs_on_subway" class="pt20 pl20">
+                    <p class="b f16">• 直通车相关</p>
+                    <div class="pt10">
+                        <p class="f18 orange">1. 直通车的展示位有哪些？</p>
+                        <p>答：淘宝网搜索结果页面右侧，有12个竖着展示位，页面底端横着的5个展示位。每页展示17个宝贝，右侧展示1-12位，下面展示13-17位，搜索页面可一页一页往后翻，展示位以此类推。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">2. 为什么当前费用可能超过限额?</p>
+                        <p>答： 因为直通车系统是隔一时间段统计的，所以扣费是一段时间内的花费，如果出现暂时超过限额的情况，在您不继续调整限额的前提下，最终扣费会以最后调整的日限额为依据，在当天24点系统会进行返还。</p>
+                        <p>【示例】：您设置的日最高限额为50元，13:50分系统扫描的时候， 您只花费了49.50元，还没有达到50元，此时不会自动下线，当13:55分系统再来扫描的时候，您已经花费了51.50元，那么推广的宝贝就会自动下 线。此时消费限额就是超过了1.5元，如您不再修改日消费限额，这超过的1.5元会在凌晨0点左右系统结算后返还到您的直通车帐户中。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">3. 直通车违规行为？</p>
+                        <p>答：一类违规行为：<a href="http://help.alimama.com/#!/ztc/faq/detail?id=5822911" target="_blank">http://help.alimama.com/#!/ztc/faq/detail?id=5822911</a></p>
+                        <p style="text-indent:2em;">二类违规行为：<a href="http://help.alimama.com/#!/ztc/faq/detail?id=5822914" target="_blank">http://help.alimama.com/#!/ztc/faq/detail?id=5822914</a></p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">4. 直通车违规处罚？</p>
+                        <img src="/site_media/jl5/images/help/subway_punish.jpg" width="800" class="bdd bw3">
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">5. 直通车推广图片怎么加？图片尺寸是多少？</p>
+                        <p>答：对推广图片大小没有限制，展示位上的推广图片会被压缩成210*315。建议推广图片选用长方形。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">6. 直通车图片类推广信息哪些地方不能遮盖、涂改？</p>
+                        <p>答：直通车推广时图片类推广信息（包括但不限于推广主图、商品详情信息中的图片等）中包含的商品、商品标签及商品包装任意地方出现遮盖、涂抹等方式都不允许。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">7. 直通车充值的钱能不能提现？</p>
+                        <p>答：一般是可以的。拨打淘宝小二电话申请提现。阿里妈妈统一客服电话：0571-88157999</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">8. 虚假交易会导致直通车违规么？</p>
+                        <p>答：虚假交易被淘宝审查出来，比较严重的会导致宝贝扣分，扣分后会导致直通车推广暂停；若审查出来没有扣分，直通车可以推广，但权重会降低。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">9. 直通车违规与自然流量有影响吗？</p>
+                        <p>答：直通车和自然流量是不同的搜索系统，所以两者之间没有关联。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">10. 我的宝贝SKU违规，什么原因？</p>
+                        <p>答：SKU作弊指利用商品属性（如套餐）设置超低或者不规范不真实的一口价，从而使商品排序靠前（如价格排序），淘宝搜索将这种商品判定为SKU作弊商品。SKU作弊有很多种，最常见的是在商品购买属性选择区域放置无关属性或者残次品，并设定超低价格，以此方式在价格排序下获得靠前排名。例如，售价89的运动鞋，在颜色选择中放置了鞋带，定价5元。</p>
+                    </div>
+                    <div class="pt20">
+                        <p class="f18 orange">11. 对于推广信息里出现的他人商标、品牌名称，需要提供哪些资质证明才可以推广？资质证明如何提交？</p>
+                        <p>答：如您确实已获得授权，请参照以下列举的信息，提交材料至邮箱<span class="b ml5">tbztc@taobao.com</span>：</p>
+                        <p style="text-indent:2em;">1）淘宝店铺注册人证明 原件实拍图（身份证或营业执照）；</p>
+                        <p style="text-indent:2em;">2）商标持有人证明 原件实拍图（身份证或营业执照）；</p>
+                        <p style="text-indent:2em;">3）商标注册证 原件实拍图；</p>
+                        <p style="text-indent:2em;">4）各环节商标授权书 原件实拍图（不受理代购小票,报关单,进货凭证等）；</p>
+                        <p style="text-indent:2em;">5）商标授权各环节公司营业执照副本 原件实拍图。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tr"><a class="fixed ml50 btn btn-primary btn-small" style="bottom:10px;" href="javascript:$('body').animate({scrollTop:0}, 'slow')">返回顶部</a></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block custom_js %}
+<script>
+jQuery(document).ready(function() {
+    $('body').scrollspy({target:'#sidenav'});
+});
+</script>
+{% endblock %}

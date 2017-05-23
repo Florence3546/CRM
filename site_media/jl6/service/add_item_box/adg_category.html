@@ -1,0 +1,21 @@
+<div class="select_warp ml0" id="search_opt_category">
+    <span class="tip form" data-toggle="dropdown" class="category_name">全部类目</span>
+    <ul class="dropdown-menu">
+        <li class="level w120" cat_id=""><a href="javascript:;" ><span class="category_title">全部类目</span></a></li>
+        {{ each cat_list }}
+        {{ if $value.child_cat_list.length>0 }}
+            <li class="dropdown-submenu level w120" cat_id="{{ $value.cat_id }}">
+                <a href="javascript:;"><span class="category_title">{{ $value.cat_name }}</span></a>
+                <!--<ul class="dropdown-menu">
+                <i class="iconfont f12">&#xe607;</i>
+                    {{ each $value.child_cat_list as child index }}
+                        <li class="level w120"  cat_id="{{ $value.cat_id }}"><a href="javascript:;"><span class="category_title">{{ child.cat_name }}</span></a></li>
+                    {{ /each }}
+                </ul>-->
+            </li>
+        {{ else }}
+        <li class="level w120" cat_id="{{ $value.cat_id }}"><a href="javascript:;"><span class="category_title">{{ $value.cat_name }}</span></a></li>
+        {{ /if }}
+        {{ /each }}
+    </ul>
+</div>

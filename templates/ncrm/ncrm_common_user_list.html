@@ -1,0 +1,237 @@
+{% load rates %}
+{% include 'ncrm_common_shop_info.html' %}
+<style>
+    .ul_line>li.hide{display: none;}
+    .animate-editor-c{transition:all .1s ease-in .2s;top:0;}
+    .animate-editor-p:hover .animate-editor-c{top:-20px;}
+    ul.is_ended {color: #aaa; cursor: pointer;}
+    ul.is_serving {color: #0074d9; cursor: pointer;}
+    ul.is_serving.is_ending {color: #e74049;}
+    ul.is_serving.is_future {color: inherit;}
+    .order_info>#subscribe_menu {display: block;}
+    .deep_red {color: #b94a48;}
+    .gold-member-y{
+        border:1px solid rgb(255, 202, 0);
+        border-radius: 5px;
+        color:rgb(255, 202, 0);
+        padding:0px;
+    }
+    .gold-member-n{
+        border:1px solid #ccc;
+        border-radius: 5px;
+        color:#ccc;
+        padding:0px;
+    }
+    .modify-memberorder{
+        margin-top:5px;
+    }
+    .modify-memberorder a{
+        margin:0px;
+    }
+    .modify-memberorder:hover{
+        cursor: pointer;
+    }
+    .goldmember-group{
+        margin-top:3px;
+    }
+</style>
+<td class="vt rel">
+    <div class="order_info ovh h220 pb2" id="order_list_{{c.shop_id}}">
+	    <div>
+	        <span class="label label-gray">订购{{ c.order_statistic.order_count }}笔，{{ c.order_statistic.cycle }}个月，{{ c.order_statistic.pay|divide:'100' }}元（人机以上{{ c.order_statistic.pay2|divide:'100' }}元）</span>
+	        <span class="label label-gray">未知{{ c.order_statistic.unknown_count }}笔，{{ c.order_statistic.unknown_pay|divide:'100' }}元</span>
+	        {% if c.order_info|length > 9 %}<a href="javascript:;" class="order_switch r" flag="1" shop_id="{{c.shop_id}}">展开</a>{% endif %}
+	    </div>
+        {%for order in c.order_info%}
+        <ul class="ul_line {% if order.is_ended %}is_ended{% else %}is_serving {% if order.is_ending %}is_ending{% else %}{% if order.is_future %}is_future{% endif %}{% endif %}{% endif %}" psuser_id="{{ order.psuser.id }}" cslt_id="{{order.consult.id}}" operater_id="{{order.operater.id}}" sub_id="{{ order.id }}" category="{{ order.category }}">
+            <li class="w30" title="{{order.item_code}}">
+                {% if order.pay == 0 and order.item_code == 'FW_GOODS-1921400-1' %}
+                试用
+                {% else %}
+                {% if order.item_code == 'ts-25811-1' %}旗舰{%endif%}
+                {% if order.item_code == 'ts-25811-8' %}专业{%endif%}
+                {% if order.item_code == 'ts-25811-5' %}基础{%endif%}
+                {% if order.item_code == 'ts-25811-3' %}单擎{%endif%}
+                {% if order.item_code == 'ts-25811-6' %}人机{%endif%}
+                {% if order.item_code == 'ts-25811-v9' %}VIP{%endif%}
+                {% if order.item_code == 'FW_GOODS-1921400-1' %}QN1{%endif%}
+                {% if order.item_code == 'FW_GOODS-1921400-v2' %}QN2{%endif%}
+                {% if order.item_code == 'FW_GOODS-1921400-v3' %}QN3{%endif%}
+                {% if order.article_code == 'tp-001' %}TP{%endif%}
+                {% if order.article_code == 'tp-002' %}钻展{%endif%}
+                {% if order.article_code == 'tp-003' %}装修{%endif%}
+                {% if order.article_code == 'tp-004' %}运营{%endif%}
+                {% if order.article_code == 'tp-005' %}补单{%endif%}
+                {% if order.article_code == 'tp-006' %}seo{%endif%}
+                {% if order.article_code == 'tp-007' %}客服{%endif%}
+                {% endif %}
+            </li>
+            <li class="w30 tc">{{order.display_biz_type}}</li>
+            <li class="w40 tr">
+                <div>{{order.cycle|default:"　"}}</div>
+                {% if order.unsubscribe_list %}
+                    {% for unsubscribe in order.unsubscribe_list%}
+                    <div class="r">
+                        <span class="dib w50">{{unsubscribe.psuser_name}}</span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </li>
+            <li class="w80 tr">
+                <div>{{order.create_time|date:"Y-m-d"}}</div>
+                {% if order.unsubscribe_list %}
+                    {% for unsubscribe in order.unsubscribe_list%}
+                    <div class="r w80">
+                        <span class="">{{unsubscribe.refund_reason_cn|truncatechars_html:7|default:'暂无原因'}}</span>
+                        <span class="dib label label-important">退</span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </li>
+            <li class="w80 tr">
+                <div>{{order.end_date|date:"Y-m-d"}}</div>
+                {% if order.unsubscribe_list %}
+                    {% for unsubscribe in order.unsubscribe_list%}
+                    <div class="r">{{unsubscribe.refund_date|date:"Y-m-d"}}</div>
+                    {% endfor %}
+                {% endif %}
+            </li>
+            <li class="w50 tr">
+                <div>{{order.pay|divide:'100'}}</div>
+                {% if order.unsubscribe_list %}
+                    {% for unsubscribe in order.unsubscribe_list%}
+                    <div class="r deep_red">-{{unsubscribe.refund|divide:'100'|default:0}}</div>
+                    {% endfor %}
+                {% endif %}
+            </li>
+            <li class="w50 tr">
+                <div>{{order.psuser.name_cn}}</div>
+            </li>
+            <li class="w50 tr">{{order.operater.name_cn}}</li>
+            <li class="w50 tr">{{order.consult.name_cn}}</li>
+        </ul>
+        {%endfor%}
+    </div>
+    <div class="account_report hide">
+	    <ul class="ul_line">
+			<li class="w70 tr pl5">-</li>
+			<li class="w80 tr">-</li>
+			<li class="w60 tr">-</li>
+			<li class="w60 tr">-</li>
+			<li class="w80 tr">-</li>
+			<li class="w60 tr">-</li>
+			<li class="w40 tr">-</li>
+	    </ul>
+        <div id="account_graph_{{c.shop_id}}" class="h200">
+        </div>
+    </div>
+</td>
+<td class="vt rel note">
+	<div class="h220 ovh">
+	    <div class="event_labels">
+		    <a class="event_detail r" href="javascript:;">查看所有</a>
+			{%if c.contact%}<span class="label label-success">联系{{c.contact|length}}次</span>{%endif%}
+			{%if c.operate%}<span class="label label-info">操作{{c.operate|length}}次</span>{%endif%}
+			{%if c.comment%}<span class="label label-warning">评论{{c.comment|length}}次</span>{%endif%}
+			{%if c.unsubscribe%}<span class="label label-important">退款{{c.unsubscribe|length}}次</span>{%endif%}
+	    </div>
+	    {{c.note|default:''|safe}}
+	    <div id="event_note_{{ c.shop_id }}">
+	    {% for e in c.event_list %}
+            {% if e.type == 'contact' %}
+            <div class="fix animate-editor-p poi" id="contact_box_{{e.id}}">
+                <span class="gray mr5">{{e.desc}}</span>
+                <span id="contact_note_{{e.id}}">{{e.note|safe|default:'没有备注'}}</span>
+                <span class="r ovh h20">
+                    <span class="rel animate-editor-c">
+                        <div>
+                            <span class="orange">{{e.psuser_name}}
+                                <span class="xf_flag green ">
+                                  {% if e.xf_flag == 1 or e.xf_flag == 2 %}(销)
+                                  {% elif e.xf_flag == 3 %} (市)
+                                  {% elif e.xf_flag == 4 %} (增)
+                                  {% elif e.xf_flag == 5 %} (技)
+                                  {% endif %}
+                                </span>
+                            </span>
+                            <span class="ml5 gray create_time">{{e.create_time|date:'Y-m-d'}}</span>
+                        </div>
+                        <div class="tr">
+                            {% if e.psuser_id == request.session.psuser_id %}
+                            <a class="ml10 editor_contact" href="javascript:;" data-info={"id":"{{e.id}}","type":"{{e.contact_type}}","xf_flag":{{e.xf_flag}}}>修改</a>
+{#                            <a class="ml10 del_contact" href="javascript:;" data-info={"id":"{{e.id}}"}>删除</a>#}
+                            {%else%}
+                            <span>请联系{{e.psuser_name}}修改</span>
+                            {%endif%}
+                        </div>
+                    </span>
+                </span>
+            </div>
+            {% endif %}
+            {% if e.type == 'operate' %}
+            <div class="fix animate-editor-p poi" id="operate_box_{{e.id}}">
+                <span class="gray mr5">操作</span>
+                <span id="operate_note_{{e.id}}">{{e.note|safe|default:'没有备注'}}</span>
+                <span class="r ovh h20">
+                    <span class="rel animate-editor-c">
+                        <div>
+                            <span class="orange">{{e.psuser_name}}</span>
+                            <span class="ml5 gray create_time">{{e.create_time|date:'Y-m-d'}}</span>
+                        </div>
+                        <div class="tr">
+                            {% if e.psuser_id == request.session.psuser_id %}
+                            <a class="ml10 editor_operate" href="javascript:;" data-info={"id":"{{e.id}}","type":"{{e.oper_type}}"}>修改</a>
+{#                            <a class="ml10 del_operate" href="javascript:;" data-info={"id":"{{e.id}}"}>删除</a>#}
+                            {%else%}
+                            <span>请联系{{e.psuser_name}}修改</span>
+                            {%endif%}
+                        </div>
+                    </span>
+                </span>
+            </div>
+		    {% endif %}
+            {% if e.type == 'unsubscribe' %}
+            <div class="fix">
+                 <span class="gray mr5">退款</span>
+                 {{e.note|safe|default:'没有备注'}}
+                 <span class="r">
+                    <span class="orange">{{e.psuser_name}}</span>
+                    <span class="ml5 gray">{{e.create_time|date:'Y-m-d'}}</span>
+                 </span>
+            </div>
+            {% endif %}
+            {% if e.type == 'pause' %}
+            <div class="fix animate-editor-p poi" id="pause_box_{{e.id}}">
+                <span class="gray mr5">暂停</span>
+                {% if e.proceed_date %}
+                <span id="pause_status_{{e.id}}">【{{ e.proceed_date|date:"Y-m-d" }} 已开启】</span>
+                {% else %}
+                <span id="pause_status_{{e.id}}" class="green">【剩余{{ e.remain_days }}天，待补{{ e.offset_days }}天】</span>
+                {% endif %}
+                <span id="pause_note_{{e.id}}">{{e.note|safe|default:'没有备注'}}</span>
+                <span class="r ovh h20 tr">
+                    <span class="rel animate-editor-c">
+                        <div>
+                            <span class="orange">{{e.psuser_name}}</span>
+                            <span class="ml5 gray create_time">{{e.create_time|date:'Y-m-d'}}</span>
+                        </div>
+                        <div>
+                            {% if not e.proceed_date %}
+                            <a class="ml10 proceed" href="javascript:;" pause_id="{{ e.id }}" pause_date="{{e.create_time|date:'Y-m-d'}}" shop_id="{{ e.shop_id }}" sub_id="{{ e.event_id }}">取消暂停</a>
+                            {% endif %}
+                            {% if e.psuser_id == request.session.psuser_id %}
+                            <a class="ml10 editor_pause" href="javascript:;" data-info='{"id":"{{e.id}}", "event_id":"{{e.event_id}}", "create_time":"{{e.create_time|date:"Y-m-d H:i:s"}}", "proceed_date":"{{e.proceed_date|date:"Y-m-d H:i:s"}}"}'>修改</a>
+{#                            <a class="ml10 del_pause {% if not e.proceed_date %}hide{% endif %}" href="javascript:;" data-info={"id":"{{e.id}}"}>删除</a>#}
+                            {% else %}
+                            <span>请联系{{e.psuser_name}}修改</span>
+                            {% endif %}
+                        </div>
+                    </span>
+                </span>
+            </div>
+            {% endif %}
+	    {% endfor %}
+        </div>
+	</div>
+</td>
+

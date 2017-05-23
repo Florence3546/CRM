@@ -1,0 +1,174 @@
+﻿{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}创建计划书{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <ul class="breadcrumb mt10 pl0">
+        <li><a href="{%url 'plan_list'%}">计划列表</a> <span class="divider">&gt;</span></li>
+        <li class="active">
+                {%if parent_plan%}
+                    {%if mode %}修改{%else%}创建{%endif%}【{{parent_plan.title}}】的子计划书
+                {%else%}
+                    {%if mode %}修改{%else%}创建{%endif%}计划书
+                {%endif%}
+        </li>
+    </ul>
+    {%if err%}
+        <div class="red"><i class="iconfont mr5">&#xe62b;</i>{{err}}</div>
+    {%endif%}
+    <div class="mt10 mb40">
+
+        <div class="box">
+            <div class="f16 b box_hd">
+                <i class="iconfont f18 mr5">&#xe67b;</i>
+                {%if parent_plan%}
+                    {%if mode %}修改{%else%}创建{%endif%}【{{parent_plan.title}}】的子计划书
+                {%else%}
+                    {%if mode %}修改{%else%}创建{%endif%}计划书
+                {%endif%}
+            </div>
+
+            <div class="p10 box_bd">
+                <form action="./" method="post" id="plan_save">
+                    <div class="mt10">
+                        <span class="w100 tr mr10 dib">
+                            计划名称：
+                        </span>
+                        <input class="w500 f12" name="plan_title" type="text" value="{{plan.title}}">
+                    </div>
+                    <div class="mt20">
+                        <span class="w100 tr mr10 dib">
+                            上级主管计划：
+                        </span>
+                        <span>
+                            <input class="w300" disabled type="text" name="related_show" id="related_show" value="{{plan.relate_plan.title}}" autocomplete="off">
+                            <input type="hidden" name="related_id" id="related_id" value="{{plan.relate_plan.id|default:0}}">
+                        </span>
+                        <a class="btn" href="#search_related_plan"  data-toggle="modal"><i class="iconfont">&#xe67b;</i></a>
+                        <span class="ml10 gray f12">点击按钮选择管理计划</span>
+                    </div>
+                    <div class="mt20 {%if parent_plan%}hide{%endif%}">
+                        <span class="w100 tr mr10 dib">
+                            责任人：
+                        </span>
+
+
+                        <input class="psuser_input w200" link="#ps_id" type="text" value="{%if parent_plan%}{{parent_plan.psuser.name_cn}}{%else%}{% if plan.psuser.name_cn %}{{plan.psuser.name_cn}}{%else%}{{psuser.name_cn}}{%endif%}{%endif%}" autocomplete="off"><span class="ml10 gray f12">计划制定人</span>
+                        <input type="hidden" id="ps_id" name="ps_id" value="{%if parent_plan%}{{parent_plan.psuser.id}}{%else%}{% if plan.psuser.id %}{{plan.psuser.id}}{%else%}{{psuser.id}}{%endif%}{%endif%}">
+
+                    </div>
+                    <!--
+                    <div class="mt20 {%if parent_plan%}hide{%endif%}">
+                        <span class="w80 tr mr10 dib">
+                            汇报对象：
+                        </span>
+                        <input class="psuser_input w200" link="#report_id" type="text" value="{%if parent_plan%}{{parent_plan.report.name_cn}}{%else%}{{plan.report.name_cn}}{%endif%}">
+                        <input type="hidden" id="report_id" name="report_id" value="{%if parent_plan%}{{parent_plan.report.id}}{%else%}{{plan.report.id}}{%endif%}">
+                    </div>
+                     -->
+                    <div class="mt20">
+                        <span class="w100 tr mr10 dib">
+                            起止时间：
+                        </span>
+                        <input class="w100" id="start_time" name="start_time" type="text" value="{%if parent_plan and not mode %}{{parent_plan.start_time|date:"Y-m-d"}}{%else%}{{plan.start_time}}{%endif%}">
+                        <span class="dib w20 tc">至</span>
+                        <input class="w100" id="end_time" name="end_time" type="text" value="{%if parent_plan and not mode %}{{parent_plan.end_time|date:"Y-m-d"}}{%else%}{{plan.end_time}}{%endif%}">
+                        {%if parent_plan%}
+                            <span class="gray ml10">范围：{{parent_plan.start_time|date:"Y-m-d"}} 至 {{parent_plan.end_time|date:"Y-m-d"}}</span>
+                        {%endif%}
+                    </div>
+                    <div class="mt20 fix">
+                        <div class="w100 tr l">
+                            <label class="lh30 mb0">统计事件：</label>
+                            <label class="lh30 mr15"><input type="checkbox" id="check_all_events" class="mr5">全选</label>
+                        </div>
+                        {% for genre, event_list in event_all %}
+	                        <ul class="ul_line lh30 " style="margin-left:115px; width:960px;">
+	                               {% for event in event_list %}
+	                                <li class="w140 {% if not event.show %}hide{% endif %}">
+	                                   <label class="dib"><input class="mr5" type="checkbox"  name="{{event.name}}" value="1" {% if event.is_checked %} checked="checked" {% endif %} >{{event.describe}}</label>
+	                                </li>
+	                               {% endfor %}
+	                        </ul>
+                        {% endfor %}
+                    </div>
+                    <div class="mt20 fix">
+                        <span class="w100 tr l mr10 dib">
+                            目标：
+                        </span>
+                        <div class="editor l" id="target">
+                            <textarea class="h160 p0 w900" name="target">{{plan.target}}</textarea>
+                        </div>
+                    </div>
+                    <div class="mt20 fix">
+                        <span class="w100 tr l mr10 dib">
+                            备注：
+                        </span>
+                        <div class="editor l" id="mark">
+                            <textarea class="h160 p0 w900" name="mark">{{plan.note}}</textarea>
+                        </div>
+                    </div>
+<!--                     <div class="mt20 fix">
+                        <span class="w80 tr l mr10 dib">
+                            进展：
+                        </span>
+                        <div class="editor l" id="progress">
+                            <textarea class="h160 p0 w900" name="progress">{{plan.progress}}</textarea>
+                        </div>
+                    </div> -->
+                    <div class="mt40" style="margin-left:100px;">
+                        <button class="btn btn-primary ml10 f12" type="submit">{%if mode %}保存修改{%else%}创建计划{%endif%}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="search_related_plan" tabindex="-1" role="dialog" style="margin-top:2px;top:10%" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+        <span class="f16 b">计划搜索</span>
+      </div>
+      <div class="p10">
+        计划所属于：
+        <!-- <input class="w100 mr10" id="plan_belong" name="plan_belong" type="text" autocomplete="off"> -->
+        <!-- <select class="psuser_select w180" name="plan_belong" id="plan_belong" data-init="{%if parent_plan%}{{parent_plan.psuser.id}}{%else%}{{plan.psuser.id}}{%endif%}"></select> -->
+        <!--  下面代码暂时屏蔽 -->
+        <!--
+        <input class="psuser_input w200" link="#plan_belong" type="text" value="{%if parent_plan%}{{parent_plan.psuser.name_cn}}{%else%}{{plan.psuser.name_cn}}{%endif%}">
+        <input type="hidden" id="plan_belong" name="plan_belong" value="{%if parent_plan%}{{parent_plan.psuser.id}}{%else%}{{plan.psuser.id}}{%endif%}">
+         -->
+        <input class="psuser_input w200" link="#plan_belong" type="text" placeholder="不支持手动粘贴，请手动输入" autocomplete="off">
+        <input type="hidden" id="plan_belong" name="plan_belong" >
+        创建日期：<input class="w100 time" name="create_time" type="text">
+        <a class="btn" href="javascript:;" id="search_related_plan_btn"><i class="iconfont">&#xe645;</i></a>
+        <table class="table-bordered mini mt20">
+            <thead>
+                <tr>
+                    <th class="w60">所属人</th>
+                    <th>名称</th>
+                    <th class="w60">动作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tc" colspan="3">
+                        请输入条件查询
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_create_plan.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmCreatePlan.init()
+});
+</script>
+{% endblock %}

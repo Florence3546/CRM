@@ -1,0 +1,209 @@
+.popup {
+    h4 {
+        // text-align: center;
+        margin-top: .5rem;
+        margin-bottom: .25rem;
+    }
+    .warning{
+        color: #fa6001;
+        border: 1px dashed;
+        width: 80%;
+        margin: 1rem auto;
+        padding: .5rem;      
+    }
+    .content {
+        // display: table;
+        // width: 100%;
+        // height: 100%;
+        // min-height: 100%;
+        padding-bottom: 4rem;
+        color: @gray-base;
+        // padding: 0 0.75rem;
+        // margin: 0;
+        // position: relative;
+    }
+    .popup_bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        div{
+            display: flex;
+        }
+        // padding: 1rem 0;
+
+        button {
+            flex: 1;
+            margin: .25rem 1rem;
+            height: 2rem;
+            line-height: 2rem;
+        }
+    }
+    .item {
+        // padding-left: .5rem;
+        padding: 0 0.75rem;
+        line-height: 1.3rem;
+        margin-bottom: .5rem;
+    }
+    .item_input_text{
+        margin-top: .4rem;
+    }
+    hr {
+        height: 1px;
+        border: none;
+        border-top: 1px dashed #ddd;
+        margin: .4rem 0;
+    }
+    .item_tips{
+        padding-left: .5rem;
+        margin: .5rem 0;
+        font-size: .6rem;
+        color: @gray;
+    }
+    header.top-nav{
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+}
+.popup_edit_budget {
+    input[type="text"] {
+        width: 3rem;
+    }
+}
+.popup_rob_rank {
+    background-color: #efeff4;
+    .content-block-title{
+        margin-top: .75rem;
+    }
+    .list-block{
+        margin-bottom: 0;
+    }
+    .content{
+        padding: 0;
+    }
+    h4,.item{
+        padding: 0 .75rem;
+    }
+    .item-title,.item-after{
+        font-size: .75rem;
+    }
+    input[type="text"]{
+        width: 180px;
+        height: auto;
+        font-size: .7rem;
+    }
+    input[type="text"].rank{
+        min-width: 185px;
+        font-size: .7rem;
+    }
+    // input[type="text"] {
+    //     width: 3rem;
+    // }
+    // input.rank[type="text"] {
+    //     width: 6rem;
+    //     text-align: left;
+    // }
+    // input.time[type="text"] {
+    //     width: 6rem;
+    //     text-align: center;
+    // }
+}
+.popup_rob_rank_history{
+    .content{
+        padding-left: 0;
+        padding-right:0;
+    }
+
+    .warp{
+        position: relative;
+        z-index: 10;
+        padding: 0 .5rem;
+    }
+
+    table{
+        thead{
+            color: @white;
+            tr{
+                height: 2.2rem;
+            }
+        }
+        tr{
+            height: 1.5rem;
+            line-height: 1.5;
+        }
+    }
+}
+.popup_choose_shop_core{
+    .item{
+        line-height: initial;
+    }
+    .content{
+        background: #eeeeee;
+    }
+    .adg-title{
+        font-size: .85rem;
+        max-height: 2rem;
+        overflow: hidden;        
+    }
+    .sub-text{
+        font-size: .6rem;
+    }
+    ul{
+        margin: 0;
+        margin-top: 10px;
+        padding: 0;
+    }
+
+    li{
+        position: relative;
+        list-style: none;
+        display: flex;
+        align-items: center;
+
+        img{
+            width: 80px;
+            height: 80px;
+        }
+
+        &>div{
+            flex:1;
+            padding-left: 10px;
+        }
+    }
+    input{
+        position: absolute;
+        right: .5rem;
+        margin-top: 5px;
+    }
+}
+.popup_rob_rank_manual{
+    .title{
+        color:@white;
+    }
+    table{
+        thead{
+            tr{
+                height: 2.2rem;
+            }
+        }
+        tr{
+            height: 1.5rem;
+            line-height: 1.5;
+        }
+    }
+}
+.popup_suggestion{
+
+    .title{
+        color: #fff;
+    }
+
+    .content{
+        padding-top: 2.2rem;
+    }
+
+    textarea{
+        width: 100%;
+        height: 5rem;
+    }
+}

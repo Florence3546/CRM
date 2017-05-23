@@ -1,0 +1,1 @@
+define("jl6/site_media/service/top_logout/top_logout",["jl6/site_media/plugins/jquery/jquery.min"],function(t){var i=function(){t('[data-toggle="tooltip"]').tooltip()};return{init:i}});

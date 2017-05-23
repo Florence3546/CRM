@@ -1,0 +1,234 @@
+//
+// Msgs
+// --------------------------------------------------
+
+
+// GENERAL STYLES
+// --------------
+
+// Сͼ����궨λ
+// ����ʽ
+.sui-msg {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	position: relative;
+	color: @msgDefaultColor;
+
+  > .msg-icon {
+    line-height: 1;
+    font-size: 14px;
+    font-family: 'icon-pc';
+    font-style: normal;
+    text-decoration: none;
+  }
+  &.msg-error > .msg-icon {
+    &:before {
+      content: "\c60d";
+    }
+  }
+  &.msg-stop > .msg-icon {
+    &:before {
+      content: "\c60b";
+    }
+  }
+  &.msg-success > .msg-icon {
+    &:before {
+      content: "\e601";
+    }
+  }
+  &.msg-warning > .msg-icon {
+    &:before {
+      content: "\c612";
+    }
+  }
+  &.msg-notice > .msg-icon {
+    &:before {
+      content: "\c601";
+    }
+  }
+  &.msg-tips > .msg-icon {
+    &:before {
+      content: "\c609";
+    }
+  }
+  &.msg-info > .msg-icon {
+    &:before {
+      content: "\c60a";
+    }
+  }
+  &.msg-question > .msg-icon {
+    &:before {
+      content: "\c605";
+    }
+  }
+
+
+	> .msg-con {
+		.border-radius(@msgBorderRadius);
+	  p {
+        font-weight: normal;
+        margin-bottom: 0;
+        margin-top: @baseLineHeight / 2;
+      }
+      .sui-close {
+        float: none;
+        position: absolute;
+        top: 11px;
+        right: 11px;
+      }
+	}
+	> .msg-icon {
+		display: inline-block;
+		*display: inline;
+		*zoom: 1;
+		position: absolute;
+	}
+
+}
+
+// С�ߴ磨Ĭ�ϳߴ磩
+.sui-msg {
+	font-size: @baseFontSize;
+	line-height: @baseLineHeight;
+	vertical-align: middle;
+	> .msg-con { padding: 2px 10px 2px 23px; }
+	> .msg-icon {
+		top: 3px;
+		left: 6px;
+	}
+  .sui-close {
+    font-size: 18px;
+    font-weight: normal;
+    color: inherit;
+  }
+
+  // ��ߴ�
+  &.msg-large {
+    font-size: @fontSizeLarge;
+    line-height: @lineHeightLarge;
+    font-weight: bold;
+    > .msg-con {
+      font-size: 12px;
+      font-weight: normal;
+      padding: 6px 15px 6px 36px;
+    }
+    .sui-close {
+      font-size: 20px;
+    }
+    > .msg-icon {
+      top: 7px;
+      left: 11px;
+      font-size: 18px;
+    }
+  }
+
+  // Msgs����
+  &.msg-error,
+  &.msg-stop,
+  {
+    color: #bb4944;
+    > .msg-con {
+      border: 1px solid #f3dfdf;
+      background-color: #f9e5e5;
+    }
+  }
+  &.msg-success {
+    color: #498844;
+    > .msg-con {
+      border: 1px solid #dbfad5;
+      background-color: #e6f5e0;
+    }
+  }
+  &.msg-warning {
+    color: #d16f00;
+    > .msg-con {
+      border: 1px solid #ffebdc;
+      background-color: #fff1e2;
+    }
+  }
+  &.msg-notice,
+  &.msg-tips,
+  {
+    color: #cd9c4f;
+    > .msg-con {
+      border: 1px solid #faf5da;
+      background-color: #fdf8df;
+    }
+  }
+
+  &.msg-info {
+    color: #3387ae;
+    > .msg-con {
+      border: 1px solid #e1f0f8;
+      background-color: #e4f2fa;
+    }
+  }
+  &.msg-question {
+    color: #333;
+    > .msg-con {
+      border: 1px solid #eaeaea;
+      background-color: #f2f0f0;
+    }
+    .msg-icon {
+      color: #999;
+    }
+  }
+
+  //�ޱ����£�������ɫ���ǳ
+  &.msg-naked {
+    &.msg-error,
+    &.msg-stop,
+    {
+      color: #ea4a36;
+    }
+    &.msg-success {
+      color: #22cd6e;
+    }
+    &.msg-warning,
+    &.msg-notice,
+    &.msg-tips {
+      color: #ff7300;
+    }
+
+    &.msg-info {
+      color: #76b8ea;
+    }
+  }
+
+  // �ɿ鼶
+  &.msg-block {
+    display: block;
+    margin-bottom: @baseMargin;
+  }
+
+  // ���ģʽ
+  &.msg-clear {
+    display: block;
+    > .msg-con {
+      display: inline-block;
+      *display: inline;
+      *zoom: 1;
+    }
+  }
+
+  // Ĭ��������ɫ(icon�Ա�����ɫ)
+  &.msg-default {
+    .msg-con {
+      color: @msgDefaultColor;
+    }
+  }
+
+  // ȥ�߿�͵�ɫ
+  &.msg-naked {
+    padding: 1px;
+    > .msg-con {
+      border: none;
+      background-color: transparent;
+    }
+  }
+
+  &.remember {
+    display: none;
+  }
+}

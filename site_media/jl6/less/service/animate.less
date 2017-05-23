@@ -1,0 +1,118 @@
+//上下移动
+@keyframes fx-up-down-move
+{
+    0%{
+        margin-top: 0px;
+    }
+    40%{
+        margin-top: -6px;
+    }
+    60%{
+        margin-top: 0px;
+    }
+    80%{
+        margin-top: -3px;
+    }
+    100%{
+        margin-top: 0;
+    }
+}
+//时钟简单模拟
+@keyframes clock
+{
+    0%     {transform: rotate(0);transform-origin:50% 50%;}
+    10%   {transform: rotate(36deg);transform-origin:50% 50%;}
+    20%   {transform: rotate(72deg);transform-origin:50% 50%;}
+    30%   {transform: rotate(108deg);transform-origin:50% 50%;}
+    40%   {transform: rotate(144deg);transform-origin:50% 50%;}
+    50%   {transform: rotate(180deg);transform-origin:50% 50%;}
+    60%   {transform: rotate(216deg);transform-origin:50% 50%;}
+    70%   {transform: rotate(252deg);transform-origin:50% 50%;}
+    80%   {transform: rotate(288deg);transform-origin:50% 50%;}
+    90%   {transform: rotate(324deg);transform-origin:50% 50%;}
+    100% {transform: rotate(360deg);transform-origin:50% 50%;}
+}
+@-moz-keyframes clock /* Firefox */
+{
+    0%     {transform: rotate(0);transform-origin:50% 50%;}
+    10%   {transform: rotate(36deg);transform-origin:50% 50%;}
+    20%   {transform: rotate(72deg);transform-origin:50% 50%;}
+    30%   {transform: rotate(108deg);transform-origin:50% 50%;}
+    40%   {transform: rotate(144deg);transform-origin:50% 50%;}
+    50%   {transform: rotate(180deg);transform-origin:50% 50%;}
+    60%   {transform: rotate(216deg);transform-origin:50% 50%;}
+    70%   {transform: rotate(252deg);transform-origin:50% 50%;}
+    80%   {transform: rotate(288deg);transform-origin:50% 50%;}
+    90%   {transform: rotate(324deg);transform-origin:50% 50%;}
+    100% {transform: rotate(360deg);transform-origin:50% 50%;}
+}
+@-webkit-keyframes clock /* Safari 和 Chrome */
+{
+    0%     {transform: rotate(0);transform-origin:50% 50%;}
+    10%   {transform: rotate(36deg);transform-origin:50% 50%;}
+    20%   {transform: rotate(72deg);transform-origin:50% 50%;}
+    30%   {transform: rotate(108deg);transform-origin:50% 50%;}
+    40%   {transform: rotate(144deg);transform-origin:50% 50%;}
+    50%   {transform: rotate(180deg);transform-origin:50% 50%;}
+    60%   {transform: rotate(216deg);transform-origin:50% 50%;}
+    70%   {transform: rotate(252deg);transform-origin:50% 50%;}
+    80%   {transform: rotate(288deg);transform-origin:50% 50%;}
+    90%   {transform: rotate(324deg);transform-origin:50% 50%;}
+    100% {transform: rotate(360deg);transform-origin:50% 50%;}
+}
+@-o-keyframes clock /* Opera */
+{
+    0%     {transform: rotate(0);transform-origin:50% 50%;}
+    10%   {transform: rotate(36deg);transform-origin:50% 50%;}
+    20%   {transform: rotate(72deg);transform-origin:50% 50%;}
+    30%   {transform: rotate(108deg);transform-origin:50% 50%;}
+    40%   {transform: rotate(144deg);transform-origin:50% 50%;}
+    50%   {transform: rotate(180deg);transform-origin:50% 50%;}
+    60%   {transform: rotate(216deg);transform-origin:50% 50%;}
+    70%   {transform: rotate(252deg);transform-origin:50% 50%;}
+    80%   {transform: rotate(288deg);transform-origin:50% 50%;}
+    90%   {transform: rotate(324deg);transform-origin:50% 50%;}
+    100% {transform: rotate(360deg);transform-origin:50% 50%;}
+}
+
+@clock-long-hand-style: clock 6s linear infinite;
+@clock-short-hand-style: clock 10s linear infinite;
+@clock-loding-style: clock 1.5s linear infinite;
+
+.clock-long-hand {
+    animation: @clock-long-hand-style;
+    -moz-animation: @clock-long-hand-style; /* Firefox: */
+    -webkit-animation: @clock-long-hand-style; /* Safari 和 Chrome: */
+    -o-animation: @clock-long-hand-style; /* Opera: */
+}
+.clock-short-hand {
+    animation: @clock-short-hand-style;
+    -moz-animation: @clock-short-hand-style; /* Firefox: */
+    -webkit-animation: @clock-short-hand-style; /* Safari 和 Chrome: */
+    -o-animation: @clock-short-hand-style; /* Opera: */
+}
+.clock-loding {
+    animation: @clock-loding-style;
+    -moz-animation: @clock-loding-style; /* Firefox: */
+    -webkit-animation: @clock-loding-style; /* Safari 和 Chrome: */
+    -o-animation: @clock-loding-style; /* Opera: */
+}
+
+// 修复iconfont错位的问题，如果iconfont那边修复后可以还原
+.clock-long-hand,.clock-short-hand{
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 4px;
+    cursor: pointer;
+}
+
+.clock-long-hand{
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAeFBMVEUAAAAnJjZDQ0MnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYnJjYtLDkvLjonJjZDQ0Nbuav8AAAAJ3RSTlMAB+7ebNnVf3ICqJ4a/biuZRTz7zMdDOymi4Z3Ni/BNf7n43r59qBsrW5pAAAA0UlEQVQoz22SWRKCMBBEOyZhCfsiorK4e/8biiZFq/B+oPKqZpKegUXUx9S7XHR6rRuQsI4qnR2UOmS6bMcQDpHvZLC1/7HyKiXc+TFpY0w8n5goosS3Jk/2+LDZ2K9/Uu9q/dmEvwLRrgNEJGP8icIzDfoqAIVDlSMCuV2KQvtIMywFzABvvyZ8DTm3EPfbXDWX38IMMcV3KdGwlGTzH8xgr0t43b4MlkKVnY2EMJIpxHaeDENk7BbGzkFZOKjV0XIZHlwG07mWXB8pp/UZ3fNfCZgLldCc3J0AAAAASUVORK5CYII=');
+}
+
+.clock-short-hand{
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYAgMAAACdGdVrAAAADFBMVEUAAABDQ0NDQ0NDQ0NZZDBDAAAABHRSTlMA7vfhnB8+pAAAABBJREFUCNdjoDa4mgCjqAoAyXsCa0Pq3MMAAAAASUVORK5CYII=');
+}

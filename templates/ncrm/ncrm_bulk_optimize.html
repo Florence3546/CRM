@@ -1,0 +1,410 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}批量优化{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/jquery.jOrgChart.css"/>
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/custom.css"/>
+<style>
+.left_dotted {border-left: 1px dotted #434343;}
+.pct45 {width: 45%;}
+.pct49 {width: 49%;}
+.ml60 {margin-left: 60px;}
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto tc p20">
+
+  <div class="mb20">
+    <h5 class="tl">1.对以下待操作店铺</h5>
+    <div class="bg_white">
+      <ul class="nav nav-tabs f14 bg_striped bdc">
+        <li class="active"><a href="#unopt_shop" data-toggle="tab">待操作店铺(<span id="unopt_shop_count">{{total_opt_count}}</span>)</a></li>
+        <li><a href="#opted_shop" data-toggle="tab">已优化(<span id="opted_shop_count">{{customer_dict.cannot_opt.has_opted|length}}</span>)</a></li>
+        <li><a href="#not_mnt_shop" data-toggle="tab">未托管(<span>{{customer_dict.cannot_opt.no_mnt_adg|length}}</span>)</a></li>
+      </ul>
+      <div class="tab-content pt10 pb10 pl20 pr20 tl ova" style="max-height: 100px; min-height: 20px;">
+        <div class="tab-pane active" id="unopt_shop">
+          <div>
+          {% for customer in customer_dict.waiting_opt.rpt_ok %}
+            <span id="{{customer.shop_id}}" class="unopt_shop mr10">
+              <a href="{% url 'login_kcjl' 'web' customer.shop_id %}" target="_blank">{{customer.nick}}</a>
+            </span>
+          {% endfor %}
+          {% for customer in customer_dict.waiting_opt.rpt_failed %}
+            <span id="{{customer.shop_id}}" class="unopt_shop mr10">
+              <a href="{% url 'login_kcjl' 'web' customer.shop_id %}" target="_blank">{{customer.nick}}</a>
+            </span>
+          {% endfor %}
+          </div>
+        </div>
+        <div class="tab-pane" id="opted_shop">
+          <div>
+          {% for customer in customer_dict.cannot_opt.has_opted %}
+            <span class="mr10">
+              <a href="{% url 'login_kcjl' 'web' customer.shop_id %}" target="_blank">{{customer.nick}}</a>
+            </span>
+          {% endfor %}
+          </div>
+        </div>
+        <div class="tab-pane" id="not_mnt_shop">
+          <div>
+          {% for customer in customer_dict.cannot_opt.no_mnt_adg %}
+            <span class="mr10">
+              <a href="{% url 'login_kcjl' 'web' customer.shop_id %}" target="_blank">{{customer.nick}}</a>
+            </span>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mb20">
+    <h5 class="tl">2.选择以下操作<span class="alert ml10">注意:【提交】将对上面【待操作店铺】中的所有店铺的所有托管计划的托管宝贝进行操作。</span></h5>
+    <div class="bg_white pt10 pb10" id="div_optimize">
+      <fieldset class="tl pl40 dib vt pct45" style="height: 229px;">
+        <legend class="f14 b">系统策略</legend>
+        {% for name, desc, detail_list in stg_cfg_list %}
+        <div class="control-group" {% if forloop.first %} style="margin-top: 10px;" {% endif %}>
+          <label class="lh20">
+            <input type="radio" name="command" value_type="common_stg" class="mr5" value="{{name}}" desc={{desc}}>{{desc}}
+            <i class="iconfont tooltips f14" data-toggle="tooltip" data-placement="right" data-original-title="<div class='tc'> --------------------------------------</div>{% for detail_desc in detail_list %}<div class='tl'> {{detail_desc}}</div><div class='tc'> --------------------------------------</div>{% endfor %}">&#xe68b;</i>
+          </label>
+        </div>
+        {% endfor %}
+      </fieldset>
+
+      <fieldset class="tl pl40 dib vt pct45 ml10" id="custom_optimize" style="height: 229px;">
+        <legend class="f14 b">手工操作</legend>
+        <div class="control-group" style="margin-top: 0px;">
+          <label class="">
+            <input type="radio" name="command" value_type="custom_cmd" class="mr5" value="del_kw">
+            <span>删词：</span>
+            <span>7天
+              <select name="del_rpt" id="del_rpt" class="w80 f12">
+                <option value="roi" >无转化</option>
+                <option value="favcount" >无收藏</option>
+                <option value="click" selected="selected">无点击</option>
+                <option value="impressions" >无展现</option>
+              </select>
+            </span>
+            <span>且 PC质量得分<=
+              <select name="pc_qscore" id="pc_qscore" class="w60 f12">
+                <option value=1 >1分</option>
+                <option value=2 >2分</option>
+                <option value=3 selected="selected">3分</option>
+                <option value=4 >4分</option>
+                <option value=5 >5分</option>
+                <option value=6 >6分</option>
+                <option value=7 >7分</option>
+                <option value=8 >8分</option>
+                <option value=9 >9分</option>
+                <option value=10 >10分</option>
+              </select>
+            </span>
+            <span>且 移动质量得分<=
+              <select name="yd_qscore" id="yd_qscore" class="w60 f12">
+                <option value=1 >1分</option>
+                <option value=2 >2分</option>
+                <option value=3 selected="selected">3分</option>
+                <option value=4 >4分</option>
+                <option value=5 >5分</option>
+                <option value=6 >6分</option>
+                <option value=7 >7分</option>
+                <option value=8 >8分</option>
+                <option value=9 >9分</option>
+                <option value=10 >10分</option>
+              </select>
+            </span>
+          </label>
+        </div>
+        <div class="control-group" style="margin-top: 0px;">
+          <label>
+            <input type="radio" name="command" value_type="custom_cmd" class="mr5" value="del_8word">
+            <span class="mr3">删词：
+              <span>7天
+                <select name="del_rpt" class="w80 f12">
+                  <option value="roi">无转化</option>
+                  <option value="favcount" >无收藏</option>
+                  <option value="click" selected="selected">无点击</option>
+                  <option value="impressions" >无展现</option>
+                </select>
+                且包含
+                <input type="text" class="w70 f12"><span class="ml3">的关键词</span>
+              </span>
+            </span>
+          </label>
+        </div>
+        <div class="control-group" style="margin-top: 0px;">
+          <label>
+            <input type="radio" name="command" value_type="custom_cmd" class="mr5" value="change_yuan">
+            出价幅度：
+            <select class="w70 f12">
+              <option value="up">提高</option>
+              <option value="down">降低</option>
+            </select>
+            <input type="text" class="w30">&ensp;元
+          </label>
+        </div>
+        <div class="control-group" style="margin-top: 0px;">
+          <label>
+            <input type="radio" name="command" value_type="custom_cmd" class="mr5" value="change_parcent">
+            出价百分比：
+            <select class="w70 f12">
+              <option value="up">提高</option>
+              <option value="down">降低</option>
+            </select>
+            <input type="text" class="w30">&ensp;%
+          </label>
+        </div>
+        <div class="control-group" style="margin-top: 0px;">
+          <label>
+            <input type="radio" name="command" value_type="custom_cmd" class="mr5" value="change_gprice">
+            使用市场平均出价的：<input type="text" class="w30">&ensp;%
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="mt10">
+        <button disabled class="btn w100 mr20" id="dry_run">预览</button>
+        <!-- <button disabled class="btn btn-primary w100" id="command_submit">3.提交</button> -->
+        <button disabled class="btn btn-primary w140" disabled="disabled">3.提交（暂不开放）</button>
+        <span class="alert f14 ml10 hide">注意:【提交】将对左侧【待操作店铺】中的所有店铺的所有托管计划的托管宝贝进行操作。</span>
+      </div>
+    </div>
+  </div>
+
+  <!--下半部分预览面板-->
+  <div class="cl"></div>
+  <div class="hide" id="show_deatail" style="min-height: 1000px;">
+    <h5 class="tl">操作预览</h5>
+    <div class="bg_white pt10 pl5 pb20 pr5 tl">
+      <div class="ml20 mt15 mb15">
+        <div class="dib w60">托管店铺：</div>
+          <div id="select_shop" class="w1200 dib vt ova" style="max-height: 150px;">
+            {% for customer in customer_dict.waiting_opt.rpt_ok %}
+            <label class="dib ml20"> <input type="radio" name="select_shop" class="mr5" value="{{customer.shop_id}}">{{customer.nick}}</label>
+            {% endfor %}
+            {% for customer in customer_dict.waiting_opt.rpt_failed %}
+            <label class="dib ml20 gc tooltips" data-toggle="tooltip" data-original-title="尚未同步报表, 不能预览" style="cursor: not-allowed;"> <input type="radio" name="select_shop" class="mr5" value="{{customer.shop_id}}" disabled >{{customer.nick}}</label>
+            {% endfor %}
+          </div>
+      </div>
+      <div class="ml20 mt15 mb15">
+        <div class="dib w60">托管计划：</div> <div id="select_camp" class="w1200 dib vt"></div>
+      </div>
+      <div class="ml20" style="height: 85px;">
+        <div class="dib w60" style="line-height: 85px;">托管宝贝：</div> <div id="select_adg" class="w1200 dib vt"></div>
+      </div>
+      <div id="div_kw_detail" class="mt20 hide">
+        <div class="mt20 mb10 ml20 mr20 f14">
+          <span class="mr40">关键词限价: <span class="b" id="kw_limit_price"></span>元</span>
+          <label class="ml10 f14 dib">
+            <input type="radio" name="kw_selector" class="mr5" value="all">所有关键词(<span class="b" id="total_kw_count"></span>)
+          </label>
+          <label class="ml10 f14 dib red">
+            <input type="radio" name="kw_selector" class="mr5" value="3">加价(<span class="b" id="plus_price_count"></span>)
+          </label>
+          <label class="ml10 f14 dib green">
+            <input type="radio" name="kw_selector" class="mr5" value="2">降价(<span class="b" id="reduce_price_count"></span>)
+          </label>
+          <label class="ml10 f14 dib baseColor">
+            <input type="radio" name="kw_selector" class="mr5" value="4">修改匹配(<span class="b" id="match_count"></span>)
+          </label>
+          <label class="ml10 f14 dib" style="text-decoration: line-through;">
+            <input type="radio" name="kw_selector" class="mr5" value="1">删除(<span class="b" id="delete_count"></span>)
+          </label>
+          <label class="ml10 f14 dib">
+            <input type="radio" name="kw_selector" class="mr5" value="0">保留(<span class="b" id="keep_count"></span>)
+          </label>
+          <label class="ml10 f14 dib">
+            <input type="radio" name="kw_selector" class="mr5" value="add">新加词(<span class="b" id="add_count"></span>)
+          </label>
+          <span class="r">报表统计天数： <span class="b">最近7天</span></span>
+        </div>
+
+
+        <table id="kw_table" class="table table-striped">
+          <thead class="bdc">
+            <tr>
+              <th class="w220">已有关键词</th>
+              <th class="hide">优化<br>类型</th>
+              <th class="">当前<br>出价</th>
+              <th class="">新出价</th>
+              <th class="w60"><div>PC/移动<br>质量得分</div></th>
+              <th class="">养词<br>天数</th>
+              <th class="">展现量</th>
+              <th class="">点击量</th>
+              <th class="">点击率</th>
+              <th class="">总花费</th>
+              <th class="">PPC</th>
+              <th class="w30">收藏量</th>
+              <th class="w30">购物<br>车数</th>
+              <th class="w30">成交量</th>
+              <th class="">成交额</th>
+              <th class="">转化率</th>
+              <th class="">ROI</th>
+              <th class="">全网展<br>现指数</th>
+              <th class="">全网点<br>击指数</th>
+              <th class="">全网<br>点击率</th>
+              <th class="">全网市<br>场均价</th>
+              <th class="">全网<br>竞争度</th>
+            </tr>
+          </thead>
+          <tbody class="bdc lh22">
+          </tbody>
+        </table>
+
+
+        <table id="add_kw_table" class="table table-striped mt20 w800 hide">
+          <thead class="bdc">
+            <tr>
+              <th class="w120 tl">新加关键词</th>
+              <th class="w70 tr"><div>匹配度</div></th>
+              <th class="w70 tr"><div>出价</div></th>
+              <th class="w90 tr"><div>市场均价</div></th>
+              <th class="w90 tr"><div>展现指数</div></th>
+              <th class="w90 tr"><div>点击指数</div></th>
+              <th class="w90 tr"><div>竞争指数</div></th>
+              <th class="w90 tr"><div>市场点击率</div></th>
+              <th class="w90 tr"><div>市场转化率</div></th>
+            </tr>
+          </thead>
+          <tbody class="bdc">
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+
+
+<div id="modal_kw_chart" class="modal hide fade in" data-width="1000">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+    <h4 class="tc">"<span id="kw_word"></span>"&nbsp;趋势图</h4>
+  </div>
+  <div class="modal-body">
+    <div id="kw_chart" style="width: 980px;"></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block template%}
+<script id="kw_table_tr" type="text/html">
+<tr id="<%=keyword_id%>" <%if (optm_type==1) { %> style="text-decoration: line-through;" <% } %> word=<%=word%> optm_type=<%=optm_type%>>
+  <td><%=word%>
+    <div class="r">
+      <% if (qscore_dict.wireless_matchflag == "2") { %>
+          <span class="iconfont hide" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="移动首屏展示机会:有机会在手机淘宝网和淘宝客户端搜索结果中屏展示">&#xe69d;</span>
+      <% } %>
+      <% if (qscore_dict.wireless_matchflag == "4") { %>
+          <span class="iconfont hide" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="移动首屏展示机会:有机会在手机淘宝网和淘宝客户端搜索结果第一屏展示">&#xe6a6;</span>
+      <% } %>
+      <% if (qscore_dict.pc_left_flag) { %>
+      <span class="iconfont hide" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="淘宝豆腐块展示机会:有机会在淘宝搜索关键词结果页左侧展示">&#xe6a2;</span>
+      <% } %>
+      <i class="iconfont match">
+        <% if (match_scope == 4 ) { %>
+        &#xe6a0;
+        <% } %>
+        <% if (match_scope == 2 ) { %>
+        &#xe6a1;
+        <% } %>
+        <% if (match_scope == 1 ) { %>
+        &#xe69f;
+        <% } %>
+      </i>
+      <% if(new_match_scope) { %>
+        <span class="baseColor ml-3">--></span>
+        <i class="iconfont match ml-2 mr4">
+          <% if (new_match_scope == 4 ) { %>
+          &#xe6a0;
+          <% } %>
+          <% if (new_match_scope == 2 ) { %>
+          &#xe6a1;
+          <% } %>
+          <% if (new_match_scope == 1 ) { %>
+          &#xe69f;
+          <% } %>
+        </i>
+      <% } %>
+      <i class="iconfont chart poi">&#xe62a;</i>
+      <i class="iconfont mnt">
+        <% if (mnt_opt_type == 0) { %>
+        &#xe6a3;
+        <% } %>
+        <% if (mnt_opt_type == 1) { %>
+        &#xe6a4;
+        <% } %>
+        <% if (mnt_opt_type == 2) { %>
+        &#xe6a5;
+        <% } %>
+      </i>
+    </div>
+  </td>
+  <td class="hide"><%=optm_desc%></td>
+  <td class="tr"><%=max_price%></td>
+  <td class="tr" >
+    <span <% if (optm_reason) { %> data-toggle="tooltip" data-original-title="<%=optm_reason%>" class="tooltips"<% } %> >
+      <span class="<% if (optm_type==4){ %>baseColor<% }else if (optm_type==2){ %>green<%} else if (optm_type==3) {%> red <% } %>">
+        <%=new_price%>
+      </span>
+    </span>
+  </td>
+  <td class="tc" pc_qscore="<%=qscore_dict.qscore%>" pc_creative_score="<%=qscore_dict.creativescore%>" pc_rele_score="<%=qscore_dict.kwscore%>" pc_cvr_score="<%=qscore_dict.cvrscore%>" yd_qscore="<%=qscore_dict.wireless_qscore%>" yd_creative_score="<%=qscore_dict.wireless_creativescore%>" yd_rele_score="<%=qscore_dict.wireless_relescore%>" yd_cvr_score="<%=qscore_dict.wireless_cvrscore%>" matchflag="<%=qscore_dict.wireless_matchflag%>" plflag="<%=qscore_dict.pc_left_flag%>">
+      <span class="hide">0</span>
+      <span class="pc_qs db pct49 l"><%=qscore_dict.qscore%></span>
+      <span class="mobile_qs left_dotted db pct49 l" >
+        <% if (qscore_dict.wireless_qscore >-1) { %>
+          <%=qscore_dict.wireless_qscore%>
+        <% } else { %>
+          --
+        <% } %>
+      </span>
+  </td>
+  <td class="tr "><%=create_days%></td>
+  <td class="tr striped"><%=impr%></td>
+  <td class="tr striped"><%=click%></td>
+  <td class="tr striped"><%=ctr%>%</td>
+  <td class="tr striped"><%=cost%></td>
+  <td class="tr striped"><%=cpc%></td>
+  <td class="tr"><%=favcount%></td>
+  <td class="tr"><%=carttotal%></td>
+  <td class="tr"><%=paycount%></td>
+  <td class="tr"><%=pay%></td>
+  <td class="tr"><%=conv%>%</td>
+  <td class="tr <%if (roi>1) { %> red<%}%> " ><%=roi%></td>
+  <td class="tr striped"><%=g_pv%></td>
+  <td class="tr striped"><%=g_click%></td>
+  <td class="tr striped"><%=g_ctr%>%</td>
+  <td class="tr striped"><%=g_cpc%></td>
+  <td class="tr striped"><%=g_competition%></td>
+</tr>
+</script>
+
+<script id="add_kw_table_tr" type="text/html">
+<tr>
+  <td><%=word%></td>
+  <td class="tr"><%=keyword_score%></td>
+  <td class="tr"><%=new_price%></td>
+  <td class="tr"><%=cat_cpc%></td>
+  <td class="tr"><%=cat_pv%></td>
+  <td class="tr"><%=cat_click%></td>
+  <td class="tr"><%=cat_competition%></td>
+  <td class="tr"><%=cat_ctr%>%</td>
+  <td class="tr"><%=coverage%>%</td>
+</tr>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="/site_media/jl5/plugins/jOrgChart/jquery.jOrgChart.js"></script>
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_bulk_optimize.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+  PT.NcrmBulkOptimize.init({{unopt_shopid_list | safe}});
+});
+</script>
+{% endblock %}

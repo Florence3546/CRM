@@ -1,0 +1,27 @@
+<div class="dropdown-menu dropdown-table">
+    <div>
+        <ul>
+            {{each data as v k}}
+                {{if v.cond.length}}
+                    <li data-id="{{v.id}}">
+                        <span class="title tr">{{v.name}}</span>
+                        {{each v.cond}}
+                        <label class="checkbox-inline">
+                            <input type="checkbox" data-title="{{v.name}}" data-status="{{$value.text}}" value="{{$value.cls}}">{{$value.text}}&ensp;<span class="sub">({{$value.count}}个{{if $value.range[0]}}，范围{{$value.range[0]}}-{{$value.range[1]}}{{/if}})</span>
+                        </label>
+                        {{/each}}
+                        {{if v.custom}}
+                        <span class="ml20">自定义</span>
+                        <input type="text">&ensp;-&ensp;<input type="text">
+                        {{/if}}
+                    </li>
+                {{/if}}
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="lh30">
+        <button type="button" class="btn btn-primary btn-sm">确定</button>
+        <button type="button" class="btn btn-default btn-sm">取消</button>
+    </div>
+</div>

@@ -1,0 +1,179 @@
+{{if keywordList.length}}
+<tr class="unsort">
+    <td></td>
+    <td class="hide"></td>
+    <td></td>
+    <td>
+        <div class="input-group custom_search">
+            <span class="select_warp btn-group" id="search_type">
+                <button type="button" class="tip btn btn-default" data-toggle="dropdown">模糊</button>
+                <ul class="dropdown-menu">
+                    <li data-value="0"><span>模糊</span></li>
+                    <li data-value="1"><span>精准</span></li>
+                </ul>
+            </span>
+            <input type="text" class="form-control search_val" placeholder="输入关键词">
+            <span class="input-group-btn search_btn">
+                <button class="btn btn-default" type="button"><i class="iconfont f16">&#xe618;</i></button>
+            </span>
+        </div>
+    </td>
+    <td></td>
+    <td>
+        <button class="btn btn-xs btn-default" id="recovery_all">全部重置</button>
+    </td>
+    <td></td>
+    <td>
+        <button class="btn btn-xs btn-default" id="recovery_mobile_all">全部重置</button>
+    </td>
+    <td>
+        <span id="rank_time">--:--</span>排名&emsp;<button class="btn btn-xs btn-default" id="rank_all">立即更新</button>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+{{each keywordList}}
+<tr id="{{$value.keyword_id}}" data-adgroup_id="{{$value.adgroup_id}}" data-campaign_id="{{$value.campaign_id}}" data-label-code="{{$value.label_code}}" data-tree-code="{{$value.tree_code}}" data-roi="{{$value.roi}}" data-cpc="{{$value.g_cpc | format:'1,100,2'}}"
+    data-ctr="{{$value.ctr}}" data-click="{{$value.click}}" data-qscore="{{$value.qscore_dict.qscore}}" data-wireless_qscore="{{$value.qscore_dict.wireless_qscore}}" data-max_price="{{$value.max_price}}" data-max_mobile_price="{{$value.max_mobile_price}}" data-g_click="{{$value.g_click}}" data-match="{{$value.match_scope}}"
+    data-mnt="{{$value.mnt_opt_type}}" data-new_price="{{$value.new_price}}" data-new_mobile_price="{{$value.new_mobile_price}}" data-optm_type="{{$value.optm_type}}" data-locked="{{$value.is_locked}}">
+    <td class="check_column">
+        <input type="checkbox">
+    </td>
+    <td class="hide  sorting_1">
+        <span class="hide main_sort">{{if $value.new_price>$value.max_price }}2{{/if}}{{if $value.max_price>$value.new_price }}1{{/if}}{{if $value.max_price==$value.new_price }}0{{/if}}</span>
+    </td>
+    <td style="padding:2px;" class="img_box tc">
+        {{if $value.mnt_opt_type == 1}}
+        <a href="/mnt/adgroup_data/{{$value.adgroup_id}}/" target="_blank">
+            {{/if}}
+            {{if $value.mnt_opt_type == 2}}
+             <a href="/web/smart_optimize/{{$value.adgroup_id}}/" target="_blank">
+            {{/if}}
+            {{if $value.mnt_opt_type == 0}}
+            <a href="/mnt/adgroup_data/{{$value.adgroup_id}}/" target="_blank">
+            {{/if}}
+            <img height="60" width="60" src="{{$value.pic_url}}_60x60.jpg_.webp" data-title="{{$value.title}}" data-camp-title="{{$value.camp_title}}" data-price="{{$value.price}}" data-pic-url="{{$value.pic_url}}"></a>
+    </td>
+    <td>
+        <a target="_blank" class="word l" href="http://subway.simba.taobao.com/#!/tools/insight/queryresult?kws={{$value.word}}">
+                {{$value.word}}
+            </a> {{if $value.qscore_dict.wireless_matchflag == "2"}}
+        <span class="iconfont l ml3 mt3" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="移动首屏展示机会:机会在手机淘宝网和淘宝客户端搜索结果中屏展示">&#xe625;</span> {{/if}} {{if $value.qscore_dict.wireless_matchflag == "4"}}
+        <span class="iconfont l ml3 mt3" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="移动首屏展示机会:有机会在手机淘宝网和淘宝客户端搜索结果第一屏展示">&#xe625;</span> {{/if}} {{if $value.qscore_dict.pc_left_flag}}
+        <span class="iconfont l mt3 ml3" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="淘宝豆腐块展示机会:有机会在淘宝搜索关键词结果页左侧展示">&#xe626;</span> {{/if}}
+        <i class="iconfont del">&#xe614;</i>
+        <i class="iconfont match">
+                {{if $value.match_scope == 4 || $value.match_scope == 2 }}
+                &#xe623;
+                {{/if}}
+                {{if $value.match_scope == 1 }}
+                &#xe622;
+                {{/if}}
+            </i>
+        <i class="iconfont" data-toggle="tooltip" data-placement="right" data-trigger="hover" {{if $value.mnt_opt_type==1 }} title="已托管，只改价">
+                &#xe654;
+                {{/if}}
+                {{if $value.mnt_opt_type == 2}}
+                 title="未托管">
+                &#xe655;
+                {{/if}}
+                {{if $value.mnt_opt_type == 0}}
+                title="已托管，自动优化">
+                &#xe653;
+                {{/if}}
+            </i>
+        <i class="iconfont chart">&#xe60c;</i>
+    </td>
+    <td class="max_price sort_custom"><span class="hide">{{$value.max_price}}</span>{{if $value.is_default_price}}<span class="tag tag-gary">默</span>{{/if}}{{$value.max_price}}</td>
+    <td>
+        <input type="text" maxlength="5" class="w40 new_price" value="{{if userNewPrice}}{{$value.new_price}}{{else}}{{$value.max_price}}{{/if}}">
+        <i class="iconfont recovery">&#xe621;</i>
+    </td>
+    <td class="max_mobile_price sort_custom"><span class="hide">{{$value.max_mobile_price}}</span>{{if $value.mobile_is_default_price}}<span class="tag tag-gary">折</span>{{/if}}{{$value.max_mobile_price}}</td>
+    <td>
+        <input type="text" maxlength="5" class="w40 new_mobile_price" value="{{if userNewPrice}}{{$value.new_mobile_price}}{{else}}{{$value.max_mobile_price}}{{/if}}">
+        <i class="iconfont recovery_mobile">&#xe621;</i>
+    </td>
+    <td class="sort_custom ">
+        <span class="hide">0</span>
+        <div class="rank">
+            <span class="pc_rank_desc db pct50 l">--</span>
+            <span class="hide pc_rank"></span>
+            <span class="left_dotted db pct50 l mobile_rank_desc">--</span>
+            <span class="hide mobile_rank"></span>
+        </div>
+    </td>
+    <td class="rob_rank">
+        {{if $value.is_locked}}
+        <a href="javascript:;" class="rob_record">已设为自动</a><a href="javascript:;" class="rob_set ml5">设置</a> {{else}}
+        <a href="javascript:;" class="rob">抢</a> {{/if}}
+    </td>
+    <td class="qscore sort_custom tc" pc_qscore="{{$value.qscore_dict.qscore}}" pc_creative_score="{{$value.qscore_dict.creativescore}}" pc_rele_score="{{$value.qscore_dict.kwscore}}" pc_cvr_score="{{$value.qscore_dict.cvrscore}}" yd_qscore="{{$value.qscore_dict.wireless_qscore}}"
+        yd_creative_score="{{$value.qscore_dict.wireless_creativescore}}" yd_rele_score="{{$value.qscore_dict.wireless_relescore}}" yd_cvr_score="{{$value.qscore_dict.wireless_cvrscore}}" matchflag="{{$value.qscore_dict.wireless_matchflag}}" plflag="{{$value.qscore_dict.pc_left_flag}}">
+        <span class="hide">0</span>
+        <span class="pc_qs db pct50 l">{{$value.qscore_dict.qscore}}</span><span class="mobile_qs left_dotted db pct50 l">{{if $value.qscore_dict.wireless_qscore >-1 }}{{$value.qscore_dict.wireless_qscore}}{{else}}--{{/if}}
+            </span>
+
+    </td>
+    <td>{{$value.create_days}}</td>
+    <td class="striped">{{$value.impr}}</td>
+    <td class="striped">{{$value.click}}</td>
+    <td class="striped">{{$value.ctr}}%</td>
+    <td class="striped">{{$value.cost}}</td>
+    <td class="striped">{{$value.cpc}}</td>
+    <td class="striped">{{$value.cpm}}</td>
+    <td class="striped">{{$value.avgpos}}</td>
+    <td>{{$value.favcount}}</td>
+    <td>{{$value.favshopcount}}</td>
+    <td>{{$value.favitemcount}}</td>
+    <td>{{$value.favctr}}%</td>
+    <td>{{$value.favpay}}</td>
+    <td>{{$value.carttotal}}</td>
+    <td>{{$value.paycount}}</td>
+    <td>{{$value.directpaycount}}</td>
+    <td>{{$value.indirectpaycount}}</td>
+    <td>{{$value.pay}}</td>
+    <td>{{$value.directpay}}</td>
+    <td>{{$value.indirectpay}}</td>
+    <td>{{$value.conv}}%</td>
+    <td {{if $value.roi>1}}class="red"{{/if}}>{{$value.roi}}</td>
+    <td class="striped">{{$value.g_pv}}</td>
+    <td class="striped">{{$value.g_click}}</td>
+    <td class="striped">{{$value.g_ctr}}%</td>
+    <td class="striped">{{$value.g_coverage}}%</td>
+    <td class="striped">{{$value.g_roi}}</td>
+    <td class="striped">{{$value.g_cpc | format:'1,100,2'}}</td>
+    <td class="striped">{{$value.g_competition}}</td>
+    <td class="striped">{{$value.g_paycount}}</td>
+</tr>
+{{/each}} {{/if}}

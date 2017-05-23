@@ -1,0 +1,203 @@
+{% extends "base_main.html" %}
+{% block title%}会员中心{% endblock %}
+
+
+{%block content%}
+<input type="hidden" value="{{data.is_need_phone}}" id="is_need_phone">
+<div id="vip_warp">
+    <div class="info_box">
+        <div class="user_img_box">
+            <img src="http://img01.taobaocdn.com/imgextra/{{request.user.shop.pic_path}}_110x110.jpg">
+        </div>
+        <div class="ditial">
+            <table>
+                <tr>
+                    <td class="f16 pr10">
+                        亲爱的会员，{{request.user.nick}}
+                    </td>
+                    <td>
+                        <a href="javascript:;" class="label-btn btn" id="complete_user_info">我的信息</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="f16 pr10">
+                        当前积分&nbsp;<span class="base_color">{{data.point_count}}</span>
+                    </td>
+                    <td>
+                        <a href="javascript:;" class="label-btn btn" id="point_detial">积分明细</a>
+                    </td>
+                </tr>
+            </table>
+            <div id="show_phase">
+                <ul id="vip_timeline">
+                    <li class="base"></li>
+                    <li class="parcent" style="width:{{data.parcent|default:0}}%">
+                    </li>
+                    <li class="iconfont {%if data.grade == 1 %}active{%endif%}">
+                        &#xe64f; 
+                    </li>
+                    <li class="iconfont {%if data.grade == 2 %}active{%endif%}">
+                        &#xe650; 
+                    </li>
+                    <li class="iconfont {%if data.grade == 3 %}active{%endif%}">
+                        &#xe651; 
+                    </li>
+                    <li class="iconfont {%if data.grade == 4 %}active{%endif%}">
+                        &#xe652; 
+                    </li>
+                </ul>
+                <ul id="vip_phase">
+                    <li >
+                        <div>
+                            精灵初级粉
+                        </div>
+                        <div>
+                            0分
+                        </div>
+                    </li>
+                    <li >
+                        <div>
+                            精灵中级粉
+                        </div>
+                        <div>
+                            10000分
+                        </div>
+                    </li>
+                    <li >
+                        <div>
+                            精灵高级粉
+                        </div>
+                        <div>
+                            25000分
+                        </div>
+                    </li>
+                    <li >
+                        <div>
+                            精灵死忠粉    
+                        </div>
+                        <div>
+                            50000分
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="im_recommend">
+            <img src="/site_media/jl6_temp/static/images/vip_home/recommend.png">
+            <div>
+		        <a href="{%url 'invite_friend'%}" target="_blank" class="btn label-btn tuijian">立即推荐</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="box unwarp mt20" id="vip_link">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="{%url 'point_mall'%}" class="vip_jfsc" target="_blank"></a>
+                    <div class="tc">会员商城</div>
+                </div>
+
+                <div class="col-md-3">
+                    {%if request.session.item_code == 'ts-25811-3'%}
+                    <a class="vip_sjxd"  target="_blank" href="/web/upgrade_suggest/"></a>
+                    <div class="tc">续订/升级优惠</div>
+                    {%else%}
+                    <a class="vip_sjxd"  target="_blank" href="/web/upgrade_suggest/"></a>
+                    <div class="tc">续订/升级优惠</div>
+                    {%endif%}
+                </div>
+
+                <div class="col-md-3">
+                    <a href="{%url 'invite_friend'%}" class="vip_tjfx" target="_blank"></a>
+                    <div class="tc">推荐有礼</div>
+                </div>
+
+                <div class="col-md-3">
+                    <a href="{%url 'point_praise'%}" class="vip_tjyl" target="_blank"></a>
+                    <div class="tc">好评有礼</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box unwarp" id="active_strategy">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th >积分奖励</th>
+                    <th >积分方式</th>
+                    <th class="tl">说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><div class="red f16">+5000</div></td>
+                    <td class="pl20">推荐有礼</td>
+                    <td class="nbl">
+                        好用你就推荐！推荐好友订购最高可获取5000积分，哇！
+                        <a href="{%url 'invite_friend'%}" target="_blank">立即推荐</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div class="red f16">+2500</div></td>
+                    <td class="pl20">续订有礼</td>
+                    <td class="nbl">
+                        好用你就续订！不仅享有优惠，还能获得最高2500积分！
+                        <a href="/web/upgrade_suggest/?referer=upgrade&item_code={{request.session.item_code}}" target="_blank">立即续订</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div class="red f16">+500&nbsp;&nbsp;</div></td>
+                    <td class="pl20">好评有礼</span>
+                    </td>
+                    <td class="nbl">
+                        好用你就好评！每月评2次，每次500分，期待您的支持！
+                        <a href="{%url 'point_praise'%}" target="_blank">立即好评</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div class="red f16">+500&nbsp;&nbsp;</div></td>
+                    <td class="pl20">验证会员</td>
+                    <td class="nbl">
+                        输入手机号等会员信息就可以获得500积分哦！
+                        {%if is_need_phone%}
+                            <a href="javascript:;" id="verify_phone">立即验证</a>
+                        {%else%}
+                            <a href="javascript:;" id="verify_phone">立即修改</a>
+                        {%endif%}
+                    </td>
+                </tr>
+                <tr>
+                    <td><div class="red f16">+40&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+                    <td class="pl20">签到送分</td>
+                    <td class="nbl">
+                        第一天签到20分，每天签到40分，签到不要停！
+                    </td>
+                </tr>
+                <tr>
+                    <td><div class="red f16">+20&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+                    <td class="pl20">登录送分</td>
+                    <td class="nbl">每天只要登录就送20分，都是系统自动送的哦。</td>
+                </tr>
+                <tr>
+                    <td><div class="red f16">+?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+                    <td class="pl20">活动送分</td>
+                    <td class="nbl">不同活动形式送分不一样的，福利不要错过哦。</td>
+                </tr>
+                <tr>
+                    <td><div class="green f16">-200&nbsp;&nbsp;&nbsp;</div></td>
+                    <td class="pl20">过期扣分</td>
+                    <td class="nbl">过期后每天减少 200分，点击“保留积分”，系统会暂存3个月。<a href="javascript:;" class="freeze_point">保留积分</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{%endblock%}
+
+
+

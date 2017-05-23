@@ -1,0 +1,1 @@
+python %~dp0sync_appraise_point.py

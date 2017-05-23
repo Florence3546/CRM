@@ -1,0 +1,21 @@
+<tr>
+    <td>实时数据：</td>
+    <td>花费：{{ cost }}元</td>
+    <td>展现量：{{ impr }}</td>
+    <td>点击量：{{ click }}</td>
+    <td>点击率：{{ ctr }}%</td>
+    <td>PPC：{{ cpc }}元</td>
+    <td>购物车总数：{{ carttotal }}</td>
+    <td>成交额：<span data-toggle="tooltip" data-placement="top" data-trigger="hover" title="直接成交金额: {{ directpay }}<br/>间接成交金额: {{ indirectpay }}">{{ pay }}</span>元</td>
+    <td>收藏量：<span data-toggle="tooltip" data-placement="top" data-trigger="hover" title="店铺收藏数: {{ favshopcount }}<br/>宝贝收藏数: {{ favitemcount }}">{{ favcount }}</span>次</td>
+    <td>成交量：<span data-toggle="tooltip" data-placement="top" data-trigger="hover" title="直接成交笔数: {{ directpaycount }}<br/>间接成交笔数: {{ indirectpaycount }}">{{ paycount }}</span>笔</td>
+    <td class="w30 tr">
+        <div class="rel update_cache" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="系统每5分钟自动刷新一次，点击图标会立即刷新。<br/>实时数据成交低不要急，有些点击不会马上转化的哦">
+	        <i class="iconfont f24 dib lh30 b vh">&#xe64c;</i>
+<!-- 	        <i class="iconfont f24 lh30 abs r0 b clock-long-hand">&#xe64e;</i>
+	        <i class="iconfont f24 lh30 abs r0 b clock-short-hand">&#xe64b;</i> -->
+            <i class="clock-long-hand">&emsp;</i>
+            <i class="clock-short-hand">&emsp;</i>
+        </div>
+    </td>
+</tr>

@@ -1,0 +1,247 @@
+{#utf-8#}{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block title%}
+  宝贝列表
+{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="/site_media/jl/plugins/tour/css/bootstrap-tour.min.css?v={{VERSION}}"/>
+<link rel="stylesheet" type="text/css" href="/site_media/qnpc/css/adgroup_list.css?v={{VERSION}}"/>
+<link rel="stylesheet" type="text/css" href="/site_media/assets/plugins/fancybox/source/jquery.fancybox.css?v={{VERSION}}"/>
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN PAGE HEADER-->
+<input type="hidden" value="{{cur_camp_id}}" id="campaign_id" />
+<input type="hidden" value="{{ mnt_type }}" id="mnt_type" />
+<input type="hidden" value="{{ add_item_flag }}" id="add_item_flag" />
+<input type="hidden" value="0" id="is_quick_entry" />
+
+<div>
+    <div class="por" id='adg_control'>
+
+            <button name='stop' class="update_adg sui-btn btn-bordered btn-xlarge">暂停推广<i class="sui-icon icon-pause"></i></button>
+            <button name='start' class="update_adg sui-btn btn-bordered btn-xlarge">参与推广<i class="sui-icon icon-play"></i></button>
+            <button name='del' class="update_adg sui-btn btn-bordered btn-xlarge">删   除<i class="sui-icon icon-touch-garbage-sign"></i></button>
+            <div class="btn-group fr">
+                    <span class="bld marl_24">标题查找：</span>
+                    <span>
+                        <input type="text" placeholder="请输入宝贝标题查询" class="input-xfat" id="search_val"><button class="btn" type="button" id="search_btn"><i class="sui-icon icon-search marl_3"></i></button>
+                    </span>
+<!--             <button  data-toggle="dropdown" class="sui-btn btn-bordered btn-xlarge marl_6 dropdown">查找<i class="sui-icon icon-pc-chevron-bottom marl_3"></i></button>
+                <div class="dropdown-menu hold-on-click dropdown-checkboxes" id="search_box">
+                    <span class="bld">快速查找：</span>
+                       <span id="id_quick_search" class="sui-dropdown dropdown-bordered dropdown-xlarge">
+                         <span class="dropdown-inner"><a role="button" href="javascript:void(0);" data-toggle="dropdown" data-trigger="hover" class="dropdown-toggle"><span id="id_quick_search_show">全部...</span><i class="caret"></i></a>
+                            <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu" style="z-index:900;">
+                              <li role="presentation" val="all"><a role="menuitem" tabindex="-1" href="javascript:;">全部...</a></li>
+                              <li role="presentation" val="online"><a role="menuitem" tabindex="-1" href="javascript:;">推广中</a></li>
+                              <li role="presentation" val="offline"><a role="menuitem" tabindex="-1" href="javascript:;">已暂停</a></li>
+                              <li role="presentation" val="mnt"><a role="menuitem" tabindex="-1" href="javascript:;">托管中</a></li>
+                              <li role="presentation" val="unmnt"><a role="menuitem" tabindex="-1" href="javascript:;">未托管</a></li>
+                            </ul>
+                         </span>
+                      </span>
+                    <span class="bld marl_24">标题查找：</span>
+                    <span>
+                        <input type="text" placeholder="请输入宝贝标题查询" class="input-xfat" id="search_val"><button class="btn" type="button" id="search_btn"><i class="sui-icon icon-search marl_3"></i></button>
+                    </span>
+                </div> -->
+            </div>
+
+            <div class="fr"><span class="bld">推广计划：</span>
+               <span class="sui-dropdown dropdown-bordered dropdown-xlarge">
+                 <span class="dropdown-inner" id="id_campaign_id"><a role="button" href="javascript:void(0);" data-toggle="dropdown" data-trigger="hover" class="dropdown-toggle"><span id="id_campaign_id_show">{%if cur_camp_id == 0 %}全部...{%else%}{% for k,v in camp_dict.items %}{%if cur_camp_id == k %}{{v}}{%endif%}{%endfor%}{%endif%}</span><i class="caret"></i></a>
+                    <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu" style="z-index:900;">
+                      <li role="presentation" val="0"><a role="menuitem" tabindex="-1" href="javascript:;">全部...</a></li>
+                      {% for k,v in camp_dict.items %}
+                      <li role="presentation" val="{{k}}"><a role="menuitem" tabindex="-1" href="javascript:;">{{v}}</a></li>
+                      {%endfor%}
+                    </ul>
+                 </span>
+              </span>
+            </div>
+    </div>
+</div>
+
+<div class="row-fluid mart_6">
+    <div class="span12">
+        <ul class="breadcrumb mar_0">
+            <li>
+                <i class="icon-list"></i>
+                <span class='bld normally'>宝贝列表(共<span id="adgroup_count" class='r_color'>0</span><span id="is_mnt">个,托管<span class='r_color' id="mnt_adg_count">0</span></span>个/当前选中<span id="current_count" class='r_color'>0</span>个)</span>
+            </li>
+            <li class="fr no-text-shadow marr_0">
+                <div id="dashboard-report-range" class="dashboard-date-range no-tooltip-on-touch-device responsive">
+                    <i class="sui-icon icon-touch-date-sign"></i>
+                    <span>统计天数：<span class="date_value">过去{{last_day}}天</span></span>
+                    <i class="sui-icon icon-pc-chevron-bottom"></i>
+                    <form action="./" method="post" class="hide" post_mode="ajax" post_fuc="PT.Adgroup_list.select_call_back">
+                      <input type="hidden" name="last_day" value="{{last_day}}" />
+                    </form>
+                </div>
+            </li>
+            <li class="fr">
+              <button id="show_keyword_count" class="custom sui-btn btn-xlarge">显示关键词数</button>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<!--<div class="container-fluid">-->
+
+<table class="table table-bordered table-hover td_middle mart_3 PT_warp" id="adgroup_table" style="width:100%;">
+    <thead>
+        <tr>
+            <th class="link_inner_checkbox pointer" style="width:14px;"><input type="checkbox" class="group-checkable father_box" data-set="#sample_1 .checkboxes" link="adgroup_table"/></th>
+            <th class="tac" style="width:80px;">宝贝图片</th>
+            <th style="width:18%;">宝贝标题</th>
+            <th style="width:16%;">基础数据</th>
+            <th style="width:16%;">转化数据</th>
+            <th style="min-width: 50px;">关键词状态</th>
+            <th style="width: 70px;">推广状态</th>
+            <th style="min-width: 45px;">全自动状态</th>
+            <th style="width: 55px;" class="hide">优化功能</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div class="row-fluid">
+      <div class="dataTables_paginate" id="dynamic_pager"></div>
+</div>
+
+<!--</div>-->
+<!-- END PAGE CONTENT-->
+<!-- 添加新宝贝 -->
+{% if not mnt_type and no_mnt_campaigns %}
+<div class="modal hide fade" id="modal_select_campaign">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3>请先选择推广计划</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row-fluid lh_36">
+       <div class="span2 tar">推广计划：</div>
+       <div class="span10">
+          <select id="campaign_2add_item">
+             {% for camp in no_mnt_campaigns %}
+             <option value="{{ camp.campaign_id }}">{{ camp.title }}</option>
+             {% endfor %}
+          </select>
+       </div>
+    </div>
+    <p><i class="icon-info-sign" style="font-size:16px;margin-right:2px;"></i>本页面中的推广新宝贝功能只针对还未加入全自动优化的推广计划</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn blue" id="redirect_campaign">确定</a>
+    <a href="#" class="btn" data-dismiss="modal">取消</a>
+  </div>
+</div>
+{% endif %}
+<!-- 添加新宝贝 END -->
+{% include 'add_item_box2.html'  %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/jquery.bootpag.min.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/date.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/plugins/tour/js/bootstrap-tour.min.js?v={{VERSION}}?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/fancybox/source/jquery.fancybox.pack.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/adgroup_list.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/FixedHeader.min.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+  jQuery(document).ready(function() {
+  PT.Adgroup_list.init();
+  });
+</script>
+{% endblock %}
+
+{% block template%}
+<script id="adgroup_tr" type="text/html">
+<tr>
+  <td class="link_inner_checkbox pointer tac"><input type="checkbox" class="checkboxes kid_box" value=<%=adgroup_id%> online_status="<%=online_status%>" name="adg_checkbox"/></td>
+  <td class="tac"><a target='_blank'><img src="<%=item_pic_url%>_80x80.jpg" width="80" height="80" /></a></td>
+  <td>
+    <span class="hide"><%=item_price%></span>
+    <div class="s_color"><%=campaign_title%></div>
+    <div><span><%=item_title%></span><a class='a_td_no black marl_3 hide' target='_blank' href='/web/title_optimize/?adgroup_id=<%=adgroup_id%>'><i class="icon-wrench zoom"></i></a></div>
+    <div class="o_color">￥<%=item_price%></div>
+  </td>
+  <td>
+    <span class="hide"><%=cost%></span>
+    <div>总花费 <span><%=cost%></span></div>
+    <div>展现量 <span><%=impr%></span></div>
+    <div>点击量 <span><%=click%></span></div>
+    <div>点击率 <span><%=click_rate%>%</span></div>
+    <div>点击花费 <span><%=ppc%></span></div>
+  </td>
+  <td>
+    <span class="hide"><%=pay%></span>
+    <div class="tooltips" data-placement="right" data-original-title="直接成交金额&nbsp;<%=directpay%>元</br>间接成交金额&nbsp;<%=indirectpay%>元</br>直接成交笔数&nbsp;<%= directpaycount%>笔</br>间接成交笔数&nbsp;<%=indirectpaycount%>笔</br>店铺收藏次数&nbsp;<%=favshopcount%>次</br>宝贝收藏次数&nbsp;<%=favitemcount%>次">
+      <div>成交额 <span><%=pay%></span></div>
+      <div>成交量 <span><%=paycount%></span></div>
+      <div>收藏量 <span><%=favcount%></span></div>
+      <div>转化率 <span><%=conv%>%</span></div>
+      <div>投资回报 <span><%=roi%></span></div>
+    </div>
+  </td>
+  <td class="tac">
+    <span class="keyword_count hide">0</span>
+    <div class="keyword_count_str hide"><img src="/site_media/jl/img/ajax-loader.gif" width="20" height="20" style="display:inline-block"><span class="s_color vam">正在查询</span></div>
+    <div>
+      <% if(mnt_type==0) {%>
+      <span><% if (optm_submit_time) { %>上次优化时间<br/><%=optm_submit_time%><% }else{ %>尚未优化<%}%></span>
+      <% } else {%>
+      <span>系统托管中</span>
+      <% } %>
+    </div>
+  </td>
+  <td class='tac'>
+    <% if(online_status=='online'){ %>
+    <span id='status_<%=adgroup_id%>'>推广中</span><br/><i class="sui-icon icon-pause update_adg single marl_3 pointer r_color tooltips" data-original-title="暂停推广" name="stop"></i>
+    <%}%>
+    <% if(online_status=='offline'){ %>
+    <span class="r_color" id='status_<%=adgroup_id%>'>已暂停</span><br/><i class="sui-icon icon-play-circle update_adg single marl_3 pointer  g_color tooltips" data-original-title="参与推广" name="start" style="margin-right:-3px;"></i>
+    <%}%>
+    <i class="sui-icon icon-remove-circle update_adg single pointer larger r_color tooltips" data-original-title="删除" name="del"></i>
+    <% if(error_descr) {%>
+    <br/><span class="r_color"><%=error_descr.slice(2)%></span>
+    <%}%>
+  </td>
+  <td class='tac'>
+    <span><% if(mnt_type==0){ %> 未托管 <% } else {%> 托管中 <% } %></span>
+  </td>
+  <td class="hide">
+    <div class="adg_oper normal_size tac">
+      <% if(mnt_type==0){ %>
+      <div id='id_kw_oper_<%=adgroup_id%>'>
+        <a href="/web/smart_optimize/<%=adgroup_id%>" target='_blank' class="lb_color">智能优化</a><br/>
+        <a href="/web/bulk_optomize/<%=adgroup_id%>" target='_blank' class="lb_color">批量优化</a><br/>
+        <a href="/web/quick_add_keyword/?adgroup_id=<%=adgroup_id%>" target='_blank' class="lb_color">快速选词</a><br/>
+        <a href="/web/precise_tao_keyword/?adgroup_id=<%=adgroup_id%>" target="_blank" class="lb_color">精准淘词</a>
+      </div>
+      <div class="btn-group">
+        <a href="javascript:void(0);" data-toggle="dropdown" class="lb_color">更多功能</a>
+        <ul class="dropdown-menu mart_0 tal" style="min-width:70px;">
+          <li><a class="pad_3" href="/web/rob_rank/<%=adgroup_id%>" target='_blank'>极速排名</a></li>
+          <li><a class="pad_3" href="/web/title_optimize/?adgroup_id=<%=adgroup_id%>" target="_blank"> 标题优化 </a></li>
+          <!--<li><a class="pad_3" href="/web/manage/elemword/?adgroup_id=<%=adgroup_id%>"" target="_blank"> 词根管理 </a></li><li class="bdt"></li>-->
+          <li><a class="pad_3" href="/web/adgroup_health_check/<%=adgroup_id%>" target="_blank"> 健康检查 </a></li><li class="bdt"></li>
+          <li><a class="pad_3" href="/web/deleted_keyword/<%=adgroup_id%>" target="_blank"> 已删词管理 </a></li>
+          <li><a class="pad_3" href="/web/adgroup_history/<%=adgroup_id%>" target="_blank"> 操作记录 </a></li>
+        </ul>
+      </div>
+      <% } else { %>
+      <a href="/mnt/adgroup_data/<%=adgroup_id%>" target="_blank" class="lb_color">查看详情</a>
+      <% } %>
+    </div>
+  </td>
+</tr>
+</script>
+{%endblock%}

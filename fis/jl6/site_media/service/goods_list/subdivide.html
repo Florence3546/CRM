@@ -1,0 +1,92 @@
+<tr class="hover_non_color">
+    <td rowspan="4" colspan="2"></td>
+    <td rowspan="2"  style="padding: 0px;">
+        <table class="table">
+            <tr>
+                <td rowspan="2"  style="border-top: none"  class="brd">计算机&emsp;</td>
+                <td  style="border-top: none">站内</td>
+            </tr>
+            <tr>
+                <td >站外</td>
+            </tr>
+        </table>
+    </td>
+    {{ if pcin }}
+    <td>{{ pcin.impr}}</td>
+    <td>{{ pcin.click}}</td>
+    <td>{{ pcin.ctr}}%</td>
+    <td>￥{{ pcin.cost}}</td>
+    <td>￥{{ pcin.cpc}}</td>
+    <td>{{ pcin.favcount}}</td>
+    <td>{{ pcin.carttotal}}</td>
+    <td>{{ pcin.paycount}}</td>
+    <td>{{ pcin.conv}}%</td>
+    <td>￥{{ pcin.pay}}</td>
+    <td>{{ pcin.roi}}</td>
+    {{ else }}
+    <td class="tc item_base" colspan="11">暂无数据</td>
+    {{ /if }}
+    <td rowspan="4" colspan="3"></td>
+</tr>
+<tr class="hover_non_color">
+    {{ if pcout }}
+    <td>{{pcout.impr}}</td>
+    <td>{{pcout.click}}</td>
+    <td>{{pcout.ctr}}%</td>
+    <td>￥{{pcout.cost}}</td>
+    <td>￥{{pcout.cpc}}</td>
+    <td>{{pcout.favcount}}</td>
+    <td>{{ pcout.carttotal}}</td>
+    <td>{{pcout.paycount}}</td>
+    <td>{{pcout.conv}}%</td>
+    <td>￥{{pcout.pay}}</td>
+    <td>{{pcout.roi}}</td>
+    {{ else }}
+    <td class="tc item_base" colspan="11">暂无数据</td>
+    {{ /if }}
+</tr>
+<tr class="hover_non_color">
+    <td rowspan="2"  style="padding: 0px;">
+        <table class="table">
+            <tr>
+                <td rowspan="2"  style="border-top: none"  class="brd">移动设备</td>
+                <td  style="border-top: none">站内</td>
+            </tr>
+            <tr>
+                <td >站外</td>
+            </tr>
+        </table>
+    </td>
+    {{ if ydin }}
+    <td>{{ydin.impr}}</td>
+    <td>{{ydin.click}}</td>
+    <td>{{ydin.ctr}}%</td>
+    <td>￥{{ydin.cost}}</td>
+    <td>￥{{ydin.cpc}}</td>
+    <td>{{ydin.favcount}}</td>
+    <td>{{ ydin.carttotal}}</td>
+    <td>{{ydin.paycount}}</td>
+    <td>{{ydin.conv}}%</td>
+    <td>￥{{ydin.pay}}</td>
+    <td>{{ydin.roi}}</td>
+    {{ else }}
+        <td class="tc item_base" colspan="11">暂无数据</td>
+    {{ /if }}
+</tr>
+<tr class="hover_non_color">
+    {{ if ydout }}
+    <td>{{ydout.impr}}</td>
+    <td>{{ydout.click}}</td>
+    <td>{{ydout.ctr}}%</td>
+    <td>￥{{ydout.cost}}</td>
+    <td>￥{{ydout.cpc}}</td>
+    <td>{{ydout.favcount}}</td>
+    <td>{{ ydout.carttotal}}</td>
+    <td>{{ydout.paycount}}</td>
+    <td>{{ydout.conv}}%</td>
+    <td>￥{{ydout.pay}}</td>
+    <td>{{ydout.roi}}</td>
+    {{ else }}
+    <td class="tc item_base" colspan="11">暂无数据</td>
+    {{ /if }}
+</tr>

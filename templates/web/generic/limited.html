@@ -1,0 +1,85 @@
+﻿{#utf-8#}{% extends "base_jl5.html" %}
+{% block title %}开车精灵-专业直通车智能优化系统{% endblock %}
+
+{% block base_jl5 %}
+    <div id="header" class="navbar-static-top">
+        <div class="container-fluid">
+            <a  href="#"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+        </div>
+    </div>
+    <div class=" container-fluid">
+        <div class=" w800 h300 mb40 auto mt100 bg_white bbd">
+            <div class="fix mt20"> <i class="iconfont f150 mt50 l ml30">&#xe678;</i>
+                <div class=" w600 h24  l ml15 mt40">
+                    <p class=" f36 b  mt30 mb30">亲，限制访问</p>
+                    <h5 class="red f20">{{msg}}</h5>
+                    <div>{%if user.nick%}您的登录名为：{{user.nick}}{%endif%}</div>
+                    <div class="mt5 lh24">
+                        <span class="vn">如果故障原因不是提示所述，请联系管理员，我们将尽快处理</span>
+                        <a class="ml10" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技">
+                            <img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                        <a class="btn btn-mini ml10" href="javascript:window.opener=null;window.open('','_self');window.close();PT.alert('您已经退出系统，关闭浏览器即可')">关闭</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block base_js %}
+<script src="/site_media/qnyd/scripts/zepto.min.js"></script>
+<script type="text/javascript" src="http://g.tbcdn.cn/sj/qn/jssdk.js"></script>
+<script type="text/javascript" src="http://g.tbcdn.cn/sj/qn/lib/js/less.js"></script>
+<script type="text/javascript" src="http://l.tbcdn.cn/apps/top/c/sdk-mobile.js"></script>
+<script>
+$().ready(function(e) {
+    var url=window.location.href,type='';
+    if(url.indexOf('qnpc')!=-1||url.indexOf('qianniupc')!=-1){
+        type='qnpc';
+    }
+    if(url.indexOf('qnyd')!=-1||url.indexOf('authString')!=-1){
+        type='qnyd';
+    }
+
+    if(type!=''){
+        $('body').addClass(type);
+        $('.call_wangwang').parent().attr('href','javascript:;');
+        $('.call_wangwang').on('click',function(){
+            switch (type){
+                case 'qnpc':
+                    var nick="派生科技";
+                    QN.wangwang.invoke({
+                         category: 'wangwang',
+                         cmd: 'chat',
+                         param: {'uid':"cntaobao"+nick},
+                         success: function (rsp) {
+                            QN.wangwang.invoke({
+                                "cmd": "insertText2Inputbox",
+                                "param": {
+                                   uid:"cntaobao"+nick,
+                                   text:"\\C0x0000ff\\T来自千牛pc版：",
+                                   type:1
+                                }
+                            });
+                             return false
+                         },
+                         error: function (msg) {
+                            PT.alert('打开失败,请联系['+nick+']');
+                         }
+                     });
+                    break;
+                case 'qnyd':
+                    TOP.mobile.ww.chat({
+                        chatNick:'派生科技',
+                        text:'来自千牛移动：',
+                        domain_code:"taobao"
+                    });
+                    break;
+            }
+        });
+        return false;
+    }
+});
+</script>
+{% endblock %}

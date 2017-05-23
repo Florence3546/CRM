@@ -1,0 +1,27 @@
+<div id="duration_setting" class="duration_setting" tabindex="-1">
+    <div>
+        <span id="day_desc"></span>： <strong class="" id="time_desc"></strong>
+    </div>
+    <div class="mt20 mb10">
+        <div class="r error-right w160 mr10">
+            <input id="duration_setting_discount" type="slider" name="discount" value="100">
+        </div>
+        <label class="n db poi f12" id="duration_discount">
+            <input type="radio" value=2 name="duration_setting" class="vn" checked>自定义：
+        </label>
+        <label class="n db poi f12" id="duration_setting_set100">
+            <input type="radio" value=1 name="duration_setting" class="vn">无折扣<span class="g9">（即100%比例投放）</span>
+        </label>
+        <label class="n db poi f12" id="duration_setting_setdefault" >
+            <input type="radio" value=0 name="duration_setting" class="vn">不投放
+        </label>
+    </div>
+    <div class="tc">
+        <button class="btn btn-small btn-primary submit">确定</button>
+        <button class="btn btn-small close_duration">取消</button>
+    </div>
+</div>
+<div id="duration_hover" class="duration_hover">
+    <div> <span id="duration_hover_week">---</span> ： </div>
+    <div> <strong id="duration_hover_time">--:-- - --:--</strong><strong class="ml5" id="duration_hover_discount">---</strong> %折扣 </div>
+</div>

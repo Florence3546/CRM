@@ -1,0 +1,60 @@
+{% extends "base_main.html" %}
+{% load rates %}
+{% block title%}好评有礼{% endblock %}
+
+{%block content%}
+
+<div class="container" id="point_praise">
+
+    <ol class="breadcrumb">
+      <li><a href="{%url 'web_home'%}">首页</a></li>
+      <li><a href="{%url 'vip_home'%}">会员中心</a></li>
+      <li class="active">好评有礼</li>
+    </ol>
+
+    <div class=" auto tc ova main_panel ">
+
+            <div class="mt30 mb20 lh30"><span class="f30">亲，全5分  好评 + 评语 将获得 <span class="base_color f30 b">500</span> 会员积分</span><span class="red hide">，当前活动双倍，共1000积分！</span></div>
+            <div id="commont_header">
+	            <div class="mt20 mb20">
+	                <span>
+	                    <span class="note">亲，30天内只能新评和改评各一次哦(续订或升级后7天可以再评)！ 打完好评后1小时左右赠送积分，如果超过1天还没有赠送，请联系顾问</span>
+	                    <a class="ml10 hide" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+	                </span>
+	            </div>
+	            <div class="pt10 pb10 pl20 pr20">
+	                <a href="javascript:;" id="go_to_comment" class="f24 btn btn-primary btn-lg">马上好评</a>
+	            </div>
+            </div>
+            <div id="commont_panel" class="dn">
+                <div class="commont_title">
+                    好评有礼
+                </div>
+                <div class="commont_body">
+		 			<div class="div_msg">
+		 				<div class="large m_color smart_explain f16">
+		                    <i class="iconfont mr10">&#xe612;</i>嫌麻烦？直接用别人的评语！以下评语已经复制到剪贴板，点 "确定" 将新开窗口跳到评价页面， 请粘贴评语并全5分哦
+		                </div>
+						<div id="div_content">
+						</div>
+					</div>
+					 <div class="opar_panel" >
+	                    <a href="{%url 'point_record_appraise'%}" target="_blank" class="w100 btn btn-primary ">确定</a>
+	                    <a class="ml10 btn" href="javascript:;" id="show_history_praise">获取评语</a>
+	                </div>
+                </div>
+            </div>
+    </div>
+</div>
+{%endblock%}
+
+{% block custom_js %}
+<script src="/site_media/jl5/plugins/zclip/jquery.zclip.min.js"></script>
+
+<script>
+$().ready(function(){
+    PT.Point.init();
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}-开车精灵</title>
+        <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+        {% if request.session.visitor_from == 'qnpc'%}
+            <link rel="stylesheet" href="/site_media/jl6_temp/themes/light_blue/theme.css__timeStamep>"/><!--ignore-->
+        {% else %}
+            <link rel="stylesheet" href="/site_media/jl6_temp/themes/{{request.session.theme|default:'orange'}}/theme.css__timeStamep>"/><!--ignore-->
+        {% endif %}
+        <link id="systheme" rel="stylesheet" href="../site_media/static/css/quickLayout.css" />
+        <style>
+@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1466065367_3793232.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1466065367_3793232.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1466065367_3793232.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1466065367_3793232.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1466065367_3793232.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+        </style>
+    </head>
+    {%if request.user.nick%}
+    <body class="from-{{request.session.visitor_from}}" {% if not error %} id="{{PAGE_MARK.2}}" {% endif %}>
+    {%else%}
+    <body>
+    {%endif%}
+        <input id="systhemes" type="hidden" value="{{request.session.theme}}"/>
+        <input id="shop_id" type="hidden" value="{{ request.user.shop_id }}" />
+        <input id="nick" type="hidden" value="{{ request.user.nick }}" />
+        <section id="main_content">
+            {% block base_jl5 %}{% endblock %}
+            {% if request.session.bottom_banner %}
+             <div class="auto bg_white tc mt20" id="show_bottom_banner" ad_id="{{ request.session.bottom_banner.obj_id }}">
+                <div id="bottom_banner_content" class="pct100">
+                    {% autoescape off %}
+                    {{ request.session.bottom_banner.ad_content }}
+                    {% endautoescape %}
+                </div>
+             </div>
+            {% endif %}
+            <footer>
+                <div>
+                    <a href="http://www.paithink.com" target="_blank">公司网站</a>&emsp;&emsp;
+                    <a href="http://www.paithink.com/promotion.html"  target="_blank">店铺推广服务</a>&emsp;&emsp;
+                    <a href="http://www.paithink.com/operate.html"  target="_blank">店铺运营服务</a>&emsp;&emsp;
+                    <a href="http://bangpai.taobao.com/group/14487125.htm"  target="_blank">加入开车精灵帮派</a>&emsp;&emsp;
+                    <a href="{% url 'point_praise' %}">给精灵好评</a>
+                    <p>
+                        Copyright@2015&emsp;www.paithink.com Inc.All Rights Reserved.武汉派生科技有限公司&emsp;保留一切权利
+                    </p>
+                </div>
+            </footer>
+            <div id="back_top">
+                <i class="iconfont">&#xe604;</i>
+            </div>
+        </section>
+    </body>
+    <script type="text/javascript" data-main="service/main" src="jl6/site_media/static/js/require.js"></script>
+    {% block modal %}{% endblock %}
+    {% block manage_elemword %}{% endblock %}
+</html>

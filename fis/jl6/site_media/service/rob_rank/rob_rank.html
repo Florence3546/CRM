@@ -1,0 +1,83 @@
+<div class="modal fade" id="rob_rank">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <h4 class="modal-title">"{{word}}"抢排名设置</h4>
+            <div class="modal-body">
+                <div class="fix mb10">
+                    <img src="{{picUrl}}" class="item_img l">
+                    <div class="l ml20">
+                        <div>计划名称：{{campaignTitle}}</div>
+                        <div>宝贝名称：{{itemTitle}}</div>
+                    </div>
+                </div>
+                <hr>
+                <form>
+                    <div>
+                        抢位方式：
+                        <label class="radio-inline">
+                          <input type="radio" name="method" {{if method=="manual"}}checked{{/if}} value="manual">手动&emsp;
+                        </label>
+
+                        <label class="radio-inline ml40">
+                          <input type="radio" name="method" {{if method=="auto"}}checked{{/if}} value="auto">自动
+                        </label>
+                        <span class="text-muted ml20 hide manual_info">(手动抢排名时，请不要刷新界面)</span>
+                        <div class="slider">
+                            <input type="text" class="hide" value="{{if start_time!=undefined }}{{start_time}}{{else}}480{{/if}};{{if end_time!=undefined }}{{end_time}}{{else}}1024{{/if}}">
+                        </div>
+                    </div>
+                    <div class="mt15">
+                        抢位平台：
+                        <label class="radio-inline">
+                          <input type="radio" name="platform" {{if platform=="pc"}}checked{{/if}} value="pc">计算机
+                          <span class="ml20">
+                              （当前出价：{{maxPrice | format:'1,1,2'}}元，{{qscore}}分，<span class="pc_rank">{{pcRank}}</span>）
+                          </span>
+                        </label>
+                    </div>
+                    <div class="mt15">
+                        &emsp;&emsp;&emsp;&emsp;&emsp;
+                        <label class="radio-inline">
+                          <input type="radio" name="platform" {{if platform=="yd"}}checked{{/if}} value="yd">移动&emsp;
+                          <span class="ml20">
+                              （当前出价：{{maxMobilePrice | format:'1,1,2'}}元，{{if wirelessQscore>0 }}{{wirelessQscore}}分{{/if}}，<span class="yd_rank">{{ydRank}}</span>）
+                          </span>
+                        </label>
+                    </div>
+                    <div class="mt15 text-muted ml20 platform_info hide">
+                        &emsp;&emsp;&emsp;&emsp;质量得分较低，建议不要抢高排名
+                    </div>
+                    <div class="mt15">
+                        期望排名：
+                        <select name="rank_start">
+                            <option value="">请选择平台</option>
+                        </select>
+                        &ensp;至&ensp;
+                        <select name="rank_end">
+                            <option value="">请选择平台</option>
+                        </select>
+                    </div>
+                    <div class="mt15">
+                        最高限价：
+                        <input type="text" autocomplete="off" maxlength="5" name="limit" class="form-control w50" value="{{limit}}">&ensp;元
+                    </div>
+                    <div class="mt15">
+                        抢位失败：
+                        <label class="radio-inline">
+                          <input type="radio" name="nearly_success" {{if nearly_success=="1" || nearly_success == undefined }}checked{{/if}} value="1">接近期望排名时保留出价
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="nearly_success" {{if nearly_success=="0"}}checked{{/if}} value="0">恢复为原价
+                        </label>
+                    </div>
+                </form>
+                <div class="red mt15">免责声明：抢位可能导致花费过高，如因抢排名导致效果不佳，与精灵无关</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">取消</button> 
+                {{if method == "auto"}}<button type="button" class="btn btn-sm btn-default rob_cancle">取消自动抢</button> {{/if}}
+                <button type="button" class="btn btn-sm btn-primary submit">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

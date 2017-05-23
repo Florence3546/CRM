@@ -1,0 +1,101 @@
+<input type="hidden" name="ad_position" value="charlink">
+<div class="mt10">
+    <span class="w60 dib">广告名称：</span>
+    <input class="w600" data-rule="require" maxlength="40" type="text" value="{{main_ad.ad_title|default:''}}" name="ad_title" placeholder="请输入广告名称">
+    <span class="red ml3 f12">*</span>
+    <span class="ml20 gray f12">不超过40个汉字</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">是否显示：</span>
+    <div class="switch vn-3 {% if main_ad.ad_display %} on {% endif %}" data-toggle="switch">
+        <label class="db"></label>
+        <input type="checkbox" name="ad_display" value="1" {% if main_ad.ad_display %} checked="checked" {% endif %}>
+    </div>
+    <span class="ml20 gray f12">开启后才会在前台显示</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">有效时间：</span>
+    <input class="w140" data-rule="require"  placeholder="请选择开始时间" type="text" value="{{main_ad.ad_start_time|default:''}}" name="ad_start_time" ><span class="red ml3 f12">*</span>
+    <span class="w40 dib tc">到</span>
+    <input class="w140" data-rule="require"  placeholder="请选择结束时间" type="text" value="{{main_ad.ad_end_time|default:''}}" name="ad_end_time"><span class="red ml3 f12">*</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">权&emsp;&emsp;重：</span>
+    <input class="w40" data-rule="require range[0,99]" type="text" name="ad_weight" value="{{main_ad.ad_weight|default:'0'}}"><span class="red ml3 f12">*</span></span>
+    <span class="ml20 gray f12">权重相同则随机显示；不同则只显示权重高的一条</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">广告链接：</span>
+    <input class="w600" type="text" name="ad_url" value="{{main_ad.ad_url|default:''}}" placeholder="请输入广告链接">
+    <span class="ml20 gray f12">为空则显示弹窗内容，非空则优先显示广告链接。</span>
+</div>
+<div class="mt10 vt">
+    <span class="w60 dib vt">广告内容：</span>
+    <textarea name="ad_content" placeholder="输入广告内容（html代码和javascript脚本）" class="w1100 h200" style="max-width: 1100px; min-height: 200px; max-height: 300px;">{{main_ad.ad_content|default:''}}</textarea>
+</div>
+<div class="mt20">
+    <button type="submit" class="btn btn-success submit">保存</button>
+    {% if check_limit %}
+    <a href="javascript:;" class="btn btn-primary check_main_ad" check_id="{{ a_id }}">审核</a>
+    {% endif %}
+    {% if put_out %}
+    <a href="javascript:;" class="btn btn-warning put_main_ad" put_id="{{ a_id }}">投放</a>
+    {% endif %}
+    <a href="../main_ad_manage" class="btn">返回</a>
+    <a class="custom_preview ml10" href="javascript:;">预览效果</a><span class="gray f12 ml5">效果在顶部哦！</span>
+</div>
+<div class="auto h30 lh30" id="show_char_link" style="position: fixed; top: -30px; left: 0px;z-index: 3;width: 100%; background-color: #434343">
+    <a id="chart_link_ad" href="javascript:;" class="orange ml20" target="_blank"></a>
+    <a class="r mr5" href="javascript:;" id="hide_char_link" ><i class="icon iconfont">&#xe621;</i></a>
+    <style>
+        #show_char_link >a:hover{ color: #ffffff}
+    </style>
+</div>
+{% block custom_js %}
+<script id="chart_link_view" type="text/html">
+    <div class="bg" style="display:none;position:fixed;width:100%;height:100%;background:#000;z-index:2;top:0;left:0;opacity:0.3;"></div>
+    <div class="auto bg_white tc hide vm" id="show_chart_link_view"
+         style="display:none;max-width:800px;max-height:500px; min-height:100px;min-width:200px;position:fixed;top:50%;background:#fff;z-index:3;left:50%;">
+        <a class="r" href="javascript:;" id="hide_chart_link_view" style="position: absolute; top: -2px; right: 2px;"><i class="icon iconfont">&#xe621;</i></a>
+        <div id="chart_link_content" style="z-index: 3;">
+            <%==data%>
+        </div>
+    </div>
+</script>
+<script>
+
+    function view_main_ad(){
+        $("#chart_link_ad").text($('input[ name=ad_title]').val());
+        var ad_url = $('input[ name=ad_url]').val();
+        if(ad_url!=null&&ad_url!=''){
+            $("#chart_link_ad").attr('href',ad_url);
+        }
+        $("#show_char_link").animate({top:-0},300);
+        $('body').animate({top:30},300);
+    }
+
+    $('#chart_link_ad').click(function(){
+        $('.bg').remove();
+        $('#show_chart_link_view').remove();
+        if($(this).attr('href')=='javascript:;'){
+            var view_html = template.render("chart_link_view",{'data':$('textarea[ name=ad_content]').val()});
+            $("body").append(view_html);
+            var height = $('#show_chart_link_view').height();
+            var width = $('#show_chart_link_view').width();
+            $("#show_chart_link_view").css('margin-left',-width/2+"px").css("margin-top",-height/2+"px");
+            $('.bg').fadeIn(200);
+            $('#show_chart_link_view').fadeIn(500);
+        }
+
+        $('#show_chart_link_view').on('click',function(){
+            $('.bg').fadeOut(500);
+            $('#show_chart_link_view').fadeOut(200);
+        });
+    });
+
+    $('#hide_char_link').click(function(){
+        $("#show_char_link").animate({top:-30},300);
+        $('body').animate({top:0},300);
+    });
+</script>
+{% endblock %}

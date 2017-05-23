@@ -1,0 +1,137 @@
+{#utf-8#}{% extends "base_jl5.html" %}
+
+{% block base_jl5 %}
+  <div id="header" class="navbar-static-top container-fluid">
+      <a href="{%url 'web_home' %}"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+      <ul class="ul_line ar mr10">
+        <li id="point_info"><a href="{%url 'vip_home'%}" target="_blank"><i class="iconfont f18 mr3">&#xe684;</i>会员中心{% if JLB_COUNT %}<span class="round_mark point_count mt-10">{{JLB_COUNT}}</span>{% endif %}</a>
+        <li id="point_info"><a href="{%url 'invite_friend' %}" target="_blank"><i class="iconfont f18 mr3">&#xe688;</i>推荐有礼</a>
+        </li>
+        <li id="point_info"><a href="{%url 'point_praise' %}" target="_blank"><i class="iconfont f18 mr3">&#xe67c;</i>好评有礼</a>
+        </li>
+        <li><a href="javascript:;" id="id_sync_data"><i class="iconfont f18 mr3">&#xe601;</i>同步下载</a>
+        </li>
+        <li>
+          <div class="dropdown rel">
+            <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-hold="true" href="javascript:;">
+              <i class="iconfont f18 mr5">&#xe640;</i>{{request.user.nick}}{% if not IS_VIP %}<span class="round_mark mt-10 msg_vip_count">{{ MSG_COUNT|add:1 }}</span>{% else %}{% if MSG_COUNT %}<span class="round_mark mt-10 msg_vip_count">{{ MSG_COUNT }}</span>{% endif %}{% endif %}<i class="iconfont">&#xe626;</i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+		      <!-- <li><a href="{%url 'vip_home'%}" target="_blank">会员中心{% if not IS_VIP %}<span class="round_mark mt-10">1</span>{%endif%}</a>
+		      </li> -->
+              <li><a id="open_msg" href="javascript:;">我的消息{% if MSG_COUNT %}<span class="round_mark mt-10 msg_count">{{MSG_COUNT}}</span>{% endif %}</a>
+              </li>
+              <li><a href="javascript:;" class="open_feedback_dialog">意见反馈</a>
+              </li>
+              <li><a href="{%url 'user_config' %}" target="_blank">设置代理</a>
+              </li>
+              <li><a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+              <li><a href="{% url 'help_center' %}" target="_blank">帮助中心</a>
+              <li><a href="{% url 'history' %}" target="_blank">升级日志</a>
+              </li>
+              <li><a href="{#url 'top_logout' #}">退出系统</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+  </div>
+  <div class="container-fluid pl0">
+    <div class="row-fluid">
+      <div id="main_nav">
+        <ul>
+          <li class="title m0 {%if PAGE_MARK.2 == 'web_home' %}active{%endif%}">
+            <i class="iconfont">&#xe63b;</i><a href="{%url 'web_home'%}">首页</a>
+          </li>
+          <li class="title ">
+            <i class="iconfont">&#xe607;</i><a class="gray" href="javascript:;">自动优化</a>
+          </li>
+          {% for mnt in MNT_LIST %}
+          <li class="mnt_index {%if camp.mnt_index == forloop.counter or mnt_index == forloop.counter %}active{%endif%}">
+            {% if mnt.name != '[]' %}
+              <a href="/mnt/choose_mnt_campaign/{{mnt.index}}" {% if mnt.name == "[未启动]" %}blank_mnt_index={{ mnt.index }}{% endif %}>{{forloop.counter}}号引擎{{mnt.name}}</a>
+            {% else %}
+              {% if request.session.item_code == 'ts-25811-3' %}
+              <a name="upgrade" href="/web/upgrade_suggest/?referer=upgrade&item_code=ts-25811-8&type=alone" target="_blank">{{forloop.counter}}号引擎[<span class="linkColor">立刻升级</span>]</a>
+            {%else%}
+              <a name="upgrade" href="/web/upgrade_suggest/?referer=upgrade&item_code=ts-25811-8" target="_blank">{{forloop.counter}}号引擎[<span class="linkColor">立刻升级</span>]</a>
+            {%endif%}
+            {% endif %}
+          </li>
+          {% endfor %}
+          <li class="title">
+            <i class="iconfont">&#xe607;</i><a class="gray" href="javascript:;">手动优化</a>
+          </li>
+          <li class="{%if PAGE_MARK.2 == 'adgroup_list' %}active{%endif%}"><a href="{% url 'adgroup_list' %}">宝贝列表</a>
+          {% if request.session.item_code != 'ts-25811-3' %}
+            <li class="{%if PAGE_MARK.2 == 'duplicate_check' %}active{%endif%}"><a id="duplicate_check_id" href="javascript:;">重复词排查</a></li>
+          {%else%}
+            <li>
+              <a target="_blank" href="/web/upgrade_suggest/?referer=upgrade&item_code=ts-25811-8&type=alone">重复词排查</a></li>
+            </li>
+          {%endif%}
+          {% if request.session.item_code != 'ts-25811-3' %}
+            <li class="{%if PAGE_MARK.2 == 'attention_list' %}active{%endif%}"><a id="attention_list" href="{% url 'attention_list' %}">重点关注词</a>
+            </li>
+          {%else%}
+            <li>
+              <a target="_blank" href="/web/upgrade_suggest/?referer=upgrade&item_code=ts-25811-8&type=alone">重点关注词</a>
+            </li>
+          {%endif%}
+
+          {%if AD_LIST%}
+          <li class="title">
+            <i class="iconfont">&#xe610;</i><a class="gray" href="javascript:;">服务中心</a>
+          </li>
+            {%for ad in AD_LIST%}
+              <li class="{%if PAGE_MARK.2 == 'paithink_services' and PAGE_MARK.3 == ad.id %}active{%endif%}"><a href="{%url 'paithink_services' ad.id %}">{{ad.title}}</a></li>
+            {%endfor%}
+          {%endif%}
+        </ul>
+        <!-- 盟友广告 宽度最好是120px-->
+        <div class="tc mt20">
+	        <a href="{% url 'advertisement' 2 %}" target="_blank" class="hide">
+		        <img src="/site_media/jl5/images/ad/ad2.jpg" width="120">
+	        </a>
+	        <a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao开车精灵">
+	            <img src="https://img.alicdn.com/imgextra/i2/836440495/TB2r54SgpXXXXcxXpXXXXXXXXXX-836440495.gif" width="150">
+	        </a>
+        </div>
+      </div>
+      <div class="span24" id="main_content">
+        {% block content %}{%endblock%}
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed pct100 b0 hide" id="limitIe8">
+      <div class="w800 auto bdd h30 p10 f18 white bg_gray">
+       亲，您的浏览器版本能会导致响应慢，为了不影响您的体验，请您下载更先进的浏览器<a class="btn ml10 btn-primary" href="http://www.google.cn/chrome/eula.html?hl=zh-CN&platform=win" target="_black">下载chrome</a>
+      </div>
+  </div>
+
+  <!-- 我的消息 -->
+  <div id="id_msg_template"></div>
+  <!-- 我的消息 -->
+  <!-- 意见反馈 -->
+  <div id="id_feedback_template"></div>
+  <!-- 意见反馈 -->
+  <!-- 联系方式 -->
+  <div id="id_info_template"></div>
+  <!-- 联系方式 -->
+ {% endblock %}
+
+ {% block base_js %}
+<!--[if IE 8]>
+  <script>
+    $('#limitIe8').show();
+  </script>
+<![endif]-->
+  <script>
+      jQuery(document).ready(function() {
+         PT.Base.init();
+      });
+  </script>
+ {% endblock %}
+
+

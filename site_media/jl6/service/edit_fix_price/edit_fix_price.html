@@ -1,0 +1,36 @@
+<div class="modal fade">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{title}}</h4>
+            </div>
+            <div class="modal-body">
+                 <form class="form-inline">
+                    <div class="p5">
+                        <span><strong>宝贝所属类目:</strong></span>
+                        <span>{{ type }}</span>
+                    </div>
+                    <div class="pt10 pb10 pl5">
+                        <span><strong>行业市场均价:</strong></span>
+                        <span>0.62元</span>
+                        <span class="gray">(建议关键词最高限价设为行业市场均价的1.2倍 = 0.74元)</span>
+                    </div>
+                    <div class="pt10 pb10 pl5">
+                      <span><strong>关键词最高限价:</strong></span>
+                      <input type="text" class="form-control" style="width: 80px;" value="{{ value }}"/>元
+                      <span class="gray"> (0.62~20.00元)</span>
+                    </div>
+                    <div class="p5">
+                      <strong><font color="red">友情提示：</font></strong>
+                      限价过低，会导致没有流量，没有转化。
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

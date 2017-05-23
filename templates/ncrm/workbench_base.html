@@ -1,0 +1,566 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}工作台{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <form  action="./" method="get" id="workbanch_search_form">
+            <input type="hidden" name="node_path" id="node_path" value="{{request.GET.node_path}}"/>
+            <input type="hidden" name="search_type" value="{{request.GET.search_type}}"/>
+            <input type="hidden" name="psuser_id" value="{{psuser_id}}"/>
+            <span class="l f12">客户群
+                <a href="#create_client_group " data-toggle="modal">
+	                <i class="icon iconfont ">&#xe61a;</i>
+	            </a>
+            ：</span>
+            <ul class="f12 fix  ul_line pl60" id="client-group-list">
+	            {% if 'is_potential' in common_groups %}
+	            <li class="mr5">
+		            <label>
+			            <input class="common_group vn" name="is_potential" type="checkbox" {% if request.GET.is_potential %}checked="checked"{% endif %} value="1">
+			            <span class="orange">意向客户</span>
+			            <span class="round_mark mt-27 bg_orange">{{ common_groups.is_potential }}</span>
+		            </label>
+	            </li>
+	            {% endif %}
+                {% if 'is_discontent' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="is_discontent" type="checkbox" {% if request.GET.is_discontent %}checked="checked"{% endif %} value="1">
+                        <span class="orange">问题客户</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.is_discontent }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% if 'to_1st_contact' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="to_1st_contact" type="checkbox" {% if request.GET.to_1st_contact %}checked="checked"{% endif %} value="1">
+                        <span class="orange">待一访</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.to_1st_contact }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% if 'to_2nd_contact' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="to_2nd_contact" type="checkbox" {% if request.GET.to_2nd_contact %}checked="checked"{% endif %} value="1">
+                        <span class="orange">待二访</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.to_2nd_contact }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% if 'unmnt_3days' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="unmnt_3days" type="checkbox" {% if request.GET.unmnt_3days %}checked="checked"{% endif %} value="1">
+                        <span class="orange">取消过托管</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.unmnt_3days }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% if 'no_balance' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="no_balance" type="checkbox" {% if request.GET.no_balance != None %}checked="checked"{% endif %} value="{{ common_groups.no_balance|join:',' }}">
+                        <span class="orange">余额为0</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.no_balance|length }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% if 'rjjh_frozen' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="rjjh_frozen" type="checkbox" {% if request.GET.rjjh_frozen %}checked="checked"{% endif %} value="1">
+                        <span class="orange">手操客户</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.rjjh_frozen }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% if 'unoperated_3days' in common_groups %}
+                <li class="mr5">
+                    <label>
+                        <input class="common_group vn" name="unoperated_3days" type="checkbox" {% if request.GET.unoperated_3days %}checked="checked"{% endif %} value="1">
+                        <span class="orange">3天未操作</span>
+                        <span class="round_mark mt-27 bg_orange">{{ common_groups.unoperated_3days }}</span>
+                    </label>
+                </li>
+                {% endif %}
+	            {% for c in all_client_group %}
+	            <li class="mr10">
+	                <input class="vn" name="client_ids" id="client_ids" {%if c.checked %}checked{%endif%} class="mr3" type="checkbox" value="{{c.id}}">
+	                <div class="dropdown">
+	                    <a class="dropdown-toggle {% if c.group_type %}orange{% endif %}" data-toggle="dropdown" data-trigger="hover" href="#">
+                            <span id="dropdown_client_group_name_{{c.id}}" class="tips" data-toggle="tooltip" title="{{c.note|default:''}}">{{c.title}}</span>
+                            <span class="round_mark mt-10 abs" style="background-color:{% if c.group_type %}#ff851b{% else %}#4687bd{% endif %};">{{c.id_list_length}}</span>
+                            <i class="iconfont tips ml3">&#xe626;</i>
+                        </a>
+                        <ul class="dropdown-menu f12" role="menu" aria-labelledby="dLabel">
+                            <li><a href="javascript:;" class="add_client" data-title="{{c.title}}" data-id="{{c.id}}">添加客户</a></li>
+                            <li class="hide"><a href="{%url 'advance_query' c.id 1%}" target="_blank">高级客户管理</a></li>
+                            {% if not c.group_type %}
+                                <li><a href="#rename_client_group" data-toggle="modal" client_id="{{c.id}}" client_note="{{ c.note|default:''}}" class="rename" data-value="{{c.title}}">修改</a></li>
+                                <li><a href="javascript:;" client_id="{{c.id}}" class="delete">删除</a></li>
+                            {% endif %}
+                        </ul>
+	                </div>
+	            </li>
+	            {% endfor %}
+            </ul>
+            <div id="create_client_group" class="modal hide fade p10" data-width="w300">
+                <label for="desc" class="col-sm-2 f12">客户群名称:
+                    <input type="text" id="client_group_name" class="f12">
+                </label>
+                <label class="col-sm-2 f12">客户群备注:
+                    <textarea id="client_group_note" class="f12"></textarea>
+                </label>
+                <a href="javascript:;" data-dismiss="modal" class="r btn ml10 f12">取消</a>
+                <a href="javascript:;" class="btn r btn-primary f12" id="create_client_group_submit">提交</a>
+            </div>
+            <div id="rename_client_group" class="modal hide fade p10" data-width="w300">
+                <label for="desc" class="col-sm-2 f12">客户群名称:
+                    <input type="hidden" name="client_id">
+                    <input type="text" id="rename_client_group_value" class="f12">
+                </label>
+                 <label for="desc" class="col-sm-2 f12">客户群备注:
+                     <textarea name="client_note" id="renote_client_group_value" class="f12"></textarea>
+                </label>
+                <a href="javascript:;" data-dismiss="modal" class="r btn ml10 f12">取消</a>
+                <a href="javascript:;" class="btn r btn-primary f12" id="rename_client_group_submit">修改</a>
+            </div>
+            <div class="w970 bg_white p10 mt20 bdd dib vt">
+                {% block search %}{% endblock %}
+            </div>
+            <div class="w320 h140 ml1 bg_white p5 mt20 bdd dib ova">
+	            <div id="crm_ad">
+	                {% for ad in crm_ad %}
+	                <div class="m5">
+	                    <a href="javascript:;" class="show_ad" ad_id="{{ ad.id }}">【CRM公告】{{ ad.ad_title }}</a>
+	                </div>
+	                {% endfor %}
+	            </div>
+                <div id="crm_feedback">
+                    {% for feedback in crm_feedback %}
+                    <div class="m5">
+                        <a href="javascript:;" class="show_feedback" feedback_id="{{ feedback.id }}">【客户反馈】{{ feedback.shop.nick }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+	            <div id="crm_reminder">
+                    {% for reminder in crm_reminder %}
+                    <div class="m5">
+                        <a href="javascript:;" class="show_reminder" reminder_id="{{ reminder.id }}">【工作提醒】{{ reminder.content|truncatechars_ch:"36" }}</a>
+                    </div>
+                    {% endfor %}
+	            </div>
+                <div id="crm_pa">
+                    {% for pa in crm_pa %}
+                    <div class="m5">
+                        <a href="javascript:;" class="show_pa" pa_id="{{ pa.id }}">{% if pa.type == 'appraise' %}【检查好评】{% else %}【积分兑换】{% endif %}{{ pa.nick }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+    {% block event_collect %}
+    {% endblock %}
+    <div class="fix lh30">
+        <!-- <span class="l"> <i class="iconfont mr5">&#xe61c;</i> 工作台 <span class="ml10"> (共 <span class="record_count">{{page_info.record_count}}</span> ) </span> </span> -->
+         <!--
+            {% if request.GET.search_global_swith == '1' %}
+                 -  <span class="red 13f">全局搜索</span>
+            {% endif %}
+         -->
+        <div class="fix r">
+            <span class="l">共{{page_info.record_count}}条记录，当前第{{page_info.page}}/{{page_info.page_count}}页</span>
+            <div class="pagination l ml10">
+                <ul>
+                    <li {%if page_info.page == 1%}class="active"{%endif%}>
+                        <a href="{%url 'workbench' work_type 1%}?{{request.META.QUERY_STRING}}">首页</a>
+                    </li>
+                    {%for p in page_info.page_xrange%}
+                    <li {%if p == page_info.page%}class="active"{%endif%}>
+                        <a href="{%url 'workbench' work_type p%}?{{request.META.QUERY_STRING}}">{{p}}</a>
+                    </li>
+                    {%endfor%}
+                    <li {%if page_info.page == page_info.page_count%}class="active"{%endif%}>
+                        <a href="{%url 'workbench' work_type page_info.page_count%}?{{request.META.QUERY_STRING}}">尾页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a class="btn btn-small edit_customer" href="javascript:void(0);" cust_id="0">录入新客户</a>
+        {% block other_btn %}
+        {%endblock%}
+    </div>
+    {% block event_table %}{% endblock %}
+    {%if customer_list%}
+    <div class="fix">
+        <span class="dib mt10">共{{page_info.record_count}}条记录，当前第{{page_info.page}}/{{page_info.page_count}}页</span>
+        <div class="pagination mt10 r">
+            <ul>
+                <li {%if page_info.page == 1%}class="active"{%endif%}>
+                    <a href="{%url 'workbench' work_type 1%}?{{request.META.QUERY_STRING}}">首页</a>
+                </li>
+                {%for p in page_info.page_xrange%}
+                <li {%if p == page_info.page%}class="active"{%endif%}>
+                    <a href="{%url 'workbench' work_type p%}?{{request.META.QUERY_STRING}}">{{p}}</a>
+                </li>
+                {%endfor%}
+                <li {%if page_info.page == page_info.page_count%}class="active"{%endif%}>
+                    <a href="{%url 'workbench' work_type page_info.page_count%}?{{request.META.QUERY_STRING}}">尾页</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {%endif%}
+</div>
+
+<div id="id_mnt_task_layer" class="w1200"></div>
+<div id="id_event_detail_layer" class="w900"></div>
+<div class="modal fade w360 hide" id="id_update_perms_layout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+   <div class="modal-header">
+    </div>
+      <div class="modal-content">
+         <div class="modal-body">
+             <form class="form-horizontal" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="desc" class="col-sm-2">　　权限码：
+                        <span id="current_perms"></span>
+                        <a id="forbidden_all_perms" href="javascript:;" class="ml10 red">禁用软件</a>
+                        <input type="hidden" id="user_id" value="">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">额外权限码：
+                        <input type="text" id="ad_perms" class="form-control w220 f12" placeholder="请输入额外验证码" data-required="">
+                    </label>
+                </div>
+            </form>
+            <div class="f12">
+                <span class="dib w60 vm tr">开车精灵</span>：
+                <a class="version_perms_code btn btn-mini btn-info" href="javascript:;" perms_code="ABCFJ">基础版</a>
+                <a class="version_perms_code btn btn-mini btn-warning ml3" href="javascript:;" perms_code="ABCDFJS">专业版</a>
+                <a class="version_perms_code btn btn-mini btn-danger ml4" href="javascript:;" perms_code="ABCDEFHJKS">旗舰版</a>
+            </div>
+            <div class="f12 mt10">
+                <span class="dib w60 vm tr">千牛</span>：
+                <a class="version_perms_code btn btn-mini btn-info" href="javascript:;" perms_code="ABC">试用版</a>
+                <a class="version_perms_code btn btn-mini btn-warning ml3" href="javascript:;" perms_code="ABCDFJS">标准版</a>
+                <a class="version_perms_code btn btn-mini btn-danger ml4" href="javascript:;" perms_code="ABCDEFHJKS">旗舰版</a>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" id="id_submit_perms" class="btn btn-primary">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!--订单分配记录弹窗-->
+<div id="modal_allocation_record_list" class="modal hide fade p10" data-width="900">
+    <h4>查看分配记录</h4>
+    <div class="modal_body" style="max-height: 400px;min-height: 200px;overflow-y: auto;"></div>
+    <div class="tr mt10">
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_edit_port_layer" class="modal hide fade p10 f12" data-width="400">
+    <div class="mb10">店&nbsp;铺&nbsp;呢&nbsp;称：<span id="id_nick"></span></div>
+    <input type="hidden" id="id_port_id_bak" value=""/>
+    <span>所在服务器：</span>
+    <select id="id_port_select" class="f12"></select>
+    <a href="javascript:;" id="id_submit_port" class="btn btn-primary f12 r ml2">提交</a>
+    <a href="javascript:;" data-dismiss="modal" class="btn f12 r">关闭</a>
+</div>
+
+<div id="id_show_info" class="modal hide fade" data-width="700">
+</div>
+
+<div id="subscribe_edit_layout" class="modal hide fade" data-width="700">
+    <div id="subscribe_edit_box"></div>
+</div>
+
+<script id="feedback_template" type="text/html">
+    <input type="hidden"  name="feedback_id" value="<%=data.id%>"/>
+    <div class="modal-body mt15">
+        <p><%=data.create_time%> <%=data.nick%>反馈的意见：</p>
+        <p><%==data.content%></p>
+        <div>
+            <span class="vt">备注：</span>
+            <textarea name="feedback_note" rows="3" style="resize:none;width:400px;" placeholder="最多输入100个汉字" maxlength="100"></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-primary mark_feedback_handled">标记为已处理</a>
+        <a href="javascript:;" class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</script>
+
+<script id="ad_template" type="text/html">
+    <div class="modal-header bbd">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4><%=data.ad_title%></h4>
+    </div>
+    <div class="modal-body mt15">
+        <p><%==data.ad_content%></p>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</script>
+
+<script id="reminder_template" type="text/html">
+    <input type="hidden"  name="reminder_id" value="<%=data._id%>"/>
+    <div class="modal-body mt15">
+        <p><%=data.create_time%> <%=data.sender_name%>发出的提醒：</p>
+        <p><%==data.content%></p>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-primary mark_reminder_handled">标记为已处理</a>
+        <a href="javascript:;" class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</script>
+
+<script id="pa_template" type="text/html">
+    <input type="hidden"  name="pa_id" value="<%=data._id%>"/>
+    <div class="modal-body mt15">
+    <%if (data.type=='appraise') { %>
+        <p><%=data.create_time%>　<%=data.nick%></p>
+        <p>打开了“好评有礼”页面，并点击了“确定”按钮。</p>
+        <p>请在开车精灵订购页面检查掌柜的好评记录，核实存在好评后通知组长赠送积分，没有则联系掌柜索要好评。</p>
+    <% } else { %>
+        <p><%=data.create_time%>　<%=data.nick%></p>
+        <p><%=data.desc%>。</p>
+        <p>请提醒市场部相关人员处理。</p>
+    <% }%>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-primary mark_pa_handled">隐藏</a>
+        <a href="javascript:;" class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</script>
+
+<script id="mnt_info_template" type="text/html">
+    <span class="bld larger"><%=data.mnt_type%></span>
+    <a style="margin-left:10px;" href="javascript:void(0);" onclick="PT.NcrmWorkbench_sh.stop_mnt_campaign(<%=data.camp_id%>)">终止托管</a></br>
+    <span>
+        <p class="indent" style="margin:0px;">创建时间：<%=data.start_time%></p>
+        <p class="indent" style="margin:0px;">托管数量：
+            <input id="id_max_num_<%=data.camp_id%>" type="text" style="width:40px;" value="<%=data.max_num%>"/>
+            <input id="max_num_bak_<%=data.camp_id%>" type="hidden" value="<%=data.max_num%>"/>
+            <a href="javascript:void(0);" onclick="PT.NcrmWorkbench_sh.update_max_num('<%=data.camp_id%>')" style="margin-left:10px;">修改</a>
+        </p>
+    </span>
+
+    任务状态
+    <table>
+        <tr>
+            <th width="100px;">任务类型</th>
+            <th width="150px;">创建时间</th>
+            <th width="150px;">执行时间</th>
+            <th width="150px;">结束时间</th>
+            <th width="50px;">失败次数</th>
+            <th width="100px;">任务状态</th>
+            <th width="400px;" class="hide">操作细节</th>
+            <th width="100px;">操作</th>
+        </tr>
+    <%for(j=0;j<data.task_list.length;j++){%>
+        <tr align="center">
+            <td><%=data.task_list[j].task_type%></td>
+            <td><%=data.task_list[j].create_time%></td>
+            <td><%=data.task_list[j].start_time%></td>
+            <td><%=data.task_list[j].end_time%></td>
+            <td><%=data.task_list[j].failed_count%></td>
+            <td><%=data.task_list[j].status%></td>
+            <td class="hide"><%=data.task_list[j].opt_list%></td>
+            <td><a href="javascript:void(0);" onclick="PT.NcrmWorkbench_sh.run_task('<%=data.task_list[j]._id%>')">立刻执行</a></td>
+        </tr>
+    <%}%>
+    </table>
+    </br></br>
+</script>
+
+<script id="event_detail_template" type="text/html">
+    <div>
+        <label class="dib mr30"><input type="checkbox" class="filter_event" name="all_event">全部(<span class="red"><%=data_info.all_event_count%></span>)</label>
+        <%if (data_info.unsubscribe_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="unsubscribe">退款(<span class="red"><%=data_info.unsubscribe_count%></span>)</label>
+        <% }%>
+        <%if (data_info.comment_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="comment">评论(<span class="red"><%=data_info.comment_count%></span>)</label>
+        <% }%>
+        <%if (data_info.software_subscribe_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="software_subscribe">订购软件(<span class="red"><%=data_info.software_subscribe_count%></span>)</label>
+        <% }%>
+        <%if (data_info.tp_subscribe_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="tp_subscribe">人工签单(<span class="red"><%=data_info.tp_subscribe_count%></span>)</label>
+        <% }%>
+        <%if (data_info.pause_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="pause">暂停订单(<span class="red"><%=data_info.pause_count%></span>)</label>
+        <% }%>
+        <%if (data_info.reintro_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="reintro">转介绍(<span class="red"><%=data_info.reintro_count%></span>)</label>
+        <% }%>
+        <%if (data_info.visible_contact_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="visible_contact">有效联系(<span class="red"><%=data_info.visible_contact_count%></span>)</label>
+        <% }%>
+        <%if (data_info.visible_operate_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="visible_operate">关键操作(<span class="red"><%=data_info.visible_operate_count%></span>)</label>
+        <% }%>
+        <%if (data_info.invisible_event_count) { %>
+        <label class="dib mr10"><input type="checkbox" class="filter_event" name="invisible_event">不重要的(<span class="red"><%=data_info.invisible_event_count%></span>)</label>
+        <% }%>
+    </div>
+    <table id="event_detail_table" class="bdd">
+	    <thead>
+	        <tr>
+	            <th class="tl w140">时间</th>
+	            <th class="tl w80">事件类型</th>
+	            <th class="tl w100">创建者</th>
+	            <th class="tl">备注</th>
+	            <th class="tl w60">操作</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    <%for(j=0;j<data.length;j++){%>
+	        <tr event_id="<%=data[j].id%>" event_type="<%=data[j].type%>" class="hide">
+	            <td><%=data[j].create_time%></td>
+	            <td><%=data[j].desc%></td>
+	            <td><%==data[j].psuser_name%></td>
+	            <td><%==data[j].note%></td>
+	            <td><%==data[j].button%></td>
+	        </tr>
+	    <%}%>
+	    </tbody>
+    </table>
+    </br></br>
+</script>
+
+<!-- 以下是模板 -->
+{% include 'common_event.html' %}
+
+<script id="id_user_selector_template" type="text/html">
+    <% for(var i=0;i<user_list.length;i++) { %>
+    <option value="<%=user_list[i].id%>"><%=user_list[i].position%>：<%=user_list[i].name_cn%></option>
+    <% } %>
+</script>
+
+<script id="id_staffs_selector_template" type="text/html">
+    <% for(var i=0;i<user_list.length;i++) { %>
+    <option value="<%=user_list[i].psuser_id%>"><%=user_list[i].name_cn%></option>
+    <% } %>
+</script>
+
+<!-- 事件备注模板 -->
+<script id="contact_note_temp" type="text/html">
+    <div class="fix animate-editor-p poi" id="contact_box_<%=id%>">
+        <span class="gray mr5"><%=contact_type%></span>
+        <span id="contact_note_<%=id%>"><%=note%></span>
+        <span class="r ovh h20">
+            <span class="rel animate-editor-c">
+                <div>
+                    <span class="orange"><%=psuser_name%>
+                      <span class="xf_flag green ">
+                        <%if (xf_flag == 1 || xf_flag == 2) { %>(销)<% }%>
+                        <%if (xf_flag == 3 ) { %>(市)<% }%>
+                        <%if (xf_flag == 4 ) { %>(增)<% }%>
+                        <%if (xf_flag == 5 ) { %>(技)<% }%>
+                      </span>
+                    </span>
+                    <span class="ml5 gray create_time"><%=$date_format('yyyy-MM-dd',create_time) %></span>
+                </div>
+                <div class="tr">
+                    <a class="ml10 editor_contact" href="javascript:;" data-info={"id":"<%=id%>","type":"<%=contact_type%>"}>修改</a>
+{#                    <a class="ml10 del_contact" href="javascript:;" data-info={"id":"<%=id%>"}>删除</a>#}
+                </div>
+            </span>
+        </span>
+    </div>
+</script>
+<script id="operate_note_temp" type="text/html">
+    <div class="fix animate-editor-p poi" id="operate_box_<%=id%>">
+        <span class="gray mr5">操作</span>
+        <span id="operate_note_<%=id%>"><%=note%></span>
+        <span class="r ovh h20">
+            <span class="rel animate-editor-c">
+                <div>
+                    <span class="orange"><%=psuser_name%></span>
+                    <span class="ml5 gray create_time"><%=$date_format('yyyy-MM-dd',create_time) %></span>
+                </div>
+                <div class="tr">
+                    <a class="ml10 editor_operate" href="javascript:;" data-info={"id":"<%=id%>","type":"<%=oper_type%>"}>修改</a>
+{#                    <a class="ml10 del_operate" href="javascript:;" data-info={"id":"<%=id%>"}>删除</a>#}
+                </div>
+            </span>
+        </span>
+    </div>
+</script>
+<script id="unsubscribe_note_temp" type="text/html">
+	<div class="fix">
+	     <span class="gray mr5">退款</span>
+	     <%=note%>
+	     <span class="r">
+	        <span class="orange"><%=psuser_name%></span>
+	        <span class="ml5 gray"><%=$date_format('yyyy-MM-dd',create_time) %></span>
+	     </span>
+	</div>
+</script>
+<script id="pause_note_temp" type="text/html">
+    <div class="fix animate-editor-p poi" id="pause_box_<%=id%>">
+        <span class="gray mr5">暂停</span>
+        <span id="pause_status_<%=id%>" class="green">【剩余<%=remain_days%>天，待补0天】</span>
+        <span id="pause_note_<%=id%>"><%=note%></span>
+        <span class="r ovh h20 tr">
+            <span class="rel animate-editor-c">
+                <div>
+                    <span class="orange"><%=psuser_name%></span>
+                    <span class="ml5 gray create_time"><%=$date_format('yyyy-MM-dd',create_time) %></span>
+                </div>
+                <div>
+                    <a class="ml10 editor_pause" href="javascript:;" data-info='{"id":"<%=id%>", "event_id":"<%=event_id%>", "create_time":"<%=$date_format("yyyy-MM-dd hh:mm:ss",create_time)%>"}'>修改</a>
+                    <a class="ml10 proceed" href="javascript:;" pause_id="<%=id%>" pause_date="<%=create_time.slice(0, 10)%>" shop_id="<%=shop_id%>" sub_id="<%=event_id%>">取消暂停</a>
+                </div>
+            </span>
+        </span>
+    </div>
+</script>
+<!--分配记录模板-->
+<script id="template_allocation_record_list" type="text/html">
+    <ul class="f12">
+    <%for (var i in record_list) { %>
+        <li class="mb5"><%=record_list[i]%></li>
+    <% }%>
+    </ul>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<link href="{{'/site_media/assets/plugins/fancybox/source/jquery.fancybox.css'|file_time_stamp}}" rel="stylesheet" type="text/css" />
+<script src="{{'/site_media/jl5/ncrm_js/common_event.js'|file_time_stamp}}" type="text/javascript"></script>
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_workbench.js'|file_time_stamp}}" type="text/javascript"></script>
+<script src="{{'/site_media/assets/plugins/fancybox/source/jquery.fancybox.pack.js'|file_time_stamp}}" type="text/javascript"></script>
+
+<script>
+
+$().ready(function(){
+    PT.CommonEvent.init();
+    PT.NcrmWorkbench.init();
+});
+
+</script>
+{% block workbench_js %}
+{% endblock %}
+
+{% include 'manual_import_customer.html' %}
+{% include 'sync_order.html' %}
+{% endblock %}

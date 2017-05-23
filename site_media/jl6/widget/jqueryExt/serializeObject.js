@@ -1,0 +1,1 @@
+define("jl6/site_media/widget/jqueryExt/serializeObject",["jl6/site_media/plugins/jquery/jquery.min"],function(e){"use strict";e.prototype.serializeObject=function(){var e=new Object;return $.each(this.serializeArray(),function(i,t){t.name in e||(e[t.name]=t.value)}),e}});

@@ -1,0 +1,293 @@
+
+// html,body {
+//   background-color: @bodyBgColor;
+// }
+
+#header{
+  #gradient > .vertical-without-ie(@headBgColor, @headBgColorEnd);
+  background-color: @headBgColor;
+}
+
+#header a{
+  color: @white;
+  &:hover,
+  &:focus{
+    color:  darken(@white, 10%);
+  }
+}
+
+#header .dropdown-menu a{
+  color: @gray;
+  &:hover,
+  &:focus{
+    color:  @white;
+  }
+}
+
+#adg_nav{
+  border: 1px solid darken(@headBgColor,10%);
+  #gradient > .vertical(@headBgColor, @headBgColorEnd);
+}
+
+
+#adg_base_info{
+  background-color: @white;
+}
+
+#adg_nav_list li.active{
+  #gradient > .vertical(darken(@headBgColorEnd,15%), darken(@headBgColor,10%));
+}
+
+#adg_nav_list>ul>li>a, #adg_nav_list .dropdown>a:hover {
+  color: @white;
+}
+
+#adg_base_info:after{
+   border-bottom: 66px solid @white;
+}
+
+.box .box_hd {
+  background-color: @boxHeadBgcolor;
+  border: 1px solid @baseLineColor;
+  #gradient > .vertical(@boxStartColor, @boxEndColor);
+}
+
+.box .box_bd {
+  border: 1px solid @baseLineColor;
+  border-color:@baseLineColor;
+  background-color: @white;
+}
+
+.box.colored .box_hd,.box.colored.disabled:hover .box_hd{
+  background-color: lighten(@baseColor,15%);
+  border-color: lighten(@baseColor,15%);
+}
+
+.box.colored i,.box.colored.disabled i{
+color:@textColor;
+}
+
+.box.colored .box_bd {
+  border-color: lighten(@baseColor,15%);
+}
+.box.colored.active .box_hd {
+  background-color: @orange;
+  border-color: @orange;
+  color: @white;
+}
+.box.colored.active i,.box.colored:hover i{
+  color: @white;
+}
+.box.colored.active .box_bd {
+  border-color: @orange;
+}
+.box.colored:hover .box_hd {
+  background-color: @orange;
+  border-color: @orange;
+  color: @white;
+}
+.box.colored:hover .box_bd {
+  border-color: @orange;
+}
+.box.colored.disabled:hover .box_bd {
+  border-color: lighten(@baseColor,15%);
+}
+
+.strongColor{
+  color: @strongColor;
+}
+
+#main_nav{
+  border-right: 1px solid @baseLineColor;
+}
+
+#main_nav ul li a {
+  color: @textColor;
+  &:hover,
+  &:focus{
+    color: @linkColor;
+  }
+  &.gray:hover,
+  &.gray:focus{
+    color:@gray;
+  }
+}
+
+#main_info{
+  background-color: @white;
+}
+
+#main_info>li,#main_info>li:first-child{
+  border:1px solid @baseLineColor;
+}
+
+#main_nav>ul>li.title{
+  border-top:1px dashed @btnBorder;
+  border-bottom:1px dashed @btnBorder;
+}
+#main_nav>ul>li.title:first-child{
+  border:none;
+}
+
+#main_nav>ul>li.title:first-child a{
+  cursor:pointer;
+}
+
+#main_nav>ul>li.title a,#main_nav>ul>li.title i{
+  color: @gray;
+  cursor: default;
+}
+
+#main_nav ul li.active>a,#main_nav ul li.active>i {
+  color: @linkColor;
+  border-color: @linkColor;
+}
+
+table.main-data td .title{
+ font-size: 12px;color:@gray;
+}
+
+#contact{
+  border:2px solid @baseColor;
+  background-color: @white;
+}
+
+#foot a {
+  color: @gray;
+  &:hover,
+  &:focus{
+    color: @baseColor;
+    text-decoration: underline;
+  }
+}
+
+table.main-data {
+  border-bottom: 1px solid @baseLineColor;
+}
+
+table.main-data td:first-child {
+    color: lighten(desaturate(@linkColor, 60%),15%);
+  }
+
+
+// .btn[data-type="select"] {
+//   #gradient > .vertical(@boxStartColor, @boxEndColor);
+// }
+
+a .icon-pt-dot{
+  font-size: 30px;
+  margin: -10px 0 0 -12px;
+  position: absolute;
+  color: @red;
+}
+
+.round_mark{
+  display: inline-block;
+  padding: 2px 5px;
+  background-color: @red;
+  border-radius: 9px;
+  color: @white;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 12px;
+font-size: 9px;
+transform: scale(0.88);
+font-family: Tahoma;
+}
+
+.modal-scrollable .loading-spinner .msg{
+  color: @white;
+}
+
+.input-prepend .select-btn{
+  border:1px solid @btnBorder;
+}
+
+.input-prepend .select-btn.red-border{
+  border:1px solid @red;
+}
+
+.hover .hover-r-w,.hover.hover-r-w{background-color: @red;color: @white;}
+.active .hover-r-w,.active.hover-r-w{background-color: @red;color: @white;}
+
+#div_preview_title ul{border:1px solid @baseColor; color:@baseColor;}
+#div_preview_title ul li{background-color: @white;}
+#div_preview_title ul li.selected_elemword{border-right: 1px solid @baseColor;border-left: 1px solid @baseColor}
+#div_preview_title ul li i.icon-remove{background-color: @white;}
+
+.J_image_list li.hover,.J_image_list li.active{
+  border-color:@linkColor;
+}
+.J_image_list li.hover:before,.J_image_list li.active:before{
+  color: @linkColor;
+}
+
+#add_item_box3.modal .tab-content {
+  border-top: 1px solid @baseLineColor;
+}
+
+#add_item_box3 tr.hovering {
+  background:@grayLighter;
+}
+
+// #item_cart tr.danger_cat {
+//   background-color: @warningBackground;
+// }
+
+#item_cart tr.danger_cat [name="cat_path"], .cat_path.danger_cat [name="cat_path"] {
+  color: @red;
+}
+
+#item_cart .adg_title.new>span:first-child {
+  color: @orange;
+}
+
+#modal_select_creative_img .item_img:hover, #modal_new_creative .item_img:hover {
+  background-color: @red;
+}
+
+#item_cart tr.hovering td:first-child a:hover {
+  background-color: @red;
+}
+
+[name='length_prompt'].margin {
+  color: @grayLight;
+}
+
+[name='length_prompt'].margin.blank, [name='length_prompt'].overflow {
+  color: @red;
+}
+
+#add_item_box3 tbody tr:last-child td {
+  border-bottom: 1px solid @baseLineColor;
+}
+
+/*提交报告*/
+.no_run .tag_color {
+  color: @grayLight !important;
+}
+
+.fail .tag_color {
+  color: @red !important;
+}
+
+.error .tag_color {
+  color: @red !important;
+}
+/* 提交报告 end */
+
+table.keyword tbody .icon-pt-times {
+  color: @red;
+}
+
+table.keyword tbody .icon-pt-help {
+  color: @baseColor;
+}
+
+table tr.kw_del .word {
+  color: @grayLight;
+}
+
+.jslider-value{
+  color:@gray;
+}

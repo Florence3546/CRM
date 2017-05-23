@@ -1,0 +1,11 @@
+<tr title_num="{{ title_num }}" class="hidden {{ extra_class }}">
+    <td data-title="编号" class="tc">{{ title_num }}</td>
+    <td data-title="参考标题" class="title"><span class="title l adg_title">{{ title }}</span><i class="iconfont edit_title ml5 base_color poi">&#xe609;</i></td>
+    <td data-title="引流能力"><span class="title_traffic_score"></span><i class="iconfont ml5 icon-add base_color poi f14 b">&#xe605;</i><i class="iconfont hide ml5 icon-del base_color poi f14 b">&#xe604;</i></td>
+    <td data-title="操作">
+	    <a href="javascript:void(0);" class="btn submit_title btn-primary btn-sm">提交</a>
+	    {{ if (extra_class=='rec_title') }}
+	    <span class="ml5 poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="系统推荐的标题可能与宝贝实际属性有偏差，且默认不加品牌词和促销词，请酌情手动调整！">[系统推荐]</span>
+	    {{ /if }}
+    </td>
+</tr>

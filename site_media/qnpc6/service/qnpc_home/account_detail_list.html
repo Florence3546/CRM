@@ -1,0 +1,15 @@
+{{each list}}
+<tr data-id="{{$value.campaign_id}}"  id="{{$value.campaign_id}}" mnt_type="{{$value.mnt_type}}" mnt_index="{{$value.mnt_index}}" {{if $value.online_status=="offline"}}class="gray_light"{{/if}}>
+    <td>{{$value.date}}</td>
+    <td>{{$value.summed.impr}}</td>
+    <td>{{$value.summed.click}}</td>
+    <td>{{$value.summed.ctr}}%</td>
+    <td>{{$value.summed.cost}}</td>
+    <td>{{$value.summed.cpc}}</td>
+    <td>{{$value.summed.favcount}}</td>
+    <td>{{$value.summed.paycount}}</td>
+    <td>{{$value.summed.conv}}%</td>
+    <td>{{$value.summed.pay}}</td>
+    <td>{{$value.summed.roi}}</td>
+</tr>
+{{/each}}

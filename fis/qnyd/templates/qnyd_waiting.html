@@ -1,0 +1,41 @@
+{#utf-8#}{% extends "qnyd_nonav.html" %}
+{% block content %}
+    <div class="page page-current" style="color:#aaa;text-align: center;" ng-controller="shopCoreCtrl">
+            <img src="/site_media/static/images/dengd.jpg?__inline" width="100%">
+            <div style="position: absolute;bottom: 1rem;text-align: center;width: 100%;color: #fff;">
+                <div class="preloader preloader-white"></div><span style="vertical-align: 4px;">正在下载数据，请稍后...</span>
+            </div>
+    </div>
+{%endblock%}
+{% block js %}
+    <script>
+        APP.controller('shopCoreCtrl', function($scope, $http) {
+            var error=false;
+            var heartbeat=function(){
+                $http.post('/qnyd/ajax/', {
+                    "function": 'is_data_ready'
+                }).success(function(data) {
+                    if(data.errMsg){
+                        $.alert(data.errMsg,'错误提示',function(){
+                            TOP.mobile.ww.chat({
+                                chatNick:'派生科技',
+                                text:'来自千牛移动：',
+                                domain_code:"taobao"
+                            });
+                        });
+                        clearInterval(timer);
+                        error=true;
+                        return false;
+                    }
+
+                    if(data.finished&&!error){
+                        window.location.href='/qnyd/home';
+                        return;
+                    };
+                });
+            }
+            heartbeat();
+            var timer=setInterval(heartbeat,5000);
+        });
+    </script>
+{%endblock%}

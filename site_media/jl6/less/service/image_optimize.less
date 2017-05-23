@@ -1,0 +1,669 @@
+//创意优化
+.sign-bar {
+  background-color: @sign-bar-bg;
+  border: 1px solid @sign-bar-border;
+  color: @sign-bar;
+  padding: 10px 5px 10px 20px;
+  height: 40px;
+  line-height: 20px;
+  position: relative;
+  margin-bottom: 15px;
+
+  i {
+    font-size: 16px;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+  }
+}
+#image_optimize {
+  .alert {
+    margin-bottom: 0px;
+  }
+}
+.select-days {
+  position: relative;
+  height: 40px;
+  line-height: 50px;
+}
+.image_optimize {
+  .box-title {
+    border-bottom: none;
+  }
+  table {
+    margin-top: -12px;
+
+    thead {
+      th {
+        padding: 6px;
+      }
+    }
+    tr {
+      td {
+        position: relative;
+        vertical-align: middle;
+
+        div.editor_title {
+          position: absolute;
+          bottom: 0;
+          background-color: white;
+          overflow: hidden;
+          height: 0;
+          transition: all .3s;
+        }
+        &.editor {
+          div.editor_title {
+            height: 55px;
+          }
+        }
+      }
+    }
+  }
+  hr {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border-top: 1px solid @gray-light;
+  }
+  &.list {
+    & ul {
+      margin-left: -40px;
+
+      &>li {
+        position: relative;
+        float: left;
+        width: 270px;
+        margin-left: 66px;
+        height: 335px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+        & .item {
+          border: 1px solid @gray-light;
+          position: relative;
+          overflow: hidden;
+          height: 335px;
+
+          .hover_show {
+            visibility: hidden;
+          }
+          &:hover .hover_show {
+            visibility: visible;
+          }
+          & .editor_title {
+            position: absolute;
+            z-index: 1;
+            background-color: @white;
+            border-top: 1px solid @gray-light;
+            color: @gray;
+            width: 100%;
+            text-align: center;
+            padding-top: 10px;
+            bottom: -91px;
+            -webkit-transition: all .3s;
+            -moz-transition: all .3s;
+            -o-transition: all .3s;
+            transition: all .3s;
+
+            & textarea {
+              width: 235px;
+            }
+          }
+          &.editor {
+            & .editor_title {
+              bottom: 0;
+            }
+            &:after {
+              content: "";
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background-color: @gray-dark;
+              opacity: 0.6;
+            }
+          }
+          &.empty {
+            background-color: @gray-lighter;
+            padding-top: 90px;
+            cursor: pointer;
+            color: @gray;
+
+            .empty-add {
+              i {
+                font-size: 98px;
+              }
+            }
+            &:hover {
+              color: @white;
+              background-color: @gray;
+              opacity: 0.5;
+            }
+          }
+        }
+        & .item2 {
+          border: 1px solid @gray-light;
+          position: relative;
+          overflow: hidden;
+          height: 335px;
+        }
+        & .img {
+          position: relative;
+          overflow: hidden;
+          margin-top: -20px;
+
+          & img {
+            width: 270px;
+            height: 270px;
+          }
+          &:hover {
+            &:after {
+              content: "";
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background-color: @gray-dark;
+              opacity: 0.6;
+              cursor: pointer;
+            }
+            &:before {
+              content: "点击编辑图片";
+              color: @white;
+              position: absolute;
+              z-index: 1;
+              left: 50%;
+              top: 50%;
+              margin-left: -42px;
+              margin-top: -10px;
+              cursor: pointer;
+            }
+          }
+        }
+        & .img2 {
+          position: relative;
+          overflow: hidden;
+          margin-top: -20px;
+
+          & img {
+            width: 270px;
+            height: 270px;
+          }
+        }
+        & .title {
+          padding: 5px 5px;
+          display: block;
+          word-break: break-all;
+          word-wrap: break-word;
+          line-height: 16px;
+          color: @gray-dark;
+          font-size: 12px;
+        }
+        & .info {
+          padding: 5px 5px;
+          position: absolute;
+          bottom: 0px;
+          width: 100%;
+
+          & .ctr {
+            font-weight: 700;
+            color: @base-color;
+          }
+          & .operate {
+            padding: 0;
+            line-height: 22px;
+            float: right;
+            font-size: 12px;
+            height: 22px;
+          }
+        }
+        & .delete {
+          display: none;
+        }
+      }
+    }
+  }
+}
+//创意优化弹出层
+.image_optimize_modal {
+  // width: 1120px;
+  // left: 50%;
+  // top: 40px;
+  // margin-left: -560px;
+  // padding-right: 17px;
+  // background-color: @white;
+  // height: 650px;
+  // overflow: hidden;
+
+  .modal-dialog {
+    width: 1110px;
+  }
+  .modal-header {
+    height: 60px;
+    margin-bottom: 10px;
+  }
+  .preview_box, .operation_box {
+    float: left;
+    height: 465px;
+    overflow: hidden;
+  }
+  & .preview_box {
+    width: 300px;
+
+    img {
+      width: 250px;
+      height: 250px;
+    }
+    & .item {
+      position: relative;
+      overflow: hidden;
+      width: 282px;
+      border: 1px dashed @gray-light;
+      padding: 5px;
+      display: inline-block;
+      background-color: @gray-lighter;
+
+      & .editor_title {
+        position: absolute;
+        z-index: 1;
+        background-color: @white;
+        border-top: 1px solid @gray-light;
+        width: 100%;
+        text-align: center;
+        padding-top: 10px;
+        bottom: -91px;
+        left: 0;
+        -webkit-transition: all .3s;
+        -moz-transition: all .3s;
+        -o-transition: all .3s;
+        transition: all .3s;
+
+        & textarea {
+          width: 250px;
+        }
+      }
+      &.editor {
+        & .editor_title {
+          bottom: 0;
+        }
+        &:after {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: @gray-base;
+          opacity: 0.6;
+        }
+      }
+    }
+    & .title {
+      padding: 5px 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      font-size: 12px;
+    }
+    & .info {
+      padding: 5px 0;
+      padding-top: 0;
+
+      & .ctr {
+        font-weight: 700;
+        color: @base-color;
+      }
+      & .operate {
+        padding: 0;
+        line-height: 20px;
+        float: right;
+      }
+    }
+  }
+  & .operation_box {
+    position: relative;
+    overflow: hidden;
+    width: 760px;
+
+    &>div {
+      display: table;
+      // position: absolute;
+      width: 1520px;
+      -webkit-transition: all .3s;
+      -moz-transition: all .3s;
+      -o-transition: all .3s;
+      transition: all .3s;
+
+      &>div {
+        float: left;
+        display: inline-block;
+      }
+    }
+    &.optimize>div {
+      margin-left: -100%;
+    }
+    & .choose_pic_box {
+      width: 750px;
+      vertical-align: top;
+    }
+    & .text_box, & .optimize_style {
+      float: left;
+      margin-left: 10px;
+    }
+    & .optimize_style {
+      margin-left: 0;
+      .nav-tabs>li {
+        a {
+          padding-right: 12px;
+          padding-left: 12px;
+          color: #686868;
+        }
+        &.active {
+          a {
+            color: @base-color;
+          }
+        }
+      }
+      .tab-content {
+        padding: 10px 0 0 0;
+        width: 600px;
+        height: 423px;
+        border: 1px solid @gray-light;
+        border-top: none;
+
+        .pagination-sm > li > span {
+          padding: 3px 5px;
+          font-size: 12px;
+          line-height: 1.5;
+        }
+      }
+      .pagination {
+        margin: 0 8px 0 0;
+
+        a {
+          padding: 1px 8px;
+        }
+      }
+    }
+    & .text_box {
+      width: 160px;
+
+      & input {
+        width: 150px;
+        margin-bottom: 20px;
+      }
+    }
+    & .tab-pane .style_warp {
+      height: 378px;
+      margin-bottom: 5px;
+      overflow: hidden;
+    }
+    & .optimize_style {
+      & .style_box {
+        display: table;
+        // padding-left: 10px;
+        &>li {
+          list-style-type: none;
+          float: left;
+          border: 2px solid #fff;
+          margin-left: 8px;
+          // margin-bottom: 10px;
+          cursor: pointer;
+          background-size: 183px 183px;
+
+          img {
+            width: 185px;
+            height: 185px;
+            border: 1px solid @gray-light;
+          }
+          &:hover, &.checked {
+            border: 2px solid @base-color;
+          }
+        }
+      }
+    }
+  }
+  & .modal-body {
+    padding: 0 20px;
+
+    &:after {
+      display: table;
+      content: '';
+      clear: both;
+    }
+  }
+  & .item_main_pic, & .local_pic {
+    float: left;
+
+    .empty {
+      width: 250px;
+      height: 270px;
+      padding-top: 25px;
+
+      i.img {
+        color: @gray-light;
+        font-size: 150px;
+      }
+    }
+  }
+  & .item_main_pic {
+    margin-left: 20px;
+    width: 432px;
+
+    & .warp {
+      padding: 20px 0 20px 20px;
+      height: 270px;
+      border: 1px solid @gray-light;
+
+      & ul>li {
+        list-style-type: none;
+        position: relative;
+        float: left;
+        margin: 0 20px 10px 0;
+        border: 1px solid transparent;
+        cursor: pointer;
+        width: 100px;
+        height: 100px;
+
+        & img {
+          width: 98px;
+          height: 98px;
+        }
+        & .delete {
+          display: none;
+        }
+        &:hover, &.checked {
+          border: 1px solid @base-color;
+        }
+        &:hover {
+          & .delete {
+            position: absolute;
+            display: inline-block;
+            color: @base-color;
+            z-index: 1;
+            font-size: 15px;
+            margin-right: -12px;
+            margin-top: -12px;
+            right: 0;
+            top: 0;
+          }
+        }
+        &.add {
+          background-color: @gray-lighter;
+          border: none;
+          cursor: auto;
+          text-align: center;
+
+          & .iconfont {
+            font-size: 30px;
+            margin-top: 35px;
+            display: inline-block;
+            color: @gray-light;
+          }
+          & button {
+            margin-top: 10px;
+          }
+          & input {
+            width: 100px;
+            height: 100px;
+            padding: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+  & .local_pic {
+    width: 250px;
+    padding-left: 40px;
+
+    & .empty {
+      text-align: center;
+      background-color: @gray-lighter;
+      height: 270px;
+      border: 1px solid @gray-light;
+
+      & .preview_layer {
+        display: none;
+      }
+    }
+    & input {
+      position: absolute;
+      z-index: 2;
+      width: 95px;
+      height: 29px;
+      opacity: 0;
+      cursor: pointer;
+      display: inline-block;
+    }
+  }
+  & .rechoose {
+    position: relative;
+    height: 250px;
+
+    &>i {
+      display: none;
+    }
+    & button, input {
+      position: relative;
+      z-index: 1;
+      margin-top: 50%;
+      margin-left: 40px;
+    }
+    & input {
+      position: absolute;
+      z-index: 2;
+      width: 100px;
+      opacity: 0;
+    }
+    & .preview_layer {
+      position: absolute;
+      overflow: hidden;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border: 1px dashed @gray-light;
+      padding: 1px;
+      height: 270px;
+      width: 250px;
+
+      img {
+        height: 270px;
+        width: 250px;
+      }
+      &.checked {
+        padding: 0;
+        border: 2px solid @base-color;
+      }
+    }
+  }
+}
+.show_model {
+  // color: @gray;
+  font-size: 0;
+  .btn{
+    background-color: #fff;
+    line-height: 26px;
+    z-index: 0 !important;
+  }
+
+  a {
+    height: 26px;
+    padding: 2px 5px;
+    border: 1px solid @gray-light;
+
+    i{
+      color:@gray;
+    }
+
+    & .iconfont {
+      font-size: 16px;
+      cursor: pointer;
+
+      &:first-child {
+        margin-left: 0;
+        border-right: none;
+      }
+    }
+    &:hover {
+      color: @base-color
+    }
+  }
+  a.active {
+    background-color: @base-color;
+    i{
+      color: #fff;
+    }
+  }
+}
+#img_cut_modal {
+  // margin-left: -265px;
+  // width: 530px;
+  // top: 40px;
+  // left: 50%;
+  // background-color: @white;
+
+  .modal-dialog {
+    width: 540px;
+  }
+  .jcrop-keymgr {
+    display: none !important;
+  }
+}
+.desc {
+  float: left;
+  font-size: 14px;
+  padding-top: 10px;
+  color: #e84d39;
+  font-weight: bold;
+}
+#complete_creatives_box {
+  ul {
+    overflow: hidden;
+    & > li {
+      height: 335px;
+    }
+  }
+}
+
+//派美广告
+#paimei{
+    display: inline-block;
+    position: absolute;
+    width: 700px;
+    margin-left: 20px;
+    top: 0;
+    left: 200px;
+    line-height: 50px;
+    marquee{
+      //color: @red;
+      width: 360px;
+      vertical-align: bottom;
+    }
+}

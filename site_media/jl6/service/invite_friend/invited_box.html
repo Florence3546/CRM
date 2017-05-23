@@ -1,0 +1,67 @@
+<table class="pct100 table-bordered">
+  <thead>
+    <tr class="h40">
+      <th class="pl20 vm">给小伙伴的订购连接</th>
+      <th class="tc vm w200">小伙伴订购状态</th>
+      <th class="tc vm w200">您的积分奖励</th>
+    </tr>
+  </thead>
+  {{ if data.length > 0 }}
+	  <tbody>
+	    {{each data}}
+	    <tr class="h40">
+	      <td class="vm p10">
+	        <form class="form-inline">
+	          <div class="form-group">
+	            <input type="text" class="form-control" disabled style="width:600px" value="店铺：{{$value.invited_name}}&emsp;版本：{{$value.order_version_text}}&emsp;周期：{{$value.order_cycle_text}}&emsp;优惠链接：{{$value.url}}">
+	            <button type="button" class="btn btn-default invited_copy">复制链接</button>
+	            <textarea class="hide">新版的开车精灵，不管是操作还是效果，绝对是行业第一的水准，通过下面的链接可以2折优惠订购。软件版本：{{$value.order_version_text}}{{$value.order_cycle_text}}优惠价：{{$value.current_price}}元(原价：{{$value.original_price}}元)优惠链接：{{$value.url}}</textarea>
+	          </div>
+	        </form>
+	      </td>
+	      <td class="tc vm">
+	        <div>
+	          {{if $value.is_freeze == 0 }}
+	            已订购
+	            <div>
+	              小伙伴获得积分
+	              {{if $value.point==5000}}
+	                2500
+	              {{/if}}
+                  {{if $value.point==4000}}
+                    2000
+                  {{/if}}
+                  {{if $value.point==2500}}
+                    1500
+                  {{/if}}
+                  {{if $value.point==1500}}
+                    1000
+                  {{/if}}
+	            </div>
+	          {{else}}
+	            未订购
+	          {{/if}}
+	        </div>
+	      </td>
+	      <td class="tc vm b">
+	        <div class="f16 red">
+	          {{if $value.is_freeze == 0 }}
+	            <span class="b">+{{$value.point}} </span>
+	          {{else}}
+	            无
+	          {{/if}}
+	        </div>
+	      </td>
+	    </tr>
+	    {{/each}}
+     </tbody>
+    {{else}}
+      <tfoot>
+            <tr class="h40" >
+                <td colspan="3" class="tc">
+                    目前没有为小伙伴们创建专属的购买链接
+                </td>
+            </tr>
+      </tfoot>
+    {{/if}}
+</table>

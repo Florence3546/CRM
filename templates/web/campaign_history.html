@@ -1,0 +1,34 @@
+<div class="fix">
+    <div class="r">
+        <div class="input-append mb0 ml10">
+            <input class="w140" type="text" placeholder="请输入计划标题" id="title_input" style="line-height:21px;">
+            <button class="btn" id="camp_search_btn" type="button"> <i class="iconfont lh14"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered mt10" id="camp_history_table">
+    <thead>
+        <tr>
+            <th><div class="th_wrapp tl">操作时间</div></th>
+            <th><div class="th_wrapp tl">推广计划</div></th>
+            <th><div class="th_wrapp tl">执行方式</div></th>
+            <th class="pct50"><div class="th_wrapp tl">操作说明</div></th>
+        </tr>
+    </thead>
+    <tbody id="history_table_tbody">
+    </tbody>
+</table>
+<script>
+    PT.Camp_history.init();
+</script>
+
+<script id="history_table_tr" type="text/html">
+<tr>
+    <td><div class="tac"><%=oper_time%></div></td>
+    <td><div class="tal"><%=camp_title%></div></td>
+    <td><div class="tal"><%=oper_type%></div></td>
+    <td><div class="tal"><%=detail%></div></td>
+</tr>
+</script>
+

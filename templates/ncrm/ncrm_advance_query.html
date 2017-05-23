@@ -1,0 +1,317 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}客户群管理{% endblock %}
+
+{% block content %}
+<input type="hidden" id="last_search_type" value="{{request.POST.search_type}}">
+<input type="hidden" id="client_group_id" value="{{client_group_id}}">
+<input type="hidden" id="psuser_id" value="{{psuser_id}}">
+
+<div class="w1329 auto">
+    <div class="mt20">
+        {%if error%}
+        <div class="red mt10">
+            <i class="iconfont mr5 f18">&#xe622;</i>{{error}}<br>
+        </div>
+        {%endif%}
+
+        <div class="bg_white bdd p10 lh24 hide" id="help_content">
+            <h5>查询帮助文档</h5>
+            <div class="pl20">
+                {%for k,v in help_dict.items%}
+                <div><span class="b black dib w140">{{k}}</span><span class="f12 gray">{{v}}</span></div>
+                {%endfor%}
+            </div>
+        </div>
+<!--         {%if not customer%}
+        <div class="orange mt10 mb20">
+            <i class="iconfont mr5 f18">&#xe622;</i>用户群不存在，请使用下面的查询器找出相关客户，并加入到客户群中<br>
+        </div>
+        {%endif%} -->
+
+        <div class="fix lh30 pt10 ">
+            <span class="f16"> <i class="iconfont mr5">&#xe685;</i>
+                高级筛选
+            </span>
+            <a href="javascript:;" class="r btn" id="show_help"><i class="iconfont mr3 f18">&#xe68b;</i>显示帮助文档</a>
+        </div>
+
+        <table class="table-layout table-bordered mini mt10" id="search_area_box">
+            <form action="./" method="post" id="query_form">
+            <thead>
+                <th class="pct90">筛选条件</th>
+                <th>动作</th>
+            </thead>
+            <tr>
+                <td>
+                    <textarea class="h80 p0 pct100 f16 bd_none b" style="resize:none;overflow-y:none;" spellcheck="false" name="query" id="query">{{request.POST.query}}</textarea>
+                    <input type="hidden" name="search_type" value="query">
+                </td>
+                <td class="tc">
+                    <button id="search_query" style="background-color:white;color:#305f87;border:0;">查询用户</button><br>
+                    <!--
+                    <a class="mt10" href="javascript:;" id="save_query">保存查询条件</a><br>
+                    <a class="mt10" href="javascript:;" id="generate_id_list">生成客户群</a><br>
+                     -->
+                </td>
+            </tr>
+            </form>
+        </table>
+
+<!--
+        <div class="fix lh30 pt10 ">
+            <span class="f16"> <i class="iconfont mr5">&#xe640;</i>
+                按指定条件筛选
+            </span>
+        </div>
+
+        <div class="bg_white p20 bdd mt10">
+            <form class="m0" action="./" method="post" id="condition_search">
+                <input type="hidden" name="search_type" value="unquery">
+                店铺：
+                {% if request.POST.nick %}
+	                <input class="w100 mr10 identity" name="nick" placeholder="昵称或ID"  type="text" value="{{request.POST.nick}}">
+                {% else %}
+                    <input class="w100 mr10 identity" name="shop_id" placeholder="昵称或ID"  type="text" value="{{request.POST.shop_id}}">
+                {% endif %}
+                QQ：
+                <input class="w100 mr10" name="qq" type="text" value="{{request.POST.qq}}">
+                电话：
+                <input class="w100 mr10" name="phone" type="text" value="{{request.POST.phone}}">
+                <button class="btn r ml5" id="id_list_btn"> <i class="iconfont">ID列表</i></button>
+                <button class="btn r" id="search_cond_btn"> <i class="iconfont">&#xe645;</i></button>
+
+               <div>
+				   <table class="table-layout table-bordered mini mt10 {%if not request.POST.id_list_textarea or request.POST.id_list_textarea == ""%} dn {% endif %} " id="search_id_list">
+				        <thead>
+				            <tr>
+				                <th class="pct90">客户ID列表</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr>
+				                <td>
+				                    <textarea class="h160 p0 pct100 f16 bd_none b rsn ofyn" name="id_list_textarea" spellcheck="false" >{{request.POST.id_list_textarea}}</textarea>
+				                </td>
+				            </tr>
+				        </tbody>
+				    </table>
+			    </div>
+            </form>
+        </div>
+
+ -->
+        {%if customer%}
+        <div class="fix lh30 pt10 pb10 mt10">
+            <span class="f16"> <i class="iconfont mr5">&#xe61c;</i>
+                用户列表
+                <span>(<span id="checked_num">0</span>/{{page_info.record_count}})</span>
+            </span>
+            <span class="r">
+                <a class="btn btn-primary" href="{%url 'generate_customer_csv' %}" target="_blank">生成客户CSV</a>
+                <a class="btn btn-primary" id="bluk_submit_ids" href="javacsript:;">导入选中客户</a>
+                <!--
+                <a class="btn btn-primary" id="submit_all_ids" href="javacsript:;">导入所有查询客户</a>
+                 -->
+                <span class="f14 b">到</span>
+                <select class="psuser_select w180" name="id_subscribe_sale_user" id="id_subscribe_sale_user" data-type="PHONESELLER"></select>
+                <select class="w160 dn" id="id_group_client"></select>
+                <!--
+                <a class="btn btn-primary" id="create_client_group" href="javacsript:;">创建客户群</a>
+                 <a class="btn mr10 btn-primary" id="open_manual_layout" href="javacsript:;">手动添加客户</a>
+                 -->
+            </span>
+        </div>
+
+        <table class="table-bordered" id="user_table">
+            <thead>
+                <tr>
+                    <th class="w20 nbl tc"><input type="checkbox" class="father_box" link="user_table"></th>
+                    <th class=" tl">店铺信息</th>
+                    <th class="tl w460 p0">
+                        <ul class="ul_line lh30">
+                            <li class="w50 tc">新/续</li>
+                            <li class="w40 tc">周期</li>
+                            <li class="w80 tr">订购时间</li>
+                            <li class="w80 tr">生效时间</li>
+                            <li class="w80 tr">到期时间</li>
+                            <li class="w60 tr">实付</li>
+                        </ul>
+                    </th>
+                    <th class="w100">动作</th>
+                </tr>
+            </thead>
+            <tbody class="lh22">
+                {%if customer%}
+                        {%for c in customer%}
+                            <tr shop_id="{{c.shop_id}}">
+                                <td class="tc">
+                                    <input type="checkbox" class="kid_box">
+                                </td>
+                                <td class="vt">
+                                    <ul class="ul_line lh30 bbdd ">
+                                        <li class="w60 tc" ><span>基本信息：</span></li>
+                                        <li class="w140 tc">
+                                            <a href="http://shop{{c.shop_id}}.taobao.com" class="orange" target="_blank" title="进入店铺">{{c.shop_id}}</a>
+                                        </li>
+                                        <li class="w140 tc">
+                                            <a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{c.nick}}" title="联系旺旺">{{c.nick}}</a>
+                                        </li>
+                                        <li class="w300 tr ">
+                                            <img style="margin-top:-3px;" src='/site_media/jl/img/credit/{{c.level}}.gif'>
+                                            &nbsp;
+	                                        {%if c.is_b2c%}
+	                                        <span class="red mr3">B店</span>
+	                                        {%else%}
+	                                        <span class="mr3">C店</span>
+	                                        {%endif%}
+                                        </li>
+                                    </ul>
+                                    <ul class="ul_line lh30 bbdd ">
+                                        <li class="w60 tc" ></li>
+                                        <li class="w140 tc">
+                                            TEL：{{c.phone|display_phone|default:'-'}}
+                                        </li>
+                                        <li class="w140 tc">
+                                            QQ：<span class="qq_flag">{{c.qq|default:'-'}}</span>
+                                        </li>
+                                        <li class="w140 tc">
+                                            类目：{{c.category|default:'-'}}
+                                        </li>
+                                        <li class="w140 tc">
+                                            地址：{{c.address|default:'-'}}
+                                        </li>
+                                    </ul>
+                                    <ul class="ul_line lh30 bbdd ">
+                                        <li class="w60 tc" ><span>客户详情：</span></li>
+                                        <li class="r" style="margin-bottom:-10px;">
+                                            <a class="mr10" href="{%url 'event_timeline' c.shop_id%}" target="_blank" >事件详情</a>
+                                            <a class="mr10" href="{%url 'login_ztc' c.shop_id%}" target="_blank">登录后台</a>
+                                            <a href="{%url 'login_kcjl' 'web' c.shop_id%}" onclick="javascript:void(0);" target="_blank" > <i class="iconfont f16 mt3 poi" title="登录开车精灵">&#xe683;</i>
+                                            </a>
+                                            <a href="{%url 'login_kcjl' 'qnpc' c.shop_id%}" onclick="javascript:void(0);" target="_blank" >
+                                                <i class="iconfont f16 mt3 ml10 poi" title="登录千牛电脑版">&#xe65e;</i>
+                                            </a>
+                                            <a href="{%url 'login_kcjl' 'qnyd' c.shop_id%}" onclick="javascript:void(0);" target="_blank" >
+                                                <i class="iconfont f18 mt3 ml10 poi" title="登录开车手机版">&#xe68e;</i>
+                                            </a>
+                                        </li>
+                                    </ul>
+								</td>
+								<td class="p0 vt rel">
+								    <div class=" h100 ova">
+								        {%for order in c.order_info%}
+
+								        <ul class="ul_line lh30 {%if c.order_info|length < 6 or not forloop.last%}bbdd{%endif%} {% if order.is_ended %}silver{% else %}{% if order.is_ending %}red{% endif %}{% endif %}">
+								            <li class="w60 tc" title="{{order.article_name}}">
+								                {%if order.article_code == 'ts-25811' %}
+								                    <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+								                {%endif%}
+								                {% if order.article_code == 'FW_GOODS-1921400' %}
+								                    <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+								                {%endif%}
+								                {%if order.article_code == 'tp-001' %}
+								                    <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+								                {%endif%}
+								                {% if order.article_code == 'tp-002' %}
+								                    <i class="iconfont inherit mr5 ml5">&#xe692;</i>
+								                {%endif%}
+								                {%if order.article_code == 'tp-003' %}
+								                    <i class="iconfont inherit mr5 ml5">&#xe695;</i>
+								                {%endif%}
+								                {% if order.article_code == 'tp-004' %}
+								                    <i class="iconfont inherit mr5 ml5">&#xe694;</i>
+								                {%endif%}
+								            {{order.display_biz_type}}
+								            </li>
+								            <li class="w40 tc">{{order.cycle}}</li>
+								            <li class="w80 tr">{{order.create_time|date:"Y-m-d"}}</li>
+								            <li class="w80 tr">{{order.start_date|date:"Y-m-d"}}</li>
+								            <li class="w80 tr">{{order.end_date|date:"Y-m-d"}}</li>
+								            <li class="w60 tr">{{order.pay|divide:'100'}}</li>
+								        </ul>
+
+								        {%endfor%}
+								    {% if c.order_info|length > 5 %}
+								        <div class="tc abs b0 l50 ml-10">
+								            <i class="iconfont f16 b poi show_order_more">&#xe61f;</i>
+								        </div>
+								        {%endif%}
+								    </div>
+								</td>
+                                <td class="tc" shop_id="{{c.shop_id}}">
+                                    {%if c.select%}
+                                    <span class="gary">已添加</span>
+                                    {%else%}
+                                    <a class="btn btn-mini singel_add" id="singel_add_{{c.shop_id}}" href="javascript:;">添加</a>
+                                    {%endif%}
+                                </td>
+                            </tr>
+            {%endfor%}
+                    {%else%}
+            <tr>
+                <td colspan="4" class="tc">暂无数据</td>
+            </tr>
+            {%endif%}
+        </tbody>
+        </table>
+
+        <div class="fix">
+            <span>当前：{{page_info.page}}/{{page_info.page_count}}</span>
+            <div class="pagination mt10 r">
+                <ul>
+                    <li {%if page_info.page == 1%}class="active"{%endif%}>
+                      <button class="form_search_url btn " submit_url="{%url 'advance_query' client_group_id 1 %}">首页</button>
+                    </li>
+                    {%for p in page_info.page_xrange%}
+                    <li {%if p == page_info.page%}class="active"{%endif%}>
+                        <button class="form_search_url btn " submit_url="{%url 'advance_query' client_group_id p%}">{{p}}</button>
+                    </li>
+                    {%endfor%}
+                    <li {%if page_info.page == page_info.page_count%}class="active"{%endif%}>
+                        <button class="form_search_url btn " submit_url="{%url 'advance_query' client_group_id page_info.page_count%}">尾页</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {%else%}
+        <div class="bg_white mt20 bdd p20 gray fix">
+            <div class="w400 auto">
+
+            <i class="iconfont l f64">&#xe66f;</i>
+            <div class="l ml20">
+
+                <h4>没有找到可用的客户，请输入查询条件</h4>
+            </div>
+            </div>
+        </div>
+        {%endif%}
+    </div>
+</div>
+
+<div id="id_create_client_group_layout" class="modal hide fade p10" data-width="w640" >
+    <div class="fix lh30 pt10 ">
+        <span class="f16 b"> <i class="iconfont mr5"></i>
+            <span id="client_group_psuser_id" psuser_id=""></span>
+        </span>
+        <input type="text" value="" id="client_group_title" style="margin-top:-5px;margin-left:15px;border-top:none;border-right:none;border-left:none;" placeholder="请为客户群创建名称" class="w200">
+        <a href="javascript:;" data-dismiss="modal" class="close_model r btn ml10">取消</a>
+        <a href="javascript:;" class="btn r btn-primary" id="create_client_group_submit">提交</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_advance_query.js'|file_time_stamp}}" type="text/javascript"></script>
+<script id="group_client_option" type="text/html">
+    <option value="<%=id%>"><%=title%></option>
+</script>
+
+<script>
+$().ready(function(){
+    PT.NcrmAdvanceQuery.init();
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,77 @@
+<table class="table-bordered table-no-warp-border bbd" id="adgroup_table">
+  <thead>
+    <tr>
+      <th class="w20 nbl tc">
+        <input class="father_box" type="checkbox" link="adgroup_table">
+      </th>
+      <th class="w100 tc"><div>宝贝图片</div></th>
+      <th><div>宝贝标题</div></th>
+      <th>
+        <div class="dropdown db table_g_sort_dropdown">
+          <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+            <span>基础数据</span>
+            <i class="iconfont r f16">&#xe614;</i>
+          </div>
+          <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+            <li><a value="cost" href="javascript:;">总花费</a></li>
+            <li><a value="impr" href="javascript:;">展现量</a></li>
+            <li><a value="click" href="javascript:;">点击量</a></li>
+            <li><a value="click_rate" href="javascript:;">点击率</a></li>
+            <li><a value="ppc" href="javascript:;">PPC</a></li>
+          </ul>
+        </div>
+      </th>
+      <th>
+        <div class="dropdown db table_g_sort_dropdown">
+          <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+            <span>转化数据</span>
+            <i class="iconfont r f16">&#xe614;</i>
+          </div>
+          <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+            <li><a value="pay" href="javascript:;">成交额</a></li>
+            <li><a value="paycount" href="javascript:;">成交量</a></li>
+            <li><a value="favcount" href="javascript:;">收藏量</a></li>
+            <li><a value="conv" href="javascript:;">转化率</a></li>
+            <li><a value="roi" href="javascript:;">ROI</a></li>
+          </ul>
+        </div>
+      </th>
+      <th class="w120"><div>推广状态</div></th>
+      <th class="w100"><div>优化状态</div></th>
+      <th class="w100 tc"><div>操作</div></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+<div class="row-fluid mt10 mb10">
+  <div class="span12 dataTables_info pl10" id="page_info">
+    每页显示<span class="page_size"></span>个宝贝，共<span class="page_count">0</span>页
+  </div>
+  <div class="span12">
+    <div class="dataTables_paginate pagination mr10 r" id="dynamic_pager"></div>
+  </div>
+</div>
+
+{% include 'manage_elemword.html' %}
+
+<div class="hide" id="mnt_type_box">
+  <div class="black">
+    <label>
+      <input type="radio" name="mnt_type" value="1">
+      <span class="ml5">自动优化</span>
+    </label>
+    <label>
+      <input type="radio" name="mnt_type" value="2">
+      <span class="ml5">只优化价格</span>
+    </label>
+    <label>
+      <input type="radio" name="mnt_type" value="0">
+      <span class="ml5">不自动优化</span>
+    </label>
+  </div>
+  <div>
+    <button class="btn btn-mini mt5 btn-primary" data-ok="popover">确定</button>
+    <button class="btn btn-mini mt5" data-dismiss="popover">取消</button>
+  </div>
+</div>

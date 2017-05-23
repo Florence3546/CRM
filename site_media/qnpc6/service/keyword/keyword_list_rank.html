@@ -1,0 +1,51 @@
+{{if keywordList.length}}
+    {{each keywordList}}
+    <tr id="{{$value.keyword_id}}" data-adgroup_id="{{$value.adgroup_id}}" data-campaign_id="{{$value.campaign_id}}" data-match="{{$value.match_scope}}">
+        <td style="padding:2px; width:60px;" class="img_box">
+            <img  height="60" width="60" src="{{$value.pic_url}}_60x60.jpg_.webp" data-title="{{$value.title}}" data-camp-title="{{$value.camp_title}}" data-price="{{$value.price}}" data-pic-url="{{$value.pic_url}}"  data-locked="{{$value.is_locked}}"></a>
+        </td>
+        <td class="tl">
+            <span class="word">{{$value.word}}</span>
+            {{if $value.qscore_dict.wireless_matchflag == "2" || $value.qscore_dict.wireless_matchflag == "4"}}
+                <span class="iconfont show_tooltip"  data-placement="right" data-trigger="hover" data-title="移动首屏展示机会:有机会在手机淘宝网和淘宝客户端搜索结果中屏展示">&#xe605;</span>
+            {{/if}}
+            {{if $value.qscore_dict.pc_left_flag}}
+                <span class="iconfont show_tooltip" data-placement="right" data-trigger="hover" data-title="淘宝豆腐块展示机会:有机会在淘宝搜索关键词结果页左侧展示">&#xe606;</span>
+            {{/if}}
+        </td>
+        <td class="max_price">{{$value.max_price}}</td>
+        <td class="max_mobile_price">{{$value.max_mobile_price}}</td>
+        <td colspan="2" class="pc_rank">
+            <a class="rank w200" href="javascript:;">查</a>
+        </td>
+        <td style="display: none" class="mobile_rank"></td>
+        <td class="rob_rank">
+                <span class="dib w200 platform">
+                    <span class="platform_name w60">{{if $value.platform == 'pc'}}计算机{{else}} 移动&emsp;{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="dib">限价<span class="limit_price">{{$value.limit_price}}</span>元</span>
+                </span>
+                <a href="javascript:;" class="rob_record">详情</a><br/>
+                <span class="dib w200 platform">
+                    <span class="exp_rank_start">{{$value.exp_rank_start_desc}}</span> - <span class="exp_rank_end">{{$value.exp_rank_end_desc}}</span>
+                </span>
+                <a href="javascript:;" class="rob_set">设置</a>
+        </td>
+        <td class="pc_qs">
+            <span class="pc_qs">{{$value.qscore_dict.qscore}}</span>
+        </td>
+        <td class="mobile_qs sort_custom qscore" pc_qscore="{{$value.qscore_dict.qscore}}" pc_creative_score="{{$value.qscore_dict.creativescore}}" pc_rele_score="{{$value.qscore_dict.kwscore}}" pc_cvr_score="{{$value.qscore_dict.cvrscore}}" yd_qscore="{{$value.qscore_dict.wireless_qscore}}" yd_creative_score="{{$value.qscore_dict.wireless_creativescore}}" yd_rele_score="{{$value.qscore_dict.wireless_relescore}}" yd_cvr_score="{{$value.qscore_dict.wireless_cvrscore}}" matchflag="{{$value.qscore_dict.wireless_matchflag}}" plflag="{{$value.qscore_dict.pc_left_flag}}">
+            {{if $value.qscore_dict.wireless_qscore >-1 }}
+                <span class="hide">{{$value.qscore_dict.wireless_qscore}}</span>
+                {{$value.qscore_dict.wireless_qscore}}
+            {{ else }}<span class="hide">0</span>--{{/if}}
+        </td>
+        <td class="striped">{{$value.impr}}</td>
+        <td class="striped">{{$value.click}}</td>
+        <td class="striped">{{$value.ctr}}%</td>
+        <td class="striped">{{$value.cost}}</td>
+        <td class="striped">{{$value.cpc}}</td>
+        <td>{{$value.conv}}%</td>
+        <td {{if $value.roi>1}}class="red"{{/if}}>{{$value.roi}}</td>
+    </tr>
+    {{/each}}
+{{/if}}

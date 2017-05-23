@@ -1,0 +1,89 @@
+{{each list}}
+<tr data-id="{{$value.campaign_id}}"  id="{{$value.campaign_id}}" mnt_type="{{$value.mnt_type}}" mnt_index="{{$value.mnt_index}}" {{if $value.online_status=="offline"}}class="gray_light"{{/if}}>
+    <td class="check_column"><input type="checkbox" value="{{$value.campaign_id}}"></td>
+    <td>
+      <span class="title">
+          <a class="item_base" title="{{$value.title}}" target="_blank" href="/mnt/mnt_campaign/{{ $value.campaign_id }}">{{$value.title}}</a>
+      </span>
+      {{ if $value.mnt_type == 0 }}
+          <span class="label label-default mnt_desc">手动</span>
+      {{ else }}
+          <span class="label label-primary mnt_desc">
+          {{ if $value.mnt_type == 1}} 长尾
+          {{else if $value.mnt_type == 2}} 重点
+          {{else if $value.mnt_type == 3}} ROI
+          {{else if $value.mnt_type == 4}} 无线
+          {{/if}}
+          </span>
+      {{/if}}
+
+      <span class="ml10">({{$value.adg_num}}个宝贝)</span>
+      &ensp;<i class="iconfont edit_title">&#xe609;</i>
+      &ensp;<i class="iconfont show_chart">&#xe60c;</i>
+      &ensp;<i class="iconfont show_subdivide">&#xe60a;</i>
+      <div class="editor_title">
+	      <input name="input_title" class="w230">
+		  <div>
+		      <span class="gray">已输入<span class="j_text_len"></span>/40</span>
+		      <div class="r">
+			      <a href="javascript:;" class="save_title">保存</a>
+			      <a href="javascript:;" class="cancel_modify_title">取消</a>
+		      </div>
+		  </div>
+      </div>
+    </td>
+    <td>
+      <span class="budget">
+        {{if $value.budget==20000000}}
+          不限
+        {{else}}
+          {{$value.budget}}元
+        {{/if}}
+      </span>
+      <i class="iconfont edit_budget" data-budget="{{$value.budget}}" data-smooth="{{$value.is_smooth}}">&#xe609;</i>
+    </td>
+    <td>
+      {{ if $value.yd_search=='1' }}移动设备<br>{{ /if }}
+      计算机&ensp;<i class="iconfont edit_platform">&#xe609;</i>
+    </td>
+    <td>
+        {{$value.schedule}}%
+        <i class="iconfont edit_schedule">&#xe609;</i>
+    </td>
+    <td><span class="hide">{{$value.impr}}</span>{{$value.impr}}</td>
+    <td><span class="hide">{{$value.click}}</span>{{$value.click}}</td>
+    <td><span class="hide">{{$value.ctr}}</span>{{$value.ctr}}%</td>
+    <td><span class="hide">{{$value.cost}}</span>￥{{$value.cost}}</td>
+    <td><span class="hide">{{$value.cpc}}</span>￥{{$value.cpc}}</td>
+    <td><span class="hide">{{$value.favcount}}</span>{{$value.favcount}}</td>
+    <td><span class="hide">{{$value.carttotal}}</span>{{$value.carttotal}}</td>
+    <td><span class="hide">{{$value.paycount}}</span>{{$value.paycount}}</td>
+    <td><span class="hide">{{$value.conv}}</span>{{$value.conv}}%</td>
+    <td><span class="hide">{{$value.pay}}</span>￥{{$value.pay}}</td>
+    <td><span class="hide">{{$value.roi}}</span>{{$value.roi}}</td>
+    <td>
+      {{if $value.online_status=="offline"}}
+        <span class="b">
+        已暂停
+        </span>
+        <a class="hover_show update_camp single" mode="1" href="javascript:;">开启</a>
+      {{else}}
+        <span class="b">
+        推广中
+        </span>
+        <a class="hover_show update_camp single" mode="0" href="javascript:;">暂停</a>
+      {{/if}}
+      {{ if $value.error_descr }}
+         <br/>{{ $value.error_descr }}
+      {{ /if }}
+    </td>
+    <td class="b tc">
+        <a href="/mnt/mnt_campaign/{{$value.campaign_id}}">进入计划</a><br>
+        {{if $value.mnt_type==0}}
+          <a href="javaScript:;" class="change_camp_mnt" type=1> 开启托管 </a>
+        {{else}}
+          <a href="javaScript:;" class="change_camp_mnt" mnt_days="{{ $value.mnt_days }}" type=0> 取消托管 </a>
+        {{/if}}
+    </td>
+</tr>
+{{/each}}

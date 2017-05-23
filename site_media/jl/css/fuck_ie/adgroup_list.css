@@ -1,0 +1,12 @@
+/* CSS Document */
+.table th,.table td{ padding:8px; }
+/*.popover{max-width:100%;}*/
+a.btn{vertical-align:middle;}
+#search_val{height:22px;}
+i{margin-bottom:3px;}
+.icon-play-circle{font-size:16px;}
+#id_campaign_id{width:150px;}
+.count_div{line-height:20px;display:inline-block; border:1px #CCC dashed; padding:6px; background-color:#eee;}
+.btn-group:hover>ul {display: block;}
+
+.blackword {border:1px dashed #FF0000; background-color:#FFFFFF; cursor:pointer; padding:5px 10px;}

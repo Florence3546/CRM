@@ -1,0 +1,496 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}退款审计{% endblock %}
+{% block extra_style %}
+<style>
+#pagination_bar {
+    text-align: right;
+    margin-top: 10px;
+}
+#id_unsubscribe_table_info {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 30px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+#pagination_bar>.dataTables_paginate {
+    display: inline-block;
+    vertical-align: top;
+}
+.unsubscribe_status_1 {background-color: #FFEBED;}
+.unsubscribe_status_2 {background-color: #DEEDF9;}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="bg_white p10 mt20 mb10 bdd">
+        <form class="m0" action="" method="post" id="form_unsubscribe_manage">
+            <div>
+                <input type="hidden" id="is_export" name="is_export" value="{{request.POST.is_export}}">
+                <span class="vm">录入时间：</span>
+                <input class="w80 f12" type="text" id="create_time_start" name="create_time_start" value="{{ create_time_start }}"/> -
+                <input class="w80 f12" type="text" id="create_time_end" name="create_time_end" value="{{ create_time_end }}"/>
+                <span class="vm ml20">店　铺：</span>
+                <input type="text" class="w100 f12" value="{{ request.POST.nick }}" name="nick" placeholder="店铺名/店铺id"/>
+                <span class="vm ml20">责任部门：</span>
+                <select name="duty_dpt" class="w120 f12">
+                    <option value="" selected="selected">--责任部门--</option>
+                    <option value="MKT" {% if request.POST.duty_dpt == 'MKT' %}selected="selected"{% endif %}>市场部</option>
+                    <option value="OPTAGENT" {% if request.POST.duty_dpt == 'OPTAGENT' %}selected="selected"{% endif %}>代运营部</option>
+                    <option value="GROUP1" {% if request.POST.duty_dpt == 'GROUP1' %}selected="selected"{% endif %}>销服一部</option>
+                    <option value="GROUP2" {% if request.POST.duty_dpt == 'GROUP2' %}selected="selected"{% endif %}>销服二部</option>
+                    <option value="GROUP3" {% if request.POST.duty_dpt == 'GROUP3' %}selected="selected"{% endif %}>销服三部</option>
+                    <option value="TGROUP1" {% if request.POST.duty_dpt == 'TGROUP1' %}selected="selected"{% endif %}>技术一部</option>
+                    <option value="TGROUP2" {% if request.POST.duty_dpt == 'TGROUP2' %}selected="selected"{% endif %}>技术二部</option>
+                    <option value="TGROUP3" {% if request.POST.duty_dpt == 'TGROUP3' %}selected="selected"{% endif %}>技术三部</option>
+                    <option value="TGROUP4" {% if request.POST.duty_dpt == 'TGROUP4' %}selected="selected"{% endif %}>技术四部</option>
+                    <option value="TGROUP5" {% if request.POST.duty_dpt == 'TGROUP5' %}selected="selected"{% endif %}>技术五部</option>
+                    <option value="TGROUP6" {% if request.POST.duty_dpt == 'TGROUP6' %}selected="selected"{% endif %}>技术六部</option>
+                    <option value="BRAND" {% if request.POST.duty_dpt == 'BRAND' %}selected="selected"{% endif %}>品牌部</option>
+                    <option value="DESIGN" {% if request.POST.duty_dpt == 'DESIGN' %}selected="selected"{% endif %}>设计部</option>
+                    <option value="VABU" {% if request.POST.duty_dpt == 'VABU' %}selected="selected"{% endif %}>增值事业部</option>
+                    <option value="OTHERS" {% if request.POST.duty_dpt == 'OTHERS' %}selected="selected"{% endif %}>其他</option>
+                    {% comment %}<option value="GROUP1" {% if request.POST.duty_dpt == 'GROUP1' %}selected="selected"{% endif %}>销服一部</option>
+                    <option value="GROUP2" {% if request.POST.duty_dpt == 'GROUP2' %}selected="selected"{% endif %}>销服二部</option>
+                    <option value="GROUP3" {% if request.POST.duty_dpt == 'GROUP3' %}selected="selected"{% endif %}>销服三部</option>
+                    <option value="GROUP4" {% if request.POST.duty_dpt == 'GROUP4' %}selected="selected"{% endif %}>销服四部</option>
+                    <option value="GROUP5" {% if request.POST.duty_dpt == 'GROUP5' %}selected="selected"{% endif %}>销服五部</option>{% endcomment %}
+                </select>
+{#                <span class="vm">业务类型：</span>#}
+{#                <select name="category" class="mr20 w120 f12">#}
+{#                    <option value="" selected="selected">--业务类型--</option>#}
+{#                    <option value="kcjl" {% if request.POST.category == 'kcjl' %}selected="selected"{% endif %}>开车精灵</option>#}
+{#                    <option value="rjjh" {% if request.POST.category == 'rjjh' %}selected="selected"{% endif %}>类目专家</option>#}
+{#                    <option value="vip" {% if request.POST.category == 'vip' %}selected="selected"{% endif %}>VIP专家托管</option>#}
+{#                    <option value="qn" {% if request.POST.category == 'qn' %}selected="selected"{% endif %}>千牛</option>#}
+{#                    <option value="ztc" {% if request.POST.category == 'ztc' %}selected="selected"{% endif %}>直通车托管</option>#}
+{#                    <option value="zz" {% if request.POST.category == 'zz' %}selected="selected"{% endif %}>钻展托管</option>#}
+{#                    <option value="zx" {% if request.POST.category == 'zx' %}selected="selected"{% endif %}>店铺装修</option>#}
+{#                    <option value="dyy" {% if request.POST.category == 'dyy' %}selected="selected"{% endif %}>代运营</option>#}
+{#                    <option value="seo" {% if request.POST.category == 'seo' %}selected="selected"{% endif %}>seo</option>#}
+{#                    <option value="kfwb" {% if request.POST.category == 'kfwb' %}selected="selected"{% endif %}>客服外包</option>#}
+{#                    <option value="other" {% if request.POST.category == 'other' %}selected="selected"{% endif %}>补单</option>#}
+{#                </select>#}
+                <span class="vm ml20">退款状态：</span>
+                <select name="status" class="f12 w120">
+                    <option value="">--退款状态--</option>
+                    <option value="1" {% if request.POST.status == '1' %}selected="selected"{% endif %}>申请中</option>
+                    <option value="2" {% if request.POST.status == '2' %}selected="selected"{% endif %}>已退款</option>
+                </select>
+                <span class="vm ml20">录入人：</span>
+                <input type="text" class="psuser_input w100 f12" name="name_cn" link="#creater_id" placeholder="录入人" value="{{ request.POST.name_cn }}" autocomplete="off">
+                <input type="hidden" id="creater_id" name="creater_id" value="{{ request.POST.creater_id }}">
+                <span class="vm ml20">责任人：</span>
+                <input type="text" class="psuser_input w100 f12" name="duty_user_name_cn" link="#duty_user_id" placeholder="签单人/服务人" value="{{ request.POST.duty_user_name_cn }}" autocomplete="off">
+                <input type="hidden" id="duty_user_id" name="duty_user_id" value="{{ request.POST.duty_user_id }}">
+            </div>
+            <div class="mt20">
+                <span class="vm">经办时间：</span>
+                <input class="w80 f12" type="text" id="refund_date_start" name="refund_date_start" value="{{ refund_date_start }}"/> -
+                <input class="w80 f12" type="text" id="refund_date_end" name="refund_date_end" value="{{ refund_date_end }}"/>
+                <span class="vm ml20">经办人：</span>
+                <input type="text" class="psuser_input w100 f12" name="cashier_name_cn" link="#cashier_id" placeholder="经办人" value="{{ request.POST.cashier_name_cn }}" autocomplete="off">
+                <input type="hidden" id="cashier_id" name="cashier_id" value="{{ request.POST.cashier_id }}">
+                <span class="vm ml20">报销部门：</span>
+                <select name="reimburse_dpt" class="w120 f12">
+                    <option value="" selected="selected">--报销部门--</option>
+                    <option value="MKT" {% if request.POST.duty_dpt == 'MKT' %}selected="selected"{% endif %}>市场部</option>
+                    <option value="OPTAGENT" {% if request.POST.duty_dpt == 'OPTAGENT' %}selected="selected"{% endif %}>代运营部</option>
+                    <option value="GROUP1" {% if request.POST.duty_dpt == 'GROUP1' %}selected="selected"{% endif %}>销服一部</option>
+                    <option value="GROUP2" {% if request.POST.duty_dpt == 'GROUP2' %}selected="selected"{% endif %}>销服二部</option>
+                    <option value="GROUP3" {% if request.POST.duty_dpt == 'GROUP3' %}selected="selected"{% endif %}>销服三部</option>
+                    <option value="TGROUP1" {% if request.POST.duty_dpt == 'TGROUP1' %}selected="selected"{% endif %}>技术一部</option>
+                    <option value="TGROUP2" {% if request.POST.duty_dpt == 'TGROUP2' %}selected="selected"{% endif %}>技术二部</option>
+                    <option value="TGROUP3" {% if request.POST.duty_dpt == 'TGROUP3' %}selected="selected"{% endif %}>技术三部</option>
+                    <option value="TGROUP4" {% if request.POST.duty_dpt == 'TGROUP4' %}selected="selected"{% endif %}>技术四部</option>
+                    <option value="TGROUP5" {% if request.POST.duty_dpt == 'TGROUP5' %}selected="selected"{% endif %}>技术五部</option>
+                    <option value="TGROUP6" {% if request.POST.duty_dpt == 'TGROUP6' %}selected="selected"{% endif %}>技术六部</option>
+                    <option value="BRAND" {% if request.POST.duty_dpt == 'BRAND' %}selected="selected"{% endif %}>品牌部</option>
+                    <option value="DESIGN" {% if request.POST.duty_dpt == 'DESIGN' %}selected="selected"{% endif %}>设计部</option>
+                    <option value="VABU" {% if request.POST.duty_dpt == 'VABU' %}selected="selected"{% endif %}>增值事业部</option>
+                    <option value="OTHERS" {% if request.POST.duty_dpt == 'OTHERS' %}selected="selected"{% endif %}>其他</option>
+                    {% comment %}<option value="GROUP1" {% if request.POST.reimburse_dpt == 'GROUP1' %}selected="selected"{% endif %}>销服一部</option>
+                    <option value="GROUP2" {% if request.POST.reimburse_dpt == 'GROUP2' %}selected="selected"{% endif %}>销服二部</option>
+                    <option value="GROUP3" {% if request.POST.reimburse_dpt == 'GROUP3' %}selected="selected"{% endif %}>销服三部</option>
+                    <option value="GROUP4" {% if request.POST.reimburse_dpt == 'GROUP4' %}selected="selected"{% endif %}>销服四部</option>
+                    <option value="GROUP5" {% if request.POST.reimburse_dpt == 'GROUP5' %}selected="selected"{% endif %}>销服五部</option>
+                    <option value="MKT" {% if request.POST.reimburse_dpt == 'MKT' %}selected="selected"{% endif %}>市场部</option>{% endcomment %}
+                </select>
+                <span class="vm ml20">退款方式：</span>
+                <select name="refund_style" class="w120 f12">
+                    <option value="" selected="selected">--退款方式--</option>
+                    <option value="1" {% if request.POST.refund_style == '1' %}selected="selected"{% endif %}>淘宝后台退款</option>
+                    <option value="2" {% if request.POST.refund_style == '2' %}selected="selected"{% endif %}>支付宝退款</option>
+                    <option value="3" {% if request.POST.refund_style == '3' %}selected="selected"{% endif %}>对公银行退款</option>
+                    <option value="4" {% if request.POST.refund_style == '4' %}selected="selected"{% endif %}>对私银行退款</option>
+                    <option value="5" {% if request.POST.refund_style == '5' %}selected="selected"{% endif %}>现金退款</option>
+                </select>
+                <span class="vm ml20">退款信息：</span>
+                <input class="f12" type="text" value="{{ request.POST.refund_info }}" name="refund_info" placeholder="退款信息"/>
+            </div>
+            <div class="mt15">
+                <span class="vm">业务类型：</span>
+                <label class="dib mb0 vm w60"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="kcjl" type="checkbox" class="mr3" {% if "kcjl" in category_list %}checked="checked"{% endif %}>开车精灵</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="rjjh" type="checkbox" class="mr3" {% if "rjjh" in category_list %}checked="checked"{% endif %}>类目专家</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="vip" type="checkbox" class="mr3" {% if "vip" in category_list %}checked="checked"{% endif %}>VIP专家托管</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="qn" type="checkbox" class="mr3" {% if "qn" in category_list %}checked="checked"{% endif %}>千牛</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="ztc" type="checkbox" class="mr3" {% if "ztc" in category_list %}checked="checked"{% endif %}>直通车托管</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="zz" type="checkbox" class="mr3" {% if "zz" in category_list %}checked="checked"{% endif %}>钻展托管</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="zx" type="checkbox" class="mr3" {% if "zx" in category_list %}checked="checked"{% endif %}>店铺装修</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="dyy" type="checkbox" class="mr3" {% if "dyy" in category_list %}checked="checked"{% endif %}>代运营</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="seo" type="checkbox" class="mr3" {% if "seo" in category_list %}checked="checked"{% endif %}>seo</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="kfwb" type="checkbox" class="mr3" {% if "kfwb" in category_list %}checked="checked"{% endif %}>客服外包</label>
+                <label class="dib mb0 vm w90"><input name="category_list" value="other" type="checkbox" class="mr3" {% if "other" in category_list %}checked="checked"{% endif %}>补单</label>
+            </div>
+            <div class="mt10">
+                <span class="vm">退款原因：</span>
+
+<div class="refund_reason">
+    <style>
+        .refund_reason{
+            padding-left: 65px;
+            margin-top: -23px;
+        }
+        .refund_reason label{
+            padding-right: 20px;
+        }
+
+    </style>
+
+
+
+                <label class="dib mb0 vm"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+{% comment "退款原因" %}
+                <label class="dib mb0 vm w90"><input name="refund_reason" value="1" type="checkbox" class="mr3" {% if 1 in refund_reason_list %}checked="checked"{% endif %}>差评投诉</label>
+                <label class="dib mb0 vm w90"><input name="refund_reason" value="2" type="checkbox" class="mr3" {% if 2 in refund_reason_list %}checked="checked"{% endif %}>效果问题</label>
+                <label class="dib mb0 vm w90"><input name="refund_reason" value="3" type="checkbox" class="mr3" {% if 3 in refund_reason_list %}checked="checked"{% endif %}>软件缺陷</label>
+                <label class="dib mb0 vm w90"><input name="refund_reason" value="4" type="checkbox" class="mr3" {% if 4 in refund_reason_list %}checked="checked"{% endif %}>活动无理由</label>
+                <label class="dib mb0 vm w90"><input name="refund_reason" value="5" type="checkbox" class="mr3" {% if 5 in refund_reason_list %}checked="checked"{% endif %}>友情赠送</label>
+                <label class="dib mb0 vm w90"><input name="refund_reason" value="6" type="checkbox" class="mr3" {% if 6 in refund_reason_list %}checked="checked"{% endif %}>积分兑换</label>
+
+{#                <span class="vm ml20">退款类型：</span>#}
+{#                <label class="dib mb0 vm"><input name="refund_type" value="1" type="checkbox" class="mr3" {% if 1 in refund_type_list %}checked="checked"{% endif %}>软件退款</label>#}
+{#                <label class="dib mb0 vm ml5"><input name="refund_type" value="2" type="checkbox" class="mr3" {% if 2 in refund_type_list %}checked="checked"{% endif %}>TP退款</label>#}
+{#                <label class="dib mb0 vm ml5"><input name="refund_type" value="3" type="checkbox" class="mr3" {% if 3 in refund_type_list %}checked="checked"{% endif %}>友情退款</label>#}
+{#                <label class="dib mb0 vm ml5"><input name="refund_type" value="4" type="checkbox" class="mr3" {% if 4 in refund_type_list %}checked="checked"{% endif %}>转店铺</label>#}
+{#                <label class="dib mb0 vm ml5"><input name="refund_type" value="5" type="checkbox" class="mr3" {% if 5 in refund_type_list %}checked="checked"{% endif %}>积分兑换</label>#}
+{#                <label class="dib mb0 vm ml5 mr20"><input name="refund_type" value="0" type="checkbox" class="mr3" {% if 0 in refund_type_list %}checked="checked"{% endif %}>其他</label>#}
+{% endcomment %}
+
+{#    <label class="hide"><input type="checkbox" name="refund_reason" value="5"> 友情赠送 <span class="silver"> (5)（补时间、转店铺、SD赠送、水军退款）</span></label>#}
+    {% for refund_reason in refund_reason_checkbox %}
+        {% if refund_reason.0 == 5 %}
+        <label class="hide"><input type="checkbox" name="refund_reason" value="5"> 友情赠送 <span class="silver"> (5)（补时间、转店铺、SD赠送、水军退款）</span></label>
+        {% else %}
+        <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="{{ refund_reason.0 }}" {% if refund_reason.0 in refund_reason_list %}checked="checked"{% endif %}> ({{ refund_reason.0 }}) {{ refund_reason.1 }}</label>
+        {% endif %}
+    {% endfor %}
+
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="3" {% if 3 in refund_reason_list %}checked="checked"{% endif %}> (3) 软件缺陷</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="6" {% if 6 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (6) 积分兑换</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="201" {% if 201 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (201) 效果不好-操作数据差</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="202" {% if 202 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (202) 效果不好-前期夸大效果</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="902" {% if 902 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (902) 客户自身原因</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="401" {% if 401 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (401) 沟通问题-签单人</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="402" {% if 402 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (402) 沟通问题-服务人</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="301" {% if 301 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (301) 销售承诺-具体的数据承诺未达到</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="302" {% if 302 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (302) 销售承诺-全额退款</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="101" {% if 101 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (101) 差评</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="102" {% if 102 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (102) 投诉淘宝/工商</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="904" {% if 904 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (904) 无理由</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="903" {% if 903 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (903) 无合同</label>#}
+{#    <label class="dib mb0 vm"><input type="checkbox" name="refund_reason" value="901" {% if 901 in refund_reason_list %}checked="checked"{% endif %} class="mr3"> (901) 操作失误</label>#}
+
+</div>
+
+            </div>
+        </form>
+    </div>
+    <div class="f16 b lh30 mb5">
+        总计：<span id="unsubscribe_sum" class="red mr3">{{ unsubscribe_sum|divide:'100' }}</span>元，<span id="unsubscribe_count" class="red mr3">{{ result|length }}</span>笔
+        <button class="btn r btn-primary w100" id="submit_form">搜&nbsp;&nbsp;索</button>
+        <button class="btn r mr20"  onclick="javascript:$('#is_export').val(1);$('#form_unsubscribe_manage').submit();">导&nbsp;出</button>
+    </div>
+    <table class="bdd" id="id_unsubscribe_table">
+        <thead>
+            <tr>
+                <th class="tl"><div>店铺名称</div></th>
+                <th class="tl w80"><div>业务类型</div></th>
+                <th class="tl w80"><div>订购时间</div></th>
+                <th class="tl w80"><div>退款录入时间</div></th>
+                <th class="tl w70"><div>退款原因</div></th>
+{#                <th class="tl w60"><div>退款类型</div></th>#}
+                <th class="tl w60"><div>录入人</div></th>
+                <th class="tl w60"><div>经办人</div></th>
+                <th class="tl w70"><div>退款状态</div></th>
+                <th class="tl w70"><div>订单金额</div></th>
+                <th class="tl w70"><div>退款金额</div></th>
+                <th class="tl w150">分摊详情</th>
+{#                <th class="tl w100"><div>服务人＆分摊</div></th>#}
+{#                <th class="tl w80"><div>其他分摊</div></th>#}
+                <th class="tl w80"><div>退款方式</div></th>
+                <th class="tl w150"><div>退款信息</div></th>
+                <th class="tl w60">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for unsub in result %}
+{#            <tr unsub_id="{{ unsub.id }}" sub_id="{{ unsub.event_id }}" sub_pay="{{ unsub.sub_pay }}" sub_category="{{ unsub.sub_category }}" refund="{{ unsub.refund }}" create_time="{{ unsub.create_time }}" refund_date="{{ unsub.refund_date }}" refund_type="{{ unsub.refund_type }}" refund_style="{{ unsub.refund_style }}" refund_info="{{ unsub.refund_info }}" server_apportion="{{ unsub.server_apportion }}" saler_apportion="{{ unsub.saler_apportion }}" other_apportion="{{ unsub.other_apportion }}" note="{{ unsub.note }}" receiver_cn="{{ unsub.receiver_cn }}" cashier_id="{{ unsub.cashier_id }}">#}
+            <tr unsub_id="{{ unsub.id }}" sub_id="{{ unsub.event_id }}" sub_pay="{{ unsub.sub_pay }}" sub_category="{{ unsub.sub_category }}" refund="{{ unsub.refund }}" create_time="{{ unsub.create_time }}" refund_date="{{ unsub.refund_date }}" refund_reason="{{ unsub.refund_reason }}" refund_style="{{ unsub.refund_style }}" refund_info="{{ unsub.refund_info }}" receiver_cn="{{ unsub.receiver_cn }}" server_apportion="{{ unsub.server_apportion }}" saler_apportion="{{ unsub.saler_apportion }}" saler_dpt_apportion="{{ unsub.saler_dpt_apportion }}" server_dpt_apportion="{{ unsub.server_dpt_apportion }}" other_apportion="{{ unsub.other_apportion }}" pm_apportion="{{ unsub.pm_apportion }}" note="{{ unsub.note }}" cashier_id="{{ unsub.cashier_id }}">
+                <td>{{ unsub.nick }}</td>
+                <td>{{ unsub.sub_category }}<br>{{ unsub.sub_item_code }}</td>
+                <td>{{ unsub.sub_create }}</td>
+                <td>{{ unsub.create_time }}</td>
+                <td>{{ unsub.refund_reason_cn }}</td>
+{#                <td>{{ unsub.refund_type_cn }}</td>#}
+                <td>{{ unsub.creater_cn }}</td>
+                <td>{{ unsub.cashier_cn }}</td>
+                <td class="unsubscribe_status_{{ unsub.status }}">
+                {% if unsub.cashier_id == myself.id %}
+                    <div class="dropdown rel">
+                        <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" href="javascript:;">
+                            <span class="unsubscribe_status_cn">{{ unsub.status_cn }}</span><i class="iconfont">&#xe626;</i>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a href="javascript:;" onclick="PT.UnsubscribeManage.modify_unsubscribe_status_wrapper('{{ unsub.id }}', 2);" class="modify_unsubscribe_status" status="2">退款成功</a></li>
+                            <li><a href="javascript:;" onclick="PT.UnsubscribeManage.modify_unsubscribe_status_wrapper('{{ unsub.id }}', 1);" class="modify_unsubscribe_status" status="1">退款失败</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <span class="unsubscribe_status_cn">{{ unsub.status_cn }}</span>
+                {% endif %}
+                {% if unsub.img_list %}
+                    <a href="javascript:;" class="show_img_modal db silver">查看截图</a>
+                {% endif %}
+                </td>
+                <td>{{ unsub.sub_pay|divide:'100' }}</td>
+                <td>{{ unsub.refund|divide:'100' }}</td>
+                <td>
+                    <div>[签单] {{ unsub.saler_cn }} <span class="saler_apportion">{{ unsub.saler_apportion|divide:'100' }}</span></div>
+                    <div>[服务] {{ unsub.server_cn }} <span class="server_apportion">{{ unsub.server_apportion|divide:'100' }}</span></div>
+                    <div {% if not unsub.saler_dpt_apportion %}class="hide"{% endif %}>[签单部门] <span class="saler_dpt_apportion">{{ unsub.saler_dpt_apportion|divide:'100' }}</span></div>
+                    <div {% if not unsub.server_dpt_apportion %}class="hide"{% endif %}>[服务部门] <span class="server_dpt_apportion">{{ unsub.server_dpt_apportion|divide:'100' }}</span></div>
+                    <div {% if not unsub.other_apportion %}class="hide"{% endif %}>[公司] <span class="other_apportion">{{ unsub.other_apportion|divide:'100' }}</span></div>
+                    <div {% if not unsub.pm_apportion %}class="hide"{% endif %}>[派美] <span class="pm_apportion">{{ unsub.pm_apportion|divide:'100' }}</span></div>
+                </td>
+{#                <td class="tr">{{ unsub.server_cn }} <span class="dib w40 tl">{{ unsub.server_apportion|divide:'100' }}</span></td>#}
+{#                <td>{{ unsub.other_apportion|divide:'100' }}</td>#}
+                <td>{{ unsub.refund_style_cn }}</td>
+                <td>{{ unsub.refund_info }}__{{ unsub.receiver_cn }}</td>
+                <td>
+                {% if can_modify %}
+                    <a class="modify_unsubscribe" href="javascript:;">修改</a>
+                    <a class="del_unsubscribe" href="javascript:;">删除</a>
+                {% elif unsub.status == 1 and unsub.psuser_id == myself.id and unsub.refund_reason != 5 %}
+                    <a class="modify_unsubscribe" href="javascript:;">修改</a>
+                    <a class="del_unsubscribe" href="javascript:;">删除</a>
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="id_edit_unsubscribe_layout" class="modal hide fade p10" data-width="600" unsub_id="" sub_id="" cashier_id="" sub_pay="" nick="">
+    <table class="table-layout">
+        <tr>
+            <td class="w60">退订订单</td>
+            <td>
+                <span id="sub_descr" class="f12"></span>
+            </td>
+        </tr>
+        {% if can_modify %}
+        <tr>
+            <td class="w60">录入时间</td>
+            <td><input type="text" id="id_edit_create_time" name="create_time" value=""></td>
+        </tr>
+        <tr>
+            <td class="w60">经办时间</td>
+            <td><input type="text" id="id_edit_refund_date" name="refund_date" value=""></td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td class="w60">退款金额</td>
+            <td>
+                <input type="text" class="w60 f12" name="refund"> 元
+            </td>
+        </tr>
+{#        <tr>#}
+{#            <td class="w60 vt">退款类型</td>#}
+{#            <td>#}
+{#                <label><input type="radio" name="refund_type" value="1"> 软件退款 <span class="silver">（所有软件的不友好退款，差评/差评威胁/官方投诉/效果问题/态度问题/订错软件）</span></label>#}
+{#                <label><input type="radio" name="refund_type" value="2"> TP退款 <span class="silver">（所有TP的不友好退款，官方投诉/效果问题/态度问题等）</span></label>#}
+{#                <div class="{% if not can_modify %}hide{% endif %}">#}
+{#                    <label><input type="radio" name="refund_type" value="3"> 友情退款 <span class="silver">（水军、友好客户等的友好退款）</span></label>#}
+{#                    <label><input type="radio" name="refund_type" value="4"> 转店铺 <span class="silver">（软件或TP客户转店铺继续服务的退款）</span></label>#}
+{#                    <label><input type="radio" name="refund_type" value="5"> 积分兑换 </label>#}
+{#                    <label><input type="radio" name="refund_type" value="0"> 其他 <span class="silver">（装修设计/代运营/钻展等退款）</span></label>#}
+{#                </div>#}
+{#            </td>#}
+{#        </tr>#}
+        <tr>
+            <td class="w60 vt">退款原因</td>
+            <td>
+                {% comment "退款原因" %}
+                <label><input type="radio" name="refund_reason" value="1"> 差评投诉</label>
+                <label><input type="radio" name="refund_reason" value="2"> 效果问题</label>
+                <label><input type="radio" name="refund_reason" value="3"> 软件缺陷</label>
+                <label><input type="radio" name="refund_reason" value="4"> 活动无理由</label>
+                <label><input type="radio" name="refund_reason" value="5"> 友情赠送 <span class="silver">（补时间、转店铺、SD赠送、水军退款）</span></label>
+                <label><input type="radio" name="refund_reason" value="6"> 积分兑换 </label>
+                {% endcomment %}
+
+{#                <label class="hide w250 l" ><input type="checkbox" name="refund_reason" value="5"> 友情赠送 <span class="silver">（补时间、转店铺、SD赠送、水军退款）</span></label>#}
+
+                {% for refund_reason in refund_reason_checkbox %}
+                    {% if refund_reason.0 == 5 %}
+                        <label class="hide w250 l"><input type="checkbox" name="refund_reason" value="5"> 友情赠送 <span
+                                class="silver">（补时间、转店铺、SD赠送、水军退款）</span></label>
+                    {% else %}
+                        <label class="w250 l"><input type="checkbox" name="refund_reason" value="{{ refund_reason.0 }}">
+                            {{ refund_reason.1 }}</label>
+                    {% endif %}
+                {% endfor %}
+
+                {% comment %}
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="3"> 软件缺陷</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="6"> 积分兑换</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="201"> 效果不好-操作数据差</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="202"> 效果不好-前期夸大效果</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="902"> 客户自身原因</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="401"> 沟通问题-签单人</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="402"> 沟通问题-服务人</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="301"> 销售承诺-具体的数据承诺未达到</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="302"> 销售承诺-全额退款</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="101"> 差评</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="102"> 投诉淘宝/工商</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="904"> 无理由</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="903"> 无合同</label>
+                <label class="w250 l"><input type="checkbox" name="refund_reason" value="901"> 操作失误</label>
+                {% endcomment %}
+
+
+
+
+            </td>
+        </tr>
+        <tr>
+            <td class="w60 vt">退款方式</td>
+            <td>
+                <label class="dib mr5"><input type="radio" name="refund_style" value="1"> 淘宝后台退款</label>
+                <label class="dib mr5"><input type="radio" name="refund_style" value="2"> 支付宝退款</label>
+                <label class="dib mr5"><input type="radio" name="refund_style" value="3"> 对公银行退款</label>
+                <label class="dib mr5"><input type="radio" name="refund_style" value="4"> 对私银行退款</label>
+                <label class="dib mr5"><input type="radio" name="refund_style" value="5"> 现金退款</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">退款信息</td>
+            <td>
+                <input type="text" class="f12" name="refund_info" placeholder="支付宝账号/银行账号">
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">户主姓名</td>
+            <td>
+                <input type="text" class="f12 w100" name="receiver_cn">
+            </td>
+        </tr>
+        <tr class="{% if not 'B' in myself.perms %}hide{% endif %}">
+            <td class="w60 vm">退款分摊</td>
+            <td>
+                <span class="vm">签单人</span>
+                <input type="text" class="w60 f12" name="saler_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">签单部门</span>
+                <input type="text" class="w60 f12" name="saler_dpt_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">公　司</span>
+                <input type="text" class="w60 f12" name="other_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <div class="mt10"></div>
+                <span class="vm">服务人</span>
+                <input type="text" class="w60 f12" name="server_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">服务部门</span>
+                <input type="text" class="w60 f12" name="server_dpt_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">派　美</span>
+                <input type="text" class="w60 f12" name="pm_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">经办人</td>
+            <td>
+                <select id="unsubscribe_cashier_id" class="w100 f12">
+                    <option value="" dept="">--请选择--</option>
+                    <option value="86" dept="HR">何涛</option>
+                    <option value="519" dept="HR">梅玲</option>
+{#                    <option value="752" dept="HR">刘香花</option>#}
+                    <option value="193" dept="DESIGN">谢敏</option>
+                    <option value="222" dept="QC">吴文婷</option>
+                    <option value="116" dept="QC">张伟</option>
+                    <option value="82" dept="GROUP1">吴洋</option>
+                    <option value="64" dept="GROUP2">邱梦雪</option>
+                    <option value="185" dept="GROUP2">万明</option>
+                    <option value="24" dept="GROUP3">祝鹏</option>
+{#                    <option value="557" dept="GROUP1">欧阳华宇</option>#}
+{#                    <option value="167" dept="GROUP1">汪锋</option>#}
+{#                    <option value="205" dept="GROUP2">王锐</option>#}
+{#                    <option value="892" dept="GROUP3">殷葵</option>#}
+{#                    <option value="77" dept="GROUP3">杨勇</option>#}
+{#                    <option value="165" dept="GROUP4">熊钰馨</option>#}
+{#                    <option value="172" dept="GROUP4">瞿小凡</option>#}
+{#                    <option value="327" dept="GROUP5">薛尧</option>#}
+                    <option value="204" dept="MKT">龚喻</option>
+                    <option value="134" dept="MKT">徐思维</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">备注</td>
+            <td>
+                <input name="note" type="hidden">
+                <div class="editor mb5" style="height:200px;" id="id_unsubscribe_note"></div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_unsubscribe">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="modal_modify_unsubscribe_status" class="modal hide fade" data-width="500" unsub_id="" status="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>截图保存凭证</h4>
+    </div>
+    <div class="modal-body">
+        <div id="image_clip_board" class="bdd bg_white" style="min-height: 200px;"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" data-dismiss="modal" class="btn">取消</a>
+        <a href="javascript:;" class="modify_unsubscribe_status btn btn-primary">确定</a>
+    </div>
+</div>
+<div id="modal_unsubscribe_img_list" class="modal hide fade" data-width="800">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>截图预览</h4>
+    </div>
+    <div class="modal-body"></div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/unsubscribe_manage.js'|file_time_stamp}}" type="text/javascript"></script>
+<script src="{{'/site_media/jl5/ncrm_js/image_clipboard.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.UnsubscribeManage.init();
+    PT.ImageClipboard.init('image_clip_board');
+});
+</script>
+{% endblock %}
+

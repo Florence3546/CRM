@@ -1,0 +1,722 @@
+{#utf-8#}
+{% extends "base_adg.html" %}
+{% load rates %}
+{% block title %}创意优化{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/site_media/jl6_temp/static/css/font.css" />
+
+<section class="container-fluid w1280 p0">
+{% include 'common_adg_top_bar.html' %}
+
+    <input type="hidden" id="creative_count" value="{{ creatives|length }}">
+    <input type="hidden" id="waiting_creatives_count" value="{{ waiting_creatives|length }}">
+    <input type="hidden" id="show_type" value="{{ request.GET.type }}">
+    <div id="sign-alert" class="alert alert-warning">
+       <a href="#" class="close" data-dismiss="alert">&times;</a>
+       <strong>提示:</strong>
+       <span>
+           系统以24小时为单位轮换测试，并在所有创意测试完后，自动选择点击率最好的4个投放。
+       </span>
+    </div>
+    <div class="select-days">
+        <div class="dtr_picker_warp vt">
+            <span class="tip" data-toggle="dtr_picker" rt_rpt="1" months="1" data-init-text="{{date_text}}" id="select_days"></span>
+        </div>
+        <div id="paimei">
+            <marquee behavior="slide" direction="left" onmouseover="this.stop()" onmouseout="this.start()">精灵拥有72名专业装修设计团队，提供免费店铺装修诊断</marquee>
+            请联系旺旺：
+           <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生视觉">
+               派生视觉 <img class="marl_6" src="/site_media/jl/img/online.ww.gif">
+           </a>
+        </div>
+        <div class="r">
+            {% if creatives|length < 4 or waiting_creatives|length < 4 %}
+            <div class="btn-group {% if request.GET.t == 'list' %}hide{%endif%}" id="add_image">
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    添加创意 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  {% if creatives|length < 4 %}
+                  <li><a href="javascript:;" id="add_new_img">添加到投放中</a></li>
+                  {%endif%}
+                  {% if waiting_creatives|length < 4 %}
+                  <li><a href="javascript:;" id="add_test_img">添加到排队中</a></li>
+                  {%endif%}
+                </ul>
+            </div>
+            {%endif%}
+            <div class="btn-group show_model">
+                <a class="btn btn-sm lst {% if request.GET.t == 'list' %}active{%endif%}"><i class="iconfont b" data-type="list">&#xe645;</i></a>
+                <a class="btn btn-sm tab {% if request.GET.t == 'table' %}active{%endif%}"><i class="iconfont b" data-type="table">&#xe646;</i></a>
+            </div>
+        </div>
+    </div>
+    <div class="image_optimize list {% if request.GET.t == 'table' %}hidden{%endif%}">
+        <!-- 投放和排队中的创意 -->
+        <div class="row-fluid">
+            <div id="list_add_box">
+                <hr>
+                <fieldset class="mt10">
+                    <span class="ml5"><strong>投放中的创意</strong></span>
+                    <ul class="mt10">
+                        {%for i in 4|txrange:0 %}
+                            {%if creatives|get_list:i %}
+                            <li>
+                                <div class="item" id="item_{{creatives|get_list:i|get_dict:'id'}}">
+                                    <div class="img">
+                                        <img src="{{creatives|get_list:i|get_dict:'img_url'|pic_fixer:240}}" data-url="{{creatives|get_list:i|get_dict:'img_url'|cut:'_sum.jpg'}}" data-id="{{creatives|get_list:i|get_dict:'id'}}">
+                                    </div>
+                                    <div class="title">{{creatives|get_list:i|get_dict:'title'}}</div>
+                                    <div class="info">
+                                        <strong class="item_base">点击率{{creatives|get_list:i|get_dict:'qr'|get_dict:'ctr'|floatformat:'2'|default:'0.00'}}%</strong>
+                                        <a class="marl_6 va2 {{creatives|get_list:i|get_dict:'show_ww_class'}}" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生视觉" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-original-title="该创意点击率较低，请咨询设计师优化">
+                                            <img src="/site_media/jl6_temp/static/images/cy_ww.gif">
+                                        </a>
+                                        <div class="operate hover_show">
+                                            <a href="javascript:;"><i class="iconfont ml5 modify_title">&#xe609;</i></a>
+                                            <a href="javascript:;"><i class="iconfont ml5 show_chart" data-id="{{creatives|get_list:i|get_dict:'id'}}">&#xe61f;</i></a>
+                                            {% if creatives|length > 1 %}
+                                            <a href="javascript:;"><i class="iconfont ml5 delete_creative" data-id="{{creatives|get_list:i|get_dict:'id'}}">&#xe61e;</i></a>
+                                            {%endif%}
+                                        </div>
+                                    </div>
+                                    <div class="editor_title">
+                                        <textarea rows="2" class="input_title"></textarea>
+                                        <div class="tr p5 f12">
+                                            <span class="silver l ml10">已输入<span class="j_text_len"></span>/40</span>
+                                            <a href="javascript:;" class="save_title" data-id="{{creatives|get_list:i|get_dict:'id'}}">保存</a>
+                                            <a href="javascript:;" class="cancel_modify_title mr10">取消</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {%else%}
+                            <li>
+                                <div class="item empty tc add_creative">
+                                    <span class="empty-add">
+                                        <i class="iconfont">&#xe62f;</i><br/>
+                                        <span>添加创意</span>
+                                    </span>
+                                </div>
+                            </li>
+                            {%endif%}
+                        {%endfor%}
+                    </ul>
+                </fieldset>
+            </div>
+            <div class="mt20" id="list_add_test_box">
+                <fieldset>
+                    <span class="ml5"><strong>排队中的创意</strong></span>
+                    <ul class="mt10">
+                        {%for i in 4|txrange:0 %}
+                            {%if waiting_creatives|get_list:i %}
+                                <li>
+                                    <div class="item item_test_{{waiting_creatives|get_list:i|get_dict:'id'}}">
+                                        <div class="img">
+                                            <img src="{{waiting_creatives|get_list:i|get_dict:'img_url'|pic_fixer:240}}" data-id="{{waiting_creatives|get_list:i|get_dict:'id'}}">
+                                        </div>
+                                        <div class="title">{{waiting_creatives|get_list:i|get_dict:'title'}}</div>
+                                        <div class="info">
+                                            <span class="gray f12">创建时间：{{waiting_creatives|get_list:i|get_dict:'create_time'|date:"Y-m-d H:i"}}</span>
+                                            <div class="operate hover_show">
+                                                <a href="javascript:;"><i class="iconfont baseColor ml5 poi modify_title">&#xe609;</i></a>
+                                                <a href="javascript:;"><i class="iconfont baseColor ml5 poi delete_creative" data-id="{{waiting_creatives|get_list:i|get_dict:'id'}}">&#xe61e;</i></a>
+                                            </div>
+                                        </div>
+                                        <div class="editor_title">
+                                            <textarea rows="2" class="input_title"></textarea>
+                                            <div class="tr p5 f12">
+                                                <span class="silver l ml10">已输入<span class="j_text_len"></span>/40</span>
+                                                <a href="javascript:;" class="save_title" data-id="{{waiting_creatives|get_list:i|get_dict:'id'}}">保存</a>
+                                                <a href="javascript:;" class="cancel_modify_title mr10">取消</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {%else%}
+                               <li>
+                                    <div class="item empty tc add_creative">
+                                        <span class="empty-add">
+                                            <i class="iconfont">&#xe62f;</i><br/>
+                                            <span>添加测试创意</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            {%endif%}
+                        {%endfor%}
+                    </ul>
+                </fieldset>
+            </div>
+        </div>
+        <!-- 已完成的创意 -->
+        <div class="row-fluid mt20" id="complete_creatives_box">
+            <fieldset>
+                <span class="ml5"><strong>已完成的创意</strong></span>
+                <ul class="mt10">
+                    {%for creative in complete_creatives%}
+                    <li>
+                        <div class="item2">
+                            <div class="img2">
+                                <img src="{{creative.img_url|pic_fixer:240}}">
+                            </div>
+                            <div class="title">{{creative.title}}</div>
+                            <div class="info">
+                                <span class="gray f12">测试时间：{{creative.start_time|date:'Y-m-d'}}&nbsp;至&nbsp;{{creative.create_time|date:'Y-m-d'}}</span><br />
+                                <strong class="item_base">点击率{{creative|get_dict:'qr'|get_dict:'ctr'|floatformat:'2'|default:'0.00'}}%</strong>
+                                <div class="operate hover_show">
+                                    <a href="javascript:;" class="reset_creative">设为创意</a>
+                                    <a href="javascript:;" class="reset_waiting_creative">重新测试</a>
+                                    <a href="javascript:;"><i class="iconfont ml5 delete_creative" data-id="{{creative.id}}">&#xe61e;</i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% if forloop.counter|divisibleby:"4" %}
+                    </ul>
+                    <ul class="ovh mt20">
+                    {%endif%}
+                    {%empty%}
+                    <div class="tl item_base ml5 pl12">
+                        {%if waiting_creatives%}
+                        您的创意还没有测试完成
+                        {%else%}
+                        您暂时没有测试创意，您可在上方“排队中的创意”区域中添加测试创意
+                        {%endif%}
+                    </div>
+                    {%endfor%}
+                </ul>
+            </fieldset>
+        </div>
+    </div>
+    <div class="image_optimize table {% if request.GET.t == 'list' %}hidden{%endif%}">
+         <div class="mt10">
+            <header>
+                <div class="box-title">
+                    <strong class="title">投放中的创意</strong>
+                </div>
+            </header>
+            <table class="table table-bordered icon_hover_show table-hover" id="table_box">
+                <thead>
+                <tr>
+                    <th class="w80"><div>创意图片</div></th>
+                    <th class="w340"><div>创意标题</div></th>
+                    <th><div>总花费</div></th>
+                    <th><div>展现量</div></th>
+                    <th><div>点击量</div></th>
+                    <th><div>点击率</div></th>
+                    <th><div>PPC</div></th>
+                    <th><div>成交额</div></th>
+                    <th><div>成交量</div></th>
+                    <th><div>收藏量</div></th>
+                    <th><div>转化率</div></th>
+                    <th><div>ROI</div></th>
+                    <th class="w160 tc">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {%for creative in creatives%}
+                    <tr>
+                        <td class="tc td-img img">
+                            <img src="{{creative.img_url|pic_fixer:80}}" data-url="{{creative.img_url|cut:'_sum.jpg'}}" data-id="{{creative.id}}">
+                        </td>
+                        <td class="item">
+                            <div class="hide img"><img data-url="{{creative.img_url|cut:'_sum.jpg'}}"/></div>
+                            <span class="w290 title l adg_title">{{creative.title}}</span>
+                            <span class="state_opt ml10 hover_show r">
+                                <i class="iconfont modify_title">&#xe609;</i>&nbsp;
+                                <i class="iconfont show_chart" data-id="{{creative.id}}">&#xe61f;</i>&nbsp;
+                            </span>
+                            <div class="editor_title">
+                                  <input name="input_title" type="text" class="input_title w280">
+                                  <div>
+                                      <span class="gray">已输入<span class="j_text_len"></span>/40</span>
+                                      <div class="r">
+                                          <a href="javascript:;" class="save_title" data-id="{{ creative.id }}">保存</a>
+                                          <a href="javascript:;" class="cancel_modify_title">取消</a>
+                                      </div>
+                                  </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr|div:'cost,100,2'|floatformat:'2'}}</span>
+                            <span class="cost">￥{{creative.qr|div:'cost,100,2'|floatformat:'2'}}</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.impressions}}</span>
+                            <span class="impr">{{creative.qr.impressions}}</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.click}}</span>
+                            <span class="click">{{creative.qr.click}}</span>
+                        </td>
+                        <td class="w80">
+                            <span class="hide">{{creative.qr.ctr|floatformat:'2'}}</span>
+                            <span class="click_rate b">{{creative.qr.ctr|floatformat:'2'}}%</span><br>
+                            <a class="marl_6 va2 {{creative.show_ww_class}}" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生视觉" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-original-title="该创意点击率较低，请咨询设计师优化">
+                                <img src="/site_media/jl6_temp/static/images/cy_ww.gif">
+                            </a>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.cpc|divide:'100'}}</span>
+                            <span class="ppc">{{creative.qr.cpc|divide:'100'}}</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.pay|divide:'100'}}</span>
+                            <span class="pay">￥{{creative.qr.pay|divide:'100'}}</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.paycount}}</span>
+                            <span class="paycount">{{creative.qr.paycount}}</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.favcount}}</span>
+                            <span class="favcount">{{creative.qr.favcount}}</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.conv|floatformat:'2'}}</span>
+                            <span class="conv">{{creative.qr.conv|floatformat:'2'}}%</span>
+                        </td>
+                        <td>
+                            <span class="hide">{{creative.qr.roi|floatformat:'2'}}</span>
+                            <span class="roi">{{creative.qr.roi|floatformat:'2'}}</span>
+                        </td>
+                        <td class="tc">
+                            <a href="javascript:;" class="edit_image"><strong>编辑创意</strong></a>&nbsp;&nbsp;
+                            {% if creatives|length > 1 %}
+                                <a href="javascript:;" class="delete_image" data-id="{{ creative.id }}"><strong>删除</strong></a>
+                            {%endif%}
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt20">
+            <header>
+                <div class="box-title">
+                    <strong class="title">排队中的创意</strong>
+                </div>
+            </header>
+            <div class="pl12 {%if waiting_creatives|length > 0 %}hide{%endif%}">暂时没有排队中的创意，您可点击上方的“添加创意”按钮增加测试创意</div>
+            <table class="table table-bordered icon_hover_show table-hover {%if waiting_creatives|length == 0 %}hide{%endif%}" id="table_test_box">
+                <thead>
+                    <tr>
+                        <th class="w80 tc">待测试图片</th>
+                        <th class="w340 tl">待测试标题</th>
+                        <th class="tl">创建时间</th>
+                        <th class="w160 tc">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for waiting_creative in waiting_creatives%}
+                    <tr>
+                        <td class="tc td-img img">
+                            <img src="{{waiting_creative.img_url|pic_fixer:80}}" data-url="{{waiting_creative.img_url|cut:'_sum.jpg'}}" data-id="{{ waiting_creative.id }}">
+                        </td>
+                        <td class="item item_test_{{ waiting_creative.id }}">
+                            <span class="w290 title l">{{waiting_creative.title}}</span>
+                            <span class="state_opt ml10 hover_show r">
+                                <i class="iconfont modify_title">&#xe609;</i>&nbsp;
+                                <!--<i class="iconfont show_chart" data-id="{{waiting_creative.id}}">&#xe61f;</i>&nbsp;-->
+                            </span>
+                            <div class="editor_title">
+                                  <input name="input_title" type="text" class="input_title w280">
+                                  <div>
+                                      <span class="gray">已输入<span class="j_text_len"></span>/40</span>
+                                      <div class="r">
+                                          <a href="javascript:;" class="save_title" data-id="{{ waiting_creative.id }}">保存</a>
+                                          <a href="javascript:;" class="cancel_modify_title">取消</a>
+                                      </div>
+                                  </div>
+                            </div>
+                        </td>
+                        <td>
+                            {{waiting_creative.create_time}}
+                        </td>
+                        <td class="tc">
+                            <a href="javascript:;" class="edit_image"><strong>编辑创意</strong></a>&nbsp;&nbsp;
+                            <a href="javascript:;" class="delete_image" data-id="{{ waiting_creative.id }}"><strong>删除</strong></a>
+                        </td>
+                    </tr>
+                    {%empty%}
+                    <tr>
+                        <td colspan="4" class="tc">没有数据</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt20">
+            <header>
+                <div class="box-title">
+                    <strong class="title">已完成的创意</strong>
+                </div>
+            </header>
+            <div class="pl12 {%if complete_creatives|length > 0 %}hide{%endif%}">暂时没有已完成的测试创意，您可点击上方的“添加创意”按钮增加测试创意</div>
+            <table class="table table-bordered icon_hover_show table-hover {%if complete_creatives|length == 0 %}hide{%endif%}" id="table_complete_box">
+                <thead>
+                    <tr>
+                        <th class="w80"><div>创意图片</div></th>
+                        <th class="w340"><div>创意标题</div></th>
+                        <th><div>总花费</div></th>
+                        <th><div>展现量</div></th>
+                        <th><div>点击量</div></th>
+                        <th><div>点击率</div></th>
+                        <th><div>PPC</div></th>
+                        <th><div>成交额</div></th>
+                        <th><div>成交量</div></th>
+                        <th><div>收藏量</div></th>
+                        <th><div>转化率</div></th>
+                        <th><div>ROI</div></th>
+                            <th class="w160 tc">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {%for creative in complete_creatives%}
+                    <tr>
+                        <td class="tc td-img">
+                            <img src="{{creative.img_url|pic_fixer:80}}" data-url="{{creative.img_url|cut:'_sum.jpg'}}" data-id="{{creative.id}}">
+                        </td>
+                        <td>
+                            <span class="w240 title l adg_title">{{creative.title}}</span>
+                        </td>
+                        <td>
+                            <span class="cost">￥{{creative.qr|div:'cost,100,2'|floatformat:'2'}}</span>
+                        </td>
+                        <td>
+                            <span class="impr">{{creative.qr.impressions}}</span>
+                        </td>
+                        <td>
+                            <span class="click">{{creative.qr.click}}</span>
+                        </td>
+                        <td class="w80">
+                            <span class="click_rate b">
+                                {{creative.qr.ctr|floatformat:'2'}}%<br>
+                                <a class="marl_6 va2 {{creative.show_ww_class}}" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生视觉" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-original-title="该创意点击率较低，请咨询设计师优化">
+                                    <img src="/site_media/jl6_temp/static/images/cy_ww.gif">
+                                </a>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="ppc">{{creative.qr.cpc|divide:'100'}}</span>
+                        </td>
+                        <td>
+                            <span class="pay">￥{{creative.qr.pay|divide:'100'}}</span>
+                        </td>
+                        <td>
+                            <span class="paycount">{{creative.qr.paycount}}</span>
+                        </td>
+                        <td>
+                            <span class="favcount">{{creative.qr.favcount}}</span>
+                        </td>
+                        <td>
+                            <span class="conv">{{creative.qr.conv|floatformat:'2'}}%</span>
+                        </td>
+                        <td>
+                            <span class="roi">{{creative.qr.roi|floatformat:'2'}}</span>
+                        </td>
+                        <td class="tc">
+                            <a href="javascript:;" class="reset_creative"><strong>设为创意</strong></a>&nbsp;&nbsp;
+                            <a href="javascript:;" class="reset_waiting_creative"><strong>重新测试</strong></a>&nbsp;&nbsp;
+                            <a href="javascript:;" class="delete_image" data-id="{{ creative.id }}"><strong>删除</strong></a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block modal %}
+<div class="modal fade image_optimize_modal" id="image_optimize_modal" data-hidetype="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">x</button>
+                <h4 class="dib"></h4>
+                <span class="f12 ml10 alert alert-warning">
+                   <strong>提示:</strong>
+                   <span>
+                       精灵拥有72名专业装修设计团队，提供免费店铺装修诊断：
+                       <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生视觉">
+                       派生视觉 <img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                   </span>
+                   <!--<i class="iconfont mr5">&#xe612;</i>免责声明：请您确认所有推广内容符合淘宝
+                    <a href="http://rule.alimama.com/?spm=a2320.7388781.a214tr8.22.3VTjnv#!/announce/business/detail?id=8306451&amp;knowledgeid=5857304" target="_blank">《直通车软件服务使用规范》</a>，若因违规造成的一切后果，与本软件无关。-->
+<!--                   建议：图片中产品面积占30%或以上，尽量减少文字/水印，不设边框；标题突出属性/功能/品质/信誉等优势，也可加些热门词。
+                   免责声明：请您确认所有推广内容符合淘宝《淘宝\天猫直通车软件服务使用规范》，若因违规造成的一切后果，与本软件无关。-->
+
+                </span>
+            </div>
+            <div class="modal-body">
+                <div class="preview_box">
+                    <h5 class="gray">效果预览</h5>
+                    <div class="item">
+                        <div id="stage"></div>
+                        <div class="info">
+                            <span class="title"></span>
+                            <a href="javascript:;"><i class="iconfont ml5 modify_title">&#xe609;</i></a>
+                            <div class="operate">
+                            </div>
+                        </div>
+                        <div class="editor_title">
+                            <textarea rows="2" class="input_title"></textarea>
+                            <div class="tr p5 f12">
+                                <span class="silver l ml10">已输入<span class="j_text_len"></span>/40</span>
+                                <a href="javascript:;" class="sync_title">保存</a>
+                                <a href="javascript:;" class="cancel_modify_title">取消</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="operation_box">
+                    <div>
+                        <div class="choose_pic_box">
+                            <div class="item_main_pic">
+                                <h5 class="gray">从主图选择创意</h5>
+                                <div class="warp">
+                                    <ul>
+                                        {%for img in img_list%}
+                                        <li>
+                                            <i class="iconfont delete">&#xe627;</i>
+                                            <img src="{{img.url|pic_fixer:100}}" data-url="{{img.url}}" data-img-id="{{img.id}}">
+                                        </li>
+                                        {%endfor%}
+                                        <li class="add {%if img_list|length >= 5 %}hide{%endif%}">
+                                            <form method="post" action="{%url 'upload_item_img'%}" target="upload_item_img" id="upload_item_img_form" enctype="multipart/form-data">
+                                                <i class="iconfont">&#xe632;</i>
+                                                <!--<button class="btn btn-default btn-xs">上传主图</button>-->
+                                                <input type="file" class="btn btn-mini" name="item_img" id="upload_item_img_input">
+                                                <input type="hidden" id="item_id" name="item_id" value="{{adg.item_id}}">
+                                                <input type="hidden" name="callback" value="upload_item_img_callback">
+                                            </form>
+                                            <iframe name="upload_item_img" class="hide"></iframe>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="desc">选择创意后点击‘编辑图片’按钮可对创意图进行优化</div>
+                            </div>
+                            <div class="local_pic">
+                                <h5 class="gray">从本地上传创意</h5>
+                                <div class="empty tc">
+                                    <i class="iconfont img">&#xe631;</i>
+                                    <div class="tc">
+                                        <input type="file" class="hidden" id="local_upload_creative">
+                                        <button id="btn_local_upload" class="btn btn-default btn-sm"><i class="iconfont mt20 mr5">&#xe632;</i>选择文件</button>
+                                    </div>
+                                    <div class="preview_layer">
+                                        <img >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="optimize_box">
+                            <div class="text_box">
+                                <h5 class="gray">编辑标签</h5>
+                                <div class="red mb20 b" id="choose_tip">请选择右边的模板风格</div>
+                                <div id="text_control">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-default" id="clean_flag">清除标签</button>
+                                <button class="btn btn-sm btn-primary btn-mini ml10" id="switch_img_cut">裁剪图片</button>
+                            </div>
+                            <div class="optimize_style">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#style2" data-toggle="tab">简约</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style3" data-toggle="tab">甜美</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style4" data-toggle="tab">酷炫</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style5" data-toggle="tab">奢华</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style6" data-toggle="tab">欧美</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style10" data-toggle="tab">双11</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style7" data-toggle="tab">双12</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style8" data-toggle="tab">其他</a>
+                                    </li>
+                                    <li>
+                                        <a href="#style9" data-toggle="tab">单个标签</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active in" id="style2">
+                                        <div class="style_warp">
+                                           <ul class="style_box">
+                                            {% for i in 12|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/2_{{i}}.png?v=1" data-temp="2_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            <li><a href="javascript:;">2</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style3">
+                                        <div class="style_warp">
+                                           <ul class="style_box">
+                                            {% for i in 12|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/3_{{i}}.png?v=1" data-temp="3_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            <li><a href="javascript:;">2</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style4">
+                                        <div class="style_warp">
+                                            <ul class="style_box">
+                                            {% for i in 12|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/4_{{i}}.png?v=1" data-temp="4_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            <li><a href="javascript:;">2</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style5">
+                                        <div class="style_warp">
+                                            <ul class="style_box">
+                                            {% for i in 12|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/5_{{i}}.png?v=1" data-temp="5_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            <li><a href="javascript:;">2</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style6">
+                                        <div class="style_warp">
+                                            <ul class="style_box">
+                                            {% for i in 12|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/6_{{i}}.png?v=1" data-temp="6_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            <li><a href="javascript:;">2</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style10">
+                                        <div class="style_warp">
+                                            <ul class="style_box">
+                                            {% for i in 6|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/10_{{i}}.png?v=1" data-temp="10_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style7">
+                                        <div class="style_warp">
+                                            <ul class="style_box">
+                                            {% for i in 12|range_reverse:6 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/7_{{i}}.png?v=1" data-temp="7_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style8">
+                                        <div class="style_warp">
+                                           <ul class="style_box">
+                                            {% for i in 14|txrange:1 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/8_{{i}}.png?v=1" data-temp="8_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            <li><a href="javascript:;">2</a></li>
+                                            <li><a href="javascript:;">3</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane fade in" id="style9">
+                                        <div class="style_warp">
+                                            <ul class="style_box">
+                                            {% for i in 184|range_reverse:0 %}
+                                                <li>
+                                                    <img src="/site_media/jl6_temp/static/images/creative_temp/9_{{i}}.png?v=1" data-temp="9_{{i}}">
+                                                </li>
+                                            {%endfor%}
+                                            </ul>
+                                        </div>
+                                        <ul class="pagination pagination-sm r mb20 mt-3"  data-count="31">
+                                            <li class="first"><a href="javascript:;" ><span aria-hidden="true">&laquo;</span></a></li>
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                            {% for i in 32|txrange:2 %}
+                                            <li {% if i > 7 %} class="hide"{% endif %}><a href="javascript:;">{{i}}</a></li>
+                                            {%endfor%}
+                                            <li class="last"><a href="javascript:;" ><span aria-hidden="true">&raquo;</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer tc">
+                <button class="btn btn-warning" id="switch_optimize">编辑图片</button>
+                <button class="btn btn-default" style="margin-left:0;" id="rechoose_img">重新选图</button>
+                <button class="btn btn-primary" data-ok="modal" action="confirm"></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消优化</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="img_cut_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <span class="f18 b">图片剪裁</span>
+                    <div class="r">
+                        <button class="btn btn-sm btn-primary">保存</button>
+                        <button class="btn btn-sm btn-default">取消</button>
+                    </div>
+                </div>
+            <div class="gray mt10 f12"> 提示：为了保证图片的清晰度，原始尺寸过小的图片将不能剪裁 </div>
+            </div>
+            <div class="modal-body tc">
+                <img id="img_cut">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

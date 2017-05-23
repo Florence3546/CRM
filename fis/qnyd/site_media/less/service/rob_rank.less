@@ -1,0 +1,45 @@
+#rob_rank_search{
+    .searchbar-cancel{
+        color: @white;
+    }
+}
+
+#rob_rank_list{
+    img{
+        width: 60px;
+        height: 60px;
+    }    
+    &>ul>li{
+        position: relative;
+        display: flex;
+        align-items: center;
+        &>div{
+            flex: 1;
+            margin-left: 10px;
+        }
+        .item{
+            display: flex;
+        }
+        ul{
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        li{
+            font-size: .65rem;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+    }
+    .icon{
+        float: right;
+        position: absolute;
+        right: 10px;
+        top: 10px;   
+    }
+    .data-title{
+        color: @gray;
+        margin-right: 4px;
+    }
+}

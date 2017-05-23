@@ -1,0 +1,249 @@
+{#utf-8#}{% extends "base_jl5.html" %}
+{% load rates %}
+{% block title%}
+精灵词霸
+{% endblock %}
+{% block extra_style %}
+  <link rel="stylesheet" href="/site_media/jl5/plugins/jslider/css/jquery.slider.min.css" />
+{% endblock %}
+{% block base_jl5 %}
+    <input type="hidden" id="item_id" value="{{ item_id }}">
+    <input type="hidden" id="cat_id" value="{{ cat_id }}">
+    <input type="hidden" id="title" value="{{ title }}">
+    <input type="hidden" id="err" value="{{ err }}">
+    <input type="hidden" id="left_adv_no" value="{{ left_adv_no }}">
+    <input type="hidden" id="right_adv_no" value="{{ right_adv_no }}">
+    <div id="header" class="navbar-static-top container-fluid">
+        <div class="auto w1000">
+            <a href="{%url 'web_home'%}"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="mt20 w1000 auto">
+
+            <div class="p10">
+                <div class="gray f16">
+                    <i class="iconfont">&#xe659;</i><span class="ml5">请选择店铺中的一款宝贝，并复制宝贝链接粘贴到输入框， 再点击“选词预览”</span>
+                </div>
+
+                <div class="mt10 bg_white p20 bdd">
+                    <form class="m0" action="./" id="url_form" method="post">
+                        <span class="f16 b gray mr10">宝贝链接：</span><input data-rule="require" class="w600 h33 f18 b" name="item_url" value="{{item_url}}" type="text"><button type="submit" class="btn ml20 btn-large btn-primary"><i class="iconfont mr5">&#xe63b;</i>选词预览</button>
+                    </form>
+                </div>
+
+                {% if detail %}
+                <h5 class="gray mt20"><i class="iconfont mr5">&#xe61c;</i>宝贝详情</h5>
+                <div class="bg_white bdd pl20 pr20 pb20 fix">
+                    <div class="mt10 mb10">
+                        <a class="" href="{{item_url}}" target="_blank">{{ title }}</a><span class="red r ml10">￥{{ item_price }}</span>
+                    </div>
+                    <div class="l w200">
+                        <img class="mt5" src="{{ pic_url }}">
+                    </div>
+                    <ul class="ul_line l w700 ml30 lh24 f12">
+                        <li class="pct100 b">所属类目：{{ cat_path }}</li>
+                    {% for property in property_list %}
+                        {%for pro in property%}
+                            <li class="pct30">{{ pro|truncatechars_ch:30 }}</li>
+                        {%endfor%}
+                    {% endfor %}
+                    </ul>
+                </div>
+
+
+                <ul class="nav nav-tabs mt20" id="select_keyword_nav">
+                    <li class="active"><a href="#quick" data-toggle="tab">快速选词</a></li>
+                    <li><a href="#precise" data-toggle="tab">精准淘词</a></li>
+                </ul>
+                <div class="tab-content bg_white">
+                    <div class="tab-pane active in" id="quick">
+
+                        <div class="fix p20">
+                            <span class="l">选词模式:</span>
+                            <label class="l ml20 hide"><input class="toggle " type="radio" id="select" name="radio_type" checked="checked" ><span>系统默认</span></label>
+                            <label class="l ml20"><input class="toggle mr3" type="radio" id="match" name="radio_type" checked="checked"><span>精准模式</span></label>
+                            <label class="l ml20"><input class="toggle mr3" type="radio" id="traffic" name="radio_type"><span>流量模式</span></label>
+                            <button class="btn btn-primary ml20 mt-3" id="btn_precise_keyword">快速选词</button>
+                        </div>
+
+                        <div class="rel pt136 hide" id="quick_common_box">
+
+                            <div class="fixed_box t0 bg_white zx105 abs pct100">
+
+                                <div class="row-fluid">
+                                  <fieldset class="pt5 pl20 pr20 nbl nbb l pb10">
+                                    <legend class="f16">筛选关键词</legend>
+                                    <button class="btn" id="quick_recommend">精灵推荐</button>
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle btn" data-toggle="dropdown" data-hold="true">滑竿筛选<i class="iconfont">&#xe626;</i></button>
+                                        <div class="dropdown-menu pl5 pr5 w500 db vh">
+                                            <div class="modal-header">
+                                                <button type="button" data-dismiss="dropdown" class="close">×</button>
+                                                <h5>拉动滑竿过滤关键词</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="silver f12">滑竿越往右，符合条件的关键词越多，但是词的质量会越差</div>
+                                                <div class="mt20" id="quick_div_sliders">
+                                                </div>
+                                                <span class="hide b f12">符合过滤条件、且未选中的词<span class="red" id='quick_sum_unchecked'></span>个<span class="gray">(排列在前面)</span></span>
+                                                <div class="mb10 hide">
+                                                    <input class="vn" id="quick_filter_checked" type="checkbox"> 保留已勾选的关键词
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="ml10 mr5">关键词过滤：包含</span><input class="w100" id="quick_include" type="text"><span class="mr5 ml5">不包含</span><input class="w100" id="quick_uninclude" type="text">
+                                  <button class="btn" id="quick_btn_search"><i class="iconfont">&#xe645;</i></button>
+                                  </fieldset>
+                                </div>
+
+                                <div class="row-fluid pt20 pb10 btd">
+                                  <span class="ml20">候选词共<span class="f24 ml5 mr5" id="quick_all_keywords">--</span>个，当前选中<span class="f24 ml5 mr5 linkColor" id="quick_sum_checked">--</span>个</span>
+                                  <div class="btn-group mr10 r">
+                                    <a class="btn rel tableToolBtn mr5" id="quick_csv_button"><i class="iconfont mr2">&#xe67e;</i>导出选中关键词</a>
+                                    <a class="btn rel tableToolBtn mr5" id="quick_copy_button"><i class="iconfont mr2">&#xe638;</i>复制选中关键词</a>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <!-- 关键词分类的表格 -->
+                            <table class="table-bordered table-no-warp-border keyword bbd table-hover" id="quick_common_table">
+                              <thead>
+                                <tr>
+                                  <th class="w20 nbl"><input class="father_box" type="checkbox" link="quick_common_table"></th>
+                                  <th><div>关键词</div></th>
+                                  <th><div>市场均价（元）</div></th>
+                                  <th><div>展现指数</div></th>
+                                  <th><div>点击指数</div></th>
+                                  <th><div>竞争度</div></th>
+                                  <th><div>匹配度</div></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="tab-pane" id="precise">
+                        <div class="p10 pt20">
+                            <div class="input-prepend mb0">
+                                <span class="add-on">核心词</span>
+                                <input class="w300" type="text" id="word_filter" placeholder="请输入核心词"><span class="f14"></span>
+                            </div>
+                            <button class="btn btn-info ml10" id="btn_tao_keyword">精准淘词</button>
+                        </div>
+
+                        <div class="p20">
+                            <span class="b w60 l">产品词：</span>
+                            <ul class="pt-tag with-x pl60 guess_elemword">
+                                {% for word in elemword_dict.prdtword_list %}
+                                    <li><a href="javascript:;">{{ word }}</a></li>
+                                    {% empty%}
+                                    <span class="gray">暂无产品词词根，可点击“词根管理”进行添加</span>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="pl20 pr20 pb20">
+                            <span class="b w60 l">属性词：</span>
+                            <ul class="pt-tag with-x pl60 guess_elemword">
+                                {% for word in elemword_dict.dcrtword_list %}
+                                    <li class="{%if forloop.counter > 13%}hide{%endif%}"><a href="javascript:;">{{ word }}</a></li>
+                                    {% empty %}
+                                    <span class="gray">暂无修饰词词根，可点击“词根管理”进行添加</span>
+                                {% endfor %}
+                                {% if elemword_dict.dcrtword_list|length > 13 %}<i class="iconfont poi gray btn_more">&#xe61a;</i>{%endif%}
+                                </ul>
+                            </div>
+                        <div class="rel pt136 hide"  id="precise_common_box">
+
+                            <div class="fixed_box t0 bg_white zx105 abs pct100">
+                                <div class="row-fluid">
+                                    <fieldset class="pt5 pl20 pr20 nbl nbb l pb10">
+                                        <legend class="f16">筛选关键词</legend>
+                                        <button class="btn" id="precise_recommend">精灵推荐</button>
+                                        <div class="dropdown">
+                                            <button class="dropdown-toggle btn" data-toggle="dropdown" data-hold="true">滑竿筛选<i class="iconfont">&#xe626;</i></button>
+                                            <div class="dropdown-menu pl5 pr5 w500 db vh">
+                                                <div class="modal-header">
+                                                    <button type="button" data-dismiss="dropdown" class="close">×</button>
+                                                    <h5>拉动滑竿过滤关键词</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="silver f12">滑竿越往右，符合条件的关键词越多，但是词的质量会越差</div>
+                                                    <div class="mt20" id="precise_div_sliders">
+                                                    </div>
+                                                    <span class="hide b f12">符合过滤条件、且未选中的词<span class="red" id='precise_sum_unchecked'></span>个<span class="gray">(排列在前面)</span></span>
+                                                    <div class="mb10 hide">
+                                                        <input class="vn" id="precise_filter_checked" type="checkbox"> 保留已勾选的关键词
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="ml10 mr5">关键词过滤：包含</span><input class="w100" id="precise_include" type="text"><span class="mr5 ml5">不包含</span><input class="w100" id="precise_uninclude" type="text">
+                                        <button class="btn" id="precise_btn_search"><i class="iconfont">&#xe645;</i></button>
+                                    </fieldset>
+                                </div>
+
+                                <div class="row-fluid pt20 pb10 btd">
+                                    <span class="ml20">候选词共<span class="f24 ml5 mr5" id="precise_all_keywords">--</span>个，当前选中<span class="f24 ml5 mr5 linkColor" id="precise_sum_checked">--</span>个</span>
+                                    <div class="btn-group mr10 r">
+                                        <a class="btn rel tableToolBtn mr5" id="precise_csv_button"><i class="iconfont mr2">&#xe67e;</i>导出选中关键词</a>
+                                        <a class="btn rel tableToolBtn mr5" id="precise_copy_button"><i class="iconfont mr2">&#xe638;</i>复制选中关键词</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table-bordered table-no-warp-border keyword bbd table-hover" id="precise_common_table">
+                              <thead>
+                                <tr>
+                                  <th class="w20 nbl"><input class="father_box" type="checkbox" link="precise_common_table"></th>
+                                  <th><div>关键词</div></th>
+                                  <th><div>市场均价（元）</div></th>
+                                  <th><div>展现指数</div></th>
+                                  <th><div>点击指数</div></th>
+                                  <th><div>竞争度</div></th>
+                                  <th><div>匹配度</div></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block custom_js %}
+    {%if DEBUG%}
+    <script src="{{'/site_media/jl5/pt_js/select_keyword_order.js'|file_time_stamp}}"></script>
+    {%else%}
+    <script src="{{'/site_media/jl5/js/select_keyword_order.min.js'|file_time_stamp}}"></script>
+    {%endif%}
+    <script src="/site_media/jl5/plugins/data-tables/ZeroClipboard.js"></script>
+    <script src="/site_media/jl5/plugins/data-tables/TableTools.js"></script>
+    <script src="/site_media/jl5/plugins/jslider/js/jquery.slider.min.js"></script>
+
+    <script>
+        jQuery(document).ready(function() {
+            PT.SelectKeywordOrder.init();
+        });
+    </script>
+    <!-- 统计代码 -->
+    <div class="hide">
+    </div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% load rates %}
+{% include 'ncrm_common_shop_info.html' %}
+<td class="p0 vt rel">
+    <div class="ovh h220">
+        {%for order in c.order_info%}
+        <ul class="ul_line lh30 {%if c.order_info|length < 4 or not forloop.last%}bbdd{%endif%} {% if order.is_ended %}silver{% else %}{% if order.is_ending %}red{% endif %}{% endif %}">
+<!--            <li class="w60 tc" title="{{order.article_name}}">
+                {%if order.article_code == 'ts-25811' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+                {%endif%}
+                {%if order.article_code == 'ts-25811-6' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe685;</i>
+                {%endif%}
+                {% if order.article_code == 'FW_GOODS-1921400' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+                {%endif%}
+                {%if order.article_code == 'tp-001' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+                {%endif%}
+                {% if order.article_code == 'tp-002' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe692;</i>
+                {%endif%}
+                {%if order.article_code == 'tp-003' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe695;</i>
+                {%endif%}
+                {% if order.article_code == 'tp-004' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe694;</i>
+                {%endif%}
+            {{order.display_biz_type}}
+            </li>-->
+            <li class="w60 tc" title="{{order.get_category_display}}">
+                {%if order.category == 'kcjl' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+                {%endif%}
+                {%if order.category == 'rjjh' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe685;</i>
+                {%endif%}
+                {%if order.category == 'vip' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+                {%endif%}
+                {%if order.category == 'qn' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+                {%endif%}
+                {%if order.category == 'ztc' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+                {%endif%}
+                {%if order.category == 'zz' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe692;</i>
+                {%endif%}
+                {%if order.category == 'zx' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe695;</i>
+                {%endif%}
+                {%if order.category == 'dyy' %}
+                    <i class="iconfont inherit mr5 ml5">&#xe694;</i>
+                {%endif%}
+            {{order.display_biz_type}}
+            </li>
+            <li class="w60 tc">{{order.psuser.name_cn}}</li>
+            <li class="w80 tr">{{order.start_date|date:"Y-m-d"}}</li>
+            <li class="w80 tr">{{order.end_date|date:"Y-m-d"}}</li>
+            <li class="w60 tr">{{order.pay|divide:'100'}}</li>
+        </ul>
+        {%endfor%}
+	    {% if c.order_info|length > 7 %}
+        <div class="tc abs b0 l50 ml-10">
+            <i class="iconfont f16 b poi show_order_more">&#xe61f;</i>
+        </div>
+        {%endif%}
+    </div>
+</td>
+<td class="vt rel note">
+    <div class="h200 note_all" style="overflow-y:scroll;overflow:auto">
+        {%for record in c.all_record %}
+            {% if record.note and record.psuser %}
+                <p class="wbba">【{{record.create_time}}&nbsp;{{record.short_descr}}】- &nbsp;{{record.note}}&nbsp;（{{record.psuser.name_cn}}）</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!--
+    <ul class="ul_line abs b0 r0">
+        {%for k,v in c.note_info.items %}
+        <li class="w80">
+            <a href="#note_{{c.shop_id}}_{{forloop.counter}}" data-toggle="modal" >{{v.des_cn}}（{{v.record|length}}）</a>
+            <div id="note_{{c.shop_id}}_{{forloop.counter}}" tabindex="-1" role="dialog" class="modal hide fade">
+                <div class="modal-header">
+                    <span class="b">{{v.des_cn}}记录</span>
+                </div>
+                <div class="modal-body">
+                    <ul class="ml20 lh30 f12">
+                        {%for n in v.record%}
+                        <li class="bbdd">
+                            <span class="gray">
+                                {%if k == 'Contact'%}【{{n.contact_type}}】{%endif%}【{{n.create_time|date:"Y-m-d"}}&nbsp;{{n.psuser.name_cn}}】
+                            </span>
+                            {{n.note}}
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+                </div>
+            </div>
+        </li>
+        {%endfor%}
+    </ul>
+     -->
+</td>

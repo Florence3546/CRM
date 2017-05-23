@@ -1,0 +1,65 @@
+#account_main{
+    display: flex;
+    background-color: white;
+    margin-bottom: 10px;
+    ul{
+        flex: 1;
+        padding: 0;
+        margin: 0;
+    }
+    li{
+        list-style: none;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        border-right:1px solid #ddd;
+        padding: 10px 0;
+    }
+    .data_name{
+        color:@gray;
+        font-size: 0.7rem;
+    }
+}
+
+.balance{
+    font-size: 1rem
+}
+
+#account_chart{
+    height: 200px;
+    #customer_box;
+    margin-bottom: 10px;
+}
+
+#campaign_list{
+    padding: 0;
+    margin: 0;
+    li{
+        list-style: none;
+        padding: 0 .5rem;
+        background-color: white;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .camp-title{
+        line-height: 2.2rem;
+        border-bottom: 1px dashed #ddd;
+
+        .icon{
+            float: right;
+        }
+    }
+    .item{
+        display: flex;
+        line-height: 2rem;
+        align-items: center;
+        &>div{
+            flex: 1;
+            display: flex;
+        }
+    }
+    .name{
+        color: @gray;
+        font-size: 0.7rem;
+        margin-right: 4px;
+    }
+}

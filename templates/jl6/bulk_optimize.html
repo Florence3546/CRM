@@ -1,0 +1,280 @@
+{#utf-8#}
+{% extends "base_adg.html" %}
+{% block title %}批量优化{% endblock %}
+
+{% load rates %}
+{% block content %}
+<section class="container-fluid adg">
+
+{% include 'common_adg_top_bar.html' %}
+
+    <div class="box">
+        <header class="hide" id="operation_bar">
+            <div class="line_box">
+
+                <div class="dtr_picker_warp ml0">
+                    <span class="tip" data-toggle="dtr_picker" months="1" id="select_keyword_days">过去七天</span>
+                </div>
+
+                <div class="btn-group" id="data_source">
+                  <button type="button" class="btn btn-sm btn-primary active" data-source='all'>汇总</button>
+                  <button type="button" class="btn btn-sm btn-default" data-source='pc'>计算机</button>
+                  <button type="button" class="btn btn-sm btn-default" data-source='mobile'>移动设备</button>
+                </div>
+
+                <span class="ml30 pl20">关键词分类：<span class="switch vm" data-toggle="switch" id="weird_switch"></span></span>
+
+                <span class="ml30 pl20">关键词最高限价提醒：PC
+                    <span id="warn_price">
+                        <span class="edit">
+                            <span>{% if adg.limit_price %}{{adg.limit_price|divide:'100'}}{% else %}5.00{% endif %}</span>元
+                            <i class="ml5 {% if adg.mnt_type != 0 %}disabled{% endif %} iconfont base_color poi">&#xe609;</i>
+                        </span>
+                        <span class="save">
+                            <input class="small w40" type="text" value="{% if adg.limit_price %}{{adg.limit_price|divide:'100'}}{% else %}5.00{% endif %}">
+                            <a href="javascript:;">保存</a>
+                        </span>
+                    </span>
+                    移动
+                    <span id="mobile_warn_price">
+                        <span class="edit">
+                            <span>{% if adg.real_mobile_limit_price %}{{adg.real_mobile_limit_price|divide:'100'}}{% else %}5.00{% endif %}</span>元
+                            <i class="ml5 {% if adg.mnt_type != 0 %}disabled{% endif %} iconfont base_color poi">&#xe609;</i>
+                        </span>
+                        <span class="save">
+                            <input class="small w40" type="text" value="{% if adg.real_mobile_limit_price %}{{adg.real_mobile_limit_price|divide:'100'}}{% else %}5.00{% endif %}">
+                            <a href="javascript:;">保存</a>
+                        </span>
+                    </span>
+                    {% if adg.mnt_type != 0 %}
+                    <i class="iconfont f16" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="默认为关键词限价，修改限价请到托管详情中修改">&#xe628;</i>
+                    {% endif %}
+                </span>
+
+                {% if adg.mob_enabled %}
+                <span class="ml30 pl20">移动折扣：
+                    <span id="adg_mobdiscount">{{adg.mobile_discount}}</span>%
+                    <i class="iconfont ml5 poi edit_mobdiscount base_color">&#xe609;</i>
+                </span>
+                {% endif %}
+                {% include 'common_keyword_show_more.html' %}
+            </div>
+
+            <ul class="tag with-x" id="filter_label">
+            </ul>
+
+            <div class="operate">
+                <span class="dropdown" id="filter_warp">
+                    <button class="btn btn-default btn-sm" data-toggle="dropdown" id="filter"><i class="iconfont mr5">&#xe615;</i>批量筛选</button>
+                </span>
+                <span class="dropdown" id="price_warp">
+                    <button class="btn btn-default btn-sm" data-toggle="dropdown" id="change_price">改PC价</button>
+                    <div class="dropdown-menu hold-on-click dropdown-table">
+                        <h4>批量修改PC出价</h4>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="price" checked value="custom">
+                                指定出价(不推荐)：<input type="text">&ensp;元
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="price" value="gPrice">
+                                使用市场平均出价的：
+                                <select class="w60">
+                                  <option value=""></option>
+                                  <option value="60">60</option>
+                                  <option value="70">70</option>
+                                  <option value="80">80</option>
+                                  <option value="90">90</option>
+                                  <option value="100">100</option>
+                                  <option value="110">110</option>
+                                  <option value="120">120</option>
+                                  <option value="130">130</option>
+                                  <option value="140">140</option>
+                                  <option value="150">150</option>
+                                </select>&ensp;%
+                              </label>
+                            </div>
+                            <div class="b lh20">降价：</div>
+                            <div class="radio mt5">
+                              <label>
+                                <input type="radio" name="price" value="yuanDown">
+                                根据调价金额：降价<input type="text">&ensp;元
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="price" value="parcentDown">
+                                根据调价比例：降价<input type="text">&ensp;%
+                              </label>
+                            </div>
+                            <div class="b lh20">加价：</div>
+                            <div class="radio mt5">
+                              <label>
+                                <input type="radio" name="price" value="yuanUp">
+                                根据调价金额：加价<input type="text">&ensp;元
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="price" value="parcentUp">
+                                根据调价比例：加价<input type="text">&ensp;%
+                              </label>
+                            </div>
+                            <div class="radio">
+                                最高限价：<input type="text" id="price_limit">&ensp;<i class="iconfont" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="当修改的出价大于最高限价时，会使用最高限价作为出价">&#xe628;</i>
+                            </div>
+                        <div class="lh30">
+                            <button type="button" class="btn btn-primary btn-sm">确定</button>
+                            <button type="button" class="btn btn-default btn-sm">取消</button>
+                        </div>
+                    </div>
+                </span>
+                <span class="dropdown" id="mobile_price_warp">
+                    <button class="btn btn-default btn-sm" data-toggle="dropdown" id="mobile_change_price">改移动价</button>
+                    <div class="dropdown-menu hold-on-click dropdown-table">
+                        <h4>批量修改移动出价</h4>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="mobile_price" checked value="custom">
+                                指定出价(不推荐)：<input type="text">&ensp;元
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="mobile_price" value="gPrice">
+                                使用市场平均出价的：
+                                <select class="w60">
+                                  <option value=""></option>
+                                  <option value="60">60</option>
+                                  <option value="70">70</option>
+                                  <option value="80">80</option>
+                                  <option value="90">90</option>
+                                  <option value="100">100</option>
+                                  <option value="110">110</option>
+                                  <option value="120">120</option>
+                                  <option value="130">130</option>
+                                  <option value="140">140</option>
+                                  <option value="150">150</option>
+                                </select>&ensp;%
+                              </label>
+                            </div>
+                            <div class="b lh20">降价：</div>
+                            <div class="radio mt5">
+                              <label>
+                                <input type="radio" name="mobile_price" value="yuanDown">
+                                根据调价金额：降价<input type="text">&ensp;元
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="mobile_price" value="parcentDown">
+                                根据调价比例：降价<input type="text">&ensp;%
+                              </label>
+                            </div>
+                            <div class="b lh20">加价：</div>
+                            <div class="radio mt5">
+                              <label>
+                                <input type="radio" name="mobile_price" value="yuanUp">
+                                根据调价金额：加价<input type="text">&ensp;元
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <label>
+                                <input type="radio" name="mobile_price" value="parcentUp">
+                                根据调价比例：加价<input type="text">&ensp;%
+                              </label>
+                            </div>
+                            <div class="radio">
+                                最高限价：<input type="text" id="price_limit_mobile">&ensp;<i class="iconfont" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="当修改的出价大于最高限价时，会使用最高限价作为出价">&#xe628;</i>
+                            </div>
+                        <div class="lh30">
+                            <button type="button" class="btn btn-primary btn-sm">确定</button>
+                            <button type="button" class="btn btn-default btn-sm">取消</button>
+                        </div>
+                    </div>
+                </span>
+                <button class="btn btn-default btn-sm" id="bluk_del">删&emsp;除</button>
+                <span class="dropdown" id="match_warp">
+                    <button class="btn btn-default btn-sm" data-toggle="dropdown">修改匹配</button>
+                    <div class="dropdown-menu hold-on-click dropdown-table">
+                        <h4>批量修改匹配</h4>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="match_type" checked value="4">
+                            广泛匹配
+                          </label>
+                        </div>
+                        <!--<div class="radio">-->
+                          <!--<label>-->
+                            <!--<input type="radio" name="match_type" value="2">-->
+                            <!--中心匹配-->
+                          <!--</label>-->
+                        <!--</div>-->
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="match_type" value="1">
+                            精确匹配
+                          </label>
+                        </div>
+                        <div class="lh30">
+                            <button type="button" class="btn btn-primary btn-sm">确定</button>
+                            <button type="button" class="btn btn-default btn-sm">取消</button>
+                        </div>
+                    </div>
+                </span>
+                {%if adg.mnt_type != 0 %}
+                <span class="dropdown" id="mnt_warp">
+                    <button class="btn btn-default btn-sm" data-toggle="dropdown">设置自动优化</button>
+                    <div class="dropdown-menu hold-on-click dropdown-table">
+                        <h4>设置自动优化</h4>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="mnt_type" value="0" checked>
+                            自动优化
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="mnt_type" value="1">
+                            只改价不删词
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="mnt_type" value="2">
+                            不改价不删词
+                          </label>
+                        </div>
+                        <div class="lh30">
+                            <button type="button" class="btn btn-primary btn-sm">确定</button>
+                            <button type="button" class="btn btn-default btn-sm">取消</button>
+                        </div>
+                    </div>
+                </span>
+                {% endif %}
+
+                <ul class="ul_line select_info">
+                    <li class="pr10">已选中(<span class="b" id="checked_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="0">PC加价(<span class="b" id="up_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="1">PC降价(<span class="b" id="down_num">0</span>)</li><li class="pr10 select_status tdl poi" mode="5">移动加价(<span class="b" id="up_mobile_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="6">移动降价(<span class="b" id="down_mobile_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="2">删除(<span class="b" id="del_num">0</span>)</li>
+                    <li class="pr10 select_status tdl poi" mode="3">匹配(<span class="b" id="match_num">0</span>)</li>
+                    {% if adg.mnt_type != 0 %}
+                    <li class="pr10 select_status tdl poi" mode="4">优化方式(<span class="b" id="mnt_num">0</span>)</li>
+                    {% endif %}
+                    <li><button class="btn btn-sm btn-primary" id="submit_keywords">提交到直通车</button></li>
+                </ul>
+            </div>
+        </header>
+
+        {% include 'common_keyword_table.html' %}
+
+        <div id="keyword_no_data">
+            <h4>没有关键词数据,请到<a href="/web/select_keyword/quick?adgroup_id={{adg.adgroup_id}}">选词</a>页面添加关键词</h4>
+        </div>
+    </div>
+</section>
+{%endblock%}

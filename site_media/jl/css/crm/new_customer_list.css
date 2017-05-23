@@ -1,0 +1,248 @@
+body {
+  min-width: 1290px;
+}
+th,
+td {
+  border: none;
+  vertical-align: top;
+  text-align: left;
+  padding: 8px;
+}
+td.vm {
+  vertical-align: middle;
+}
+td input {
+  width: 20px;
+}
+textarea {
+  margin-bottom: 10px;
+}
+a:visited{color: #0099FF;}
+.ulstyle {
+  list-style: none;
+  float: left;
+}
+.ulstyle li {
+  display: inline;
+}
+#beizhu li span {
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+}
+.select_ul li {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  margin-left: 12px;
+  line-height: 45px;
+}
+.select_ul li span {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+.select_ul li .title {
+  font-weight: 600;
+}
+.select_ul li .sp {
+  color: #FA6001;
+}
+.select_ul li .line {
+  width: 20px;
+  text-align: center;
+}
+.select_ul li input,
+.select_ul li select {
+  width: 80px;
+  margin-bottom: 0px;
+}
+.hide_i {
+  display: none !important;
+}
+select {
+  width: 94px;
+}
+ul {
+  margin-left: 0;
+}
+legend {
+  width: auto;
+  margin: 0;
+  padding: 0 6px;
+  border: none;
+  font-size: 16px;
+  height: 30px;
+  line-height: 30px;
+}
+#content_wrapper {
+  width: 1327px;
+  margin: 0 auto;
+  padding: 0;
+}
+#group_msg li {
+  line-height: 24px;
+  font-size: 12px;
+}
+.no_border {
+  border: none;
+}
+.no_border td {
+  border: none;
+}
+.no_border.transparent {
+  background-color: transparent !important;
+}
+.no_border.transparent td {
+  background-color: transparent !important;
+}
+.bld,
+th {
+  font-weight: 700 !important;
+}
+.y_color {
+  color: #fa6001 !important;
+}
+.table_in_table {
+  background-color: transparent !important;
+  border: none;
+}
+.table_in_table td {
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  border-bottom: #ddd dashed 1px;
+  background-color: transparent !important;
+}
+.hover_show {
+  visibility: hidden;
+}
+.hover .hover_show {
+  visibility: visible;
+}
+.comment_box input,.dangerous_box input {
+  margin: -1px 0 0 0;
+}
+.comment_box label,.dangerous_box label {
+  display: inline;
+  font-size: 12px;
+}
+form {
+  margin: 0;
+}
+.table td {
+  line-height: 22px;
+}
+.navbar {
+  height: 42px;
+}
+.modal-body {
+  font-size: 12px;
+}
+/*
+a {
+    transition: color 0.2s linear;
+}
+*/
+
+.page-content a:hover {
+  color: #ff0000 !important;
+}
+.modal-footer {
+  background-color: #ffffff;
+}
+.post_data span {
+  width: 72px;
+  display: inline-block;
+  text-align: right;
+}
+.post_data input,
+.modal-body select {
+  margin-right: 12px;
+  margin-bottom: 10px;
+  width: 100px;
+}
+.post_data input[type=submit] {
+  width: auto;
+}
+.post_data select {
+  width: 114px;
+}
+.post_data .require {
+  position: absolute;
+  width: auto;
+  margin-left: -10px;
+  margin-top: 6px;
+  color: #f00;
+}
+.table thead th {
+  vertical-align: middle;
+  text-align: left;
+}
+.order_list {
+  display: block;
+  height: 110px;
+  overflow: hidden;
+  padding-bottom: 40px !important;
+}
+.order_list_more {
+  width: 100%;
+  height: 30px;
+  right: 0;
+  background-color: #fff;
+  bottom: 0;
+  position: absolute;
+}
+tr.hover .order_list_more {
+  background-color: #eee;
+}
+.order_list_more i {
+  display: block;
+  cursor: pointer;
+  line-height: 30px;
+}
+#lxgw select {
+  width: 135px;
+}
+.accordion {
+  margin-bottom: 20px;
+}
+.accordion-group {
+  margin-bottom: 2px;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.accordion-heading {
+  border-bottom: 0;
+}
+.accordion-heading .accordion-toggle {
+  display: block;
+  padding: 8px 15px;
+}
+.accordion-toggle {
+  cursor: pointer;
+}
+.accordion-inner {
+  padding: 9px 15px;
+  border-top: 1px solid #e5e5e5;
+}
+.collapse {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  -webkit-transition: height 0.35s ease;
+  -moz-transition: height 0.35s ease;
+  -o-transition: height 0.35s ease;
+  transition: height 0.35s ease;
+}
+.collapse.in {
+  height: auto;
+}
+.accordion textarea{width:100%; font-family: "Microsoft YaHei","微软雅黑",'helvetica','arial','verdana','tahoma','sans-serif'}
+.newest_mark{height: 30px; line-height: 30px;}
+.editing{background-color: #e7e7e7;border:1px #999 solid;outline:none;font-weight: 700;}
+img{max-width: none;} /*修复谷歌切换表格隐藏的bug*/
+
+#id_has_phone {margin:0;width:initial;}

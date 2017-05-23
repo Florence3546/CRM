@@ -1,0 +1,21 @@
+<div id="tab_msg" class="tab-pane active">
+  <div class="accordion" id="accordion1">
+    {{each list as value index }}
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a href="#collapse_cm_{{value.id}}" data-parent="#accordion1" data-toggle="collapse" id="title_common_{{value.id}}" class="accordion-toggle black collapsed {{if !value.is_read}}close_msg{{/if}}" data="{{value.id}}" >
+                <span id="lbl_read_{{value.id}}" class="label {{if value.is_read}}label-default{{else}}label-primary{{/if}}">{{if value.is_read}}已读{{else}}未读{{/if}}</span>
+                <span class="color-{{value.level}}">
+                   {{value.title}}
+                </span>
+                <span class="r gray"> {{value.last_modified}}</span>
+            </a>
+        </div>
+        <div class="accordion-body collapse" id="collapse_cm_{{value.id}}">
+            <div class="accordion-inner">{{value.content}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,42 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}全自动任务趋势图{% endblock %}
+
+{% block content %}
+<style type="text/css">
+    .w1287{width: 1287px;}
+</style>
+<div class="w1329 auto">
+    <div class="mt20">
+        <ul class="nav nav-tabs p0 rel">
+            <li class="active">
+                <a href="#tab1" data-toggle="tab">任务概览</a>
+            </li>
+            <li>
+                <a href="#tab2" data-toggle="tab">错误信息统计</a>
+            </li>
+        </ul>
+
+        <div class="tab-content bg_white p20">
+            <div class="tab-pane active in" id="tab1">
+            </div>
+
+            <div class="tab-pane in" id="tab2">
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/trend_chart.js'|file_time_stamp}}" type="text/javascript"></script>
+<script src="{{'/site_media/jl5/ncrm_js/task_rpt.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.TaskRpt.init();
+});
+</script>
+{% endblock %}

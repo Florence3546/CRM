@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}-开车精灵</title>
+    <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+    {%if DEBUG%}
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/bootstrap.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/quick_layout.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.css'|file_time_stamp}}" />
+    {%else%}
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/bootstrap.min.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/quick_layout.min.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.min.css'|file_time_stamp}}" />
+    {%endif%}
+      <link rel="stylesheet" href="/site_media/jl5/plugins/gritter/css/jquery.gritter.css">
+    {% block extra_style %} {% endblock %}
+    <script src="/site_media/jl5/js/jquery-1.10.1.min.js"></script>
+    <script src="/site_media/jl5/plugins/jquery-migrate-1.2.1.min.js"></script>
+    <style>
+    @font-face {
+      font-family: 'iconfont';
+      src: url('{{'/site_media/jl5//font/iconfont.eot'|file_time_stamp}}'); /* IE9*/
+      src: url('{{'/site_media/jl5//font/iconfont.eot'|file_time_stamp}}?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+      url('{{'/site_media/jl5//font/iconfont.woff'|file_time_stamp}}') format('woff'), /* chrome、firefox */
+      url('{{'/site_media/jl5//font/iconfont.ttf'|file_time_stamp}}') format('truetype'), /* chrome、firefox、opera、Safari,Android, iOS 4.2+*/
+      url('{{'/site_media/jl5//font/iconfont.svg'|file_time_stamp}}#iconfont') format('svg'); /* iOS 4.1- */
+    }
+    </style>
+  </head>
+  <body id="{{PAGE_MARK.2}}">
+    <!-- 预加载开始 -->
+    <img class="hide" src="/site_media/assets/img/ajax-modal-loading.gif">
+    <img class="hide" src="/site_media/jl5/images/forecast_orde_ajax.gif">
+    <!-- 预加载结束 -->
+    <div id="top_info">
+    </div>
+    <div id="main-content" class="rel">
+      {% block base_jl5 %}{% endblock %}
+    </div>
+    <div id="foot" class="row-fluid page-scroll">
+        <div class="">
+	        <a href="https://fuwu.taobao.com/serv/shop_index.htm?spm=a1z13.2196529.0.0.oa5k8D&isv_id=890019595&from=pskj" target="_blank" class="dib">
+		        <img src="https://img.alicdn.com/imgextra/i2/836440495/TB2CJlmgXXXXXcSXXXXXXXXXXXX-836440495.jpg" height="100">
+	        </a>
+	        <img src="https://img.alicdn.com/imgextra/i3/836440495/TB2rpSVfXXXXXcsXXXXXXXXXXXX-836440495.png" class="hide" height="100">
+        </div>
+        <div class="mt10">
+	        <a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"><span class="mr5">联系顾问</span>|</a>
+	        <a href="http://www.paithink.com" target="_blank"><span class="mr5">公司网站</span>|</a>
+	        <a href="http://www.paithink.com" target="_blank"><span class="mr5">直通车托管服务</span>|</a>
+	        <a href="http://www.paithink.com" target="_blank"><span class="mr5">视觉营销服务</span>|</a>
+	        <a href="http://www.paithink.com" target="_blank"><span class="mr5">店铺诊断服务</span>|</a>
+	        <a href="http://bangpai.taobao.com/group/14487125.htm" target="_blank"><span class="mr5">加入精灵帮派</span>|</a>
+	        <a href="http://fuwu.taobao.com/ser/my_service.htm?tabIndex=1" target="_blank"><span class="mr5">给精灵打好评</span></a>
+        </div>
+        <p class="tac gray">Copyright © 2014 <a href="http://www.paithink.com" target="_blank">www.paithink.com</a> Inc. All Rights Reserved. 武汉派生科技有限公司 保留一切权利</p>
+    </div>
+    <!-- 联系顾问 -->
+    <div class="trans" id="contact">
+      <div class="abs r0 w20 bg_base white tc mr-20 mt100"><i class="iconfont f16 db">&#xe610;</i>联系顾问</div>
+      <ul class="tc mt10">
+      	{% if CONSULT_WW %}
+        <li id="li_CONSULT_WW" class="pb10 bbcd">
+          <div class="b">专属顾问</div>
+          <div class="red b">{{CONSULT_WW}}</div>
+          <div class="mt3"><a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{CONSULT_WW}}"><img class="marl_6" src="http://amos.alicdn.com/realonline.aw?v=2&uid={{CONSULT_WW}}&site=cntaobao&s=1&charset=utf-8"></a></div>
+          <div class="f12 mt5 hide">(上班时间：8:30-23:00)</div>
+        </li>
+        {%endif%}
+        <li id="li_pskj_WW" class="pb10 bbcd {% if CONSULT_WW %}pt10{%endif%}">
+          <div class="b">精灵主旺旺</div>
+          <div class="red b">派生科技</div>
+          <div class="mt3"><a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a></div>
+          <div class="f12 mt5 gray">(上班时间：8:30-23:00)</div>
+        </li>
+        <li class="pb10 pt10 bbcd">
+          <div class="b">顾问专线</div>
+          <div class="red b">400-0610-203</div>
+          <div class="f12 mt5 gray">(在线时间：9:00-23:00)</div>
+        </li>
+        <li class="pb10 pt10 bbcd">
+          <div class="b">投诉电话</div>
+          <div class="red b">132-9415-8425</div>
+          <div class="f12 mt5 gray">受理时间<br/>(周一至周五 14:00-22:00)</div>
+        </li>
+        <li class="pb10 pt10">
+          <div class="b">人工托管服务</div>
+          <!--<div><a class="w_color" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao人工托管服务"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a></div>-->
+          <div><a class="a_WW" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a></div>
+          <div class="f12 mt5 gray">受理时间<br/>(周一至周五 8:30-18:00)</div>
+        </li>
+      </ul>
+    </div>
+    <!-- 联系顾问 -->
+    <!--全屏遮罩层开始-->
+    <div class="hide" id="full_screen_tips">
+      <div class="modal-backdrop in"></div>
+      <div class="modal-scrollable">
+        <div class="loading-spinner fade in">
+          <img src="/site_media/assets/img/ajax-modal-loading.gif" align="middle">
+          <div class="msg"></div>
+        </div>
+      </div>
+    </div>
+    <!--全屏遮罩层结束-->
+    <script src="/site_media/jl5/js/jquery.cookie.min.js"></script>
+    <script src="/site_media/jl5/js/dajax.js"></script>
+    <script src="/site_media/jl5/plugins/Highcharts-3.0.5/js/highcharts.js"></script>
+    <script src="/site_media/jl5/plugins/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
+    <script src="/site_media/jl5/plugins/gritter/js/jquery.gritter.min.js"></script>
+    {%if DEBUG%}
+      <script src="{{'/site_media/jl5/plugins/data-tables/dataTables.1.1.0.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/FixedHeader.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/artTemplate.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/bootstrap.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/ptui.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/templates.js'|file_time_stamp}}"></script>
+    {%else%}
+      <script src="{{'/site_media/jl5/plugins/data-tables/dataTables.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/artTemplate.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/bootstrap.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/ptui.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/templates.min.js'|file_time_stamp}}"></script>
+    {%endif%}
+    {% block extra_js %}{% endblock %}
+    {% block base_js %}{% endblock %}
+    {% block custom_js %}{% endblock %}
+    <!--判断客服旺旺是否在线-->
+    {% if CONSULT_WW %}
+    <script>
+    $(function () {
+        $.getJSON('http://amos.alicdn.com/muliuserstatus.aw?beginnum=0&site=cntaobao&charset=utf-8&uids={{ CONSULT_WW }}&callback=?', function (data) {
+            var ww_url;
+            if (data.data[0]) {
+                $('#li_pskj_WW').hide();
+                url = 'aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{CONSULT_WW}}';
+            } else {
+                $('#li_CONSULT_WW').hide();
+                url = 'aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技';
+            }
+            $('a.a_WW').attr('href', url);
+        });
+    });
+    </script>
+    {% endif %}
+    <!-- 统计代码 -->
+    <div class="hide">
+    </div>
+  </body>
+</html>

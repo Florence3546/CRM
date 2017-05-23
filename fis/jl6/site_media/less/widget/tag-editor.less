@@ -1,0 +1,97 @@
+/* surrounding tag container */
+/* hide original input field or textarea visually to allow tab navigation */
+.tag-editor-hidden-src { position: absolute !important; left: -99999px; }
+/* hide IE10 "clear field" X */
+.tag-editor ::-ms-clear { display: none; }
+
+.tag-editor .tag-editor-tag.active+.tag-editor-delete,
+.tag-editor .tag-editor-tag.active+.tag-editor-delete i { background: none; cursor: text; }
+
+.tag-editor .tag-editor-tag.active { background: none !important; }
+.tag-editor {
+  list-style-type: none;
+  padding: 0 5px 0 0;
+  margin: 0;
+  overflow: hidden;
+  cursor: text;
+  /*font: normal 14px sans-serif;*/
+  color: #555;
+  background: #fff;
+
+  li{
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 3px 0;
+    line-height: 1.5;
+    position: relative;
+    &:hover{
+    i{
+      visibility: visible;
+    }
+  }
+  }
+
+  div{
+    float: left;
+    padding: 0 4px;
+  }
+
+  .placeholder{
+    padding: 0 8px;
+    color: #bbb;
+  }
+
+  .tag-editor-spacer {
+    padding: 0;
+    width: 2px;
+    overflow: hidden;
+    color: transparent;
+    background: none;
+  }
+  input {
+    vertical-align: inherit;
+    border: 0;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: text;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    box-shadow: none;
+    background: none;
+  }
+  .tag-editor-tag {
+    font-weight : 900;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    /*color: #46799b;
+    background: #e0eaf1;*/
+    color: #677a89;
+    background: #e8ecef;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 2px 0 0 2px;
+  }
+  /* delete icon */
+  .tag-editor-delete {
+    position: absolute;
+    background: #e0eaf1;
+    width: 7px;
+    height: 7px;
+    cursor: pointer;
+    right: 0px;
+    top: 0px;
+  }
+
+  .tag-editor-delete i {
+    display: inline-block; width: 7px; height: 7px; vertical-align: middle; background: url('/jl6/site_media/widget/tagEditor/delete.png') 0 -14px no-repeat;
+    position: relative;
+    top: -7px;
+    right:4px;
+    visibility: hidden;
+  }
+}

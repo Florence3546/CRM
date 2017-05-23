@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <title>KISSY Editor Test</title>
+    <link href="http://g.alicdn.com/kissy/k/5.0.1/css/base.css" rel="stylesheet"/>
+    <link href="http://g.alicdn.com/kg/editor-plugins/1.1.3/assets/editor.css" rel="stylesheet"/>
+<!--    <link rel="stylesheet" type="text/css" href="../build/assets/editor-debug.css">  -->
+
+</head>
+<body>
+<h1 style="font-size: 2em;text-align: center;margin: 2em;">Simple KISSY Editor</h1>
+
+
+<div style="width: 90%;margin: 20px auto;">
+    <textarea id="ks-editor-textarea" style='width:600px;height:400px'></textarea>
+    <button onclick="window.newEditor.destroy();">destroy</button>
+</div>
+<script src="//g.alicdn.com/kissy/k/5.0.1/seed-debug.js"></script>
+<script type="text/javascript" src="http://g.tbcdn.cn/kg/editor-plugins/1.1.3/mods.js"></script>  <!-- 引入插件模块依赖表避免模块串行加载，优化性能-->
+<script>
+
+    (function () {
+        window.EDITOR_VERSION = '1.1.4';
+
+        var isDebug = location.search.indexOf('debug') > -1;
+        window.EDITOR_CFG = {
+            fromTextarea: '#ks-editor-textarea'
+        };
+        require.config({
+            packages: [
+                {
+                    name: 'kg/editor-plugins/' + EDITOR_VERSION,
+                    path: isDebug ? '../lib' : 'http://g.alicdn.com/kg/editor-plugins/' + EDITOR_VERSION
+                }
+            ]
+        })
+
+    })();
+</script>
+<script src="./demo.js"></script>
+</body>
+</html>

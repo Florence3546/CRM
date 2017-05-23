@@ -1,0 +1,53 @@
+<tr class="<%if (mnt_index) { %>hide<%}%>" <%if(online_status=="offline"){ %> class="mnt_tr" <% } %> fix-ie="hover">
+  <td class="hide">
+
+  </td>
+  <td class="nbl">
+    <div><a class="black" id="title_<%=campaign_id%>" <%if (mnt_index) { %>href='/mnt/mnt_campaign/<%=mnt_index%>'<% } else { %>href='/web/adgroup_list/<%=campaign_id%>'<%}%> ><%=title%></a><i class="iconfont hover-show ml3">&#xe60e;</i><i class="iconfont ml3 hover-show">&#xe60f;</i>
+    </div>
+  </td>
+  <td>
+  <span class="hide" id="budget_value_hide_<%=campaign_id%>"><%=budget%></span>
+  <span id="budget_value_show_<%=campaign_id%>"><%if(budget<20000000){ %><%=budget%>元<% }else{ %>不限<% } %></span><i class="iconfont ml3 hover-show">&#xe60e;</i>
+  </td>
+  <td>
+    <span class="hide"><%=total_cost%></span>
+    <div>
+      <span>总花费：￥<%=total_cost%></span>
+    </div>
+    <div>
+      <span class="w100 dib">展现量：<%=impr%></span><span class="ml3">点击量：<%=click%></span>
+    </div>
+    <div>
+      <span class="w100 dib">点击率：<%=click_rate%>%</span><span class="ml3">PPC：<%=ppc%></span>
+    </div>
+  </td>
+  <td>
+    <span class="hide"><%=total_pay%></span>
+    <div>
+      <span>成交额：￥<%=total_pay%></span>
+    </div>
+    <div>
+      <span class="w100 dib">成交量：<%=paycount%></span><span class="ml3">收藏量：<%=favcount%></span>
+    </div>
+    <div>
+      <span class="w100 dib">转化率：<%=conv%>%</span><span class="ml3">ROI：<%=roi%></span>
+    </div>
+  </td>
+  <td>
+    <div>
+      <%if (online_status=="online"){%>
+      推广中<i class="iconfont red poi ml3">&#xe64d;</i>
+      <% }else{ %>
+      已暂停<i class="iconfont baseColor poi ml3">&#xe64e;</i>
+      <% } %>
+    </div>
+    <div><%=adg_num%>个宝贝</div>
+    <div><%=error_descr%></div>
+  </td>
+  <td class="tc">
+    <div>
+        <a href="javascript:;" class="btn btn-info">管理</a>
+    </div>
+  </td>
+</tr>

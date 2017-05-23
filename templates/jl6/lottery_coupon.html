@@ -1,0 +1,197 @@
+{#utf-8#}{% extends "base_main.html" %}
+{% load rates %}
+
+{% block title%}
+优惠券
+{%endblock%}
+
+
+{% block extra_style %}
+{% endblock %}
+
+{% block content %}
+<link href="/site_media/jl6/static/css/upgrade_suggest.css" rel="stylesheet" type="text/css"/>
+
+<div class="container-fluid auto mt20">
+
+<!-- web端升级 -->
+<table class="nbb auto">
+    <tbody>
+        <tr>
+            <td class="pct25 p0 vt">
+                <div class="item">
+                    <div class="tc">
+                        <img class="mt20 float_img" src="/site_media/jl6/static/images/vip_home/shuang.png?t=1449237544117" width="120" height="120">
+                        <h4 class="mt20">双引擎</h4>
+                    </div>
+                    <ul class="mt10 w140 lh24 tc auto">
+                        <li>自动托管2个计划</li>
+                        <li>重点托管10款宝贝</li>
+                        <li>长尾托管500款宝贝</li>
+                    </ul>
+                    <div class="dg_box mt20">
+                        <div class="ovh" >
+                            <ul class="ul_line {% if double_size < 2 %} single {% endif %} ">
+                                {% for template in double_version %}
+                                    <li>
+                                        {% include 'lottery_coupon_template.html' %}
+                                    </li>
+                                {% empty %}
+                                    <li style="width:50%;" >
+                                        <div class="main_box">
+                                            <div class="tc gray pl20 pr20 mt30 mb10">
+                                               亲，对不起，精灵不提供该版本兑换链接。
+                                            </div>
+                                        </div>
+                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">暂无兑换链接</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if double_size > 2 %}
+                            <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe606;</i></a>
+                            <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe607;</i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+            <td class="pct25 p0 vt">
+                <div class="item">
+                    <div class="tc">
+                        <img class="mt20 float_img" src="/site_media/jl6/static/images/vip_home/siyq.png?t=1449237544117" width="120" height="120">
+                        <h4 class="mt20">八引擎</h4>
+                    </div>
+                    <ul class="mt10 w140 lh24 tc auto">
+                        <li>自动托管8个计划</li>
+                        <li>手动自动全功能</li>
+                        <li>核心词任性抢排名</li>
+                    </ul>
+                    <div class="dg_box mt20">
+                        <div class="ovh" >
+                            <ul class="ul_line {% if four_size < 2 %} single {% endif %} ">
+                                {% for template in four_version %}
+                                    <li>
+                                        {% include 'lottery_coupon_template.html' %}
+                                    </li>
+                                {% empty %}
+                                    <li style="width:50%;" >
+                                        <div class="main_box">
+                                                <div class="tc gray pl20 pr20 mt30 mb10">
+                                                   亲，对不起，精灵不提供该版本兑换链接。
+                                                </div>
+                                            </div>
+                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">暂无兑换链接</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if four_size > 2 %}
+                            <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe606;</i></a>
+                            <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe607;</i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+            <td class="pct25 p0 vt">
+                  <div class="item">
+                        <div class="tc">
+                            <img class="mt20 float_img" src="/site_media/jl6/static/images/vip_home/zhuanjia.png?t=1449237544117" width="120" height="120">
+                            <h4 class="mt20">类目专家版</h4>
+                        </div>
+                        <ul class="mt10 w140 lh24 tc auto">
+                            <li>人工手动微调</li>
+                            <li>个性化设置托管</li>
+                            <li>软件24小时监控</li>
+                        </ul>
+                        <div class="dg_box mt20">
+                            <div class="ovh" >
+                                <ul class="ul_line {% if cate_size < 2 %} single {% endif %} ">
+                                    {% for template in cate_version %}
+                                        <li>
+                                            {% include 'lottery_coupon_template.html' %}
+                                        </li>
+                                    {% empty %}
+                                        <li style="width:50%;" >
+                                            <div class="main_box">
+                                                <div class="tc gray pl20 pr20 mt30 mb10">
+                                                   亲，对不起，精灵不提供该版本兑换链接。
+                                                </div>
+                                            </div>
+                                            <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">暂无兑换链接</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% if cate_size > 2 %}
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe606;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe607;</i></a>
+                            {% endif %}
+                        </div>
+                </div>
+            </td>
+            <td class="pct25 p0 vt">
+                <div class="item">
+                    <div class="tc">
+                        <img class="mt20 float_img" src="/site_media/jl6/static/images/vip_home/leimu.png?t=1449237544117" width="120" height="120">
+                        <h4 class="mt20">VIP专家版</h4>
+                    </div>
+                    <ul class="mt10 w140 lh24 tc auto">
+                        <li>手动操作5款宝贝</li>
+                        <li>专家车手全程交流</li>
+                        <li>效果提升更有保障</li>
+                    </ul>
+                    <div class="dg_box mt20">
+                        <div class="ovh" >
+                            <ul class="ul_line {% if vip_size < 2 %} single {% endif %} ">
+                                {% for template in vip_version %}
+                                    <li>
+                                        {% include 'lottery_coupon_template.html' %}
+                                    </li>
+                                {% empty %}
+                                    <li>
+                                        <div class="main_box">
+                                            <div class="tc gray pl20 pr20 mt30 mb10">
+                                               亲，对不起，精灵不提供该版本兑换链接。
+                                            </div>
+                                        </div>
+                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">暂无兑换链接</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if vip_size > 2 %}
+                            <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe606;</i></a>
+                            <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe607;</i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+
+<script>
+
+window.onload=function(){
+
+    require(['jl6/site_media/plugins/jquery/jquery.min'],function($){
+
+            $('.dg_box .next').on('click',function(){
+                $(this).parent().find('.ul_line').css('marginLeft','-100%');
+                $(this).removeClass('active');
+                $(this).prev().addClass('active');
+            });
+
+            $('.dg_box .prev').on('click',function(){
+                $(this).parent().find('.ul_line').css('marginLeft','0');
+                $(this).removeClass('active');
+                $(this).next().addClass('active');
+            })
+
+    });
+}
+</script>
+{%endblock%}
+

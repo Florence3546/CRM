@@ -1,0 +1,271 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}用户列表{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+
+        <div class="fix lh30 p10">
+            <span class="f16"><i class="iconfont mr5">&#xe61c;</i>用户列表</span>
+           	<span><a class="btn btn-small r edit_customer" href="javascript:void(0);" cust_id="0">录入新客户</a></span>
+            <div class="r">
+                <form class="m0" action="./" method="post">
+                    店铺ID：
+                    <input class="w100 mr10" name="shop_id" type="text" value="{{shop_id}}">
+                    用户名：
+                    <input class="w160" placeholder="可输入'淘**店'模糊查询" name="nick" type="text" value="{{nick}}">
+                    <button class="btn" type="submit"><i class="iconfont">&#xe645;</i></button>
+                </form>
+            </div>
+        </div>
+
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th class="w160 tl">店铺信息</th>
+                    <th class="tl w300">直通车信息</th>
+                    <th class="tl">备注</th>
+                    <th class="w100">动作</th>
+                </tr>
+            </thead>
+            <tbody class="lh22">
+                {%if customer%}
+                    {%for c in customer%}
+                    <tr>
+                        <td>
+                            <div>
+                                <img src='/site_media/jl/img/credit/{{c.user.level}}.gif'>
+                                {%if c.is_b2c%}
+                                <span class="r red mr3">B店</span>
+                                {%else%}
+                                <span class="r mr3">C店</span>
+                                {%endif%}
+                            </div>
+                            <div>
+                                <a href="http://shop{{c.shop_id}}.taobao.com" class="orange" target="_blank" title="进入店铺">{{c.shop_id}}</a>
+                                <div class="r">
+                                    {%if c.ww%}
+                                    <i class="iconfont tips poi f20" data-original-title="{{c.ww}}">&#xe68d;</i>
+                                    {%endif%}
+                                    {%if c.qq%}
+                                    <i class="iconfont tips poi f20" data-original-title="{{c.qq}}">&#xe68c;</i>
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div>
+                                <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao{{c.nick}}" title="联系旺旺">{{c.nick}}</a>
+                            </div>
+                            <div>TEL：{{c.phone|display_phone|default:'-'}}</div>
+                            <div class="gray">{{c.category}}</div>
+                            <div class="gray">{{c.address}}</div>
+                            <a href="{% url 'edit_customer' c.id %}" target="_blank">修改</a>
+                        </td>
+                        <td>
+                            {%if c.ztc_id%}
+                            <div>
+                                <span class="dib w80">直通车代理：</span>
+                                <span>{{c.ztc_id}}</span>
+                                <span class="ml10">{{c.ztc_psw}}</span>
+                            </div>
+                            {%endif%}
+                            {%if c.lz_id%}
+                            <div>
+                                <span class="dib w80">量子号：</span>
+                                <span>{{c.lz_id}}</span>
+                                <span class="ml10">{{c.lz_psw}}</span>
+                            </div>
+                            {%endif%}
+                        </td>
+                        <td></td>
+                        <td class="tc vt" shop_id="{{c.shop_id}}">
+                            <a href="javascript:;" class="contact">添加联系事件</a><br/>
+                            <a href="javascript:;" class="subscribe">录入订单</a><br/>
+                            <a href="javascript:;" class="operate">操作</a><br/>
+                            <a href="javascript:;" class="reintro">转介绍</a><br/>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                {%else%}
+                <tr>
+                    <td colspan="4" class="tc">暂无数据</td>
+                </tr>
+                {%endif%}
+            </tbody>
+        </table>
+        <div class="fix">
+            <span>
+                当前：{{page_info.page}}/{{page_info.page_count}}
+            </span>
+            <div class="pagination mt10 r">
+                <ul>
+                  <li {%if page_info.page == 1%}class="active"{%endif%}><a href="{%url 'user_list' 1%}">首页</a></li>
+                  {%for p in page_info.page_xrange%}
+                    <li {%if p == page_info.page%}class="active"{%endif%}><a href="{%url 'user_list' p%}">{{p}}</a></li>
+                  {%endfor%}
+                  <li {%if page_info.page == page_info.page_count%}class="active"{%endif%}><a href="{%url 'user_list' page_info.page_count%}">尾页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="id_add_contact_layout" class="modal hide fade p10" data-width="w400">
+    <input type="hidden"  id="id_contact_shop_id" />
+    <table class="table-layout f14">
+        <tr>
+            <td class="w80">联系方式</td>
+            <td>
+                <label class="dib"><input class="mr3" type="radio" name="contact_type" value="qq">QQ</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="contact_type" value="ww" checked="checked">旺旺</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="contact_type" value="phone">电话</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="contact_type" value="weixin">微信</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="contact_type" value="others">其它</label>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td>联系时间</td>
+            <td><input type="text" id="id_contact_time" value=""></td>
+        </tr>
+        <tr class="hide">
+            <td>结束时间</td>
+            <td><input type="text" id="id_contact_end_time" value=""></td>
+        </tr>
+        <tr>
+            <td>关键词</td>
+            <td><input class="w280" type="text" id="id_contact_intention" value=""></td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><textarea class="w280"  id="id_contact_note"></textarea></td>
+        </tr>
+        <tr>
+            <td>是否主动</td>
+            <td><input type="checkbox" id="id_contact_isinitiative" checked="checked"></td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary" id="submit_contact">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_subscribe_layout" class="modal hide fade p10" data-width="w650">
+    <input type="hidden"  id="id_subscribe_shop_id" />
+    <table class="table-layout f14">
+        <tr>
+            <td class="w90" >销售者</td>
+            <td><input type="text" id="id_subscribe_sale_user" value="" psuser_id="0"><span id="is_valid_flag" style="margin:0px 10px;"></span></td>
+        </tr>
+        <tr>
+            <td class="w80">订购类型</td>
+            <td>
+                <label class="dib"><input class="mr3" type="radio" name="biz_type" value="1" checked="checked">新订</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="biz_type" value="2" >续订</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="biz_type" value="3">升级</label>
+            </td>
+        </tr>
+        <tr>
+            <!-- 此处暂不考虑软件应用 -->
+            <td>订单类型</td>
+            <td>
+                <select id="id_subscribe_article_code">
+                    <option value="">请选择</option>
+                    <option value="operation">直通车操作</option>
+                    <option value="thirdpartnar">店铺代运营</option>
+                    <option value="decoration">店铺装修</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>金额</td>
+            <td>
+                <input type="text" value="" id="id_subscribe_pay" >
+            </td>
+        </tr>
+        <tr >
+            <td>起止时间</td>
+            <td>
+                <input class="w100" id="id_subscribe_start_time"  type="text" value="">
+                <span class="dib w20 tc">-</span>
+                <input class="w100" id="id_subscribe_end_time" type="text" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><textarea class="w280"  id="id_subscribe_note"></textarea></td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" id="submit_subscribe" class="btn btn-primary" id="submit_contact">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn subscribe_btn">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_operate_layout" class="modal hide fade p10" data-width="w400">
+    <input type="hidden"  id="id_operate_shop_id" />
+    <table class="table-layout f14">
+        <tr>
+            <td class="w80">操作类型</td>
+            <td>
+                <label class="dib"><input class="mr3" type="radio" name="oper_type" value="ztc" checked="checked">直通车操作</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="oper_type" value="zz" >钻展操作</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="oper_type" value="others">其它</label>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><textarea class="w280"  id="id_operate_note"></textarea></td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary" id="submit_operate">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_reintro_layout" class="modal hide fade p10" data-width="w400">
+    <input type="hidden"  id="id_reintro_shop_id" />
+    <table class="table-layout f14">
+        <tr>
+            <td class="w80">转介绍</td>
+            <td>
+                <label class="dib"><input class="mr3" type="radio" name="reintro_type" value="ztc" checked="checked">人工托管</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="reintro_type" value="zz" >钻展</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="reintro_type" value="rjjh">类目专家</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="reintro_type" value="zx">装修</label>
+                <label class="dib"><input class="ml10 mr3" type="radio" name="reintro_type" value="others">其它</label>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><textarea class="w280"  id="id_reintro_note"></textarea></td>
+        </tr>
+        <tr>
+			<td>转介绍人</td>
+			<td><select id="id_select_receiver"></select></td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary" id="submit_reintro">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn">关闭</a>
+    </div>
+</div>
+
+<script id="id_user_selector_template" type="text/html">
+	<% for(var i=0;i<user_list.length;i++) { %>
+	<option value="<%=user_list[i].id%>"><%=user_list[i].position%>：<%=user_list[i].name_cn%></option>
+	<% } %>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/ncrm_user_list.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.NcrmUserList.init();
+});
+
+</script>
+{% endblock %}

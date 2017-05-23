@@ -1,0 +1,196 @@
+{#utf-8#}{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block title%}
+	计划列表
+{% endblock %}
+{% block extra_style %}
+<link href="/site_media/jl/plugins/tour/css/bootstrap-tour.min.css?v={{VERSION}}" rel="stylesheet" type="text/css" />
+<link href="/site_media/qnpc/css/campaign_list.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+<link href="/site_media/assets/plugins/fancybox/source/jquery.fancybox.css?v={{VERSION}}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div class="marb_6" id="camp_control">
+
+      <a href="javascript:void(0);" class="sui-btn btn-bordered btn-xlarge camp" oper="0">暂停推广<i class="sui-icon icon-pause"></i></a>
+      <a href="javascript:void(0);" class="sui-btn btn-bordered btn-xlarge camp" oper="1">参与推广<i class="sui-icon icon-play"></i></a>
+      <a href="javascript:void(0);" class="sui-btn btn-bordered btn-xlarge" id="camp_history">操作记录<i class="sui-icon icon-time"></i></a>
+    </div>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb mar_0">
+            <li>
+                <i class="icon-list"></i>
+                <span class='bld normally'>计划列表<span>(共<span id="total_camp_count" class='r_color'></span>个/当前选中<span id="checked_count" class='r_color'>0</span>个)</span></span>
+            </li>
+            <li class="fr no-text-shadow marr_0">
+                <div id="dashboard-report-range" class="dashboard-date-range no-tooltip-on-touch-device responsive">
+                    <i class="sui-icon icon-touch-date-sign"></i>
+                    <span>统计天数：<span class="date_value">过去1天</span></span>
+                    <i class="sui-icon icon-pc-chevron-bottom"></i>
+                    <form action="./" method="post" class="hide" post_mode="ajax" post_fuc="PT.Campaign_list.select_call_back">
+                    	<input type="hidden" name="last_day" />
+                    </form>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<table class="table table-bordered mart_3 PT_warp" id="campaign_table">
+    <thead>
+        <tr class="tac">
+            <th style="width:14px;"><input type="checkbox" class="group-checkable father_box" data-set="#sample_1 .checkboxes" link="campaign_table" /></th>
+            <th style="width:20%;">计划名称</th>
+            <th style="width:60px;">日限额</th>
+            <th style="width:16%;">基础数据</th>
+            <th style="width:16%;">转化数据</th>
+            <th style="width:70px;">推广状态</th>
+            <th style="width:85px;">全自动状态</th>
+            <th>宝贝个数</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="hide" id="camp_history_table_box">
+  <table class="table table-striped table-bordered table-hover td_middle" id="camp_history_table">
+      <thead>
+          <tr class="tac">
+              <th nowrap="nowrap"><div class="th_wrapp">操作时间</div></th>
+              <th nowrap="nowrap"><div class="th_wrapp">推广计划</div></th>
+              <th nowrap="nowrap"><div class="th_wrapp">执行方式</div></th>
+              <th nowrap="nowrap"><div class="th_wrapp">操作说明</div></th>
+          </tr>
+      </thead>
+      <tbody id="history_table_tbody">
+      </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block template %}
+<script id="campaign_tr" type="text/html">
+<tr <%if(online_status=="offline"){ %> class="mnt_tr" <% } %>>
+	<td class="link_inner_checkbox pointer"><input type="checkbox" class="checkboxes kid_box" value="<%=campaign_id%>"></td>
+	<td><a href='/qnpc/adgroup_list/<%=campaign_id%>' class="marl_3" id="title_<%=campaign_id%>"><%=title%></a><i class="sui-icon icon-pencil zoom marl_3 edit_title pointer"></i><i class="sui-icon icon-bar-chart zoom marl_3 show_trend_chart pointer"></i></td>
+	<td class="tac">
+		<span class="hide" id="budget_value_hide_<%=campaign_id%>"><%=budget%></span>
+		<div>
+			<span id="budget_value_show_<%=campaign_id%>"><%if(budget<20000000){ %><%=budget%><% }else{ %>不限<% } %></span>
+			<i class="sui-icon icon-pencil edit_btn pointer"></i>
+			<input type="hidden" id="is_smooth_<%=campaign_id%>" value="<%=is_smooth%>"/>
+		</div>
+	</td>
+	<td>
+		<span class="hide"><%=total_cost%></span>
+		<div>总花费 <span><%=total_cost%></span></div>
+		<div>展现量 <span><%=impr%></span></div>
+		<div>点击量 <span><%=click%></span></div>
+		<div>点击率 <span><%=click_rate%>%</span></div>
+		<div>点击花费 <span><%=ppc%></span></div>
+	</td>
+	<td>
+		<span class="hide"><%=total_pay%></span>
+		<div class="tooltips" data-placement="top" data-original-title="直接成交金额 : <%=directpay%>元</br>间接成交金额 : <%=indirectpay%>元</br>直接成交笔数 : <%= directpaycount%>笔</br>间接成交笔数 : <%=indirectpaycount%>笔</br>店铺收藏次数 : <%=favshopcount%>次</br>宝贝收藏次数 : <%=favitemcount%>次">
+			<div>成交额 <span><%=total_pay%></span></div>
+			<div>成交量 <span><%=paycount%></span></div>
+			<div>收藏量 <span><%=favcount%></span></div>
+			<div>转化率 <span><%=conv%>%</span></div>
+			<div>投资回报 <span><%=roi%></span></div>
+		</div>
+	</td>
+	<td class="tac">
+		<%if (online_status=="online"){%>
+		<span class="hide">1</span>
+		<span id="status_<%=campaign_id%>">推广中</span>
+		<% }else{ %>
+		<span class="hide">0</span>
+		<span id="status_<%=campaign_id%>">已暂停</span>
+		<% } %>
+    <br/>
+		<span><%=error_descr%></span>
+	</td>
+	<td class="tac">
+		<span class="hide"><%if (mnt_type) { %>1<% } else { %>0<%}%></span>
+		<span><%if (mnt_type) { %>【<%=mnt_name%>】<% } else { %>未托管<%}%></span>
+	</td>
+	<td class="tac">
+		<span class="hide"><%=adg_num%></span>
+		<div><%=adg_num%>个</div>
+		<a href="/qnpc/adgroup_list/<%=campaign_id%>" class="lb_color normal_size">查看宝贝</a>
+	</td>
+</tr>
+</script>
+<script id="edit_budget_temp" type="text/html">
+<div class="sui-form" style="line-height:24px;" id="edit_budget_box">
+  <div>
+    <label>
+      <input type="radio" name="budget_radio" value='0' id="noset_budget"><span class="marl_6 normally">不设置日限额</span>
+    </label>
+  </div>
+  <div>
+    <label>
+      <input type="radio" name="budget_radio" value='1' id="set_budget"><span class="marl_6 normally">设置日限额为</span>
+    </label>
+    <input type="text" class="input-mini" id="budget_value" maxlength="5">元
+    <span>(最低30元，最高99999元)</span>
+    <span class="tooltips marl_6" data-placement="bottom" data-original-title="由于淘宝限制，大于10万的日限额，请到直通车后台修改"><i class="sui-icon icon-lightbulb"></i></span>
+  </div>
+  <div class="marl_24" id="put_setting">
+    <div>
+      <label>
+        <input type="radio" name="smooth_radio" checked="checked"><span class="marl_6 normally">标准投放</span>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        <input type="radio" name="smooth_radio"><span class="marl_6 normally">智能化均匀投放</span>
+      </label>
+    </div>
+  </div>
+</div>
+</script>
+<script id="budget_popover_temp" type="text/html">
+	<div class="popover" id="edit_budget_box"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>
+</script>
+<script id="title_popover_temp" type="text/html">
+	<input id="edit_title_input" type="text" class="m-wrap" maxlength="20" style="width:260px; height:15px;"/>
+</script>
+
+<script id="modal_camp_trend_temp" type="text/html">
+  <div id="camp_trend_chart" style="height:300px;width:660px;"></div>
+</script>
+
+<script id="history_table_tr" type="text/html">
+  <tr>
+      <td><div class="tac"><%=oper_time%></div></td>
+      <td><div class="tal marl_3"><%=camp_title%></div></td>
+      <td><div class="tal marl_3"><%=oper_type%></div></td>
+      <td><div class="tal marl_3"><%=detail%></div></td>
+  </tr>
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/date.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/plugins/tour/js/bootstrap-tour.min.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/fancybox/source/jquery.fancybox.pack.js?v={{VERSION}}"></script>
+<script src="/site_media/qnpc/scripts/campaign_list.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function() {
+	PT.Campaign_list.init();
+});
+</script>
+{% endblock %}

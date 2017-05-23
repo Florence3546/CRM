@@ -1,0 +1,84 @@
+table {
+  table-layout: fixed;
+  font-size: 12px;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  td{
+    padding: 8px 4px;
+    border-bottom: 1px solid @tableBorder;
+  }
+
+  th{
+    text-align: center;
+    font-weight: 700;
+    padding: 8px 4px;
+    background-color: @tableThBackground;
+    border-bottom: 1px solid @tableBorder;
+    #gradient > .vertical-without-ie(@boxStartColor, @boxEndColor);
+  }
+
+  tr{
+    background-color: @white;
+  }
+  background-color:@tableBackground;
+
+  i{
+    color:@baseColor;
+  }
+}
+
+table.mini{
+  th{
+    padding: 2px 4px;
+  }
+}
+
+.table-layout {
+  td{
+    border-bottom:none;
+  }
+}
+
+.table-bordered {
+  border-top: 1px solid @tableBorder;
+  border-left: 1px solid @tableBorder;
+  border-right: 1px solid @tableBorder;
+
+  th, td {
+      border: 1px solid @tableBorder;
+      border-top: none;
+      border-right: none;
+    }
+
+  td.nbb{
+    border-bottom: none;
+  }
+
+  td.nbl{
+    border-left: none;
+  }
+}
+
+.table-bordered .nbl{
+  border-left:none;
+}
+
+.table-no-warp-border {
+  border-left: none;
+  border-right:none;
+  &>thead th:first-child, &>tbody td:first-child {
+    border-left: none;
+  }
+  &>tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.table-striped>tbody>tr:nth-child(even){
+  background-color:@tableBackgroundAccent;
+}
+
+.table-hover>tbody>tr:hover,.table-hover>tbody>tr:hover td{
+  background-color:lighten(@gray,45%);
+}

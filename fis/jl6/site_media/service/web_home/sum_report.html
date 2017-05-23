@@ -1,0 +1,35 @@
+<tr>
+    <td rowspan="4">　　</td>
+    <td>总花费　</td>
+    <td>展现量　</td>
+    <td>点击量　</td>
+    <td>点击率　</td>
+    <td>PPC&nbsp;<i class="iconfont f14" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="平均点击花费">&#xe61a;</i>　</td>
+    <td>购物车总数</td>
+</tr>
+<tr class="data">
+    <td class="b">￥{{ cost }}</td>
+    <td>{{ impr }}</td>
+    <td>{{ click }}</td>
+    <td>{{ ctr }}%</td>
+    <td>{{ cpc }}</td>
+    <td>{{ carttotal }}</td>
+</tr>
+<tr>
+    <td>成交额</td>
+    <td>收藏量</td>
+    <td>成交量</td>
+    <td>转化率</td>
+    <td>ROI&nbsp;<i class="iconfont f14" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="投资回报率">&#xe61a;</i></td>
+    <td>成交量单价&nbsp;<i class="iconfont f14" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="成交量单价 = 成交额/成交量">&#xe61a;</i></td>
+</tr>
+<tr class="data">
+    <td class="b"><span data-toggle="tooltip" data-placement="top" data-trigger="hover" title="直接成交金额: {{ directpay }}<br/>间接成交金额: {{ indirectpay }}">￥<span class="pay">{{ pay }}</span></span> </td>
+    <td><span data-toggle="tooltip" data-placement="top" data-trigger="hover" title="店铺收藏数: {{ favshopcount }}<br/>宝贝收藏数: {{ favitemcount }}">
+      {{ favcount }}
+      </span></td>
+    <td><span data-toggle="tooltip" data-placement="top" data-trigger="hover" title="直接成交笔数: {{ directpaycount }}<br/>间接成交笔数: {{ indirectpaycount }}">{{ paycount }}</span></td>
+    <td>{{ conv }}%</td>
+    <td>{{ roi }}</td>
+    <td>{{ avg_pay }}</td>
+</tr>

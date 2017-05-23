@@ -1,0 +1,276 @@
+
+<link rel="stylesheet" href="/site_media/jl5/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.css" />
+
+<style type="text/css">
+.duration {
+    width: 829px;
+    border: 1px solid #eee;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: default;
+    border-right: 0;
+    font-size: 12px;
+}
+
+.duration .header {
+    height: 50px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.duration .content {
+    clear: both;
+    height: 426px;
+    overflow: hidden;
+}
+
+.duration .content .week {
+    width: 60px;
+    border-right: 1px solid #eee;
+    height: 100%;
+}
+
+.duration .content .week .day {
+    border-bottom: 1px solid #eee;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.duration .header .info {
+    width: 60px;
+    height: 50px;
+    line-height: 50px;
+    background: #fafafa;
+    border-right: 1px solid #eee;
+}
+
+.duration .header .time {
+    background: #fafafa;
+    border-right: 1px solid #eee;
+    width: 191px;
+}
+
+.duration .header .num {
+    height: 31px;
+    line-height: 31px;
+    border-bottom: 1px solid #eee;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.duration .header .digital {
+    width: 31px;
+    border-right: 1px solid #eee;
+}
+
+.duration .header .last {
+    border-right: 0;
+}
+
+.duration .boxzone {
+    float: left;
+    width: 768px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.duration .boxzone .box {
+    width: 15px;
+    height: 60px;
+    float: left;
+    background: #fff;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    background-color: rgb(241, 241, 241);
+}
+
+.duration ul {margin: 0;}
+.duration ul li {list-style: none;}
+
+.duration_setting {
+    width: 230px;
+    border: 1px solid #DDD;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    border-radius: 2px;
+    position: fixed;
+    padding: 20px;
+    background: #fff;
+    display: none;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+/*    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -115px;*/
+}
+
+.duration_hover {
+    width: 155px;
+    border: 1px solid #DDD;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    border-radius: 2px;
+    position: fixed;
+    padding: 15px;
+    background: #fff;
+    z-index: 9999;
+    filter: alpha(opacity=80);
+    opacity: .8;
+    top: 0;
+    left: 0;
+    font-size: 12px;
+}
+
+#selectable .ui-selecting { background: #FECA40 !important; }
+#selectable .ui-selected { background: #FFF !important; border-right-color: #FFF; border-bottom-color: #FFF; }
+
+.li_bgcolor_0 {background-color: rgb(241, 241, 241) !important; }
+.li_bgcolor_1 {background-color: rgb(230, 230, 230) !important; }
+.li_bgcolor_3 {background-color: rgb(181, 208, 250) !important; }
+.li_bgcolor_4 {background-color: rgb(157, 193, 248) !important; }
+.li_bgcolor_5 {background-color: rgb(133, 178, 246) !important; }
+.li_bgcolor_6 {background-color: rgb(109, 163, 245) !important; }
+.li_bgcolor_7 {background-color: rgb(85, 147, 243) !important; }
+.li_bgcolor_8 {background-color: rgb(63, 132, 241) !important; }
+.li_bgcolor_9 {background-color: rgb(36, 116, 240) !important; }
+.li_bgcolor_10 {background-color: rgb(255, 246, 183) !important; }
+.li_bgcolor_11 {background-color: rgb(255, 237, 165) !important; }
+.li_bgcolor_12 {background-color: rgb(255, 222, 162) !important; }
+.li_bgcolor_13 {background-color: rgb(255, 207, 162) !important; }
+.li_bgcolor_14 {background-color: rgb(255, 186, 153) !important; }
+.li_bgcolor_15 {background-color: rgb(255, 171, 132) !important; }
+.li_bgcolor_16 {background-color: rgb(255, 150, 129) !important; }
+.li_bgcolor_17 {background-color: rgb(255, 123, 123) !important; }
+.li_bgcolor_18 {background-color: rgb(246, 102, 132) !important; }
+.li_bgcolor_19 {background-color: rgb(249, 108, 195) !important; }
+.li_bgcolor_20 {background-color: rgb(237, 102, 231) !important; }
+.li_bgcolor_21 {background-color: rgb(228, 102, 225) !important; }
+.li_bgcolor_22 {background-color: rgb(213, 123, 255) !important; }
+.li_bgcolor_23 {background-color: rgb(192, 120, 246) !important; }
+.li_bgcolor_24 {background-color: rgb(171, 102, 222) !important; }
+.li_bgcolor_25 {background-color: rgb(156, 102, 198) !important; }
+
+
+
+</style>
+
+<div id="modal_camp_schedule" class="modal hide fade" tabindex="-1" data-width="860" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+      <a href="javascript:;" class="close" data-dismiss="modal">×</a>
+      <h4><span id="camp_schedule_title" class="b"></span>设置投放时间</h4>
+    </div>
+    <div class="modal-body">
+        <div class="duration">
+            <ul class="header">
+                <li class="l info">星期\时间</li>
+                <li class="l time">
+                    <div class="num">00:00 - 06:00</div>
+                    <ul class="detail clearfix">
+                        <li class="digital l">0</li>
+                        <li class="digital l">1</li>
+                        <li class="digital l">2</li>
+                        <li class="digital l" >3</li>
+                        <li class="digital l">4</li>
+                        <li class="digital l last">5</li>
+                    </ul>
+                </li>
+                <li class="l time">
+                    <div class="num">06:00 - 12:00</div>
+                    <ul class="detail clearfix" >
+                        <li class="digital l">6</li>
+                        <li class="digital l">7</li>
+                        <li class="digital l">8</li>
+                        <li class="digital l">9</li>
+                        <li class="digital l">10</li>
+                        <li class="digital l last">11</li>
+                    </ul>
+                </li>
+                <li class="l time">
+                    <div class="num" >12:00 - 18:00</div>
+                    <ul class="detail clearfix">
+                        <li class="digital l">12</li>
+                        <li class="digital l">13</li>
+                        <li class="digital l">14</li>
+                        <li class="digital l">15</li>
+                        <li class="digital l">16</li>
+                        <li class="digital l last">17</li>
+                    </ul>
+                </li>
+                <li class="l time">
+                    <div class="num">18:00 - 24:00</div>
+                    <ul class="detail clearfix">
+                        <li class="digital l">18</li>
+                        <li class="digital l">19</li>
+                        <li class="digital l">20</li>
+                        <li class="digital l">21</li>
+                        <li class="digital l">22</li>
+                        <li class="digital l last">23</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="content">
+                <ul class="l week">
+                    <li class="day">星期一</li>
+                    <li class="day">星期二</li>
+                    <li class="day">星期三</li>
+                    <li class="day">星期四</li>
+                    <li class="day">星期五</li>
+                    <li class="day">星期六</li>
+                    <li class="day">星期天</li>
+                </ul>
+                <ul class="boxzone" id="selectable"></ul>
+            </div>
+        </div>
+        <div class="mt10">
+            <span>
+                <button class="btn bluk_set" value="100">全日制投放</button>
+                <button class="btn bluk_set" value="0">清空</button>
+            </span>
+            <span>（可以拖拽鼠标选择投放时间段）</span>
+            <span class="r">
+                <button class="btn btn-primary submit">提交</button>
+                <button class="btn" data-dismiss="modal">取消</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div id="duration_setting" class="duration_setting" tabindex="-1">
+    <div>
+        <span id="day_desc"></span>： <strong class="" id="time_desc"></strong>
+    </div>
+    <div class="mt20 mb10">
+        <div class="r error-right" style="width: 160px;">
+            <input id="duration_setting_discount" type="slider" name="discount" value="100">
+        </div>
+        <label class="f12" id="duration_discount">
+            <input type="radio" value=2 name="duration_setting" class="mr5" checked>自定义：
+        </label>
+        <label class="f12" id="duration_setting_set100">
+            <input type="radio" value=1 name="duration_setting" class="mr5">无折扣
+        </label>
+        <label class="f12" id="duration_setting_setdefault" >
+            <input type="radio" value=0 name="duration_setting" class="mr5">不投放
+        </label>
+    </div>
+    <div class="tc">
+        <button class="btn btn-small btn-primary submit">确定</button>
+        <button class="btn btn-small close_duration">取消</button>
+    </div>
+</div>
+
+<div id="duration_hover" class="duration_hover hide" >
+    <div> <span id="duration_hover_week">---</span> ： </div>
+    <div> <strong id="duration_hover_time">--:-- - --:--</strong> <strong class="ml5" id="duration_hover_discount">---</strong> %折扣 </div>
+</div>
+
+<script src="/site_media/jl5/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
+<script>
+jQuery(document).ready(function() {
+  PT.Schedule.init();
+});
+</script>

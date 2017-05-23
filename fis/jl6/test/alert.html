@@ -1,0 +1,199 @@
+<html>
+<head>
+    <title>测试</title>
+    <link rel="stylesheet" type="text/css" href="../site_media/themes/default/default_theme.less" />
+</head>
+<body>
+<div class="container">
+<i class="iconfont f16" data-toggle="tooltip" data-placement="left" data-trigger="click" title="Tooltip on left">&#xe628;</i>
+    <h1>alert组件测试</h1>
+        <i class="iconfont f16" data-toggle="tooltip" data-placement="left" data-trigger="click" title="Tooltip on left">&#xe628;</i>
+    <p>
+        <button class="btn btn-primary" id="t01">点我啊</button>
+        <pre>
+            m.show({
+                body:'哎呦！不错啊',
+                hidden:function(){
+                    console.log('关闭后')
+                },
+                hide:function(){
+                    console.log('关闭前')
+                }
+            });
+        </pre>
+    </p>
+    <p>
+        <button class="btn btn-primary" id="t02">第二种调用方式</button>
+        <pre>
+        m.show('啦啦啦德玛西亚');
+        </pre>
+    </p>
+    <h1>confirm组件测试</h1>
+    <p>
+        <button class="btn btn-primary" id="t11">点我啊</button>
+        <pre>
+            con.show({
+                body:'哎呦！不错啊',
+                okHidden:function(){
+                    console.log('确认关闭后')
+                },
+                okHide:function(){
+                    console.log('确认关闭前')
+                },
+                cancleHidden:function(){
+                    console.log('取消关闭后')
+                },
+                cancleHide:function(){
+                    console.log('取消关闭前')
+                }
+            });
+        </pre>
+    </p>
+    <h1>ajax测试</h1>
+    <p>
+        <button class="btn btn-primary" id="t21">点我啊</button>
+        <pre>
+            ajax.ajax('get_name');
+        </pre>
+    </p>
+
+    <h1>common测试</h1>
+    <p>
+        <button class="btn btn-primary" id="t31">你大爷</button>
+        <pre>
+            common.alert.show('你大爷');
+        </pre>
+    </p>
+
+    <h1>loading测试</h1>
+    <p>
+        <button class="btn btn-primary" id="t41">loading</button>
+        <pre>
+            common.loading.show('你大爷');
+        </pre>
+    </p>
+
+    <h1>lightMsg测试</h1>
+    <p>
+        <button class="btn btn-primary" id="t51">lightMsg</button>
+        <pre>
+            common.lightMsg.show('哎呦不错哦');
+        </pre>
+    </p>
+    <p>
+        <button class="btn btn-primary" id="t52">第二种调用方式</button>
+        <pre>
+        common.lightMsg.show({
+                title:'德玛西亚',
+                body:'我是提醒内容',
+                timeout:1000
+            });
+        </pre>
+    </p>
+
+    <h1>switch测试</h1>
+    <p>
+        <div class="switch" data-toggle="switch" id="t61"></div>
+        <pre>
+        $('#t61').on('change',function(e,checked){
+            console.log(checked)
+        });
+        </pre>
+    </p>
+
+    <h1>scrollBar测试</h1>
+    <p>
+        <div style="height:100px;width:300px;overflow: hidden;" id="t71" data-target="#common_message">
+            <div id="common_message">啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚,啦啦啦德玛西亚</div>
+        </div>
+    </p>
+</div>
+<script type="text/javascript" src="jl6/site_media/static/js/require.js"></script>
+<script type="text/javascript">
+
+    require(['jquery',
+             'bootstrap',
+             'jl6/site_media/widget/alert/alert',
+             'jl6/site_media/widget/confirm/confirm',
+             'jl6/site_media/widget/ajax/ajax'
+             ],function($,ale,con,ajax,_){
+
+// $('[data-toggle="tooltip"]').tooltip()
+
+        $('#t01').on('click',function(){
+            ale.show({
+                body:'哎呦！不错啊',
+                hidden:function(){
+                    console.log('关闭后');
+                },
+                hide:function(){
+                    console.log('关闭前');
+                }
+            });
+        });
+
+        $('#t02').on('click',function(){
+            ale.show('啦啦啦德玛西亚');
+        });
+
+        $('#t11').on('click',function(){
+            con.show({
+                body:'哎呦！不错啊',
+                okHidden:function(){
+                    console.log('确认关闭后');
+                },
+                okHide:function(){
+                    console.log('确认关闭前');
+                },
+                cancleHidden:function(){
+                    console.log('取消关闭后');
+                },
+                cancleHide:function(){
+                    console.log('取消关闭前');
+                }
+            });
+        });
+
+        $('#t21').on('click',function(){
+            ajax.ajax('get_name');
+        });
+    });
+
+
+    require(['jquery',
+             'jl6/site_media/service/common/common'
+             ],function($,PT){
+
+        $('#t31').on('click',function(){
+            PT.alert.show('get_name');
+        });
+
+        $('#t41').on('click',function(){
+            PT.loading.show('get_name');
+
+            setTimeout(function(){PT.loading.hide()},3000);
+        });
+
+        $('#t51').on('click',function(){
+            PT.lightMsg.show('哎呦不错哦');
+        });
+
+        $('#t52').on('click',function(){
+            PT.lightMsg.show({
+                title:'德玛西亚',
+                body:'我是提醒内容',
+                timeout:1000
+            });
+        });
+
+        $('#t61').on('change',function(e,checked){
+            console.log(checked)
+        });
+
+        $('#t71').scrollBar();
+    });
+
+
+</script>
+</body>
+</html>

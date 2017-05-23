@@ -1,0 +1,45 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}修改我的密码{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid w640 auto">
+	<div class=" " id="id_edit_box">
+         <ul>
+         	<li class="mt10">
+                 <span>现在的密码:</span>
+                 <input type='password' class="w180" id="id_old_password" maxlength="16" value="" />
+                 <span class="hint">请输入旧密码</span>
+                 <span class="error_hint red hide"></span>
+             </li>
+             <li class="mt10">
+                 <span>新&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;&nbsp;码:</span>
+                 <input type='password' class="w180" id="id_password" maxlength="16" value="" />
+                 <span class="hint">6~16个字符，建议使用字母加数字或符号的组合密码</span>
+                 <span class="error_hint red hide"></span>
+             </li>
+             <li class="mt10">
+                 <span>确认新密码:</span>
+                 <input type='password' class="w180" id="id_repsw" maxlength="16" value=""/>
+                 <span class="hint">再输一次密码</span>
+                 <span class="error_hint red hide"></span>
+             </li>
+             <li class="mt10 ml50 pl50">
+                 <a href="javascript:void(0);" class="btn btn-primary marl_12 ml20" id="save_psw">保存</a>
+             </li>
+         </ul>
+     </div>
+</div>
+
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/change_psw.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.ChangePsw.init();
+});
+</script>
+{% endblock %}

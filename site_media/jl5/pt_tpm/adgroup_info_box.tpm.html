@@ -1,0 +1,30 @@
+<ul class="adgroup_base_info p10 span6 lh22 f12 h130 bdd">
+    <li>推广状态：<% if(online_status=='online'){ %>
+        <span id='status_<%=adgroup_id%>'>推广中</span>
+        <%}%>
+        <% if(online_status=='offline'){ %>
+        <span class="r_color" id='status_<%=adgroup_id%>'>已暂停</span>
+    <%}%></li>
+    <li title="<%=campaign_title%>" class="text-overflow">所在计划：<%=campaign_title%></li>
+    <li title="<%=cat_path + '  ' + danger_descr%>" class="text-overflow">所属类目：<%=cat_path%>
+    </li>
+    <li>默认出价：<%=$format(default_price,100,1,2)%>元</li>
+</ul>
+<div class="adgroup_base_info_table span18">
+    <table class="table-bordered h130">
+        <tr>
+            <td class="p5 tac">总花费(元)<div class="f20 b mt5">￥<%=$format(rpt_sum_cost,100,1,2)%></div></td>
+            <td class="p5">展现量(次)<div class="mt5 f18"><%=rpt_sum_impressions%></div></td>
+            <td class="p5">点击量(次)<div class="mt5 f18"><%=rpt_sum_click%></div></td>
+            <td class="p5">点击率<div class="mt5 f18"><%=$format(rpt_sum_ctr,1,1,2)%>%</div></td>
+            <td class="p5">PPC(元)<div class="mt5 f18">￥<%=$format(rpt_sum_cpc,100,1,2)%></div></td>
+        </tr>
+        <tr>
+            <td class="p5">成交额(元)<div class="f20 b mt4">￥<%=$format(rpt_sum_pay,100,1,2)%></div></td>
+            <td class="p5">收藏量(次)<div class="mt4 f18"><%=rpt_sum_favcount%></div></td>
+            <td class="p5">成交量(笔)<div class="mt4 f18"><%=rpt_sum_paycount%></div></td>
+            <td class="p5">点击转化率<div class="mt4 f18"><%=$format(rpt_sum_conv,1,1,2)%>%</div></td>
+            <td class="p5">ROI<div class="mt4 f18"><%=$format(rpt_sum_roi,1,1,2)%></div></td>
+        </tr>
+    </table>
+</div>

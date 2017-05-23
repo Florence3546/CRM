@@ -1,0 +1,13 @@
+<div class="error_popover w600 bdd f13" style="overflow-y: auto;">
+    {{ each error_list as value}}
+    <div class="error_adg bbd  l">
+        <div class="l p2 err_img brc">
+            <img src="{{ value[0] }}_80x80.jpg"/>
+        </div>
+        <div class="l p10 err_desc w500">
+            <div class="adg_title b">{{ value[1] }}</div>
+            <div class="red mt10"><strong>错误信息：</strong>{{ value[2] }}</div>
+        </div>
+    </div>
+    {{ /each }}
+</div>

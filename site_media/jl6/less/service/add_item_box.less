@@ -1,0 +1,277 @@
+.left_box{
+  width: 670px;
+  height: 910px;
+  overflow: hidden;
+
+ .category{
+  margin-top: 3px;
+  .dropdown-menu{
+    min-width: 100%;
+    .level{
+      border-bottom: 1px solid @gray-lighter;
+      position: relative;
+      a{
+        padding: 0px;
+      }
+      position: relative;
+      .category_title{
+        text-align: left;
+        width: 100%;
+        display:block;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        overflow: hidden;
+        padding: 5px 10px;
+        border-bottom: none;
+      }
+      i{
+        position: absolute;
+        right: 5px;
+        top: 10px;
+      }
+      &:hover{
+        background-color: @gray-lighter;
+      }
+    }
+    a{
+      color: @gray;
+    }
+    .dropdown-submenu{
+      position: relative;
+      .dropdown-menu{
+        top: 0;
+        left: 100%;
+        margin-top: -2px;
+        margin-left: -1px;
+        border-radius: 0 2px 2px 2px;
+      }
+      &:hover{
+        .dropdown-menu {
+           display: block;
+        }
+      }
+    }
+  }
+  .dropdown-submenu.pull-left{
+      float: none;
+      .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  // Position radios and checkboxes better
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 0px 0px 1px 0px;
+    line-height: normal;
+    vertical-align: text-bottom;
+  }
+}
+.right_box{
+  width: 600px;
+  height: 910px;
+  overflow: hidden;
+  .select_item{
+    width: 100%;
+    border-top: 1px solid @gray-light;
+    table{
+      td.vm{
+        vertical-align: middle;
+      }
+    }
+    .table-thead{
+      width: 100%;
+      font-size: 12px;
+      font-weight: 900;
+      height: 34px;
+      line-height: 34px;
+      border-bottom: 1px solid @gray-light;
+      .adg_img{
+        float: left;
+        width: 64px;
+        margin-left: 52px;
+        text-align: center;
+      }
+      .adg_title{
+        float: left;
+        width: 460px;
+        text-align: center;
+      }
+    }
+    .table-body{
+      height: 820px;
+      overflow-y: auto;
+      table{
+        margin-bottom: 0px;
+      }
+      .adg_img{
+        width: 60px;
+        height: 60px;
+        position: relative;
+        cursor: pointer;
+        .hover{
+          display: none;
+          position: absolute;
+          width: 60px;
+          height: 60px;
+          top:0;
+          left: 0;
+          text-align: center;
+          font-size: 30px;
+          line-height: 60px;
+          z-index: 1;
+          opacity: 0.7;
+          background-color: @black;
+          font-weight: 900;
+          .iconfont{
+            opacity: 1;
+          }
+        }
+
+        &:hover{
+          .hover{
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+.add_adg_img{
+  width: 70px;
+  height: 70px;
+  position: relative;
+  cursor: pointer;
+  .hover{
+    display: none;
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    top:0;
+    left: 0;
+    text-align: center;
+    font-size: 30px;
+    line-height: 70px;
+    z-index: 1;
+    opacity: 0.7;
+    background-color: @black;
+    font-weight: 900;
+    .iconfont{
+      opacity: 1;
+    }
+  }
+
+  &:hover{
+    .hover{
+      display: block;
+    }
+  }
+}
+
+.item_box{
+  border:1px solid @gray-light;
+  .search{
+    padding: 10px;
+    line-height: 30px;
+    height:45px;
+    select{
+      padding: 5px 8px;
+    }
+  }
+  .panel-group{
+    margin-bottom: 0px
+  }
+
+  .panel{
+    border: none;
+    .panel-heading{
+      padding: 12px 5px;
+      border-top:1px solid @gray-light;
+      .panel-title{
+        color: @gray-base;
+        font-size: 14px;
+        a{
+          width: 100%;
+          color: @base-color;
+        }
+      }
+    }
+    + .panel {
+        margin-top: 0px;
+    }
+    .panel-body{
+      height: 775px;
+      padding: 0px;
+      table{
+        border: none;
+        margin-bottom: 0px;
+        thead{
+          th{
+            background-image: none;
+            border-bottom:1px solid @gray-light;
+          }
+        }
+        tr{
+          td{
+            vertical-align: middle;
+            border-bottom: 1px solid #dddddd;
+            border-top:none;
+          }
+        }
+      }
+      .adg_t_body{
+        overflow-y: auto;
+        height: 740px;
+      }
+      .h780{
+        height: 780px;
+      }
+    }
+  }
+}
+
+#modal_select_creative_img{
+  .image_list{
+    ul{
+      li{
+        cursor: pointer;
+        position: relative;
+        &:hover{
+          border: 1px solid @base-color;
+          .select{
+            display: block;
+          }
+        }
+        .select{
+          color: @base-color;
+          position: absolute;
+          display: none;
+          bottom: 0px;
+          right: 0px;
+          opacity: 0.8;
+          font-size: 30px;
+        }
+      }
+      li.active{
+        border: 1px solid @base-color;
+        .select{
+            display: block;
+          }
+      }
+    }
+  }
+}
+
+.err_desc{
+  width: 518px;
+}
+
+.to_item_page{
+  color: @gray-base;
+  &:hover{
+    color: @base-color;
+  }
+}

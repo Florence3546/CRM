@@ -1,0 +1,64 @@
+{% extends "base_crm.html" %}
+{% block title%}
+    全自动配置管理
+{% endblock %}
+{% load rates %}
+{% block extra_style %}
+<link href="/site_media/jl/plugins/jslider/css/jquery.slider.min.css" rel="stylesheet"/>
+<style>
+.edit_cfg {width:600px;}
+.w20 {width:20px;}
+.w50 {width: 150px;}
+.w400 {width:350px;}
+.edit_args {width:120px;}
+.instrcn_list {padding: 3px;margin-bottom: 10px;border: 1px solid #ccc;display:inline-block;list-style:none;}
+.instrcn_list li {display: inline-block;background-color:#ddd; cursor:pointer;margin: 2px;}
+.view_style {width:400px;}
+.edit_style {width:400px;border: 1px solid #52a8ec;}
+.edit_style li {font-size:16px;}
+.hover-show{visibility:hidden; cursor: pointer;}
+.hover .hover-show{visibility: visible;}
+.stgy_detail_div{border:#ccc dashed 1px; padding: 3px 6px;}
+.desc_input{border: 1px #fff solid !important;}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <div class="portlet mart_12" id="id_taskcfg_list_div">
+        <div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>任务配置</div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse"></a>
+            </div>
+        </div>
+        <div class="portlet-body" id="id_taskcfg_list_layer"></div>
+    </div>
+</div>
+<div id="id_instrcn_list_layer"></div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="/site_media/jl/plugins/jslider/js/jquery.slider.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/taskcfg_list.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/instruction_list.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/mnt_cfg.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block template%}
+{% include 'taskcfg_template.html'  %}
+{% include 'instruction_template.html'  %}
+{% endblock %}
+
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function(){
+    PT.MntCfg.init_dom();
+});
+</script>
+{% endblock %}

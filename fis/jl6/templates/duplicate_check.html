@@ -1,0 +1,257 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% block title %}全店删词{% endblock %}
+{% block content %}
+    <input type="hidden" value="0" id="page_type">
+    <input type="hidden" value="{{ camp_id }}" id="campaign_id">
+    <input type="hidden" value="{{ mnt_type }}" id="mnt_type"/>
+    <input type="hidden" value="{{ add_item_flag }}" id="add_item_flag"/>
+    <input type="hidden" value="{{ CONSULT_WW }}" id="CONSULT_WW"/>
+    <section class="container-fluid w1280">
+        <ol class="breadcrumb">
+            <li><a href="../web_home">首页</a></li>
+            <li><span class="item_dark">全店删词</span></li>
+        </ol>
+        {% if not kwrtp_isok %}
+            <div class="alert alert-warning red">
+                正在下载关键词报表，数据不完整时删词可能导致误删好词，请稍后再来查看或手动刷新该页面。
+            </div>
+        {% endif %}
+
+        <div class="custom_tab mt20">
+            <button class="btn btn-primary to_carousel" item="0">一键删除垃圾词&nbsp;(<span class="garbage_count">0</span>个)</button>
+            <button class="btn to_carousel" item="1">一键删除低分词&nbsp;(<span class="lowscore_count">0</span>个)</button>
+            <button class="btn to_carousel" item="2">一键删除重复词&nbsp;(<span class="duplicate_count">0</span>个)</button>
+            <button class="btn to_carousel" item="3">手动删除重复词&nbsp;(<span class="duplicate_count">0</span>个)</button>
+            <button id="id_recheck" class="btn btn-default btn-sm r mt10">重新检查</button>
+        </div>
+        <div id="dupl_del_carousel" class="carousel slide" data-interval="false">
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="del_box">
+                        <div class="del_img">
+                            <img src="../site_media/static/images/del_garbage.png" alt=""/>
+                        </div>
+                        <div>
+                            <span class="ml30">一键删除全店淘宝直通车判定的垃圾词（即连续15天无展现且7天内未激活的词，不管是否是重复词，都强烈建议删除）</span>
+                        </div>
+                        <span class="item_dark ml30">排查范围：账户所有计划</span>
+                        <button class="btn btn-primary btn-sm r" id="del_garbage">一键删除</button>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="del_box">
+                        <div class="del_img">
+                            <img src="../site_media/static/images/del_low.png" alt=""/>
+                        </div>
+                        <div>
+                            <span id="condition_score" class="ml30">
+                                删除PC和移动质量得分均小于等于
+                                <div class="select_warp m5" name="del_qscore">
+                                    <span class="tip form" data-toggle="dropdown">3</span>
+                                    <ul class="dropdown-menu">
+                                        <li data-value="5"><span>5</span></li>
+                                        <li data-value="4"><span>4</span></li>
+                                        <li data-value="3"><span>3</span></li>
+                                        <li data-value="2"><span>2</span></li>
+                                    </ul>
+                                </div>
+                                且
+                                <div class="select_warp m5" name="del_day">
+                                    <span class="tip form" data-toggle="dropdown">过去7天</span>
+                                    <ul class="dropdown-menu">
+                                        <li data-value="3"><span>过去3天</span></li>
+                                        <li data-value="5"><span>过去5天</span></li>
+                                        <li data-value="7"><span>过去7天</span></li>
+                                        <li data-value="15"><span>过去15天</span></li>
+                                    </ul>
+                                </div>
+                                <div class="select_warp m5" name="del_statistics_type">
+                                    <span class="tip form" data-toggle="dropdown">展现量为0</span>
+                                    <ul class="dropdown-menu">
+                                        <li data-value="impressions"><span>展现量为0</span></li>
+                                        <li data-value="click"><span>点击量为0</span></li>
+                                        <li data-value="carttotal"><span>购物车数为0</span></li>
+                                        <li data-value="paycount"><span>成交量为0</span></li>
+                                    </ul>
+                                </div>
+                                的低分词
+                                <label for="id_del_offline" class="inline dib pl10 select_div">
+                                    <input type="checkbox" id="del_offline_score" name="del_offline" checked="checked">
+                                    <span class="marl_3">不删除已暂停的计划和宝贝下的关键词</span>
+                                </label>
+
+                                <label for="id_del_longtai" class="inline dib pl10 select_div">
+                                    <input type="checkbox" id="del_longtail_score" name="del_longtail" checked="checked">
+                                    <span class="marl_3">不删除长尾和ROI计划下的关键词</span>
+                                </label>
+
+                            </span>
+                        </div>
+                        <div>
+                            <span class="item_dark ml30">排查范围：账户所有计划下添加时间超过<span id="del_low_day">7</span>天的低分词</span>
+                            <button class="btn btn-primary btn-sm r" id="del_by_score">一键删除</button>
+                        </div>
+                        <div class="red ml50"><span class="ml30">&nbsp;&nbsp;请谨慎操作，一旦误删，亲找精灵也没办法恢复的哦。</span></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="del_box">
+                        <div class="del_img">
+                            <img src="../site_media/static/images/del_dupl.png" alt=""/>
+                        </div>
+                        <div>
+                            <span id="condition_detail" class="ml30">
+                                删除重复次数大于
+                                <div class="select_warp m5" name="del_level">
+                                    <span class="tip form" data-toggle="dropdown">3</span>
+                                    <ul class="dropdown-menu">
+                                        <li data-value=3><span>3</span></li>
+                                        <li data-value=4><span>4</span></li>
+                                        <li data-value=5><span>5</span></li>
+                                        <li data-value=6><span>6</span></li>
+                                        <li data-value=7><span>7</span></li>
+                                        <li data-value=8><span>8</span></li>
+                                        <li data-value=9><span>9</span></li>
+                                        <li data-value=10><span>10</span></li>
+                                    </ul>
+                                </div>
+                                且
+                                <div class="select_warp m5" name="del_day">
+                                    <span class="tip form" data-toggle="dropdown">过去7天</span>
+                                    <ul class="dropdown-menu">
+                                        <li data-value=3><span>过去3天</span></li>
+                                        <li data-value=5><span>过去5天</span></li>
+                                        <li data-value=7><span>过去7天</span></li>
+                                        <li data-value=15><span>过去15天</span></li>
+                                    </ul>
+                                </div>
+                                <div class="select_warp m5" name="del_statistics_type">
+                                    <span class="tip form" data-toggle="dropdown">展现量为0</span>
+                                    <ul class="dropdown-menu">
+                                        <li data-value="impressions"><span>展现量为0</span></li>
+                                        <li data-value="click"><span>点击量为0</span></li>
+                                        <li data-value="carttotal"><span>购物车数为0</span></li>
+                                        <li data-value="paycount"><span>成交量为0</span></li>
+                                    </ul>
+                                </div>
+                                的重复词
+                                <label for="id_del_offline" class="inline dib pl10 select_div">
+                                    <input type="checkbox" id="del_offline" name="del_offline" checked="checked">
+                                    <span class="marl_3">不删除已暂停的计划和宝贝下的关键词</span>
+                                </label>
+                                <label for="id_del_longtai" class="inline dib pl10 select_div">
+                                    <input type="checkbox" id="del_longtail" name="del_longtail" checked="checked">
+                                    <span class="marl_3">不删除长尾和ROI计划下的关键词</span>
+                                </label>
+                            </span>
+                        </div>
+                        <span class="item_dark ml30">排查范围：添加时间超过<span id="del_dupl_day">7</span>天的重复词</span>
+                        <button class="btn btn-primary btn-sm r" id="del_by_condition">一键删除</button>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="box mt20">
+                        <div id="duplicate_box">
+                            <div class="duplicate-table">
+                                <table class="table table-hover box_fix_fixedHeader" id="duplicate_table">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <div class="dupl_del_column b">重复词列表&emsp;(共<span
+                                                    class="duplicate_count b">0</span>个)
+                                                <span class="r del_span">
+                                                    <button class="btn btn-primary btn-sm" id="del_by_hand">删除当前选中&nbsp;</button>
+                                                </span>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="choose_column w60 tc"><input type="checkbox" class="select-all"></th>
+                                        <th data-active="times" class="sort_field">全选<span class="del_count">(已选择<span
+                                                class="hand_del_count b">0</span>个)</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="loading_tr">
+                                        <td colspan="2">
+                                            <div class="tc">
+                                                <img src="../site_media/static/images/ajax_loader.gif" alt=""><br>
+                                                <span>请稍候...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination_bar tr pt10"></div>
+                        </div>
+
+                        <div id="dupl_detail_box">
+                            <div class="dupl-detail-table">
+                                <table class="table table-hover box_fix_fixedHeader" id="dupl_detail_table">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="12">
+                                            <div class="dupl_del_column">
+                                                <span class="cur_kw_title b">重复词列表</span>
+                                                <span class="r del_span"><button id="single_submit_btn" class="btn btn-default btn-sm">删除当前选中&nbsp;</button></span>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="choose_sub_column w30 tc">
+                                            <input type="checkbox" class="select-all-sub"></th>
+                                        <th class="tc">
+                                            <div>状态</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>图片</div>
+                                        </th>
+                                        <th class="w160">
+                                            <div>所在计划</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>PC当前出价</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>移动当前出价</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>PC得分</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>移动得分</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>7天展现量</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>7天点击量</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>7天PPC</div>
+                                        </th>
+                                        <th class="tc">
+                                            <div>7天成交额</div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="11">
+                                            <div class="tc">
+                                                <span>暂无数据</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

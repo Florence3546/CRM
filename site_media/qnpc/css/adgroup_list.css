@@ -1,0 +1,13 @@
+/* CSS Document */
+/*.popover{max-width:100%;}*/
+a.btn{vertical-align:middle;}
+#search_val{width:220px;}
+#search_btn{border:none; margin-left:-45px; height:27px; line-height:15px;}
+i{margin-bottom:3px;}
+.icon-play-circle{font-size:16px;}
+#adg_control i{margin-left: 3px;}
+.count_div{line-height:20px;display:inline-block; border:1px #CCC dashed; padding:6px; background-color:#eee;}
+.red_num{ color:#E02222; font-weight:bold;width: 30px;display: inline-block; text-align:center;}
+.btn-group:hover>ul {display: block;}
+#search_box{right:0; left:auto; padding:10px;}
+.icon-pause{vertical-align: 2px;}

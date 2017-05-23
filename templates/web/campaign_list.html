@@ -1,0 +1,51 @@
+{#utf-8#}{% extends "base_mainjl5.html" %}
+{% block title%}
+  计划列表
+{% endblock %}
+{% block content %}
+  <div class="row-fluid">
+    <div class="box">
+      <div class="box_hd">
+        <span class="box_l">
+        <i class="iconfont mr5">&#xe61c;</i>宝贝列表（共46个/当前选中6个）
+        </span>
+        <span class="box_r">
+        <div class="dropdown" id="campaign_select_days">
+          <a class="dropdown-toggle btn btn-small" data-toggle="dropdown" data-autowidth="true"  data-type="select" href="#"><i class="iconfont mr5">&#xe61e;</i><span class="dropdown-value">过去7天</span><i class="iconfont">&#xe626;</i></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a value="1" href="javascript:;">过去1天</a></li>
+            <li><a value="3" href="javascript:;">过去3天</a></li>
+            <li><a value="7" href="javascript:;">过去7天</a></li>
+            <li><a value="15" href="javascript:;">过去15天</a></li>
+          </ul>
+        </div>
+        </span>
+      </div>
+      <div class="box_bd p0">
+        <table class="table-bordered table-no-warp-border nbt" id="compaign_lsit" data-target="campaign.tpm.html">
+          <thead>
+            <th class="w20 hide">
+              <input type="checkbox" />
+            </th>
+            <th class="pct20 nbl">计划名称</th>
+            <th class="pct10">日限额</th>
+            <th class="pct21">基础数据</th>
+            <th class="pct21">转化数据</th>
+            <th class="pct10">计划状态</th>
+            <th>操作</th>
+          </thead>
+          <tbody>
+            <td class="tc" colspan="7">正在加载数据。。。</td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block custom_js %}
+  <script>
+  jQuery(document).ready(function() {
+  PT.Campaign_list.init();
+  });
+  </script>
+{% endblock %}

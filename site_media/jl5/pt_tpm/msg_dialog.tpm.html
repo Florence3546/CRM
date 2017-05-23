@@ -1,0 +1,37 @@
+<div id="msg_modal_dialog"  class="modal container hide fade" tabindex="-1" data-width="1000" style="top: 1%;margin-top: 0;">
+    <div class="modal-header nbb">
+      <a href="javascript:;" class="close" data-dismiss="modal">&times;</a>
+      <h4 class="tac"><i class="iconfont f18 mr3">&#xe602;</i>我的消息</h4>
+
+    </div>
+    <div class="modal-body p0">
+
+      <div class="tab-content nbb nbl nbr p10">
+        <div id="tab_common_msg" class="tab-pane active">
+          <div class="accordion" id="accordion1">
+            <% for (var i=0;i<common_msg_list.length;i++) { %>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#collapse_cm_<%=common_msg_list[i].id%>" data-parent="#accordion1" data-toggle="collapse" id="title_common_<%=common_msg_list[i].id%>" class="accordion-toggle black collapsed <% if (common_msg_list[i].is_prompt) {%> close_msg <% } %>" data="{is_common:1,msg_id:'<%=common_msg_list[i].id%>'}" >
+                        <i class="mr5 iconfont normally <% if (common_msg_list[i].is_prompt) { %> red<% }else{ %> silver <% } %>" id="dot_<%=common_msg_list[i].id%>">&#xe62b;</i>
+                        <span class="<%=common_msg_list[i].level%>">
+                          <%=common_msg_list[i].title %>
+                        </span>
+                      <span class="r gray"><%=common_msg_list[i].last_modified%></span>
+                    </a>
+                </div>
+                <div class="accordion-body collapse" id="collapse_cm_<%=common_msg_list[i].id%>">
+                    <div class="accordion-inner"><%=common_msg_list[i].message%>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+

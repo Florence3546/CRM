@@ -1,0 +1,129 @@
+<div class="mt20">
+    <form method="post" action="" id="edit_customer_form">
+        <table class="nbb auto">
+            <thead>
+                <tr>
+                    <th class="w130"></th>
+                    <th></th>
+                    <th class="w130"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tr>
+                <td class="tr"><label for="id_nick" class="lh30">淘宝主号(nick)</label></td>
+                <td>
+                    <input id="id_nick" type="text" name="nick" value="{{form.nick.value}}" maxlength="30" {% if form.nick.value %}readonly="true"  error_msg=""{% else %}error_msg="必须填写nick"{%endif%}/>
+                    <input type="hidden" name="shop_id" value="{{form.shop_id.value|default_if_none:''}}" id="id_shop_id"/>
+<!--                    <a href="javascript:void(0);" class="btn btn-mini  ml10 {% if form.nick.value %} hide {%endif%}"  id="id_check_nick" >检查</a><br />
+                    <span class="helptext">必须是主号，否则读不出数据</span>-->
+                </td>
+                <td class="tr"><label for="id_alipay" class="lh30">支付宝账号</label></td>
+                <td><input type="text" name="alipay" value="{{form.alipay.value}}" id="id_alipay"/></td>
+            </tr>
+            <tr>
+                <td class="tr"><label for="id_is_b2c" class="lh30">是否天猫店</label> </td>
+                <td>
+	                <label class="lh30">
+	                    <input type="checkbox" name="is_b2c" id="id_is_b2c" {% if form.is_b2c.value %}checked="checked" {%endif%}>
+	                    <span class="gray">选中表示为天猫店铺</span>
+	                </label>
+                </td>
+<!--                <td class="tr"><label for="id_level" class="lh30">信誉等级</label> </td>
+                <td><input type="text" name="level" value="{{form.level.value}}" id="id_level"/></td>-->
+                <td class="tr"><label for="id_info_status" class="lh30">信息爬取状态</label> </td>
+                <td>{{form.info_status}}</td>
+            </tr>
+            <tr>
+                <td class="tr"><label for="id_category" class="lh30">经营类目</label> </td>
+                <td><input id="id_category" type="text" name="category" maxlength="50"  value="{{form.category.value|default_if_none:''}}"/></td>
+                <td class="tr"><label for="id_address" class="lh30">地址</label> </td>
+                <td><input id="id_address" type="text" name="address" maxlength="50"  value="{{form.address.value|default_if_none:''}}"/></td>
+            </tr>
+            <tr>
+                <td class="tr"><label for="id_seller" class="lh30">联系人</label> </td>
+                <td><input id="id_seller" type="text" name="seller" maxlength="20" value="{{form.seller.value|default_if_none:''}}"/></td>
+                <td class="tr"><label for="id_phone" class="lh30">手机号</label> </td>
+                {% if not form.phone.value %}
+                    <td><input id="id_phone" type="text" name="phone" value="" maxlength="15"/></td>
+                {% else %}
+                {% if has_contact_perm %}
+                    <td><input id="id_phone" type="text" name="phone" value="{{form.phone.value|default_if_none:''}}" maxlength="15"/></td>
+                {% else %}
+                    <td><input id="id_phone" type="text" name="phone" value="" maxlength="15" disabled="disabled"/></td>
+                {% endif %}
+                {% endif %}
+            </tr>
+            <tr>
+                <td class="tr"><label for="id_qq" class="lh30">QQ</label> </td>
+                {% if not form.qq.value %}
+                    <td><input id="id_qq" type="text" name="qq" value="" maxlength="15" /></td>
+                {% else %}
+                {% if has_contact_perm %}
+                    <td><input id="id_qq" type="text" name="qq" value="{{form.qq.value|default_if_none:''}}" maxlength="15" /></td>
+                {% else %}
+                    <td><input id="id_qq" type="text" name="qq" value="" maxlength="15" disabled="disabled"/></td>
+                {% endif %}
+                {% endif %}
+                <td class="tr"><label for="id_ww" class="lh30">旺旺</label> </td>
+                <td><input id="id_ww" type="text" name="ww" value="{{form.ww.value|default_if_none:''}}" maxlength="30" /></td>
+            </tr>
+            <tr>
+                <td class="tr">
+	                <label for="id_lz_name" class="lh30">淘宝子账号/密码</label>
+<!--	                <label for="id_lz_psw">密码:</label>-->
+                </td>
+                <td>
+	                <input id="id_lz_name" type="text" name="lz_name" maxlength="40" value="{{form.lz_name.value|default_if_none:''}}" class="w100" /> /
+	                <input id="id_lz_psw" type="text" name="lz_psw" maxlength="20" value="{{form.lz_psw.value|default_if_none:''}}" class="w80" />
+                </td>
+                <td class="tr">
+                    <label for="id_zz_name" class="lh30">钻展账号/密码</label>
+<!--                    <label for="id_zz_psw">密码:</label>-->
+                </td>
+                <td>
+                    <input id="id_zz_name" type="text" name="zz_name" maxlength="40" value="{{form.zz_name.value|default_if_none:''}}" class="w100"/> /
+                    <input id="id_zz_psw" type="text" name="zz_psw" maxlength="20" value="{{form.zz_psw.value|default_if_none:''}}" class="w80" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tr">
+                    <label for="id_ztc_name" class="lh30">直通车代理号/密码</label>
+<!--                    <label for="id_ztc_psw">密码:</label>-->
+                </td>
+                <td>
+                    <input id="id_ztc_name" type="text" name="ztc_name" maxlength="40" value="{{form.ztc_name.value|default_if_none:''}}" class="w100"/> /
+                    <input id="id_ztc_psw" type="text" name="ztc_psw" maxlength="20"  value="{{form.ztc_psw.value|default_if_none:''}}" class="w80" />
+                </td>
+                <td class="tr">
+                    <label for="id_acct_name" class="lh30">淘宝主号/密码</label>
+<!--                    <label for="id_acct_psw">密码:</label>-->
+                </td>
+                <td>
+                    <input id="id_acct_name" type="text" name="acct_name" maxlength="40" value="{{form.acct_name.value|default_if_none:''}}" class="w100"/> /
+                    <input id="id_acct_psw" type="text" name="acct_psw" maxlength="20" value="{{form.acct_psw.value|default_if_none:''}}" class="w80" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tr"><label for="id_source" class="lh30">用户来源</label></td>
+                <td><input id="id_source" type="text" name="source" maxlength="30" value="{{form.source.value|default_if_none:''}}" /></td>
+                <td class="tr"><label for="id_acct_status">用户状态</label> </td>
+                <td>{{form.acct_status}}</td>
+            </tr>
+            <tr>
+                <td class="tr"><label for="id_note">备注</label> </td>
+                <td colspan='3'>
+	                <div class="editor mb5" id="id_note" style="height:160px;width:615px"></div>
+	                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+	                <div class="hide init_data">{{form.note.value|default_if_none:''|safe}}</div>
+                </td>
+            </tr>
+        </table>
+        <div class="tc">
+            <a href="javascript:;" class="btn btn-primary mt10 f12" id="id_submit">保存</a>
+            <a href="javascript:;" data-dismiss="modal" class="btn mt10 f12">取消</a>
+<!--            <div class="hide">
+	            {%if is_new %}<a class="btn mt40 f12" id="add_to_group">保存并加入客户群</a>{%endif%}
+            </div>-->
+        </div>
+    </form>
+</div>

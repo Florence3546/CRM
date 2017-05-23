@@ -1,0 +1,39 @@
+{%load rates %}
+ {% if not isneed_phone %}
+<div id="info_modal_dialog" class="modal container hide fade" data-backdrop="static" data-width="550" tabindex="-1" aria-hidden="false" data-hidetype='remove'>
+
+    <div class="modal-header">
+        <h5>为您的效果负责是精灵不懈的追求，为了方便与您的沟通和及时向您反馈软件效果，请留下您的联系方式！</h5>
+    </div>
+    <div class="modal-body pt0">
+        <div>
+            <span class="dib w50">手机号</span>
+            <input type="text" id="id_phone" name="phone" class="ml10 w180" maxlength="11" value="{{form.instance.phone}}">
+            <span class="red ml5">*</span>
+        </div>
+        <div class="mt10">
+            <span class="dib w50">QQ号</span>
+            <input type="text" id="id_qq" name="phone" class="ml10 w180" maxlength="30" value="{{form.instance.qq}}">
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary ml10" id="id_submit_info">确定修改</button>
+      <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+</div>
+    {%else%}
+<div id="info_modal_dialog" class="modal container hide fade" data-backdrop="static" data-width="950" tabindex="-1" aria-hidden="false" data-hidetype='remove'>
+    <div class="rel" style="height:550px">
+        <img class="abs" src="/site_media/jl5/images/lxfs.png" height="550">
+        <div class="abs r0 t50 w220 h200">
+        <input type="text" id="id_phone" name="phone" class="ml10 w110 bgtp nba mb3" maxlength="11" value="{{form.instance.phone}}">
+        <input type="text" id="id_qq" name="qq" class="ml10 w180 bgtp nba mt45 mb4" maxlength="30" value="{{form.instance.qq}}">
+        <div class="mt30 ml2">
+        <img class=" poi" src="/site_media/jl5/images/lxfs_jh.png" id="id_submit_info" height="45" width="139" style="height:45px;widt:139px;">
+        {% if isneed_phone != 2 %}<span class="white ml10 poi" data-dismiss="modal" onclick="javascript:PT.set_habit({'cancel_show_phone':1});" id="cancel_show_phone">取消</span>{% endif %}
+        </div>
+        </div>
+    </div>
+</div>
+    {%endif%}
+

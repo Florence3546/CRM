@@ -1,0 +1,131 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}我的信息{% endblock %}
+
+{% block content %}
+
+<div class="w520 auto">
+    <form action="" method="post" class="form-horizontal p5 mt20 bg_white">
+	    <fieldset>
+		    <legend>我的信息</legend>
+			<div class="control-group">
+				<label class="control-label" for="id_name_cn">中文名</label>
+				<div class="controls">
+					<input type="text" id="id_name_cn" name="name_cn" placeholder="请输入中文名" value="{{ psuser.name_cn }}">
+				</div>
+			</div>
+            <div class="control-group">
+                <label class="control-label" for="id_birthday">生日</label>
+                <div class="controls">
+                    <input type="text" id="id_birthday" name="birthday" placeholder="例如：1970-01-01" value="{{ psuser.birthday|default:'' }}">
+                    {% if 'birthday' in error_info %}<span class='red'>＊输入有误</span>{% endif %}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="id_gender">性别</label>
+                <div class="controls">
+					<select id="id_gender" name="gender">
+						<option value="">--请选择--</option>
+						<option value="男" {% if psuser.gender == '男' %}selected="selected"{% endif %}>男</option>
+						<option value="女" {% if psuser.gender == '女' %}selected="selected"{% endif %}>女</option>
+					</select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="id_ww">旺旺ID</label>
+                <div class="controls">
+                    <input type="text" id="id_ww" name="ww" placeholder="请输入旺旺ID" value="{{ psuser.ww }}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="id_qq">QQ号码</label>
+                <div class="controls">
+                    <input type="text" id="id_qq" name="qq" placeholder="请输入QQ号码" value="{{ psuser.qq }}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="id_phone">手机号码</label>
+                <div class="controls">
+                    <input type="text" id="id_phone" name="phone" placeholder="请输入手机号码" value="{{ psuser.phone }}">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-primary">保存修改</button>
+                    <a class="btn btn-danger" data-toggle="modal" href="#modal_reset_password" role="button">修改密码</a>
+                </div>
+            </div>
+	    </fieldset>
+    </form>
+</div>
+<div id="modal_reset_password" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal_label_reset_password" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h4 id="modal_label_reset_password">修改密码</h4>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<input type="password" placeholder="为解决autocomplete设为off时失效导致的密码安全问题，而设置的隐藏控件" class="hide">
+			<div class="control-group">
+				<label class="control-label" for="id_old_password">当前密码</label>
+	            <div class="controls">
+	                <input type="password" id="id_old_password" name="old_password" placeholder="请输入当前密码" value="">
+	            </div>
+			</div>
+            <div class="control-group">
+                <label class="control-label" for="id_new_password">新密码</label>
+                <div class="controls">
+                    <input type="password" id="id_new_password" name="new_password" placeholder="字母、数字、符号组合，长度6~16" value="">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="id_new_password2">再输一次新密码</label>
+                <div class="controls">
+                    <input type="password" id="id_new_password2" name="new_password2" placeholder="请再输一次新密码" value="">
+                </div>
+            </div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+		<button class="btn btn-primary" id="save_new_password">保存密码</button>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
+
+{% block template%}
+{% endblock %}
+
+{% block custom_js %}
+<script>
+$().ready(function () {
+    //日期时间选择器
+    require(['dom', 'gallery/datetimepicker/1.1/index'], function(DOM, Datetimepicker) {
+        new Datetimepicker({
+            start: '#id_birthday',
+            timepicker: false,
+            closeOnDateSelect : true
+        });
+    });
+    $('#save_new_password').click(function () {
+        if ($('#id_old_password').val()=='') {
+	        PT.alert('请输入当前密码！');
+        } else if ($('#id_new_password').val()=='') {
+            PT.alert('请输入新密码！');
+        } else if ($('#id_new_password').val()!=$('#id_new_password2').val()) {
+            PT.alert('两次输入的新密码不一致哦！');
+        } else {
+            PT.show_loading('正在保存密码');
+            $('#modal_reset_password').modal('hide');
+            PT.sendDajax({'function':'ncrm_change_psw', 'old_psw':$('#id_old_password').val(), 'new_psw':$('#id_new_password').val()});
+        }
+    });
+    $('#modal_reset_password').on('show', function () {
+	    $('#id_old_password, #id_new_password, #id_new_password2').val('');
+    });
+});
+</script>
+{% endblock %}

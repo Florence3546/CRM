@@ -1,0 +1,298 @@
+{#utf-8#}{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block title%}
+	全自动优化
+{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="/site_media/assets/plugins/fancybox/source/jquery.fancybox.css?v={{VERSION}}"/>
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="mnt_index" value="{{mnt_index}}" />
+<input type="hidden" id="max_price_recm" value="{{max_price_recm|default:0.2}}" />
+<input type="hidden" id="campaign_id" value="" />
+<input type="hidden" id="mnt_type" value="" />
+<input type="hidden" id="mnt_max_num" value="" />
+<div class="row-fluid normally marb_12">
+  <div>
+    <h3 class="mart_6">全自动托管流程</h3>
+    <div class="sui-steps steps-auto" id="mnt_wizard">
+      <div class="wrap">
+        <div class="current">
+          <label><span class="round"><i class="sui-icon icon-pc-right"></i></span><span>第一步 设置托管计划</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+        </div>
+      </div>
+      <div class="wrap">
+        <div class="todo">
+          <label><span class="round">2 </span><span>第二步 选择托管宝贝</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+        </div>
+      </div>
+      <div class="wrap">
+        <div class="todo">
+          <label><span class="round">3</span><span>第三步 提交</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row-fluid normally PT_warp" style="padding:10px">
+  <div id="step1" class="row-fluid" style="max-width:715px;">
+  <div class="bd normally pad_12 marb_12 alert lh_24">
+    	<div>
+            <strong>长尾托管：</strong>
+            <span>长尾词精准引流；一键批量托管宝贝；一键设置关键词限价；最多可托管150个宝贝；低价引流，低投入高回报；智能限价，每日花费轻松掌控。</span><br>
+            <strong>重点托管：</strong>
+            <span>热搜词强力引流；智能管控重点宝贝；个性化设置宝贝限价；最多可托管10个宝贝；重点照顾，引入更多流量；根据预算，自动调整推广策略。</span>
+        </div>
+    </div>
+    <div class="padt_6">
+    <form class="sui-form form-horizontal" novalidate="novalidate" id="check_setup_one">
+      <div class="control-group">
+        <label for="inputGender" class="control-label" style="vertical-align:top">推广计划：</label>
+        <div class="controls">
+          {% for campaign in campaign_list %}
+          <label data-toggle="radio" class="{% if campaign.mnt_type != 0 %}disabled{% endif %} radio-pretty marb_6">
+            <input type="radio" name="campaign" {% if campaign.mnt_type != 0 %}disabled="disabled"{% endif %} value="{{ campaign.campaign_id }}" ><span>{{ campaign.title }}</span>
+          </label>
+          {%endfor%}
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="inputEmail" class="control-label">全自动类型：</label>
+        <div class="controls">
+          <label data-toggle="radio" class="radio-pretty inline">
+            <input type="radio" name="mnt_type" value="1"><span>长尾托管</span>
+          </label>
+          <label data-toggle="radio" class="radio-pretty inline">
+            <input type="radio" name="mnt_type" value="2"><span>重点托管</span>
+          </label>
+        </div>
+      </div>
+      <div class="control-group hide" id="div_max_price">
+        <label for="max_price" class="control-label">关键词最高限价：</label>
+        <div class="controls">
+          <input type="text" disabled min="0.2" max="5" id="max_price" name="max_price" >
+          <div class="sui-msg msg-tips msg-naked">
+            <div class="msg-con" id="max_price_tip">[0.8~5.00]元</div>
+            <s class="msg-icon"></s>
+          </div>
+        </div>
+      </div>
+      <div class="control-group hide" id="div_budget">
+        <label for="budget" class="control-label">推广计划日限额：</label>
+        <div class="controls">
+          <input type="text" disabled id="budget" name="budget">
+          <div class="sui-msg msg-tips msg-naked">
+            <div class="msg-con" id="budget_tip">:)</div>
+            <s class="msg-icon"></s>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group" id="div_more">
+        <label for="inputGender" class="control-label" style="vertical-align:top">更多设置：</label>
+        <div class="controls">
+          <div class="marb_6">
+            <span class="trigger_more_setting pointer">分时折扣、投放平台、地域设置<i class="sui-icon icon-pc-chevron-bottom larger" style="vertical-align: -3px;"></i></span>
+              <i class="sui-icon icon-pc-question-circle tooltips marl_6" data-placement="right" data-original-title="仅开启托管时设置一次，<br/>今后在优化过程中不会修改"></i>
+          </div>
+          <div class="div_more_setting hide">
+            <label data-toggle="checkbox" class="block marb_6">
+              <input type="checkbox" name="more_setting" value="schedule"><span>重置分时折扣设置</span>
+              <i class="sui-icon icon-pc-question-circle tooltips marl_6" data-placement="right" data-original-title="凌晨时折扣为35%,<br/>高峰期时折扣为105%"></i>
+            </label>
+            <label data-toggle="checkbox" class="block marb_6">
+              <input type="checkbox" name="more_setting" value="platform"><span>重置投放平台设置</span>
+              <i class="sui-icon icon-pc-question-circle tooltips marl_6" data-placement="right" data-original-title="开启站外投放，折扣为 60%<br/>开启移动投放，折扣为110%"></i>
+            </label>
+            <label data-toggle="checkbox" class="block marb_6">
+              <input type="checkbox" name="more_setting" value="erea"><span>关闭港澳台国外地域投放</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <button class="sui-btn btn-large btn-primary btn_next" type="submit" id="btn_next">下一步</button>
+    </form>
+    </div>
+<!--
+    <div class="span5 marl_0 mart_12 alert" id="mnt_tip">
+    	<span class="label label-info">长尾托管：</span>
+        <p>长尾词精准引流；一键批量托管宝贝；一键设置关键词限价；最多可托管150个宝贝；低价引流，低投入高回报；智能限价，每日花费轻松掌控。</p>
+    	<span class="label label-info">重点托管：</span>
+        <p>热搜词强力引流；智能管控重点宝贝；个性化设置宝贝限价；最多可托管10个宝贝；重点照顾，引入更多流量；根据预算，自动调整推广策略。</p>
+    </div>
+-->
+  </div>
+  <div id="step2" class="hide mar_auto">
+    <div class="mnt_description alert pad_6 normal_size">
+      <ul class="ls_none lh_30">
+        <li class="marb_6"> <strong>托管说明：</strong> <span mnt_type="1">为了避免对算法的干扰，系统会在每次优化时删除该计划下未托管的宝贝；后期添加的宝贝如果未加入托管，系统也会自动删除。</span> <span mnt_type="2">系统不会删除重点托管计划下未托管的宝贝，但为了避免对干扰，建议您自行删除或暂停未托管的宝贝。</span> </li>
+        <li> <strong>免责声明：</strong> <span> 请仔细确认推广宝贝、标题和推广标题，以免违规，如因违规造成的一切后果与精灵软件无关。
+          详情参考
+          {% if request.user.shop_type == "C"%} <a class="b_color" target="_blank" href="http://zhitongche.taobao.com/help/showItem.action?helpItemId=148">《淘宝直通车软件服务使用规范》</a> {% else %} <a class="b_color" target="_blank" href="http://rule.taobao.com/detail-252.htm">《天猫直通车软件服务使用规范》</a> {% endif %} </span> </li>
+      </ul>
+    </div>
+    <div class="marb_12">
+      <div class="statistic_div pad_3"> 最多可托管<span class="mnt_max_num red_num">---</span>个宝贝，已选<span class="mnt_count0 red_num">0</span>个，还可选<span class="mnt_count red_num">---</span>个 </div>
+      <div class="row-fluid tac border_ccc padt_12 padb_6" style="overflow:hidden">
+        <div class="span4 offset2">
+          <button class="sui-btn btn-xlarge btn-primary" id="set_mnt_adg">选择计划内已推广宝贝</button>
+          <div class="mart_6">已选<span class="mnt_adg_count red_num">0</span>个<span class="hide adg_2del_info r_color">(剩余<span class="total_adg_count">---</span>个将删除)</span></div>
+        </div>
+        <div class="span4">
+          <button class="sui-btn btn-xlarge btn-primary" id="add_item">选择计划下未推广宝贝</button>
+          <div class="mart_6">已选<span class="new_item_count red_num">0</span>个<span class="hide danger_cats_info r_color">(<span class="danger_item_count">0</span>个类目有推广限制)</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="tac">
+      <button class="sui-btn btn-large btn_prev">上一步</button>
+      <button class="sui-btn btn-large btn-primary btn_next">下一步</button>
+    </div>
+  </div>
+    <div id="step3" class="row-fluid hide">
+        <div class="offset1 span10">
+            <div class="row-fluid padb_6">
+                <div class="span2 large bld lh_30 tar">第一步</div>
+                <div class="span10">
+                    <div class="large bld lh_30">设置托管计划</div>
+                    <div class="lh_30" id="campaign_dscr">
+                        推广计划：<span></span>
+                    </div>
+                    <div class="lh_30" id="mnt_type_dscr">
+                        全自动类型：<span></span>
+                    </div>
+                    <div class="lh_30" id="max_price_dscr">
+                        关键词最高限价 <span></span> 元
+                    </div>
+                    <div class="lh_30" id="budget_dscr">
+                        推广计划日限额 <span></span> 元
+                    </div>
+                    <div class="lh_30 r_color">
+                        请务必遵循市场竞争规律，根据流量、花费的变化情况，及时调整计划日限额和关键词最高限价，避免设置过低导致开车效果不佳。
+                    </div>
+                </div>
+            </div>
+            <div class="padb_6">
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="lh_30 large bld tar">第二步</div>
+                    </div>
+                    <div class="span10">
+                        <div class="large bld lh_30">选择托管宝贝</div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="lh_30 bld tar"></div>
+                    </div>
+                    <div class="span10">
+                        <div class="lh_30">
+                            选中计划内已推广宝贝 <span class="mnt_adg_count">0</span> 个
+                        </div>
+                        <div class="lh_30 r_color hide">
+                            即将删除 <span class="total_adg_count">---</span> 个不托管的宝贝
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="lh_30 bld tar"></div>
+                    </div>
+                    <div class="span10">
+                        <div class="lh_30">
+                            选中计划下未推广宝贝 <span class="new_item_count">0</span> 个
+                        </div>
+                        <div class="lh_30 r_color hide">
+                            类目有推广限制 <span class="danger_item_count">0</span> 个，如果您强制推广导致淘宝下架、停车、关店等惩罚，精灵不负任何责任！
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid padb_6">
+                <div class="span2 large bld lh_30 tar">其他信息</div>
+                <div class="span10">
+                    <div class="lh_30">
+                        最多可托管 <span class="mnt_max_num">---</span> 个宝贝，共选中 <span class="mnt_count0">0</span> 个宝贝，还可选 <span class="mnt_count">---</span> 个
+                    </div>
+                    <div class="lh_30">
+                        首次加词预计完成时间：提交后24小时内
+                    </div>
+                    <div class="lh_30 hide r_color" id="consult_note">
+                        后期顾问可能会人工抽查您的托管效果并给出建议，请务必及时查看软件中的顾问私人留言哦。
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid mart_12">
+                <div class="span11 offset1">
+                    <button class="btn btn_prev">上一步</button>
+                    <button class="btn red" id="submit_all">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--设置长尾托管-->
+<div id="set_gsw_dialog" class="set_mnt_dialog large" style="display:none;line-height:40px;height:auto;width:480px;">
+  <div class="alert pad_0 marb_6 lh_24">
+    <p class="marl_12">1.为了避免对算法的干扰，系统会在每次优化时删除该计划下未托管的宝贝；后期添加的宝贝如果未加入托管，系统也会自动删除。<br>
+    2.系统会自动关闭该计划的<!--定向、站外、-->港澳台国外的投放，您可以在引擎设置完成后，在直通车后台重新开启。<br>
+    3.请不要将主推计划设为长尾托管，因为长尾托管关键词出价偏低，以免影响您的直通车整体流量。</p>
+  </div>
+  <div class="tac marb_6"> <span class="lh_30 vam">确定则输入"<span class="bigger r_color check_str">同意删除</span>"并点击确定</span> <span>
+    <input type="text" class="check_value" size="8" maxlength="5" />
+    </span> </div>
+</div>
+<!--设置重点托管-->
+<div id="set_impt_dialog" class="set_mnt_dialog large" style="display:none;line-height:40px;height:auto;width:480px;">
+  <div class="alert pad_0 marb_6 lh_24">
+    <p class="marl_12">系统不删除重点托管计划下未托管的宝贝，但为了避免对重点托管的干扰，建议您自行删除或暂停未托管的宝贝。</p>
+  </div>
+  <div class="tac marb_6"> <span class="lh_30 vam">确定则输入"<span class="bigger r_color check_str">同意</span>"并点击确定</span> <span>
+    <input type="text" class="check_value" size="8" maxlength="4" />
+    </span> </div>
+</div>
+<script id="create_mnt_campaign_msg" type="text/html">
+<div class="<%=report[0].result_cls%> row-fluid padb_6">
+    <div class="span2 larger bld lh_30">第一步</div>
+    <div class="span10 marl_0">
+        <div class="larger bld lh_30">设置托管计划：<span class="tag_color"><%==report[0].result_str%></span></div>
+        <div class="large lh_24 tag_color"><%==report[0].msg%></div>
+    </div>
+</div>
+<div class="<%=report[1].result_cls%> row-fluid padb_6">
+    <div class="span2 larger bld lh_30">第二步A</div>
+    <div class="span10 marl_0">
+        <div class="larger bld lh_30">托管计划内已推广宝贝：<span class="tag_color"><%==report[1].result_str%></span></div>
+        <div class="large lh_24 tag_color"><%==report[1].msg%></div>
+    </div>
+</div>
+<div class="<%=report[2].result_cls%> row-fluid padb_12">
+    <div class="span2 larger bld lh_30">第二步B</div>
+    <div class="span10 marl_0">
+        <div class="larger bld lh_30">托管计划下未推广宝贝：<span class="tag_color"><%==report[2].result_str%></span></div>
+        <div class="large lh_24 tag_color"><%==report[2].msg%></div>
+    </div>
+</div>
+</script>
+{% include 'qnpc_mnt_adg_box.html' %}
+{% include 'qnpc_add_item_box2.html' %}
+{%endblock%}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/fancybox/source/jquery.fancybox.pack.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/choose_mnt_campaign.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/add_item_box2.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/mnt_adg_box.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	PT.ChooseMntcampaign.init();
+    PT.MntAdgBox.init();
+    PT.AddItemBox2.init();
+    PT.AddItemBox2.ajax_loading_animate('。', 3, 300); //自定义ajax加载动画
+});
+</script>
+{% endblock %}

@@ -1,0 +1,232 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}编辑计划树{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/jquery.jOrgChart.css"/>
+<link rel="stylesheet" href="/site_media/jl5/plugins/jOrgChart/css/custom.css"/>
+<style>
+#node_right_menu {
+    width: 140px;
+    background-color: white;
+    border: 1px solid #ddd;
+    position: absolute;
+}
+#node_right_menu>li>a, #node_right_menu>li>div {
+    display:block;
+    padding: 2px 15px;
+    cursor: default;
+}
+#node_right_menu>li>a:hover {
+    background-color: #3366CC;
+    color: white;
+}
+#node_right_menu>li>a.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+#node_right_menu>li>a.disabled:hover {
+    background-color: inherit;
+}
+.mark_node {
+    display: inline-block;
+    line-height: 15px;
+    width: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+.mark_node.gold {
+    background-image: linear-gradient(to bottom,#FFEB3B,#FFC107);
+}
+.mark_node.red {
+    background-image: linear-gradient(to bottom,#f66a39,#e74049);
+}
+.mark_node.silver {
+    background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+}
+.mark_node.gray {
+    background-image: linear-gradient(to bottom,#eee,#9E9E9E);
+}
+.mark_node.green {
+    background-image: linear-gradient(to bottom,#CDDC39,#8BC34A);
+}
+.mark_node.cyan {
+    background-image: linear-gradient(to bottom,#00BCD4,#00BCD4);
+}
+.big .jOrgChart .node {
+    width: 200px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<input type="hidden" id="tree_id" value="{{ request.GET.tree_id|default:'' }}">
+<input type="hidden" id="copy_flag" value="{{ request.GET.copy_flag|default:'0' }}">
+<div class="pt10">
+    <!--左侧节点编辑菜单-->
+    <div id="editor_tree" class="bg_white bdd fixed {% if '2' not in psuser.perms %}limited{% endif %}" style="right: 10px;border-bottom-color: #b3b3b3;">
+        <div class="p5" style="background-image: linear-gradient(to bottom,#fff,#e6e6e6);border-bottom-color: #b3b3b3;">
+            <span class="dib vm w60 tr mr10">起止日期</span>
+            <input class="tree_time w80 f12" type="text" id="id_start_time" name="start_time" value=""/> -
+            <input class="tree_time w80 f12" type="text" id="id_end_time" name="end_time" value=""/>
+            <span class="dib vm w40 tr mr10">备注</span>
+            <textarea name="editor_tree_desc" id="editor_tree_desc" value="" class="w180 h20 rn f12" placeholder="请输入备注" maxlength="100"></textarea>
+            <a class="submit_tree btn btn-small" href="javascript:;">确定提交</a>
+        </div>
+    </div>
+    <!--分类树展示窗口-->
+    <div>
+        <ul id="ul_category_tree" class="hide"></ul>
+        <div id="div_category_tree" class="big pt20"></div>
+    </div>
+</div>
+
+<!--编辑节点弹窗-->
+<div id="editor_node" class="modal hide fade p10" data-width="500" path="">
+    <table class="table-layout">
+        <tr>
+            <td class="w60 tr">当前节点</td>
+            <td class="pl10">
+                <input type="text" class="w120 f12" name="editor_node_name" id="editor_node_name" value="">
+            </td>
+        </tr>
+        <tr>
+            <td class="w60 tr vt"><div class="lh30">预期目标</div></td>
+            <td class="pl10" id="editor_node_goal">
+                <div><span class="dib w80 vm">进账金额</span><input type="text" class="editor_node_goal w80 f12" name="renew_order_pay"></div>
+                <div class="mt10"><span class="dib w80 vm">好评数</span><input type="text" class="editor_node_goal w80 f12" name="good_comment_count"></div>
+                <div class="mt10"><span class="dib w80 vm">SD单量</span><input type="text" class="editor_node_goal w80 f12" name="unknown_order_count"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60 tr">节点规则</td>
+            <td class="pl10"><a id="add_node_cond" class="btn btn-mini" href="javascript:;">添加规则</a></td>
+        </tr>
+    </table>
+    <div id="editor_node_cond"></div>
+    <div class="tr">
+        <a href="javascript:;" class="submit_tree btn f12">确定提交</a>
+        <a href="javascript:;" id="reset_node" class="btn f12">取消</a>
+    </div>
+</div>
+
+<!--规则编辑弹窗-->
+<div id="modal_category_condition" class="modal hide fade p10" data-width="500" path="">
+	<h4><span class="node_name mr10"></span>规则<span class="cond_no"></span></h4>
+	<ul class="l mb20 f12">
+        {% for cond in all_cond_fields %}
+
+        {% if cond.type == 'boolfield' %}
+        <li class="l mt10">
+            <span class="cond l w140 tr mr5" name="{{ cond.name }}" type="bool">{{ cond.name_cn }}</span>
+            <label class="l ml10"><input type="radio" class="" name="{{ cond.name }}_booleans" value="true" value_cn="是">是</label>
+            <label class="l ml10"><input type="radio" class="mr3" name="{{ cond.name }}_booleans" value="false" value_cn="否">不是</label>
+            <label class="l ml10"><input type="radio" class="mr3" name="{{ cond.name }}_booleans" checked="checked" value="" value_cn="">不考虑</label>
+        </li>
+        {% endif %}
+
+        {% if cond.type == 'enumeratefield' %}
+        <li class="l mt10">
+            <span class="cond l w140 tr mr5" name="{{ cond.name }}" type="enumerate">{{ cond.name_cn }}</span>
+            {% for k, v in cond.enum_fields %}
+            <label class="l ml10"><input type="checkbox" class="mr3" name="{{ cond.name }}_list" value="{{ k }}" value_cn="{{ v }}">{{ v }}</label>
+            {% endfor %}
+        </li>
+        {% endif %}
+        
+        {% if cond.type == 'cmpfield' %}
+        <li class="l w250 mt10">
+            <span class="cond dib w140 tr mr5" name="{{ cond.name }}" type="cmp">{{ cond.name_cn }}</span>
+            <input type="text" class="w30 f12" name="{{ cond.name }}_min"> - <input type="text" class="w30 f12" name="{{ cond.name }}_max">
+        </li>
+        {% endif %}
+
+        {% if cond.type == 'listcmpfield' %}
+        <li class="l w250 mt10">
+            <span class="cond dib w140 tr mr5" name="{{ cond.name }}" type="listcmp">{{ cond.name_cn }}</span>
+            <input type="text" class="w30 f12" name="{{ cond.name }}_min"> - <input type="text" class="w30 f12" name="{{ cond.name }}_max">
+        </li>
+        {% endif %}
+        
+        {% endfor %}
+	</ul>
+    <div class="tr">
+        <a href="javascript:;" id="confirm_condition" class="btn btn-primary f12">确定</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<!--节点右键菜单-->
+<ul id="node_right_menu" class="hide">
+    <li><a id="edit_node">编辑节点</a></li>
+    <li><a id="add_node">添加子节点</a></li>
+    <li><a id="del_node">删除</a></li>
+    <li><a class="move_node" direction="left">◀ 左移</a></li>
+    <li><a class="move_node" direction="right">▶ 右移</a></li>
+    <li><a id="copy_node">复制</a></li>
+    <li><a id="paste_node" class="disabled">粘贴子节点</a></li>
+    <li>
+        <div>
+            <span>标记</span>
+            <a class="mark_node gold" href="javascript:;" mark="0">&nbsp;</a>
+            <a class="mark_node red" href="javascript:;" mark="1">&nbsp;</a>
+            <a class="mark_node silver" href="javascript:;" mark="2">&nbsp;</a>
+            <a class="mark_node gray" href="javascript:;" mark="3">&nbsp;</a>　　
+            <a class="mark_node green" href="javascript:;" mark="4">&nbsp;</a>
+            <a class="mark_node cyan" href="javascript:;" mark="5">&nbsp;</a>
+        </div>
+    </li>
+</ul>
+{% endblock %}
+
+
+{% block custom_js %}
+<script type="text/javascript" src="/site_media/jl5/plugins/jOrgChart/jquery.jOrgChart.js"></script>
+<script src="{{'/site_media/jl5/ncrm_js/edit_plan_tree.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.EditPlanTree.init();
+});
+</script>
+<!--规则展示模板-->
+<script id="template_node_cond" type="text/html">
+<table class="node_cond table-layout mt10 btdd" cond_no="<%=cond_no%>">
+    <tr class="tr">
+        <td class="w60"><% if (cond_no>1) { %>或 <% }%>规则<span><%=cond_no%></span></td>
+        <td class="pl10"><a class="edit btn btn-mini" href="javascript:;">编辑</a><a class="del btn btn-mini ml5" href="javascript:;">删除</a></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div class="ml50"><%==cond_str%></div>
+        </td>
+    </tr>
+</table>
+</script>
+<!--节点展示模板-->
+<script id="template_node" type="text/html">
+<li>
+    <div path="<%=tree_data.path%>" mark="<%=tree_data.mark%>">
+        <div name="node_name" class="p5"><%=tree_data.name%></div>
+        <div class="f24 mt2"><%=tree_data.shop_count%></div>
+        <div name="node_goal" class="f12 tl p5 bbdd">
+            <div>预期目标</div>
+            <%if (tree_data.goal) { %>
+            <div class="ml15">
+                <%if (tree_data.goal.renew_order_pay) { %>
+                <div>进账金额 <span name="renew_order_pay"><%=tree_data.goal.renew_order_pay%></span></div>
+                <% }%>
+                <%if (tree_data.goal.good_comment_count) { %>
+                <div>好评数 <span name="good_comment_count"><%=tree_data.goal.good_comment_count%></span></div>
+                <% }%>
+                <%if (tree_data.goal.unknown_order_count) { %>
+                <div>SD单量 <span name="unknown_order_count"><%=tree_data.goal.unknown_order_count%></span></div>
+                <% }%>
+            </div>
+            <% }%>
+        </div>
+        <div name="cond_list" class="f12 tl p5">
+            <div>节点规则</div>
+            <div class="ml15"><%==cond_str%></div>
+        </div>
+    </div>
+</li>
+</script>
+{% endblock %}

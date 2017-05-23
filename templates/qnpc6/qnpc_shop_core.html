@@ -1,0 +1,127 @@
+{#utf-8#}
+{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block content %}
+    <!-- page 容器 -->
+    <div class="page" id="{{ PAGE_MARK.2 }}">
+        <input type="hidden" id="version_limit" value="{{ version_limit }}"/>
+        {% if version_limit %}
+        <div class="sui-msg msg-large msg-warning msg-block ">
+            <div class="msg-con text-center">
+                亲，您订购的版本不支持全店核心词哦，请升级到八引擎版吧！
+                <a href="/web/upgrade_suggest/" target="_blank">立即升级</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="breadcrumb">
+            <span class="account-ye"><a href="/qnpc/qnpc_home" >首页</a> / 全店核心词</span>
+            <span class="func hide">
+                <span class="sui-dropdown select">
+                    <span class="dropdown-inner">
+                        <a role="button" data-toggle="dropdown" href="javascript:void(0);" class="sui-btn btn-xlarge btn-primary dropdown-toggle">
+                            <input value="7" name="select_date" id="select_date" type="hidden"><span>过去7天</span><i class="iconfont">&#xe603;</i>
+                        </a>
+                        <ul role="menu" aria-labelledby="drop1" class="sui-dropdown-menu">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" value="1" href="javascript:void(0);">昨天</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" value="3" href="javascript:void(0);">过去3天</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" value="5" href="javascript:void(0);">过去5天</a>
+                            </li>
+                            <li role="presentation" class="active"><a role="menuitem" tabindex="-1" value="7" href="javascript:void(0);">过去7天</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" value="15" href="javascript:void(0);">过去15天</a>
+                            </li>
+                        </ul>
+                    </span>
+                </span>
+            </span>
+        </div>
+
+        <div class="keyword-table">
+            <div class="submit-div hide">
+                <span>PC加价 <span id="pc_add_count">0</span> 个</span>&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span>PC降价 <span id="pc_cut_count">0</span> 个</span>&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span>移动加价 <span id="yd_add_count">0</span> 个</span>&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span>移动降价 <span id="yd_cut_count">0</span> 个</span>&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a href="javascript:void(0);" id="submit_list" class="sui-btn btn-xlarge btn-warning">提交到直通车</a>
+            </div>
+            <table class="sui-table table-bordered" id="keyword_table">
+                <thead>
+                    <tr style="text-align: center">
+                        <th rowspan="2">宝贝图片</th>
+                        <th rowspan="2"> <div class="tl"> 关键词(<span id="keywords_count">--</span>)</div> </th>
+                        <th rowspan="2"><div>PC当前出价</div></th>
+                        <th rowspan="2"><div>PC新出价</div></th>
+                        <th rowspan="2"><div>移动当前出价</div></th>
+                        <th rowspan="2"><div>移动新出价</div></th>
+                        <th rowspan="2" data-table="keyword_table" data-index="4">
+                            <div>抢排名</div>
+                        </th>
+                        <th colspan="2" data-table="keyword_table" data-index="4">
+                            <div>当前排名</div>
+                        </th>
+                        <th colspan="2" data-toggle="selectSort" data-name-list='[["计算机","pc_qs"],["移动","mobile_qs"]]' data-table="keyword_table" data-index="6">
+                            <div>质量得分</div>
+                        </th>
+                        <th rowspan="2"><div>展现量</div></th>
+                        <th rowspan="2"><div>点击量</div></th>
+                        <th rowspan="2"><div>点击率</div></th>
+                        <th rowspan="2"><div>总花费</div></th>
+                        <th rowspan="2"><div>PPC</div></th>
+                        <th rowspan="2"><div>转化率</div></th>
+                        <th rowspan="2"><div>ROI</div></th>
+                    </tr>
+                    <tr>
+                        <th><div>PC</div></th>
+                        <th><div>移动</div></th>
+                        <th><div>PC</div></th>
+                        <th><div>移动</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="tar">
+
+                        <td colspan="19">
+                            <div class="text-center">
+                                <span>暂无数据</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="rankDetailModal"  style="width: 600px; margin-left: -300px; left:50%;" tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade">
+            <div class="modal-dialog"
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                        <h4 class="modal-title">排名记录</h4>
+                    </div>
+                    <div class="modal-body" style=" max-height: 400px; overflow-y: scroll">
+                        <table class="sui-table table-bordered" id="detail_table">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center">优化时间</th>
+                                <th style="text-align: center">出价</th>
+                                <th style="text-align: center">排名情况</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="tar">
+                                <td colspan="3">
+                                    <div class="text-center">
+                                        <img src="/site_media/qnpc6/static/images/ajax_loader.gif" alt=""><br>
+                                        <span>请稍候...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

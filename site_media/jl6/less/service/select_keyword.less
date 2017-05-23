@@ -1,0 +1,272 @@
+#keyword_cart,#keyword_selecter{
+    table{
+        margin-bottom: 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        td,th{
+            border: none;
+            vertical-align: middle;
+        }
+        th{
+            height: 50px;
+            background-image: none;
+            border-bottom: 1px solid @table-border-color;
+            font-weight: normal;
+        }
+
+
+        &.table{
+            tbody>tr{
+                height: 35px;
+                td{
+                    border-bottom: 1px dotted @table-border-color;
+                }
+            }
+        }
+    }
+
+    .btn-sm{
+        height: 30px;
+    }
+
+    .input-group{
+        input{
+            height: 30px;
+            padding: 0 5px;
+        }
+    }
+}
+
+
+
+#keyword_cart_box{
+    float: left;
+    width: 387px;
+}
+
+#keyword_cart{
+    position: relative;
+    height: 100%;
+    border: 1px solid @table-border-color;
+
+    header{
+        text-align: center;
+        margin: 0;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    table input[type="text"]{
+        height: 25px;
+        padding: 0 5px;
+    }
+
+    table{
+        th{
+            font-weight: 700;
+        }
+
+        i.iconfont{
+            color: @base-color;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    }
+
+    &.fixed{
+        top:0;
+        width: 387px;
+        position: fixed;
+    }
+
+    .bottom_operation{
+        width: 387px;
+    }
+}
+
+#scroll_box{
+    overflow-y: auto;
+}
+
+#keyword_selecter{
+
+    float: left;
+    margin-left: 15px;
+    width: 1280-387-15px;
+    // padding-bottom: 50px;
+
+    .bottom_operation{
+        width: 1280-387-15px;
+    }
+
+    .top_operation{
+        padding: 10px;
+    }
+
+    .tab-content{
+        position: relative;
+        padding-bottom: 50px;
+    }
+
+    .tag_editor{
+        padding: 10px;
+        .tag-editor{
+            width: 600px;
+            border:1px solid @table-border-color;
+        }
+
+        .placeholder{
+            line-height: 30px;
+        }
+
+        .select_box{
+            position: absolute;
+            z-index: 105;
+            background-color: #fff;
+            width: 600px;
+            border:1px solid @table-border-color;
+            border-top: none;
+            box-shadow: 0 2px 10px 0px @gray-dark;
+        }
+
+        button{
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .tag-editor{
+            float: left;
+        }
+    }
+
+    .layout-slider .series_name {
+        width: 85px;
+        display: inline-block
+    }
+
+    .layout-slider{
+        margin-bottom: 30px;
+        .jslider{
+            display: inline-block;
+            width: 75%;
+            margin-left: 10px;
+        }
+    }
+
+    textarea{
+        resize: none;
+    }
+
+
+    td{
+        span.del{
+            color:@gray;
+            text-decoration: line-through;
+        }
+    }
+
+}
+
+#select_keyword{
+    .fixedHeader{
+        margin-left: 0;
+        table{
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            th{
+                vertical-align: middle;
+                background-color: #fff;
+                border-bottom-width: 1px;
+                font-weight: 700;
+                height: 50px;
+                background-image: none;
+                border-bottom: 1px solid @table-border-color;
+                font-weight: normal;
+            }
+        }
+    }
+
+}
+
+.bottom_operation{
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 5px;
+    background-color: #fff;
+    border: 1px solid @table-border-color;
+    border-bottom: none;
+    margin-left: -1px;
+    visibility: hidden;
+
+    nav{
+        display: inline-block;
+        line-height: initial;
+        vertical-align: middle;
+        margin-left: 30px;
+
+        &>span{
+            display: inline-block;
+            margin-top: 5px;
+            margin-right: 20px;
+        }
+    }
+
+    .pagination{
+        margin: 0;
+    }
+}
+
+#select_keyword_nav{
+    background-color: @gray-lighter;
+    a{
+        font-weight: 700;
+        color: @gray-base;
+    }
+}
+
+#max_price_limit{
+    width: 55px;
+}
+
+#modify_box{
+    width: 325px;
+    margin-bottom: 5px;
+    line-height: initial;
+    padding: 10px 20px;
+    header{
+        text-align: left;
+        font-weight: 700;
+    }
+    input[type="text"]{
+        .form-control;
+        display: inline-block;
+        width: 50px;
+        height: 25px;
+        padding: 0 4px;
+    }
+}
+
+.select_keyword{
+    border-top: 1px solid @table-border-color;
+
+    .iconfont{
+        font-size: 16px;
+        float: right;
+        color:@base-color;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 5px;
+      margin-top: 0;
+      vertical-align: -2px;
+    }
+}
+
+#submit_keyword{
+    margin-top: 12px;
+}

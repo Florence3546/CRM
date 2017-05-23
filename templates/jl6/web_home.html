@@ -1,0 +1,211 @@
+{#utf-8#}
+<!--顶部广告-->
+{% extends "base_main.html" %}
+{% load rates %}
+{% block title %}首页{% endblock %}
+
+
+{% block content %}
+<section class="container-fluid">
+    <!--主区横条start-->
+    {% if main_banner %}
+    <div class="alert alert-info" id="show_main_banner">
+        <a class="r" href="javascript:;" id="hide_main_banner"><strong><i class="iconfont f16">&#xe614;</i></strong></a>
+        <div id="main_banner_content" ad_frequency="{{ main_banner.ad_frequency }}" ad_id="{{ main_banner.obj_id }}">
+            {% autoescape off %}
+            {{ main_banner.ad_content }}
+            {% endautoescape %}
+        </div>
+    </div>
+    {% endif %}
+    <!--主区横条end-->
+    <div class="main_rpt_warp pr290" id="account_warp">
+        <article class="box">
+            <header>
+                <div class="line_box">
+                    <span class="title">账户报表</span>
+<!--                    <div class="select_warp" id="select_account_days">
+                        <span class="tip" data-toggle="dropdown">昨天</span>
+                        <ul class="dropdown-menu">
+                          <li data-value="1"><span>昨天</span></li>
+                          <li data-value="7"><span>过去7天</span></li>
+                          <li data-value="15"><span>过去15天</span></li>
+                        </ul>
+                    </div>-->
+	                <div class="dtr_picker_warp">
+	                    <span class="tip" data-toggle="dtr_picker" id="select_account_days" rt_rpt="0">昨天</span>
+	                </div>
+                    <a href="javascript:;" id="account_detail" class="sub">查看明细</a>
+                </div>
+            </header>
+            <div>
+                <div class="pl12 pr12">
+		            <table class="rt_rpt"></table>
+                </div>
+                <table class="total_rpt">
+
+                </table>
+
+                <div id="account_char" class="pct100">
+
+                </div>
+            </div>
+        </article>
+        <aside>
+            <div class="box" id="vip_center">
+                <header>
+                    <div class="line_box">
+                        <span class="title">会员信息</span>
+                        <a href="{%url 'vip_home'%}" class="sub">会员中心</a>
+                    </div>
+                </header>
+                <div>
+                    <ul>
+                        <li>
+                            <span class="title">订购版本</span>&emsp;
+                            <span class="msg">{{version_name}}</span>
+                        </li>
+                        <li>
+                            <span class="title">剩余时间</span>&emsp;
+                            <span class="msg">{{request.session.left_days}}天</span>
+                            <a class="btn btn-sm btn-primary r" href="/web/upgrade_suggest/" target="_blank">续订优惠</a>
+                        </li>
+                        <li>
+                            <span class="title">账户余额</span>&emsp;
+                            <span class="msg">{{ account.balance }}元</span>
+                            <button class="btn btn-primary btn-sm" id="btn_recharge">立即充值</button>
+                        </li>
+                        <li>
+                            <span class="title">会员积分</span>&emsp;
+                            <span class="msg point_count">{{JLB_COUNT}}</span>{% if JLB_COUNT > 2000 %}<a href="{%url 'point_mall'%}" class="ml5 point_mall" target="_blank">兑换</a>{% endif %}
+                            {%if is_sign_today %}
+                             <button class="btn btn-default disabled btn-sm"  id="sign_point">已&thinsp; 签&thinsp; 到</button>
+                            {%else%}
+                             <button class="btn btn-sm btn-primary" id="sign_point"><i class="iconfont mr5">&#xe63a;</i>签&thinsp;&nbsp;&thinsp;到</button>
+                            {%endif%}
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="box" id="common_msg">
+                <header>
+                    <div class="line_box">
+                        <span class="title">公告信息</span>
+                    </div>
+                </header>
+                <div class="right_notice_list">
+                    <ul>
+                        {% for notice in right_notices %}
+                            <li class="right_notice_link main_ad" ad_id="{{ notice.obj_id }}">
+                                <a class="right_notice_title" href="{% if notice.ad_url %}{{ notice.ad_url }}{% else %}javascript:;{% endif %}" target="_blank">
+                                    {{ notice.ad_title }}
+                                </a>
+                                <time>({{ notice.ad_put_time }})</time>
+                                {% if notice.is_new %}
+                                <a href="javascript:;"><i class="iconfont base_color f20">&#xe629;</i></a>
+                                {% endif %}
+                                <input type="hidden" value="{{ notice.ad_content }}"/>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <div class="box">
+        <header>
+            <div class="line_box">
+                <span class="title">计划列表</span>
+                <div class="dtr_picker_warp">
+                    <span class="tip" data-toggle="dtr_picker" id="select_campaign_days">过去七天</span>
+                </div>
+            </div>
+            <div class="operate">
+                <button class="btn btn-default btn-sm update_camp" mode="1">参与推广</button>
+                <button class="btn btn-default btn-sm update_camp" mode="0">暂停推广</button>
+                <button class="btn btn-default btn-sm js_create_camp">新建计划</button>
+<!--                 <div class="show_more_warp">
+                    <span class="tip" data-target="campaign_table" data-toggle="show_more">更多数据</span>
+                </div> -->
+            </div>
+        </header>
+        <div>
+            <table class="table table-bordered icon_hover_show table-hover" id="campaign_table">
+              <thead>
+                  <tr class="h30">
+                      <th class="choose_column">
+                        <div>
+                            <input type="checkbox" class="all">
+                        </div>
+                      </th>
+                      <th class="w230">
+                        <div>
+                            计划名称
+                            <a id="show_subdivide_all" class="r base_color" href="javascript:;"><i class="iconfont mr5">&#xe640;</i>细分</a>
+                        </div>
+                      </th>
+                      <th data-active="budget"><div>日限额</div></th>
+                      <th data-active="platform"><div>投放平台</div></th>
+                      <th data-active="discount"><div>分时折扣</div></th>
+                      <th data-active="imp"><div>展现量</div></th>
+                      <th data-active="click"><div>点击量</div></th>
+                      <th data-active="ctr"><div>点击率</div></th>
+                      <th data-active="cost"><div>总花费</div></th>
+                      <th data-active="ppc"><div>PPC</div></th>
+                      <th data-active="favcount"><div>收藏量</div></th>
+                      <th data-active="carttotal"><div>购物车数</div></th>
+                      <th data-active="paycount"><div>成交量</div></th>
+                      <th data-active="cov"><div>转化率</div></th>
+                      <th data-active="true"><div>成交额</div></th>
+                      <th data-active="roi"><div>ROI</div></th>
+                      <th data-active="flag"><div>状态</div></th>
+                      <th class="tc"><div>操作</div></th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="17">
+                      <div class="text-center">
+                        <img src="/site_media/jl6/static/images/ajax_loader.gif" alt=""><br>
+                        <span>请稍候...</span>
+                      </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<!--右下弹窗 end-->
+{% if mr_window %}
+<div class="auto bg_white tc" id="show_mr_window" ad_show_secs="{{ mr_window.ad_show_secs }}"
+     ad_close_btn="{{ mr_window.ad_close_btn }}" ad_delay_secs="{{ mr_window.ad_delay_secs }}"
+     ad_frequency="{{ mr_window.ad_frequency }}">
+    <div  id="hide_mr_window">
+        <a href="javascript:;"><i class="icon iconfont">&#xe614;</i></a>
+    </div>
+    <div id="mr_window_content" ad_id="{{ mr_window.obj_id }}">
+        {% autoescape off %}
+        {{ mr_window.ad_content }}
+        {% endautoescape %}
+    </div>
+</div>
+{% endif %}
+<!--右下弹窗 end -->
+<!--中间弹窗start-->
+{% if mc_window %}
+<div class="auto tc vm" id="show_mc_window" ad_frequency="{{ mc_window.ad_frequency }}">
+    <div id="hide_mc_window"><a class="r" href="javascript:;"><i class="icon iconfont">&#xe614;</i></a></div>
+    <div id="mc_window_content" ad_id="{{ mc_window.obj_id }}">
+        {% autoescape off %}
+        {{ mc_window.ad_content }}
+        {% endautoescape %}
+    </div>
+</div>
+{% endif %}
+<!--中间弹窗end-->
+{%endblock%}

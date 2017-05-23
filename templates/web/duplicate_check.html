@@ -1,0 +1,97 @@
+{#utf-8#}{% extends "base_mainjl5.html" %}
+{% block title%}
+    批量删词
+{% endblock %}
+{% block content %}
+    {% if not kwrtp_isok %}
+        <div class="red mb10">
+            <i class="iconfont">&#xe659;</i><span class="f16 ml5">当前有关键词报表没有下载完成，请不要进行重复词排查的操作，请先尝试点击右上角的“同步下载->直通车报表数据”进行修复。</span>
+        </div>
+    {% endif %}
+
+    <div class="box">
+        <div class="box_hd">
+            <span class="box_l">
+            重复词排查
+            </span>
+            <span class="box_r">
+            <button class="btn btn-small"  id="id_recheck">重新检查</button>
+            </span>
+        </div>
+        <div class="box_bd pt10">
+            <div class="tabbable tabbable-custom">
+                <ul class="nav nav-tabs tab_title no-left-warp-border">
+                    <li class="active"><a href="#tab_smart" data-toggle="tab"  id="smart_btn">一键删除垃圾词<span>(共<span class="r_color" id="garbage_count"></span>个)</span></a></li>
+                    <li><a href="#tab_advanced" data-toggle="tab"  id="advanced_btn">高级批量删除重复词<span>(共<span class="r_color dupl_word_count"></span>个)</span></a></li>
+                    <li><a href="#tab_manual" data-toggle="tab"  id="manual_btn">手工批量删除重复词<span>(共<span class="r_color dupl_word_count"></span>个)</span></a></li>
+                </ul>
+                <div class="tab-content nbl nbr">
+                    <div class="p10 fix lh44" id="condition">
+                        <span class="hide" id="condition_detail">
+                        <span id='obj_descr' class="large ml10 b">针对以下选中项：</span>
+                        <span class="large popovers" data-placement="right" data-trigger="hover" data-content="1级最高最好，数字越大优先级越差，越没有展现机会，大于2的建议删除" >删除</span>
+                        重复次数大于
+                        <select class="small" tabindex="1" id="del_level" style=" width: 50px !important;">
+                            <option value="2" selected="selected">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="7">7</option>
+                            <option value="10">10</option>
+                        </select>
+                        且
+                        <select class="w110" tabindex="1" id="del_day">
+                            <option value="3">过去3天</option>
+                            <option value="4">过去4天</option>
+                            <option value="5">过去5天</option>
+                            <option value="7" selected="selected">过去7天</option>
+                            <option value="10">过去10天</option>
+                            <option value="14">过去14天</option>
+                            <option value="15">过去15天</option>
+                        </select>
+                        <select class="w100" tabindex="1" id="del_statistics_type" style=" width: 110px !important;">
+                            <option value="impr" selected="selected">展现量为0</option>
+                            <option value="click">点击量为0</option>
+                        </select>
+                        <label for="id_del_offline" class="inline dib"><input type="checkbox" id="del_offline" name="del_offline" checked="checked" style="margin-top:-2px;"><span class="marl_3">不删除已暂停的计划和宝贝下的重复词</span></label>
+                        </span>
+                        <button type="button" class="btn btn-large btn-primary r" id="comm_submit_btn" >批量删除<i class="icon-trash marl_6"></i></button>
+                        <div class="large m_color mart_6 baseColor" id="smart_explain">
+                            <i class="iconfont">&#xe659;</i>
+                            一键删除淘宝直通车判定的垃圾词(即连续15天展现为0且未激活，不管重复，都强烈建议删除)
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_manual">
+                        <!--重复词排查开始-->
+                        <div class="row-fluid mart_12" id="dupl_box">
+                            <table class="table-no-warp-border btd mb10" id="dupl_kw_list">
+                                <thead>
+                                    <tr>
+                                        <th class="w20"></th>
+                                        <th class="tac"><div>重复关键词</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--重复词排查结束-->
+                    </div>
+                    <div class="tab-pane" id="tab_advanced">
+                    </div>
+                    <div class="tab-pane" id="tab_smart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block custom_js %}
+    <script>
+    jQuery(document).ready(function() {
+        PT.Duplicate_check.init();
+    });
+    </script>
+{% endblock %}

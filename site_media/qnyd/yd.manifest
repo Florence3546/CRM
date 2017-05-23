@@ -1,0 +1,20 @@
+﻿CACHE MANIFEST
+
+# VERSION 0.0.6
+CACHE:
+/site_media/qnyd/css/bootstrap.min.css
+/site_media/qnyd/scripts/zepto.min.js
+/site_media/jl/scripts/artTemplate.js
+/site_media/jl/scripts/dajax.js
+/site_media/qnyd/plugins/js/adapters/standalone-framework.js
+/site_media/qnyd/plugins/js/highcharts.js
+/site_media/qnyd/img/ajax-white.gif
+/site_media/qnyd/img/loader.gif
+/site_media/qnyd/img/loader-small.gif
+/site_media/qnyd/img/loader-small-white.gif
+http://g.tbcdn.cn/sj/qn/jssdk.js
+http://g.tbcdn.cn/sj/qn/lib/js/less.js
+http://l.tbcdn.cn/apps/top/c/sdk-mobile.js
+
+NETWORK:
+*

@@ -1,0 +1,1 @@
+python.exe start_new_word_forecast.py

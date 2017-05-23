@@ -1,0 +1,53 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}计划列表{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        {%if child_plan%}
+        <div class="fix lh30 mt10 mb10">
+            <ul class="breadcrumb p0 l m0">
+                <li>
+                    <a href="/ncrm/plan_list/">
+                        {{child_plan.0.parent_plan.title}}
+                    </a>
+                    <span class="divider">&gt;</span>
+                </li>
+                <li class="active">子计划</li>
+            </ul>
+        </div>
+
+        <table class="table-bordered mini">
+            <thead>
+                <tr>
+                    <th class="w160">计划名称</th>
+                    <th class="w60">责任人</th>
+                    <th>目标</th>
+                    <th>备注</th>
+                    <th>进展</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for c in child_plan%}
+                <tr>
+                    <td class="tc">{{c.title}}</td>
+                    <td class="tc">{{c.psuser_cn_name}}</td>
+                    <td>{{c.target|safe}}</td>
+                    <td>{{c.note|safe}}</td>
+                    <td>{{c.progress|safe}}</td>
+                    <td class="tc"><a href="{%url 'edit_plan' c.id%}">修改</a></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        {%else%}
+        <div class="tc p20">
+            <i class="iconfont f20 mr5">&#xe66f;</i>计划不存在
+        </div>
+        {%endif%}
+    </div>
+</div>
+{% endblock %}
+

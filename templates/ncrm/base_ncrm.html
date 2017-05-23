@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+	<script>console.log('html head '+new Date());</script>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}-CRM</title>
+    <link href="http://g.alicdn.com/kissy/k/5.0.1/css/base.css" rel="stylesheet">
+    <link href="http://g.alicdn.com/kg/editor-plugins/1.1.3/assets/editor.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/ncrm/bootstrap.min.css'|file_time_stamp}}" />
+    {%if DEBUG%}
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/quick_layout.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.css'|file_time_stamp}}" />
+    {%else%}
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/quick_layout.min.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.css'|file_time_stamp}}" />
+      <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.min.css'|file_time_stamp}}" />
+    {%endif%}
+      <link rel="stylesheet" href="/site_media/jl5/plugins/gritter/css/jquery.gritter.css">
+    {% block extra_style %} {% endblock %}
+    <script src="/site_media/jl5/js/jquery-1.10.1.min.js"></script>
+    <script src="/site_media/jl5/plugins/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/site_media/jl5/plugins/jquery.base64.js"></script>
+  </head>
+  <style>
+    .header {width: 100%; height: 60px; background: url(/site_media/jl5/images/header-nav-bg.jpg) center top #4687bd;background-repeat: no-repeat;background-position: -80px -40px;box-shadow: 1px 1px 5px #204F77;}
+    .header {width: 100%; height: 60px; box-shadow: 1px 1px 5px #204F77;background-color: #4687bd;}
+/*    .header .christmas{position: absolute; width: 1903px; height: 60px; top: 0; background: url(/site_media/jl5/images/christmas_bg2.png) no-repeat -5px  #4687bd; margin-left: -287px;}*/
+    .page-overflow .christmas{margin-left: -296px;}
+    #custom_header .main_nav{margin:0;display: inline-block; line-height: 60px;}
+    #custom_header .main_nav li{display: inline-block;}
+    #custom_header .main_nav a{color: #fff;position: relative;font-size: 16px;width: 90px;display: inline-block;line-height: 60px;text-align: center;}
+    /*#custom_header .main_nav a:hover,#custom_header li.active a{font-weight: 700;}*/
+    #custom_header .dropdown{line-height: 60px;}
+    #custom_header .dropdown>a,#custom_header .dropdown>a:hover{color: #fff;}
+    #custom_header .dropdown-menu li,#custom_header .dropdown-menu a,#custom_header .dropdown-menu a:hover{color: #000;line-height:20px;display:block;text-align:left;font-size:14px;margin-bottom: 5px;}
+    #custom_header .main_nav a:hover:after,#custom_header li.active a:after{content: ''; position: absolute; width: 100%; height: 60px; left: 0; background-color: #fff; opacity: 0.2;}
+    #custom_header .dropdown-menu a:hover:after,#custom_header li.active .dropdown-menu a:after{content: ''; position: absolute; width: 100%; height: 20px; left: 0; background-color: #fff; opacity: 0.2;}
+    .ks-dtp{z-index: 9999 !important;}
+    .header-year{padding:0px;}
+    .w55{ width:55px;}
+    .w560{ width:560px;}
+    .w820{ width:820px;}
+    .w650{ width:650px;}
+    label{font-size:12px;}
+    #event_detail_table th, #event_detail_table td {padding:8px;}
+    #event_detail_table td>p {margin:0;}
+    #event_detail_table tr[event_type=invisible_event] {color:#aaa;background-color:#eee;}
+    #event_detail_table tr[event_type=unsubscribe] {color:#e74049;}
+    @font-face {
+      font-family: 'iconfont';
+      src: url('//at.alicdn.com/t/font_1458630249_2868664.eot'); /* IE9*/
+      src: url('//at.alicdn.com/t/font_1458630249_2868664.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+      url('//at.alicdn.com/t/font_1458630249_2868664.woff') format('woff'), /* chrome、firefox */
+      url('//at.alicdn.com/t/font_1458630249_2868664.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+      url('//at.alicdn.com/t/font_1458630249_2868664.svg#iconfont') format('svg'); /* iOS 4.1- */
+    }
+  </style>
+  <body id="{{PAGE_MARK.2}}">
+    <!-- 预加载开始 -->
+    <img class="hide" src="/site_media/assets/img/ajax-modal-loading.gif">
+    <img class="hide" src="/site_media/jl5/images/forecast_orde_ajax.gif">
+    <!-- 预加载结束 -->
+    <input type="hidden" id="psuser_id" value="{{request.session.psuser_id}}">
+    <input type="hidden" id="psuser_cn" value="{{request.session.psuser_name}}">
+    <input type="hidden" id="psuser_dept" value="{{myself.department}}"/>
+
+    <div class="header" id="custom_header">
+      <div class="container-fluid">
+        <div class="w1329 auto rel zx999">
+              <div class="rel l0 zx1">
+                <a class="hide brand mt-3" href="{%url 'plan_list'%}">
+                    <img class="dib" src="/site_media/jl5/images/logo.png" height="60" width="373">
+                </a>
+                <ul class="ul_line main_nav">
+                    <li {%if 'workbench' in PAGE_MARK.2 %}class="active"{%endif%}><a href="{% url 'myworkbench' %}?{{ request.session.search_args }}" target="_blank">工作台</a></li>
+                    <li {%if PAGE_MARK.2 == 'event_statistic' %}class="active"{%endif%}><a href="{% url 'event_statistic' %}" target="_blank">事件统计</a></li>
+                    <li {%if PAGE_MARK.2 == 'plan_list' %}class="active"{%endif%} style="display:none;"><a href="{% url 'plan_list' %}" target="_blank">计划</a></li>
+                    <li {%if PAGE_MARK.2 == 'work_reminder' %}class="active"{%endif%}><a href="{% url 'work_reminder' %}?psuser_id={{ request.session.psuser_id }}&handle_status=-1" target="_blank">提醒</a></li>
+                    <li {%if PAGE_MARK.2 == 'diary_list' %}class="active"{%endif%}><a href="{% url 'diary_list' 'mine' %}" target="_blank">日志</a></li>
+                    <li>
+                        <div class="dropdown rel">
+                            <a href="javascript:;" class="dropdown-toggle white f16" data-trigger="hover" data-toggle="dropdown" data-type="select">
+                                售后部<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                <li><a class="p0" href="{% url 'category_tree' %}" target="_blank">分类树</a></li>
+                                <li><a class="p0" href="{% url 'plan_tree' %}" target="_blank">计划树</a></li>
+                                <li><a class="p0" style="display:none;" href="{% url 'metric_statistic' %}" target="_blank">度量</a></li>
+                                <li><a class="p0" href="{% url 'adgroup_top' %}" target="_blank">宝贝TOP榜</a></li>
+                                <li><a class="p0" style="display:none;" href="{% url 'performance' %}" target="_blank">业绩排行榜</a></li>
+                                <li><a class="p0" style="display:none;" href="{% url 'xfgroup_manage' %}" target="_blank">销服组配置</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown rel">
+                            <a href="javascript:;" class="dropdown-toggle white f16" data-trigger="hover" data-toggle="dropdown" data-type="select">
+                                市场部<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                <li><a class="p0" href="{% url 'order_manage' %}" target="_blank">订单管理</a></li>
+                                {% if 'a' in request.session.perms %}
+                                <li><a class="p0" href="{% url 'subscribe_analyze' %}" target="_blank">订单分析</a></li>
+                                {% endif %}
+                                <li><a class="p0" href="{% url 'order_dunning' %}" target="_blank">订单催付</a></li>
+                                <li><a class="p0" href="{% url 'crm_point_manager' %}" target="_blank">积分兑换</a></li>
+                                <li><a class="p0" href="{% url 'ncrm_feedback' %}" target="_blank">客户反馈</a></li>
+                                {% if '1' in request.session.perms %}
+                                <li><a class="p0" href="{% url 'consult_manager' %}" target="_blank">客户分发</a></li>
+                                {% endif %}
+                                {% if 'a' in request.session.perms %}
+                                <li><a class="p0" href="{% url 'record_distribute' %}" target="_blank">客户分发记录</a></li>
+                                <li><a class="p0" href="http://www.ztcjl.com/PS908/" target="_blank">商城管理</a></li>
+                                <li><a href="{% url 'main_ad_manage' %}" target="_blank">广告管理</a></li>
+                                <li><a class="p0" href="{% url 'sale_link' %}" target="_blank">推广链接</a></li>
+                                <li><a class="p0" href="{% url 'short_message_manage' %}" target="_blank">短信管理</a></li>
+                                <li><a class="p0" href="http://rdtest.ztcjl.com:30001/spider" target="_blank">竞争统计</a></li>
+                                {% endif %}
+                                <li><a class="p0" href="{% url 'comment_manage' %}" target="_blank">评论管理</a></li>
+                                <li><a class="p0" href="{% url 'pre_sales_advice' %}" target="_blank">售前咨询</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown rel">
+                            <a href="javascript:;" class="dropdown-toggle white f16" data-trigger="hover" data-toggle="dropdown" data-type="select">
+                                人机部<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                <li><a class="p0" href="{% url 'category_tree' %}" target="_blank">分类树</a></li>
+                                <li><a class="p0" href="{% url 'metric_statistic_rjjh' %}" target="_blank">度量统计</a></li>
+                                <li><a class="p0" href="{% url 'select_keyword_order' %}" target="_blank">选词预览</a></li>
+                                <li><a class="p0" href="{% url 'crm_account' %}" target="_blank">账户列表</a></li>
+                                <li><a class="p0" href="{% url 'crm_campaign' %}" target="_blank">计划列表</a></li>
+                                <li><a class="p0" href="{% url 'crm_adgroup' %}" target="_blank">宝贝列表</a></li>
+                                <li><a class="p0" href="{% url 'crm_keyword' %}" target="_blank">关键词列表</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown rel">
+                            <a href="javascript:;" class="dropdown-toggle white f16" data-trigger="hover" data-toggle="dropdown" data-type="select">
+                                财务部<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                {% if myself.id == 519 or myself.id == 86 %}<li><a class="p0" href="{% url 'approval_subscribe' %}" target="_blank">进账审计</a></li>{% endif %}
+                                <li><a class="p0" href="{% url 'unsubscribe_manage' %}" target="_blank">退款审计</a></li>
+{#                                <li><a class="p0" href="{% url 'operating_rpt1' %}" target="_blank">运营报表</a></li>#}
+                                {% if 'H' in request.session.perms %}
+                                <li><a class="p0" href="{% url 'performance_income' %}" target="_blank">绩效表</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown rel">
+                            <a href="javascript:;" class="dropdown-toggle white f16" data-trigger="hover" data-toggle="dropdown" data-type="select">
+                                派生视觉<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                <li><a class="p0" href="http://www.paithink.com:30001" target="_blank">订单管理系统</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    {% if '2' in request.session.perms %}
+                    <li>
+                        <div class="dropdown rel">
+                            <a href="javascript:;" class="dropdown-toggle white f16" data-trigger="hover" data-toggle="dropdown" data-type="select">
+                                研发部<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel&quot;">
+                                <li><a class="p0" href="{% url 'rpt_snap' %}" target="_blank">报表趋势</a></li>
+                                <li><a class="p0" href="{% url 'task_rpt' %}" target="_blank">托管任务</a></li>
+                                <li><a class="p0" href="{% url 'strategy_cfg' %}" target="_blank">算法配置</a></li>
+                                <li><a class="p0" href="{% url 'category_list' %}" target="_blank">选词配置</a></li>
+                                <li><a class="p0" href="{% url 'kw_manage' %}" target="_blank">词元配置</a></li>
+                                <li><a class="p0" href="javascript:PT.alert('暂未开放');" target="_blank">词库任务</a></li>
+                                <li><a class="p0" href="{% url 'crm_user_list' %}" target="_blank">用户列表</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="ul_line ar mr10">
+                    <li>
+                        <div class="dropdown rel">
+                            <a class="dropdown-toggle white f16" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;">
+                                <i class="iconfont f18 mr5">&#xe640;</i>{{request.session.psuser_name}}<i class="iconfont">&#xe626;</i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <li><a href="{%url 'ncrm_psuser_roster' %}" target="_blank">花名册</a></li>
+                                <li><a href="{%url 'psuser_contact' %}" target="_blank">我的信息</a></li>
+                                <li><a href="{%url 'ncrm_logout' %}">退出系统</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+              </div>
+        </div>
+      </div>
+      <div class="ovh pct100 abs t0">
+        <div class="w1329 auto rel" style="height:60px;">
+          <div class="christmas"></div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid f12" id="main-content">
+      {% block content %}{% endblock %}
+    </div>
+    <div id="foot" class="row-fluid page-scroll">
+      <div>
+        <a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"><span class="mr5">联系顾问</span>|</a>
+        <a href="http://www.paithink.com" target="_blank"><span class="mr5">公司网站</span>|</a>
+        <a href="http://www.paithink.com" target="_blank"><span class="mr5">直通车托管服务</span>|</a>
+        <a href="http://www.paithink.com" target="_blank"><span class="mr5">视觉营销服务</span>|</a>
+        <a href="http://www.paithink.com" target="_blank"><span class="mr5">店铺诊断服务</span>|</a>
+        <a href="http://bangpai.taobao.com/group/14487125.htm" target="_blank"><span class="mr5">加入精灵帮派</span>|</a>
+        <a href="http://fuwu.taobao.com/ser/my_service.htm?tabIndex=1" target="_blank"><span class="mr5">给精灵打好评</span></a>
+      </div>
+      <p class="tac gray">Copyright © 2014 <a href="http://www.paithink.com" target="_blank">www.paithink.com</a> Inc. All Rights Reserved. 武汉派生科技有限公司 保留一切权利</p>
+    </div>
+    <!--全屏遮罩层开始-->
+    <div class="hide" id="full_screen_tips">
+      <div class="modal-backdrop in"></div>
+      <div class="modal-scrollable">
+        <div class="loading-spinner fade in">
+          <img src="/site_media/assets/img/ajax-modal-loading.gif" align="middle">
+          <div class="msg"></div>
+        </div>
+      </div>
+    </div>
+    <!--全屏遮罩层结束-->
+    <div id="customer_edit_layout" class="modal hide fade" data-width="800">
+    	<div class="modal-header">
+	        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+	    </div>
+    	<div id="customer_edit_box"></div>
+    </div>
+
+    <!-- 返回顶部 -->
+    <div class="tc fixed w50 h50 r0 mr10 b0 mb10 white f30 bg_base opt3 poi hide" id="return_top">
+      <i class="iconfont mt10 dib">&#xe613;</i>
+    </div>
+
+    <script src="/site_media/jl5/js/jquery.cookie.min.js"></script>
+    <script src="/site_media/jl5/js/dajax.js"></script>
+    <script src="/site_media/jl5/plugins/Highcharts-3.0.5/js/highcharts.js"></script>
+    <script src="/site_media/jl5/plugins/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
+    <script src="/site_media/jl5/plugins/gritter/js/jquery.gritter.min.js"></script>
+    <script src="/site_media/jl6/plugins/zclip/jquery.zclip.min.js"></script>
+    <script src="{{ '/site_media/jl5/plugins/xhEditor/xheditor.js'|file_time_stamp }}" type="text/javascript"></script>
+    <script src="{{ '/site_media/jl5/plugins/xhEditor/xheditor_lang/zh-cn.js'|file_time_stamp }}" type="text/javascript"></script>
+    {%if DEBUG%}
+      <script src="{{'/site_media/jl5/plugins/data-tables/dataTables.1.1.0.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/ZeroClipboard.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/TableTools.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/FixedHeader.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/artTemplate.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/bootstrap.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/ptui.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/templates.js'|file_time_stamp}}"></script>
+    {%else%}
+      <script src="{{'/site_media/jl5/plugins/data-tables/dataTables.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/ZeroClipboard.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/TableTools.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/data-tables/FixedHeader.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/plugins/artTemplate.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/bootstrap.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/ptui.min.js'|file_time_stamp}}"></script>
+      <script src="{{'/site_media/jl5/js/templates.min.js'|file_time_stamp}}"></script>
+    {%endif%}
+    <script src="{{'/site_media/jl5/ncrm_js/ncrm_base.js'|file_time_stamp}}"></script>
+    <script src="//g.alicdn.com/kissy/k/5.0.1/seed.js" data-config="{combine:true}"></script>
+    <script src="/site_media/jl5/plugins/kissy-plugins/deprecated.js"></script>
+    <script>
+      modulex.config({
+          packages: {
+              pt: {
+                  base: "/site_media/jl5/plugins/kissy-plugins/pt",
+                  tag: 'first_version',
+                  combine:false
+              },
+              kg: {
+                  base: "/site_media/jl5/plugins/kissy-plugins/kg",
+                  tag: 'first_version',
+                  combine:false
+              },
+              gallery: {
+                  base: "/site_media/jl5/plugins/kissy-plugins/gallery",
+                  combine:false
+              }
+          }
+      });
+      $().ready(function(){
+        PT.NcrmBase.init();
+      });
+    </script>
+    {% block extra_js %}{% endblock %}
+    {% block base_js %}{% endblock %}
+    {% block custom_js %}{% endblock %}
+    {% block template%}{% endblock %}
+  </body>
+  <script>console.log('html foot '+new Date());</script>
+</html>

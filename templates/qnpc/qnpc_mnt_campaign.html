@@ -1,0 +1,278 @@
+{#utf-8#}{% extends "qnpc_base.html" %}
+{% load rates %}
+{% block title%}
+	{{camp.get_mnt_type_display}}
+{% endblock %}
+{% block extra_style %}
+<link href="/site_media/assets/css/pages/profile.css?v={{VERSION}}" rel="stylesheet" type="text/css">
+<link href="/site_media/jl/plugins/tour/css/bootstrap-tour.min.css?v={{VERSION}}" rel="stylesheet" type="text/css" />
+<link href="/site_media/assets/plugins/fancybox/source/jquery.fancybox.css?v={{VERSION}}" rel="stylesheet" />
+<link href="/site_media/jl/css/fuck_ie/mnt_campaign.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+<link href="/site_media/jl/css/fuck_ie/mnt_adg.css?v={{VERSION}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="campaign_id" value="{{camp.campaign_id}}" />
+<input type="hidden" id="mnt_max_num" value="{{camp.max_num}}" />
+<input type="hidden" id="mnt_type" value="{{camp.mnt_type}}" />
+<input type="hidden" id="mnt_index" value="{{camp.mnt_index}}" />
+<input type="hidden" id="planned_time" value="{{camp.planned_time}}" />
+
+<div class="row-fluid" >
+    <div class="marb_12 larger bld">
+    	【{{camp.get_mnt_type_display}}】:“{{camp.title}}”
+        <a class="tooltips" id="id_close_mnt" data-placement="top" data-original-title="解除托管后，系统将不再对该计划做任何优化，您可以手动优化该计划">【解除托管】</a>
+    </div>
+
+    <div class="bd normally pad_12 marb_12 alert lh_24">
+    	<div>
+            <strong>免责声明：</strong>
+            <span>请仔细确认推广宝贝和标题，以免违规，如因违规造成的一切后果与精灵软件无关。详细规则请参考
+                {% if request.user.shop_type == "C"%}
+                <a target="_blank" href="http://zhitongche.taobao.com/help/showItem.action?helpItemId=148">《淘宝直通车软件服务使用规范》</a>
+                {% else %}
+                <a target="_blank" href="http://zhitongche.taobao.com/help/showItem.action?helpItemId=149">《天猫直通车软件服务使用规范》</a>
+                {% endif %}
+            </span>
+        </div>
+
+    	{% if camp.mnt_type == 2 or camp.mnt_type == 4 %}
+        <div class="mart_6">
+            <strong>托管说明：</strong>
+            <span>系统不会对计划下的其他推广宝贝做任何处理，但为了避免对重点托管宝贝的干扰，建议您将计划下的未托管宝贝自行删除或暂停推广</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="marb_12">
+        <table border="0" class="table_a PT_warp" id="camp_sum_rpt_table">
+            <thead>
+                <th colspan="6" class="pad_3" style="background-color:#EEE;">
+                	<span class='large pad_6' style="line-height:35px;">计划汇总数据</span>
+                    <div id="dashboard-report-range" class="dashboard-date-range no-tooltip-on-touch-device" style="float:right !important;">
+                        <i class="sui-icon icon-touch-date-sign"></i>
+                        <span>统计天数：<span class="date_value">过去1天</span></span>
+                        <i class="sui-icon icon-pc-chevron-bottom"></i>
+                        <form action="./" method="post" class="hide" post_mode="ajax" post_fuc="PT.MntCampaign.select_call_back">
+                            <input type="hidden" name="last_day" />
+                        </form>
+                    </div>
+                    <a class="marr_12 mart_6 fr" data-toggle="modal" href="#modal_camp_detail">查看详情</a>
+                    <br style="clear:both;">
+                </th>
+            </thead>
+            <tbody>
+            </tbody>
+    	</table>
+    </div>
+
+    <div id="camp_oper" class="PT_warp">
+    	<div class="row-fluid">
+    		<div class="span7 vam">
+                {% if camp.mnt_type == 1 or camp.mnt_type == 3 %}
+                <div class="lh_36">关键词最高限价：
+                    <input type="hidden" id="max_price_bak" value="{{camp|div:'max_price,100,2'}}">
+                    <input type ="text" class="tooltips min_input text_input" data-original-title="建议设在在0.80~5.00元之间" value="{{camp|div:'max_price,100,2'}}" maxlength="4" id="id_max_price" disabled />元
+                    <a class="edit_price marl_3">【修改】</a>
+                    <span class="hide"><a class="cancel_price">【取消】</a><a id="submit_max_price">【保存】</a></span>
+                </div>
+            	{% endif %}
+
+                <div class="lh_36">推广计划日限额：
+                    <input type="hidden" id="budget_bak" value="{{camp|div:'budget,100,0'}}">
+                    <input type ="text" class="tooltips min_input text_input" data-original-title="" value="{{camp|div:'budget,100,0'}}" maxlength="5" id="id_budget" disabled />元
+                    <a class="edit_price marl_3">【修改】</a>
+                    <span class="hide"><a class="cancel_price">【取消】</a><a id="submit_budget">【保存】</a></span>
+                </div>
+        	</div>
+
+            <div class="tooltips tar pull-right" data-original-title="" id="quick_oper_tip" is_active={{camp.is_active}} is_recent={{camp|is_recent:'quick_optime'}}>
+                <button type="button" class="btn r_btn quick_oper disabled" stgy="1"><img class="hide poa" src="/site_media/jl/img/ajax-loader.gif" style="height:24px;margin-left:-12px;"><i class="sui-icon icon-touch-plus"></i> 加大投入</button>
+                <button type="button" class="btn g_btn quick_oper disabled" stgy="-1"><img class="hide poa" src="/site_media/jl/img/ajax-loader.gif" style="height:24px;margin-left:-12px;"><i class="sui-icon icon-touch-minus"></i> 减少投入</button>
+            </div>
+
+        	<div class="span12 marl_0 mart_12">
+            <div>
+                <input type="hidden" value="{{camp.optimize_time}}" id="optimize_time">
+                {% if camp.is_active %}
+                	<span id="camp_online_status" class="mnt_discr">系统自动优化中，上次优化时间：{{camp.optimize_time}}</span>
+                	<button type="button" class="sui-btn btn-large btn-danger marl_3 fr hide" id="camp_mnt_oper" mnt_oper=0 >暂停</button>
+                {% else %}
+                	<span id="camp_online_status" class="mnt_discr">
+                    {% if camp.online_status == 'online' and camp.mnt_status == 0 %}您已暂停托管，系统无法自动优化
+                    {% else %}
+                        {% if camp.online_status == 'offline' and camp.mnt_status == 0 %}推广计划已暂停，同时您已暂停托管
+                        {% else %}推广计划已暂停，系统无法自动优化
+                        {% endif %}
+                    {% endif %}
+                    </span>
+                	<button type="button" class="sui-btn btn-large btn-success marl_3 fr"  id="camp_mnt_oper" mnt_oper=1 >启动</button>
+                {% endif %}
+            </div>
+            <div class="pad_3"></div>
+            <div>
+            	<span class="mnt_discr">已托管<span class="mnt_num red_num">---</span>个，还可以托管<span class="new_num red_num">---</span>个</span>
+            	<button type="button" class="sui-btn btn-large btn-success fr" id="add_item">托管新宝贝</button>
+        	</div>
+    	</div>
+    	</div>
+    </div>
+
+    <div class="tabbable tabbable-custom mart_12">
+    	<ul class="nav nav-tabs tab_title">
+        	<li class="active"><a href="#adg_list" data-toggle="tab">宝贝列表（共<span id="adg_count" class='r_color'>---</span>个）</a></li>
+<!--             {% if camp.msg_count %}
+            <li>
+                <a href="#msg_record" data-toggle="tab" switch="0" id="li_msg_record">顾问留言
+                    {% if camp.comment_count %}<span>（<span id="comment_count" class='r_color'>{{camp.comment_count}}</span>）</span>{% endif %}
+                </a>
+            </li>
+            {% endif %} -->
+            <li><a href="#opt_record" data-toggle="tab" switch="0" id="li_opt_record">操作记录</a></li>
+        </ul>
+        <div class="tab-content">
+            <!--宝贝列表开始-->
+            <div class="tab-pane active" id="adg_list">
+            	{% include 'qnpc_mnt_adg.html'  %}
+            </div>
+            <div class="tab-pane" id="msg_record"></div>
+            <div class="tab-pane" id="opt_record">
+                <table class="table table-bordered table-hover td_middle" id="record_table">
+                    <thead>
+                        <tr>
+                            <th >操作人</th>
+                            <th >操作时间</th>
+                            <th >操作类型</th>
+                            <th >操作明细</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% include 'qnpc_add_item_box2.html'  %}
+
+<!-- 解除托管确认弹出层 开始 -->
+<div id='id_close_confirm' class="mid_high hide">
+    <div class="tac">
+
+    	<div style="font-size:20px;" class="mar_12">确认“<span class="r_color">解除托管</span>”该计划吗？</div>
+    	<div class="tal mar_6">1、系统会停止托管您的宝贝，但不会改变当前计划的推广状态</div>
+    	<div class="tal mar_6">2、您可以重新开启，但需要重新选择计划和宝贝等等</div>
+    </div>
+    <div class="tac pad_12">
+    	<a href="javascript:void(0)" id="id_close_btn" class="btn red">确定</a>
+    	<a href="javascript:void(0)" onclick="$.fancybox.close();" class="btn">取消</a>
+    </div>
+</div>
+<!-- 解除托管确认弹出层 结束 -->
+
+<!-- 计划详情弹出层 开始 -->
+<div id="modal_camp_detail"  class="sui-modal hide fade" data-width="700">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	  <h4 class="tac">“{{camp.title}}”详细报表</h4>
+	</div>
+	<div class="modal-body">
+		<div id="camp_trend_chart" style="height:300px;"></div>
+		<!-- 计划基本数据报表开始 -->
+        <div id="detailed" class="mart_24">
+            <table class="table table-striped table-bordered table-hover td_middle" id="detailed_table">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>展现量</th>
+                        <th>点击量</th>
+                        <th>点击率</th>
+                        <th>平均点击花费</th>
+                        <th>总花费</th>
+                        <th>成交额</th>
+                        <th>成交笔数</th>
+                        <th>收藏次数</th>
+                        <th>投资回报率</th>
+                        <th>点击转化率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for rpt in camp.snap_list%}
+                    <tr>
+                        <td class="tac">{{rpt.date|date:"Y-m-d"}}</td>
+                        <td class="base_data">{{rpt.impressions}}</td>
+                        <td class="base_data">{{rpt.click}}</td>
+                        <td class="base_data">{{rpt.ctr|floatformat:'2'}}%</td>
+                        <td class="base_data">{{rpt|div:'cpc,100,2'}}</td>
+                        <td class="base_data">{{rpt|div:'cost,100,2'}}</td>
+                        <td class="conv_data"><div class="tooltips" data-original-title="直接成交金额 : {{rpt|div:'directpay,100,2'|floatformat:'2'}}元</br>间接成交金额 : {{rpt|div:'indirectpay,100,2'|floatformat:'2'}}元">{{rpt|div:'pay,100,2'|floatformat:'2'}}</div></td>
+                        <td class="conv_data"><div class="tooltips" data-original-title="直接成交笔数 : {{rpt.directpaycount}}笔</br> 间接成交笔数 : {{rpt.indirectpaycount}}笔">{{rpt.paycount}}</div></td>
+                        <td class="conv_data"><div class="tooltips" data-original-title="店铺收藏次数 : {{rpt.favshopcount}}次</br>宝贝收藏次数 : {{rpt.favitemcount}}次">{{rpt.favcount}}</div></td>
+                        <td class="conv_data">{{rpt.roi|floatformat:'2'}}</td>
+                        <td class="conv_data">{{rpt.conv|floatformat:'2'}}%</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <!-- 计划基本数据报表结束 -->
+    </div>
+</div>
+<!-- 计划详情弹出层 结束 -->
+
+
+<!-- END PAGE CONTENT-->
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/date.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/bootstrap-daterangepicker/daterangepicker.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/fancybox/source/jquery.fancybox.pack.js?v={{VERSION}}"></script>
+<script src="/site_media/jl/plugins/tour/js/bootstrap-tour.min.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/mnt_campaign.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/mnt_adg.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/qnpc/scripts/add_item_box2.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function() {
+	PT.MntAdg.init();
+	PT.MntCampaign.init();
+	PT.AddItemBox2.init();
+	PT.draw_trend_chart( 'camp_trend_chart' ,{{category_list|safe}},{{series_cfg_list|safe}});
+    PT.AddItemBox2.ajax_loading_animate('。', 3, 300); //自定义ajax加载动画
+
+	PT.MntCampaign.close_redicet=function(campaign_id){
+		window.location.href='/qnpc/adgroup_list/'+campaign_id;
+	}
+});
+</script>
+{% endblock %}
+
+{% block template %}
+<script id="camp_sum_rpt_tr" type="text/html">
+<tr>
+	<td><div>总花费(元)</div><div class="bld larger r_color">￥<%=cost%></div></td>
+	<td><div class="tooltips" data-original-title="直接成交金额 : <%=directpay%>元</br>间接成交金额 : <%=indirectpay%>元"><div>成交额(元)</div><div class="bld larger r_color">￥<%=pay%></div></div></td>
+	<td><div>点击量(次)</div><div class="bld larger"><%=click%></div></td>
+	<td><div class="tooltips" data-original-title="直接成交笔数 : <%= directpaycount%>笔</br> 间接成交笔数 : <%=indirectpaycount%>笔"><div><div>成交数(笔)</div><div class="bld larger"><%=paycount%></div></div></td>
+	<td><div>平均点击花费(元)</div><div class="bld larger">￥<%=cpc%></div></td>
+	<td><div>投资回报率</div><div class="bld larger"><%=roi%></div></td>
+</tr>
+</script>
+
+<script id="opt_record_tbody" type="text/html">
+<%for(var i=0;i<data.length;i++){ %>
+<tr>
+	<td class="tac"><%=data[i].opter%></td>
+	<td class="tac"><%=data[i].opt_time%></td>
+	<td class="tac"><%=data[i].opt_type%></td>
+	<td class="tac"><%=data[i].opt_desc%></td>
+</tr>
+<%}%>
+
+</script>
+{% endblock %}

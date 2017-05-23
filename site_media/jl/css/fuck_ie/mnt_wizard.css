@@ -1,0 +1,85 @@
+/*导航条*/
+ul.li_in_block li {
+    display: inline-block;
+    list-style-type: none;
+}
+
+#mnt_wizard {
+	font-size: 0px;
+}
+
+div.engine_no {
+    width: 100px;
+    height: 41px;
+    line-height: 41px;
+    text-align: center;
+    margin-right: 3px;
+    font-size: 18px;
+    background: #35aa47;
+    color: white;
+}
+
+div.wizard_rect {
+    display: inline-block;
+    vertical-align: top;
+    width: 345px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    background-color: #ddd;
+}
+
+li.active div.wizard_rect {
+    background-color: #4d90fe;
+}
+
+div.wizard_sp {
+    display: inline-block;
+    vertical-align: top;
+    width: 10px;
+    height: 40px;
+    position: relative;
+    z-index: 10;
+}
+
+div.wizard_trigon {
+    width: 20px;
+    height: 40px;
+    position: absolute;
+    z-index: 2;
+    background-image: url('../img/trigon_s.png');
+}
+
+li.active div.wizard_trigon {
+    background-image: url('../img/trigon_b.png');
+}
+
+div.wizard_blank {
+    width: 20px;
+    height: 40px;
+    position: absolute;
+    left: 10px;
+    z-index: 1;
+    background-image: url('../img/trigon_w.png');
+}
+/*导航条 end*/
+
+/*全自动类型对比框*/
+.mnt_type_title {width:100px;background-color:#898989;color:#fff;}
+.active .mnt_type_title.blue {background-color:#4d90fe;}
+.active .mnt_type_title.green {background-color:#35aa47;}
+.mnt_type_info {padding:6px 18px;background-color:#fff;color:#898989;line-height:40px;}
+.active .mnt_type_info.blue {color:#4d90fe;}
+.active .mnt_type_info.green {color:#35aa47;}
+/*全自动类型对比框 end*/
+
+.count_div{line-height:20px;display:inline-block; border:1px #CCC dashed; padding:6px; background-color:#eee;}
+
+/*提交报告*/
+.no_run .tag_color {color:#898989 !important;}
+.fail .tag_color {color:#FF0000 !important;}
+.success .tag_color {color:#35aa47 !important;}
+.error .tag_color {color:#FF0000 !important;}
+/*提交报告 end*/

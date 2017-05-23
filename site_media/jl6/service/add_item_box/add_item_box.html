@@ -1,0 +1,60 @@
+{{each adg_list as value index}}
+ <tr {{ if !value.has_pic }} class="hide" {{ /if }} adgroup_id="{{ value.adgroup_id }}" has_pic="{{ if value.has_pic }}1{{ else }}0{{ /if }}" item_id="{{ value.item_id }}" id="{{ value.item_id }}"  cat_id="{{ value.cat_id }}">
+    <td class="hide">{{ index }}</td>
+    <td style="padding: 2px; width: 74px; height: 74px;">
+        <div class="add_adg_img">
+            <a href="javascript:void(0);">
+                {{ if value.has_pic }}
+                <img src="{{value.pic_url}}_70x70.jpg" class="pic_url">
+                {{ else }}
+                <img src="/site_media/jl6/static/images/no_photo_70x70.jpg?t=1490089588990" class="pic_url">
+                {{ /if }}
+            </a>
+            <div class="hover {{ if list_type=='other' }}add_item{{ else }}add_adgroup{{ /if }}"><a><i class="iconfont">&#xe62d;</i></a></div>
+        </div>
+    </td>
+    <td class="tl vm" style="width: 270px; overflow: hidden">
+        <div>
+            <a  name="item_title" class="to_item_page" target="_blank" href='http://item.taobao.com/item.htm?id={{ value.item_id }}'>{{ value.title }}&emsp;</a>
+            <span>￥{{value.price}}</span>
+        </div>
+    </td>
+     {{ if list_type=='other' }}
+     <td class="tc vm" style="width: 85px; overflow: hidden">
+        {{value.sales_count}}
+    </td>
+     <td class="tc vm" style="width: 85px; overflow: hidden">
+      {{value.stock}}
+    </td>
+    <td class="tc vm {{if value.camp_id_list.length>0}}has_campaign{{ /if }}"  style="width: 100px; overflow: hidden" camp_id_list='{{ value.camp_id_list.length }}'>
+
+      {{if value.camp_id_list.length>0}}
+        <div class="adg_camp">
+            <span class="poi" data-toggle="tooltip" data-placement="left"
+                title="{{ each value.camp_id_list as camp camp_index }}{{ camp }}<br/>{{ /each }}">
+                <strong>{{ value.camp_id_list.length }}个计划下推广</strong>
+            </span>
+        </div>
+      {{ else }}
+        未推广
+      {{ /if }}
+    </td>
+     <td class="tc pr5">
+        <a href="javascript:;" class="add_item b f16" value="{{ value.item_id }}"><i class="iconfont">&#xe65c;</i></a>
+    </td>
+     {{ else }}
+     <td class="tc vm"  style="width: 85px; overflow: hidden">
+      {{value.click}}
+    </td>
+     <td class="tc vm" style="width: 85px; overflow: hidden">
+      {{value.paycount}}
+    </td>
+     <td class="tc vm" style="width: 100px; overflow: hidden">
+        {{value.roi}}
+    </td>
+     <td class="tc pr5">
+        <a href="javascript:;" class="add_adgroup b f16" value="{{ value.item_id }}"><i class="iconfont">&#xe65c;</i></a>
+    </td>
+     {{ /if }}
+</tr>
+{{/each}}

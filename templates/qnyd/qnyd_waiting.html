@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1, user-scalable=no">
+</head>
+<style>
+body {
+	background-image: -webkit-gradient(linear, left top, right top, from(#2f4562), to(#365d78));
+	background-image: -webkit-linear-gradient(left, #2f4562, #365d78);
+	background-image: linear-gradient(left, #2f4562, #365d78);
+	height: 100%;
+	margin: 0;
+	font-size: 12px;
+}
+body>div {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	color: #fff;
+}
+body>div:first-child {
+	top: 25%;
+}
+.bottom {
+	bottom: 12px;
+}
+.ajax-login {
+	vertical-align: -3px;
+	margin-right: 6px;
+}
+#progress_num {
+	margin-left: 6px;
+}
+</style>
+
+<body>
+<div> <img src="/site_media/qnyd/img/kcjl.png" width="200" height="60" >
+  <div style="margin-top:12px;">
+    <div><img class="ajax-login" src="/site_media/qnyd/img/ajax-blue.gif" width="14" height="14"><span id="progress_text">初始化中</span><span id="progress_num">0</span>%</div>
+  </div>
+</div>
+<div class="bottom"> Copyright © 2014 派生科技有限公司 </div>
+
+<!-- BEGIN CORE PLUGINS --> 
+<!--<script src="/site_media/assets/plugins/jquery-1.10.1.min.js" type="text/javascript"></script>--> 
+<script src="/site_media/qnyd/scripts/zepto.min.js"></script> 
+<script src="/site_media/jl/scripts/dajax.js" type="text/javascript"></script> 
+<script src="/site_media/qnyd/scripts/base.js?v={{VERSION}}.js" type="text/javascript"></script> 
+<script src="/site_media/qnyd/scripts/common.js?v={{VERSION}}.js" type="text/javascript"></script> 
+<!--    <script src="/site_media/jl/scripts/artTemplate.js" type="text/javascript"></script>--> 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+$(document).ready(function() {
+	//心跳
+	setInterval(function(){
+		PTQN.sendDajax({'function':'web_is_data_ready','auto_hide':0});
+	},5000);
+	//立即执行一次
+	PTQN.sendDajax({'function':'web_is_data_ready','auto_hide':0});
+});
+	
+var tween=function(t,b,c,d){return -c*(t/=d)*(t-2) + b}
+//算子你可以改变他来让你的动画不一样
+var process=document.getElementById('progress_num');
+var execution=function(val,t){
+	var s=(new Date()).getTime(),d=t || 300,
+		b=Number(process.getAttribute('process')) || 0,
+		c=val-b;
+	(function(){
+		var t=(new Date()).getTime()-s;
+		if(t>d){
+			t=d;
+			process.innerText=Math.ceil(tween(t,b,c,d));
+			process.setAttribute('process',tween(t,b,c,d));
+			return false;
+		}
+		
+		process.innerText=Math.ceil(tween(t,b,c,d));
+		process.setAttribute('process',tween(t,b,c,d));
+		setTimeout(arguments.callee,10);
+		//arguments.callee 匿名函数递归调用
+	})();
+}
+
+// 后台调用来设置前台进度条的进度
+function set_progress(progress_json){
+	if(typeof(progress_json.redicrect)!='undefined'){
+		$('#progress_text').text('加载完成');
+		execution(100,5000);
+		window.location.href='/qnyd/account';
+		return;
+	};
+	
+	var progress_n=Number(progress_json.progress);
+	$('#progress_text').text(progress_json.msg);
+	
+	// 刷新进度的数字和相对位置
+	execution(progress_n,5000);
+}
+</script> 
+<!-- END JAVASCRIPTS --> 
+<script type="text/javascript" src="http://a.tbcdn.cn/apps/isvportal/securesdk/securesdk.js" id="J_secure_sdk_script" data-appkey="12612063"></script>
+</body>
+</html>

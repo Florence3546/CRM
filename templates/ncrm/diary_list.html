@@ -1,0 +1,134 @@
+{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}{{diary_owner}}的日志{% endblock %}
+
+{% block content %}
+<style>
+.bc {background-color:#a3a3a3;}
+</style>
+
+<div class="row-fluid ">
+	<div class="pl10 pt20 span3">
+		<form id="id_date_range_form" action="" method="post">{% csrf_token %}
+		<h4>按日期：</h4>
+		<ul >
+		    <li><input type="text" value="{{date_range_form.start_date.value}}" class="w100 mb5" id="id_start_date" name="start_date"></li>
+		    <li><input type="text" value="{{date_range_form.end_date.value}}" class="w100 mb5" id="id_end_date" name="end_date"></li>
+		    <li><input type="submit" value="查询"></li>
+		</ul>
+		</form>
+
+		<h4>按作者:</h4>
+		<ul class="lh20">
+			<li><a href="{%url 'diary_list' 'all'  %}" class="{%if name == 'all' %}bc{%endif%}" >全部</a></li>
+			{%for user in user_list %}
+			<li><a href="{%url 'diary_list' user.name %}" class="{%if user.name == name %}bc{%endif%}" >{{user.name_cn}}</a></li>
+			{%endfor%}
+		</ul>
+	</div>
+	<div class="span21">
+		<div class="mb20 mt20">
+			<h4>
+				<span >日志数量：<strong>{{diary_list|length}}</strong>篇</span>
+				<a class="ml20 btn add_diary" href="javascript:void(0);">写日志</a>
+			</h4>
+		</div>
+		<table class="bdd" id="id_diary_list">
+			<thead>
+				<tr>
+					<th width="5%"><div class="th_wrapp">作者</div></th>
+		            <th width="7%"><div class="th_wrapp">时间</div></th>
+		            <th width="30%"><div class="th_wrapp">今日日志</div></th>
+		            <th width="30%"><div class="th_wrapp">明日计划</div></th>
+		            <th width="20%"><div class="th_wrapp">点评</div></th>
+		            <th width="8%"><div class="th_wrapp">操作</div></th>
+				</tr>
+			</thead>
+		    <tbody>
+			    {%for diary in diary_list %}
+			    <tr id='{{diary.id}}'>
+			        <td align="center">{{diary.author.name_cn}} <br/></td>
+			        <td align="center" {% if diary.is_current_week %}class="bc"{% endif %}>
+			        	<span {% if diary.is_today %} class="red b" {% endif %}>{{diary.create_time|date:"Y-m-d"}}<br/>{{diary.create_time|date:"H:i:s"}}</span>
+			        </td>
+			        <td style="width:30%">
+			        	<div class="editor" id="id_{{diary.id}}_content">
+      			    		<div class="init_data">{{diary.content|default:''|safe}}</div>
+      			    	</div>
+			        	<!--
+			        	<div class="h80 ovh">
+							<a href="javascript:void(0);" class="show_more" position=1>展开</a>
+						</div>
+						 -->
+					</td>
+      			    <td style="width:15%">
+      			    	<div class="editor" id="id_{{diary.id}}_todolist">
+      			    		<div class="init_data">{{diary.todolist|safe}}</div>
+      			    	</div>
+    			    </td>
+      			    <td>
+      			    	<div id="id_{{diary.id}}_comment" class="editor">
+      			    		<div class="comment_data">
+		      			    	<span>{{diary.commenter.name_cn|default:''}}</span>
+		      			    	<span class="ml10">{{diary.comment_time|date:"Y年m月d日"}}&nbsp;{{diary.comment_time|date:"H:i:s"}}</span>
+		                        <div class="init_data">{{diary.comment|safe}}</div>
+      			    		</div>
+                        </div>
+      			    </td>
+
+			        <td class="tc">
+				        {% if diary.is_current and diary.author == me%}
+				        <a href = "javascript:void(0);" class="btn edit_diary">编辑</a>
+				        <a href = "javascript:void(0);" class="btn save_diary hide">保存</a>
+				        {% endif %}
+				        {% if me.is_manager and diary.author != me %}
+				        <a href = "javascript:void(0);" class="btn comment_diary">点评</a>
+				        <a href = "javascript:void(0);" class="btn save_comment hide">保存</a>
+				        {%endif%}
+			        </td>
+			    </tr>
+			    {%endfor%}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script id="id_diary_template" type="text/html">
+	<tr id='0'>
+		<td align="center">{{me.name_cn}}</td>
+		<td align="center" class="bc"><span class="red b"></span></td>
+		<td style="width:30%">
+			<div class="editor" id="id_0_content">
+				<div class="init_data"></div>
+			</div>
+		</td>
+		<td style="width:15%">
+			<div class="editor" id="id_0_todolist">
+				<div class="init_data"></div>
+			</div>
+		</td>
+		<td></td>
+		<td class="tc">
+			<a href = "javascript:void(0);" class="btn edit_diary hide">编辑</a>
+			<a href = "javascript:void(0);" class="btn save_diary">保存</a>
+		</td>
+	</tr>
+</script>
+
+<script id="id_comment_template" type="text/html">
+	<span><%=name_cn%></span>
+	<span class="ml10"><%=comment_time%></span>
+	<div class="init_data"><%=comment%></div>
+</script>
+
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/diary_list.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.DiaryList.init();
+});
+</script>
+{% endblock %}

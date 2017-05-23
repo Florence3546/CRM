@@ -1,0 +1,18 @@
+﻿.dropdown .dropdown-menu .input-mini{padding: 0;width: 40px;}
+.dropdown-menu.right{right: 0;left: inherit;}
+.nav-tabs.no-left-warp-border li.active:first-child a{border-left: none}
+/*输入框验证*/
+.input_error .iconfont {position: relative;right: 40px;font-size: 16px;color: #e74049;display: inline !important;}
+.input_error input {border: solid 1px #e74049;color: #e74049;}
+.input-append .add-on .tooltip, .input-prepend .add-on .tooltip {text-shadow:none;}
+input.bgtp[type="text"]{background: transparent;}
+input.nba[type="text"]{border: none;outline: none;}
+input.nba[type="text"]:focus{border-color:transparent;box-shadow:none;}
+
+textarea[disabled].init {cursor:initial;background-color:#fff;border:1px solid transparent;box-shadow:none;}
+input.h33[type="text"] {height: 33px;}
+input.h18[type="text"] {font-size: 18px;}
+table i.inherit{color:inherit;}
+table .note p{margin:0 5px 0 0; display: inline-block;}
+
+.popover {max-width:none;}

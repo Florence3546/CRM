@@ -1,0 +1,191 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}运营报表{% endblock %}
+{% block extra_style %}
+<style>
+.hidden{display: none !important;}
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1200 auto pt20">
+  <div class="bg_white p10 mb20">
+    <div>
+      <span>统计时间</span>
+      <input class="w80 ml5 dib" name="start_date" id="start_date" type="text" value="{{start_date}}"> ~
+      <input class="w80 ml5 dib" name="end_date" id="end_date" type="text" value="{{end_date}}">
+      <button class="btn btn-primary ml20 w80" id="submit_form">查&nbsp;询</button>
+    </div>
+  </div>
+
+  <div class="hide">
+    <h4>进账统计报表
+      <span class="f12 gray n ml10">
+        <span class="ml3">1、进账金额指审核通过后的金额(不包含未知类型的订单)；</span>
+        <span class="ml3">2、销服部的金额 = 售后的金额+销售的金额；</span>
+        <span class="ml3">3、怀疑金额不对时，请先在「度量」页面，选择相同条件，点击「绩效校准」后再核对。</span>
+      </span>
+    </h4>
+    <table class="table-hover" id="pay_rpt_table">
+      <thead>
+        <tr>
+          <th class=""><div>部门</div></th>
+          <th class="tr"><div>销服</div></th>
+          <th class="tr"><div>操作</div></th>
+          <th class="tr"><div>人机</div></th>
+          <th class="tr"><div>店铺运营</div></th>
+          <th class="tr"><div>开车精灵单量</div></th>
+          <th class="tr"><div>千牛单量</div></th>
+          <th class="tr"><div>总金额</div></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div class="f14 m5">
+    	<span class="red"><b>注</b>&nbsp;:&nbsp;</span><span style="color:#aaa">当下按照指战员审批过的金额来计算，后期切换成财务审批金额。</span>
+    </div>
+  </div>
+
+  <div class="mt20 hide">
+    <h4>销服进账统计报表
+      <span class="f12 gray n ml10">
+        <span class="ml3">(统计规则同上)</span>
+      </span>
+    </h4>
+    <table class="icon_hover_show table-hover" id="xiaofu_pay_table">
+      <thead>
+        <tr>
+          <th class=""><div>部门<a class="r base_color show_rpt_subdivide_all" href="javascript:;"><i class="iconfont mr5">&#xe61c;</i>详情</a></div></th>
+          <th class="tr"><div>开车精灵单量</div></th>
+          <th class="tr"><div>千牛单量</div></th>
+          <th class="tr"><div>总金额</div></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt20 hide">
+    <h4>退款统计报表
+      <span class="f12 gray n ml10">
+        <span class="ml3">1、退款金额指退款记录中的总金额，不是分摊金额；</span>
+        <span class="ml3">2、举例：服务一部 的 小明 的退款金额，指 「责任部门」是'服务一部'、「服务人」是'小明'的退款总金额。</span>
+      </span>
+    </h4>
+    <div class="ovh ml10">
+        <label for="category_selecter_all" class="l">
+            <input type="checkbox" value="{{key}}" id="category_selecter_all" checked="true">全选
+        </label>
+        {% for key, desc in category_list %}
+        <label for="category_selecter_{{key}}" class="l ml10">
+            <input type="checkbox" value="{{key}}" id="category_selecter_{{key}}" class="category_selecter" checked="true">{{desc}}
+        </label>
+        {% endfor %}
+    </div>
+    <div class="ovh ml10">
+        <label for="refund_style_selecter_all" class="l">
+            <input type="checkbox" id="refund_style_selecter_all" checked="true">全选
+        </label>
+        {% for key, desc in refund_style_list %}
+        <label for="refund_style_selecter_{{key}}" class="l ml10">
+            <input type="checkbox" value="{{key}}" id="refund_style_selecter_{{key}}" class="refund_style_selecter" checked="true">{{desc}}
+        </label>
+        {% endfor %}
+    </div>
+    <table class="icon_hover_show table-hover" id="refund_rpt_table">
+      <thead>
+        <tr>
+          <th class=""><div>部门<a class="r base_color show_rpt_subdivide_all" href="javascript:;"><i class="iconfont mr5">&#xe61c;</i>详情</a></div></th>
+          <th class="tr"><div>差评投诉</div></th>
+          <th class="tr"><div>效果问题</div></th>
+          <th class="tr"><div>软件缺陷</div></th>
+          <th class="tr"><div>活动无理由</div></th>
+          <th class="tr"><div>友情赠送</div></th>
+          <th class="tr"><div>积分兑换</div></th>
+          <th class="tr"><div>总退款额</div></th>
+          <th class="tr"><div>总退款量</div></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block template%}
+<script id="pay_rpt_table_tr" type="text/html">
+  <tr id="<%=department_id%>">
+    <td class="tc"><%=department%></td>
+    <td class="tr"><%=$format(position_dict.xf, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(position_dict.tpae, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(position_dict.rjjh, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(position_dict.optagent, 100, 1, 2)%></td>
+    <td class="tr"><%=kcjl_paycount%></td>
+    <td class="tr"><%=qn_paycount%></td>
+    <td class="tr"><%=$format(total_pay, 100, 1, 2)%></td>
+  </tr>
+</script>
+
+<script id="xiaofu_pay_table_tr" type="text/html">
+  <tr id="">
+    <td class="tc"><%=department%>
+      <i class="iconfont show_subdivide hover hide r poi f12 mt4">&#xe61c;</i>
+    </td>
+    <td class="tr"><%=kcjl_paycount%></td>
+    <td class="tr"><%=qn_paycount%></td>
+    <td class="tr"><%=$format(total_pay, 100, 1, 2)%></td>
+  </tr>
+</script>
+
+<script id="xiaofu_pay_table_subtr" type="text/html">
+  <tr class="hover_non_color bgf0 hidden">
+    <td class="tr"><%=psuser_name%></td>
+    <td class="tr"><%=kcjl_paycount%></td>
+    <td class="tr"><%=qn_paycount%></td>
+    <td class="tr"><%=$format(total_pay, 100, 1, 2)%></td>
+  </tr>
+</script>
+
+<script id="refund_rpt_table_tr" type="text/html">
+  <tr id="">
+    <td class="tc"><%=department%>
+      <i class="iconfont show_subdivide hover hide r poi f12 mt4">&#xe61c;</i>
+    </td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_1.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_2.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_3.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_4.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_5.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_6.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(total_refund, 100, 1, 2)%></td>
+    <td class="tr"><%=total_count%></td>
+  </tr>
+</script>
+
+<script id="refund_rpt_table_subtr" type="text/html">
+  <tr class="hover_non_color bgf0 hidden">
+    <td class="tr"><%=position%>-<%=psuser_name%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_1.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_2.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_3.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_4.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_5.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(refund_reason_dict.rr_6.refund, 100, 1, 2)%></td>
+    <td class="tr"><%=$format(total_refund, 100, 1, 2)%></td>
+    <td class="tr"><%=total_count%></td>
+  </tr>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/operating_rpt.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.OperatingRpt.init();
+});
+</script>
+{% endblock %}

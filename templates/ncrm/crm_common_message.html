@@ -1,0 +1,226 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}公告管理{% endblock %}
+{% block content %}
+<style type="text/css" media="screen">
+    label{display: inline;}
+    table{table-layout:auto;}
+    .hovershow{display: none;}
+    .hover .active .hovershow{display: block;}
+    li.rel.active{z-index:2;}
+    .header .hor-menu ul.nav li a,.header .nav > li.dropdown .dropdown-toggle{padding: 9px 18px;}
+    .header .nav > li.dropdown{padding-left: 0;padding-right: 0;}
+
+    .ks-dtp table{width: auto;}
+    .ks-dtp select{padding: 0;height: auto;}
+</style>
+<div class="mt20 w1200 auto">
+    <div class="gray">
+        <i class="iconfont mr5">&#xe659;</i>图片请先上传到淘宝图片空间，然后直接引用链接，上传图片前请压缩图片，避免用户加载时间过长<br>
+    </div>
+    <ul class="nav nav-tabs mt20 pl0" id="editor_tabs" fix-ie="hover">
+    {%for msg in msg_list%}
+        <li class="rel {%if forloop.counter == 1 %}active{%endif%}">
+            <a href="#tab_{{msg.id}}" data-toggle="tab" editor_id='{{msg.id}}' >{{msg.title}}</a>
+            <i class="iconfont abs t0 r0 red mt-5 mr-10 f18 poi hovershow del_tab">&#xe623;</i>
+        </li>
+    {%endfor%}
+    <li id="add_tab">
+        <a href="javascript:;" ><i class="iconfont f18 ml10">&#xe624;</i></a>
+    </li>
+    </ul>
+    <div class="tab-content mb20">
+    {%for msg in msg_list%}
+        {%if msg.html%}
+        <div class="tab-pane p10 fade {%if forloop.counter == 1 %}active{%endif%} in" id="tab_{{msg.id}}">
+            <form id="form_{{msg.id}}">
+                <div class="mt10">
+                    <span class="w80 dib">审核状态：</span>
+                    <span>{%if msg.flag %}已审核{%else%}未审核{%endif%}</span>
+                    <span class="ml20 gray f12">通过审核才能在用户端推送，请联系相关负责人审核</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">公告标题：</span>
+                    <input class="w400" data-rule="require" type="text" id="title_{{msg.id}}" value="{{msg.com.title}}"><span class="red ml3 f12">*</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">有效时间：</span>
+                        <input class="w140" data-rule="require" type="text" value="{{msg.com.start_time}}" id="start_time_{{msg.id}}" /><span class="red ml3 f12">*</span>
+                        <span class="w50 dib tc">到</span>
+                        <input class="w140" data-rule="require"type="text" value="{{msg.config}}" id="end_time_{{msg.id}}" /><span class="red ml3 f12">*</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">消息级别：</span>
+                    <select class="w300" id="id_level_{{msg.id}}" name="level">
+                        <option value="info" {%if msg.com.level == "info"%}selected="selected"{%endif%}>信息：需要用户关注的某些信息</option>
+                        <option value="alert" {%if msg.com.level == "alert"%}selected="selected"{%endif%}>警告：需要用户避免危险操作的提示</option>
+                        <option value="error" {%if msg.com.level == "error"%}selected="selected"{%endif%}>错误：系统出现故障时使用此消息通知用户</option>
+                    </select>
+                    <span class="ml20 gray f12">请使用相应的消息类型</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">用户类型：</span>
+                    <select class="w100" id="id_user_type_{{msg.id}}" name="user_type">
+                        <option value="21729299" {%if msg.com.user_type == "21729299"%}selected="selected"{%endif%} >千牛</option>
+                        <option value="12612063" {%if msg.com.user_type == "12612063"%}selected="selected"{%endif%} >开车精灵</option>
+                        <option value="88888888" {%if msg.com.user_type == "88888888"%}selected="selected"{%endif%} >CRM更新公告</option>
+                    </select>
+                    <span class="ml20 red f12">此项修改请慎重</span>
+                </div>
+                <div class="mt20">
+                    <span class="w80 dib">主页显示：</span>
+                      <div class="switch vn-3 {%if msg.com.is_show %}on{%else%}off{%endif%}" data-toggle="switch" >
+                        <label class="db"></label>
+                        <input type="checkbox" id="switch_{{msg.id}}" {%if msg.com.is_show %}checked="checked"{%endif%}>
+                      </div>
+                      <span class="ml20 gray f12">开启后会同时在首页公告和我的信息中显示</span>
+                </div>
+                <div class="mt20" id="{{msg.id}}_editor">
+                    <div class="editor_wating">
+                        <img src="/site_media/jl5/images/forecast_orde_ajax.gif">
+                        <span class="ml5">组件加载中</span>
+                    </div>
+                </div>
+                <div class="mt20">
+                    <button type="submit" class="btn btn-primary submit" disabled>保存</button>
+                    {% if 'A' in psuser.perms %}
+                    <a class="btn btn-primary release" disabled>审核发布</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        {%else%}
+        <div class="tab-pane p10 fade {%if forloop.counter == 1 %}active{%endif%} in" id="tab_{{msg.id}}">
+            <form class="bind" id="form_{{msg.id}}">
+                <div class="mt10">
+                    <span class="w80 dib">推广标题：</span>
+                    <span class="dib w250"><input class="w200" data-rule="require" maxlength="8" type="text" id="title_{{msg.id}}" value="{{msg.title}}"><span class="red ml3 f12">*</span></span>
+                    <span class="ml20 gray f12">为新建的公告给一个别名方便记忆，例如课程公告</span>
+                </div>
+<!--                 <div class="mt10">
+                    <span class="w80 dib">绑定ID：</span>
+                    <span class="dib w250"><input class="w200" data-rule="digital require" maxlength="8" type="text" id="common_message_{{msg.id}}"><span class="red ml3 f12">*</span></span>
+                    <span class="ml20 gray f12">如果想新添加一个可编辑的消息，请联系研发的同事</span>
+                </div> -->
+                <div class="mt20">
+                    <button type="submit" class="btn btn-primary submit" disabled>确定</button>
+                </div>
+            </form>
+        </div>
+        {%endif%}
+    {%endfor%}
+    </div>
+</div>
+<div class="hide">
+{%for msg in msg_list%}
+    <div id="init_msg_{{msg.id}}">
+        {{msg.com.message}}
+    </div>
+{%endfor%}
+</div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}
+{% block custom_js %}
+<script>
+
+
+require('pt/pt-editor', function(editor){
+    var editors={};
+
+    //加载完成删除wating提示
+    $('.editor_wating').remove();
+    $('.submit').removeAttr('disabled');
+    $('.release').removeAttr('disabled');
+
+    $('#editor_tabs').on('shown',function(){
+        var obj=$(this).find('li.active a'),id=obj.attr('editor_id'),ed;
+        if(obj.attr('switch')==='1'||id==undefined){
+            return;
+        }
+
+        //日期时间选择器
+        require(['dom', 'gallery/datetimepicker/1.1/index'], function (DOM, Datetimepicker) {
+            var b,c;
+            b= new Datetimepicker({
+                    start : '#start_time_'+id,
+                    formatTime:'HH:mm:ss'
+                });
+            c= new Datetimepicker({
+                    start : '#end_time_'+id,
+                    formatTime:'HH:mm:ss'
+                });
+
+        });
+
+        if($('#'+id+'_editor').length){
+            ed=new editor({render:'#'+id+'_editor'});
+            ed.initData($('#init_msg_'+id).text());
+            ed.render();
+
+            editors[id]=ed;
+
+            obj.attr('switch',1);
+        }
+
+        //开启验证
+        $('#form_'+id).vaildata({call_back:function(){
+            var id=$('#editor_tabs li.active a').attr('editor_id');
+            if(!$('#form_'+id).hasClass('bind')){
+                var obj=$('#editor_tabs li.active a'),
+                    id=obj.attr('editor_id'),
+                    title=$('#title_'+id).val(),
+                    user_type=$('#id_user_type_'+id).val(),
+                    level=$('#id_level_'+id).val(),
+                    start_time=$('#start_time_'+id).val(),
+                    switch_dom=$('#switch_'+id)[0];
+                    end_time=$('#end_time_'+id).val();
+
+                    if($.trim(editors[id].value())==''){
+                        PT.light_msg('你他妈在逗我？','内容为空，不允许提交')
+                        return;
+                    }
+
+                PT.sendDajax({'function':'ncrm_set_common_manage',
+                                'id':id,
+                                'title':title,
+                                'user_type':user_type,
+                                'level':level,
+                                'start_time':start_time,
+                                'end_time':end_time,
+                                'switch':switch_dom.checked?1:0,
+                                'html':editors[id].value()
+                            });
+            }else{
+                var common_message_id=$('#common_message_'+id).val(),title=$('#title_'+id).val();
+                PT.sendDajax({'function':'ncrm_bind_common_message_id','id':id,'title':title});
+            }
+        }});
+    });
+
+    //立即显示一个编辑器
+    $('#editor_tabs').trigger('shown');
+
+    $('#add_tab').on('click',function(){
+        PT.show_loading('正在创建新标签')
+        PT.sendDajax({'function':'ncrm_add_menu_ad','is_manual':1,'type':'common_message'})
+    });
+
+    $('.del_tab').on('click',function(){
+        if(!confirm('您确定要删除一个推广内容吗？')){
+            return false;
+        }
+
+        var id=$('#editor_tabs li.active a').attr('editor_id');
+        PT.sendDajax({'function':'ncrm_del_ad_manage','id':id,'common':1})
+    });
+
+    $('.release').on('click',function(){
+        var id=$('#editor_tabs li.active a').attr('editor_id');
+        PT.sendDajax({'function':'ncrm_release_common_message','id':id});
+    });
+})
+
+
+</script>
+{% endblock %}

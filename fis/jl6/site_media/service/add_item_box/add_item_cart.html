@@ -1,0 +1,44 @@
+{{ each data }}
+<tr item_id="{{ $value.item_id }}" adgroup_id="{{ $value.adgroup_id }}" cat_id="{{ $value.cat_id }}" class="bbd hover" tb="{{ tb }}">
+    <td class="tc vm w50 undo poi"><a class="b f16" href="javascript:;"><i class="iconfont">&#xe62a;</i></a>
+        <ul class="hide" name="item_imgs">
+        </ul>
+    </td>
+    <td class="w60 bld" style="padding: 2px;">
+        <div class="adg_img edit_pen_image">
+            <img name="creative_img" width="60" height="60" src="{{ $value.pic_url }}"/>
+            <div class="hover"><a><i class="iconfont">&#xe609;</i></a></div>
+        </div>
+        <div class="adg_img mt2 edit_pen_image">
+            <img name="creative_img" width="60" height="60" src="{{ $value.pic_url }}"/>
+            <div class="hover"><a><i class="iconfont">&#xe609;</i></a></div>
+        </div>
+    </td>
+    <td class="tl">
+        <div class="mt5">
+            <a  name="item_title" class="to_item_page" target="_blank" href='http://item.taobao.com/item.htm?id={{ $value.item_id }}'>{{ $value.title }}&emsp;</a>
+        </div>
+        {{ if mnt_type!='0'}}
+        <div class="mt3 adg_cfg" camp_limit="1">
+            PC限价：<span class="limit_price_pc" value="{{ strategy.max_price_pc }}">{{ strategy.max_price_pc }}</span>元&nbsp;&nbsp;&nbsp;
+            移动限价：<span class="limit_price_yd" value="{{ strategy.max_price_yd }}">{{ strategy.max_price_yd }}</span>元&nbsp;&nbsp;&nbsp;
+            优化方式：<span class="mnt_opt_type" value="{{ strategy.mnt_opt_type }}">{{ if strategy.mnt_opt_type==1 }}自动优化{{ else }}只改价{{ /if }}</span>&nbsp;&nbsp;&nbsp;
+            <a href="javascript:;" class="f14 set_adg_cfg"><strong><i class="iconfont">&#xe639;</i></strong></a>
+        </div>
+        {{ else }}
+        <br/>
+        {{ /if }}
+
+        <div class="adg_title mt5"><span>{{ if tb=='0' }}新增创意1：{{ else }}创意标题1：{{ /if }}</span>
+            <input name="adg_title" type="text" class="w320" value="正在获取..."/>&nbsp;
+            <span name="char_delta">剩20个汉字</span>
+        </div>
+        <div class="adg_title mt5"><span>{{ if tb=='0' }}新增创意2：{{ else }}创意标题2：{{ /if }}</span>
+            <input name="adg_title" type="text" class="w320" value="正在获取..."/>&nbsp;
+            <span name="char_delta">剩20个汉字</span>
+        </div>
+        <div class="error_list lh30 red b hide">
+        </div>
+    </td>
+</tr>
+{{ /each }}

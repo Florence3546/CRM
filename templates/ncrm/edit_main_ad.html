@@ -1,0 +1,186 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}编辑广告({{ ad_position }})-{% endblock %}
+{% block content %}
+<style>
+textarea{ font-size: 12px;}
+</style>
+<div class="mt20 w1200 auto">
+    <div class="red pl10 pt10" id="img_tips">
+        <i class="iconfont mr5">&#xe659;</i>①&nbsp;图片请先上传到淘宝图片空间，然后引用链接，上传图片前请先压缩，避免用户加载时间过长！
+              &nbsp;&nbsp;②&nbsp;除文字链和右侧公告，其他位置的广告，都要经研发或产品经理审核，私自发布研发有权删除！
+    </div>
+    <ul class="nav nav-tabs mt10 pl0" fix-ie="hover">
+         <li class="rel active">
+            <a href="#edit_panel" data-toggle="tab" >{% if a_id %}{{ a_id }} - {% endif %}{{ ad_position }}</a>
+        </li>
+    </ul>
+    <div class="tab-content mb20">
+
+        <div class="tab-pane p10 bg_white active show" id="edit_panel" >
+            <form id="edit_ad_from">
+                <input type="hidden" name="_id" value="{{ a_id }}">
+                <input type="hidden" id="ad_position_type" value="{{ edit_form }}">
+                {% include edit_form %}
+            </form>
+
+        </div>
+
+    </div>
+    {% if edit_form == 'servermenu_form.html' %}
+        <div id="ServerMenu_content" class="hide">
+            {{main_ad.ad_content|default:''}}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}
+{% block custom_js %}
+<script>
+
+$(function(){
+    //如果是服务中心的，需要加载富文本编辑器
+    var form_name = $('#ad_position_type').val();
+    if(form_name.indexOf('servermenu_form')>-1){
+        var ed;
+        require('pt/pt-editor', function(editor){
+            //加载完成删除wating提示
+            $('.editor_wating').remove();
+            $('.submit').removeAttr('disabled');
+            $('.release').removeAttr('disabled');
+
+            ed=new editor({render:'#server_menu_editor'});
+            ed.initData($('#ServerMenu_content').text());
+            ed.render();
+        })
+    }
+    //日期时间选择器
+    require(['dom', 'gallery/datetimepicker/1.1/index'], function (DOM, Datetimepicker) {
+        var b,c;
+        new Datetimepicker({
+                start : '[name=ad_start_time]',
+                formatTime:'HH:mm'
+            });
+        new Datetimepicker({
+                start : '[name=ad_end_time]',
+                formatTime:'HH:mm'
+            });
+    });
+
+    //保存数据
+    $("#edit_ad_from").vaildata({'placement':'right','call_back':function(obj){
+        var params = {
+                      'function':'ncrm_save_main_ad',
+                      'callback':'save_ad_callback'
+        }
+        var forms = $("#edit_ad_from").serializeArray();
+        var main_ad={};
+        for (var index in forms){
+            if(forms[index].name=='ad_user_type'&&main_ad['ad_user_type']!=undefined){
+                main_ad['ad_user_type'] = main_ad['ad_user_type']+forms[index].value
+            }else{
+                main_ad[forms[index].name] = forms[index].value
+            }
+        }
+
+        //校验投放时间，开始时间小于结束时间
+        var sDate = new Date(main_ad['ad_start_time']);
+        var eDate  = new Date(main_ad['ad_end_time']);
+
+        if(eDate<=sDate){
+            PT.alert('有效时间错误，结束时间必须在开始时间之后!');
+            return false;
+        }
+
+        //如果是右侧公告，则需校验是否选择了用户类型
+        if(main_ad["ad_position"]=="RightNotice"){
+            if(!main_ad['ad_user_type']){
+                PT.alert("请先至少选择一个用户类型！");
+                return false;
+            }
+        }
+
+        if(form_name.indexOf('servermenu_form')>-1){
+            main_ad['ad_content'] = ed.value();
+        }
+
+        //广告内容非空校验
+        if(!main_ad['ad_content']){
+            if(main_ad["ad_position"]=="rightnotice"||main_ad["ad_position"]=="charlink"){
+                if(!main_ad["ad_url"]){
+                    PT.alert("链接和内容至少有一项不能为空！");
+                    return false;
+                }
+            }else{
+                PT.alert("广告内容不能为空！");
+                return false;
+            }
+        }
+
+        //如果输入了超链接，判断是否以http://开头，若没有则需加上
+        if(main_ad["ad_url"]){
+            var ad_url = main_ad["ad_url"];
+            var _sign = ad_url.indexOf('http://');
+            if(_sign!=0){
+                ad_url = 'http://'+ad_url;
+            }
+            main_ad["ad_url"] = ad_url;
+        }
+
+        params.main_ad = JSON.stringify(main_ad);;
+        PT.sendDajax(params);
+    }});
+
+    $('.check_main_ad').on('click',function(){
+        var params = {
+                      'function':'ncrm_check_main_ad',
+                      'callback':'save_ad_callback',
+                      '_id':$(this).attr('check_id')
+        }
+        PT.sendDajax(params);
+    });
+
+    var input_condition = $('input[name=ad_show_condition]');
+    var old_condition = $(input_condition).val();
+    var old_condition_type = $('input[name=condition_type]:checked').val();
+    $('input[name=condition_type]').on('change',function(){
+        if($(this).val() == old_condition_type) {
+            $(input_condition).val(old_condition);
+        }else{
+            $(input_condition).val('');
+        }
+        if($(this).val()=='condition'){
+            $(input_condition).attr('placeholder',"请输入显示条件");
+        }else{
+            $(input_condition).attr('placeholder',"输入nick，以“,”分割");
+        }
+    });
+
+    $('.put_main_ad').on('click',function(){
+        var params = {
+                      'function':'ncrm_put_main_ad',
+                      'callback':'save_ad_callback',
+                      '_id':$(this).attr('put_id')
+        }
+        PT.sendDajax(params);
+    })
+
+    //预览
+    $('.custom_preview').on('click',function(){
+        view_main_ad();
+    });
+});
+var save_ad_callback = function(data){
+    PT.hide_loading();
+    if(data.result){
+        PT.alert(data.msg,null,function(){
+           window.location.href='../main_ad_manage';
+        });
+    }else{
+        PT.alert(data.msg);
+    }
+}
+</script>
+{% endblock %}
+

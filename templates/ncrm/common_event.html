@@ -1,0 +1,616 @@
+
+<div id="id_add_contact_layout" class="modal hide fade p10" data-width="500">
+    <input type="hidden"  id="id_contact_shop_id" />
+    <table class="table-layout">
+        <tr>
+            <td class="w80">联系方式</td>
+            <td>
+                <label class="dib f12"><input class="mr3" type="radio" name="contact_type" value="ww" checked="checked">旺旺</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="contact_type" value="qq">QQ</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="contact_type" value="phone">电话</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="contact_type" value="weixin">微信</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="contact_type" value="others">其它</label>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td>联系时间</td>
+            <td><input type="text" id="id_contact_time" value=""></td>
+        </tr>
+        <tr class="hide">
+            <td>结束时间</td>
+            <td><input type="text" id="id_contact_end_time" value=""></td>
+        </tr>
+        <tr class="keyword hide">
+            <td>关键词</td>
+            <td><input class="w280 f12" type="text" id="id_contact_intention" value=""></td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="id_contact_note">
+                </div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+        <tr class="isinitiative hide">
+            <td>是否主动</td>
+            <td><input type="checkbox" id="id_contact_isinitiative" checked="checked"></td>
+        </tr>
+        <tr>
+            <td>是否有效<div>&nbsp;</div><div class="contact_prompt hide">&nbsp;</div></td>
+            <td>
+                <label class="mb0 f12"><input class="mr3" type="radio" name="contact_visible" value="1" checked="checked">有效沟通（指沟通了或传达了相关信息且对方已接收到等）</label>
+                <label class="mb0 f12"><input class="mr3" type="radio" name="contact_visible" value="0">无效沟通（未回复/未接听/非本人沟通/信息未传达等无效沟通）</label>
+                <div class="contact_prompt red hide"><i class="iconfont red mr3">&#xe62b;</i>有效沟通的备注必须满3个字，否则请选择无效沟通</div>
+            </td>
+        </tr>
+        <tr>
+            <td>岗位类型</td>
+            <td>
+              <label class="dib f12"><input class="mr3" type="radio" name="contact_xf_flag" value="1" checked="checked">销售</label>
+              <label class="dib f12"><input class="mr3" type="radio" name="contact_xf_flag" value="3" >市场</label>
+              <label class="dib f12"><input class="mr3" type="radio" name="contact_xf_flag" value="4" >增值事业</label>
+              <label class="dib f12"><input class="mr3" type="radio" name="contact_xf_flag" value="5" >技术</label>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" id="editor_submit_contact" class="btn btn-primary f12">修改</a>
+        <a href="javascript:;" id="submit_contact" class="btn btn-primary f12">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_subscribe_layout" class="modal hide fade p10" data-width="500">
+    <input type="hidden"  id="id_subscribe_shop_id" />
+    <table class="table-layout">
+        <tr>
+            <td class="w90">签单人</td>
+            <td>
+                <!-- <select class="psuser_select" name="id_subscribe_sale_user" id="id_subscribe_sale_user"></select> -->
+                <input type="text" class="w200 f12 psuser_input" link="#id_subscribe_sale_user" autocomplete="off">
+                <input type="hidden" id="id_subscribe_sale_user" name="id_subscribe_sale_user">
+                <span id="is_valid_flag" style="margin:0px 10px;"></span>
+            </td>
+        </tr>
+        <tr class="vt">
+            <td>订单类型</td>
+            <td>
+                <label class="dib f12"><input class="mr3" type="radio" name="biz_type" value="1" checked="checked">新订</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="biz_type" value="2" >续订</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="biz_type" value="3">升级</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="biz_type" value="7">自我新订</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="biz_type" value="8">转介绍</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="biz_type" value="9">软件成交</label>
+                <label class="dib f12"><input class="mr3" type="radio" name="biz_type" value="10">进账划分客户</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="biz_type" value="11">店铺提成</label>
+            </td>
+        </tr>
+        <tr>
+            <td>业务类型</td>
+            <td>
+                <select id="id_subscribe_category" class="f12">
+                    <option value="ztc" article_code="tp-001">直通车托管</option>
+                    <option value="vip" article_code="ts-25811">VIP专家托管</option>
+                    <option value="rjjh" article_code="ts-25811">类目专家</option>
+                    <option value="zz" article_code="tp-002">钻展托管</option>
+                    <option value="zx" article_code="tp-003">店铺装修</option>
+                    <option value="dyy" article_code="tp-004">代运营</option>
+                    <option value="seo" article_code="tp-006">seo</option>
+                    <option value="kfwb" article_code="tp-007">客服外包</option>
+                    <option value="other" article_code="tp-005">补单</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>成交方式</td>
+            <td>
+                <select id="id_subscribe_source_type" class="f12">
+<!--                    <option value="1">淘宝推广</option>-->
+                    <option value="2">人工洽谈</option>
+<!--                    <option value="3">转介绍</option> -->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>成交金额</td>
+            <td>
+                <input type="text" value="" id="id_subscribe_pay" class="f12"> 元
+            </td>
+        </tr>
+        <tr >
+            <td>订购时间</td>
+            <td>
+                <input class="w100 f12" id="id_subscribe_create_time"  type="text" value="">
+            </td>
+        </tr>
+        <tr >
+            <td>服务时间</td>
+            <td>
+                <input class="w100 f12" id="id_subscribe_start_time"  type="text" value="">
+                <span class="dib w20 tc">-</span>
+                <input class="w100 f12" id="id_subscribe_end_time" type="text" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="new_subscribe_note">
+                </div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td>默认可见</td>
+            <td>
+                <label class="dib mb0 f12"><input class="mr3" type="radio" name="subscribe_visible" value="1" checked="checked">可见</label>
+                <label class="dib mb0 f12"><input class="ml10 mr3" type="radio" name="subscribe_visible" value="0">隐藏</label>
+            </td>
+        </tr>
+        <tr>
+            <td>岗位类型</td>
+            <td>
+              <label class="dib f12"><input class="mr3" type="radio" name="subscribe_xf_flag" value="1" checked="checked">销售</label>
+              <label class="dib f12"><input class="mr3" type="radio" name="subscribe_xf_flag" value="3" >市场</label>
+              <label class="dib f12"><input class="mr3" type="radio" name="subscribe_xf_flag" value="4" >增值事业</label>
+              <label class="dib f12"><input class="mr3" type="radio" name="subscribe_xf_flag" value="5" >技术</label>
+            </td>
+        </tr>
+        <tr>
+            <td>付款方式</td>
+            <td>
+                <select id="id_subscribe_pay_type" class="f12">
+                    <option value="1">淘宝后台付款</option>
+                    <option value="2" selected="selected">公司支付宝付款</option>
+                    <option value="3">公司中国银行账户付款</option>
+                    <option value="4">香花私人支付宝付款</option>
+                    <option value="5">派生视觉支付宝付款</option>
+                    <option value="6">现金付款</option>
+                    <option value="7">技术一部支付宝付款</option>
+                    <option value="8">技术二部支付宝付款</option>
+                    <option value="9">技术三部支付宝付款</option>
+                    <option value="10">技术四部支付宝付款</option>
+                    <option value="11">技术五部支付宝付款</option>
+                    <option value="12">技术六部支付宝付款</option>
+                    <option value="16">技术七部支付宝付款</option>
+                    <option value="13">销服一部支付宝付款</option>
+                    <option value="14">销服二部支付宝付款</option>
+                    <option value="15">销服三部支付宝付款</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>付款信息</td>
+            <td>
+                <input type="text" value="" placeholder="支付宝账号/银行账号" id="subscribe_pay_type_no" name="subscribe_pay_type_no">
+            </td>
+        </tr>
+        <tr>
+            <td>户主姓名</td>
+            <td>
+                <input type="text" class="f12 w100" id="subscribe_receiver_cn">
+            </td>
+        </tr>
+       <tr>
+          <td>是否有合同</td>
+          <td>
+             <label class="dib f12">
+                <input class="mr3" type="radio" name="subscribe_has_contract" value="1">是
+             </label>
+            <label class="dib f12">
+                <input class="mr3" type="radio" name="subscribe_has_contract" value="0" checked="checked">否
+             </label>
+          </td>
+        </tr>
+        <tr>
+          <td>聊天文件</td>
+          <td>
+            <input type="file" class="hide" id="subscribe_chat_file" >
+            <input type="text" name="subscribe_chat_file_path"  id="chat_file_path" value="" class="w150 f12" style="cursor: pointer" readonly="readonly" placeholder="点击选择聊天文件">
+            <span class="btn btn-success f12" id="up_chat_btn">上传</span>
+            <span class="red" style="display: block;"><i class="iconfont mr5 red f12">&#xe659;</i>如需上传聊天文件，请点击“上传”按钮上传聊天文件</span>
+          </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" id="add_subscribe" class="btn btn-primary f12">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn subscribe_btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_operate_layout" class="modal hide fade p10" data-width="500">
+    <input type="hidden"  id="id_operate_shop_id" />
+    <table class="table-layout">
+        <tr>
+            <td class="w80">操作类型</td>
+            <td>
+                <label class="dib ztc f12"><input class="mr3" type="radio" name="oper_type" value="ztc" checked="checked">直通车操作</label>
+                <label class="dib rjjh f12"><input class="ml10 mr3" type="radio" name="oper_type" value="rjjh" >人机操作</label>
+                <label class="dib zz f12"><input class="ml10 mr3" type="radio" name="oper_type" value="zz" >钻展操作</label>
+                <label class="dib others f12"><input class="ml10 mr3" type="radio" name="oper_type" value="others">其它</label>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="id_operate_note">
+                </div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+        <tr>
+            <td>是否关键<div>&nbsp;</div><div class="operate_prompt hide">&nbsp;</div></td>
+            <td>
+                <label class="mb0 f12"><input class="mr3" type="radio" name="oper_visible" value="1" checked="checked">关键操作（指第一次接单/转单/重要调整等）</label>
+                <label class="mb0 f12"><input class="mr3" type="radio" name="oper_visible" value="0">非关键操作（普通操作，在事件详情中默认隐藏，点击才显示）</label>
+                <div class="operate_prompt red hide"><i class="iconfont red mr3">&#xe62b;</i>关键操作的备注必须满3个字，否则请选择非关键操作</div>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="editor_submit_operate">修改</a>
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_operate">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_reintro_layout" class="modal hide fade p10" data-width="500">
+    <input type="hidden"  id="id_reintro_shop_id" />
+    <table class="table-layout">
+        <tr>
+            <td class="w80">指定接收人</td>
+            <td>
+                <input class="psuser_input w200 f12" link="#id_select_receiver" type="text" autocomplete="off">
+                <input type="hidden" id="id_select_receiver" name="id_select_receiver">
+            </td>
+        </tr>
+        <tr>
+            <td>转介绍类型</td>
+            <td>
+                <label class="dib f12"><input class="mr3" type="radio" name="reintro_type" value="ztc" checked="checked">人工托管</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="reintro_type" value="zz" >钻展</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="reintro_type" value="rjjh">类目专家</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="reintro_type" value="zx">装修</label>
+                <label class="dib f12"><input class="ml10 mr3" type="radio" name="reintro_type" value="others">其它</label>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="id_reintro_note">
+                </div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td>默认可见</td>
+            <td>
+                <label class="dib mb0 f12"><input class="mr3" type="radio" name="reintro_visible" value="1" checked="checked">可见</label>
+                <label class="dib mb0 f12"><input class="ml10 mr3" type="radio" name="reintro_visible" value="0">隐藏</label>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_reintro">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_comment_layout" class="modal hide fade p10" data-width="500">
+    <input type="hidden"  id="id_comment_shop_id" />
+    <input type="hidden" class="w140 f12" name="comment_current_version" id="comment_current_version">
+    <table class="table-layout">
+        <tr>
+            <td class="w60">所属平台</td>
+            <td>
+                <label class="dib mb0">
+	                <input type="radio" name="comment_article_code" value="ts-25811" checked="checked"> 开车精灵
+                </label>
+                <label class="dib mb0 ml10">
+                    <input type="radio" name="comment_article_code" value="FW_GOODS-1921400"> 千牛
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">评价时间</td>
+            <td><input type="text" class="w140 f12" name="comment_create_time" id="comment_create_time"></td>
+        </tr>
+        <tr>
+            <td class="w60">好评类型</td>
+            <td>
+                <label class="dib mb0">
+                    <input type="radio" name="comment_type" value="110" checked="checked"> 日常好评
+                </label>
+                <label class="dib mb0 ml10">
+                    <input type="radio" name="comment_type" value="120"> 踩好评
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60 vt">差评类型</td>
+            <td>
+                <label class="dib">
+                    <input type="radio" name="comment_type" value="200"> 差评未改
+                </label>
+                <label class="dib ml10">
+                    <input type="radio" name="comment_type" value="301"> 5分无评语
+                </label>
+                <label class="dib ml10">
+                    <input type="radio" name="comment_type" value="302"> 5分评语未去
+                </label>
+                <label class="dib ml10">
+                    <input type="radio" name="comment_type" value="304"> 未改全5分
+                </label>
+                <label class="dib ml10">
+                    <input type="radio" name="comment_type" value="305"> 全5分好评
+                </label>
+                <label class="dib">
+                    <input type="radio" name="comment_type" value="303"> 去评语评分未改
+                </label>
+            </td>
+        </tr>
+        <tr class="hide" id="top_comment_time_box">
+            <td class="w60">评论名次</td>
+            <td><input type="text" class="w60 f12" name="top_comment_times" id="top_comment_times"></td>
+        </tr>
+        <tr class="hide" id="modify_comment_time_box">
+            <td class="w60">改评时间</td>
+            <td><input type="text" class="w140 f12" name="modify_comment_time" id="modify_comment_time"></td>
+        </tr>
+        <tr>
+            <td class="w60 vt">备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="id_comment_note"></div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td>默认可见</td>
+            <td>
+                <label class="dib mb0 f12"><input class="mr3" type="radio" name="comment_visible" value="1" checked="checked">可见</label>
+                <label class="dib mb0 f12"><input class="ml10 mr3" type="radio" name="comment_visible" value="0">隐藏</label>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_comment">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_unsubscribe_layout" class="modal hide fade p10" data-width="600" auto_apportion="{% if 'B' not in myself.perms %}1{% endif %}">
+    <input type="hidden"  id="unknown_subscribe_flag" />
+    <input type="hidden"  id="id_unsubscribe_shop_id" />
+    <table class="table-layout">
+        <tr>
+            <td class="w60">退订订单</td>
+            <td>
+                <span id="unsubscribe_event_descr" class="f12"></span>
+                <input name="unsubscribe_event_id" id="unsubscribe_event_id" type="hidden">
+            </td>
+        </tr>
+        <tr class="only_unsubscribe">
+            <td class="w60">退款金额</td>
+            <td>
+                <input type="text" class="w60 f12" id="unsubscribe_refund"><span class="gray ml10">元</span>
+            </td>
+        </tr>
+{#        <tr class="unknown_subscribe_hide">#}
+{#            <td class="w60 vt">退款类型</td>#}
+{#            <td>#}
+{#                <label><input type="radio" name="refund_type" value="1"> 软件退款 <span class="silver">（所有软件的不友好退款，差评/差评威胁/官方投诉/效果问题/态度问题/订错软件）</span></label>#}
+{#                <label><input type="radio" name="refund_type" value="2"> TP退款 <span class="silver">（所有TP的不友好退款，官方投诉/效果问题/态度问题等）</span></label>#}
+{#                <label class="hide"><input type="radio" name="refund_type" value="3"> 友情退款 <span class="silver">（水军、友好客户等的友好退款）</span></label>#}
+{#                <label class="hide"><input type="radio" name="refund_type" value="4"> 转店铺 <span class="silver">（软件或TP客户转店铺继续服务的退款）</span></label>#}
+{#                <label class="hide"><input type="radio" name="refund_type" value="5"> 积分兑换 </label>#}
+{#                <label class="hide"><input type="radio" name="refund_type" value="0"> 其他 <span class="silver">（装修设计/代运营/钻展等退款）</span></label>#}
+{#            </td>#}
+{#        </tr>#}
+        <tr class="only_unsubscribe">
+            <td class="w60 vt">退款原因</td>
+            <td>
+{#                <label><input type="radio" name="refund_reason" value="1"> 差评投诉</label>#}
+{#                <label><input type="radio" name="refund_reason" value="2"> 效果问题</label>#}
+{#                <label><input type="radio" name="refund_reason" value="4"> 活动无理由</label>#}
+                <ul>
+                    <li class="w250 l"><label class="hide"><input type="checkbox" name="refund_reason" value="5"> 友情赠送 <span class="silver">（补时间、转店铺、SD赠送、水军退款）</span></label></li>
+{#                  <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="3"> 软件缺陷</label></li>#}
+                    {% for refund_reason in refund_reason_checkbox %}
+                        {% if refund_reason.0 == 5 %}
+                            <li class="w250 l"><label class="hide"><input type="checkbox" name="refund_reason" value="5"> 友情赠送 <span class="silver">（补时间、转店铺、SD赠送、水军退款）</span></label></li>
+                            {% else %}
+                            <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="{{ refund_reason.0 }}">
+                           {{ refund_reason.1 }}</label></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% comment %}
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="3"> 软件缺陷</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="6"> 积分兑换</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="201"> 效果不好-操作数据差</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="202"> 效果不好-前期夸大效果</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="902"> 客户自身原因</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="401"> 沟通问题-签单人</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="402"> 沟通问题-服务人</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="301"> 销售承诺-具体的数据承诺未达到</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="302"> 销售承诺-全额退款</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="101"> 差评</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="102"> 投诉淘宝/工商</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="904"> 无理由</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="903"> 无合同</label></li>
+                    <li class="w250 l"><label><input type="checkbox" name="refund_reason" value="901"> 操作失误</label></li>
+                    {% endcomment %}
+
+                </ul>
+
+            </td>
+        </tr>
+        <tr class="only_unknown_subscribe">
+            <td class="w60">签单人</td>
+            <td>
+                <input type="text" class="psuser_input w100 f12" id="unsubscribe_saler_cn" link="#unsubscribe_saler_id" value="" autocomplete="off">
+                <input type="hidden" id="unsubscribe_saler_id" name="unsubscribe_saler_id" value="">
+            </td>
+        </tr>
+        <tr class="only_unsubscribe">
+            <td class="w60 vt">退款方式</td>
+            <td>
+                <label class="dib"><input type="radio" name="refund_style" value="1"> 淘宝后台退款</label>
+                <label class="dib ml5"><input type="radio" name="refund_style" value="2"> 支付宝退款</label>
+                <label class="dib ml5"><input type="radio" name="refund_style" value="3"> 对公银行退款</label>
+                <label class="dib ml5"><input type="radio" name="refund_style" value="4"> 对私银行退款</label>
+                <label class="dib ml5"><input type="radio" name="refund_style" value="5"> 现金退款</label>
+                <br>
+                <label class="dib"><input type="checkbox" name="frozen_kcjl"> 禁止使用软件</label>
+                <label class="dib ml5"><input type="checkbox" name="unmnt_all"> 取消托管计划</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">退款信息</td>
+            <td>
+                <input type="text" class="f12" id="unsubscribe_refund_info" placeholder="支付宝账号/银行账号">
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">户主姓名</td>
+            <td>
+                <input type="text" class="f12 w100" id="unsubscribe_receiver_cn">
+            </td>
+        </tr>
+        {% if 'B' in myself.perms %}
+        <tr class="only_unsubscribe">
+            <td class="w60 vm">退款分摊</td>
+            <td>
+                <span class="vm">签单人</span>
+                <input type="text" class="w60 f12" id="unsubscribe_saler_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">签单部门</span>
+                <input type="text" class="w60 f12" id="unsubscribe_saler_dpt_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">公　司</span>
+                <input type="text" class="w60 f12" id="unsubscribe_other_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <div class="mt10"></div>
+                <span class="vm">服务人</span>
+                <input type="text" class="w60 f12" id="unsubscribe_server_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">服务部门</span>
+                <input type="text" class="w60 f12" id="unsubscribe_server_dpt_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+                <span class="vm ml30">派　美</span>
+                <input type="text" class="w60 f12" id="unsubscribe_pm_apportion" placeholder="分摊金额"><span class="vm"> 元</span>
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td class="w60">经办人</td>
+            <td>
+                <select id="unsubscribe_cashier_id" class="w100 f12">
+                    <option value="" dept="">--请选择--</option>
+                    <option value="86" dept="HR">何涛</option>
+                    <option value="519" dept="HR">梅玲</option>
+{#                    <option value="752" dept="HR">刘香花</option>#}
+                    <option value="193" dept="DESIGN">谢敏</option>
+                    <option value="222" dept="QC">吴文婷</option>
+                    <option value="116" dept="QC">张伟</option>
+                    <option value="82" dept="GROUP1">吴洋</option>
+                    <option value="64" dept="GROUP2">邱梦雪</option>
+                    <option value="185" dept="GROUP2">万明</option>
+                    <option value="24" dept="GROUP3">祝鹏</option>
+{#                    <option value="557" dept="GROUP1">欧阳华宇</option>#}
+{#                    <option value="167" dept="GROUP1">汪锋</option>#}
+{#                    <option value="205" dept="GROUP2">王锐</option>#}
+{#                    <option value="892" dept="GROUP3">殷葵</option>#}
+{#                    <option value="77" dept="GROUP3">杨勇</option>#}
+{#                    <option value="165" dept="GROUP4">熊钰馨</option>#}
+{#                    <option value="172" dept="GROUP4">瞿小凡</option>#}
+{#                    <option value="327" dept="GROUP5">薛尧</option>#}
+                    <option value="204" dept="MKT">龚喻</option>
+                    <option value="134" dept="MKT">徐思维</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="id_unsubscribe_note"></div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_unsubscribe">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_add_pause_layout" class="modal hide fade p10" data-width="500">
+    <input type="hidden"  id="id_pause_shop_id" />
+    <table class="table-layout">
+        <tr>
+            <td class="w60">暂停订单</td>
+            <td>
+<!--                <select name="pause_event_id" id="pause_event_id" class="f12"></select>
+                <span id="pause_event_id0"></span>-->
+                <span id="pause_event_descr" class="f12"></span>
+                <input name="pause_event_id" id="pause_event_id" type="hidden">
+            </td>
+        </tr>
+        <tr>
+            <td class="w60">暂停时间</td>
+            <td><input type="text" class="w140 f12" name="pause_create_time" id="pause_create_time" readonly="readonly"></td>
+        </tr>
+        <tr>
+            <td class="w60">开启时间</td>
+            <td><input type="text" class="w140 f12" name="proceed_date" id="proceed_date" readonly="readonly" placeholder="取消暂停时系统自动记录"></td>
+        </tr>
+        <tr>
+            <td class="w60">备注</td>
+            <td>
+                <div class="editor mb5" style="height:200px;" id="id_pause_note"></div>
+                <span class="red"><i class="iconfont mr5 red f12">&#xe659;</i>请勿改变字体大小，不要直接粘贴网页内容</span>
+            </td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="editor_submit_pause">修改</a>
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_pause">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="id_proceed_layout" class="modal hide fade p10" data-width="500">
+
+    <table class="table-layout">
+        <tr>
+            <td class="w60">开启时间</td>
+            <td><input type="text" class="w140 f12" name="proceed_date2" id="proceed_date2"></td>
+        </tr>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary f12" id="submit_proceed">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn f12">关闭</a>
+    </div>
+</div>
+
+<div id="subscribe_menu" class="hide tr" shop_id="" sub_id="" nick="" cslt_id="" myself_position="{{ myself.position }}">
+    <a class="unknown_subscribe red {% if not '1' in myself.perms and myself.department != 'MKT' %}forbid_manual{% endif %}" href="javascript:;">标记赠送</a>
+    <a class="unsubscribe red ml10 {% if not 'B' in myself.perms %}forbid_manual{% endif %}" href="javascript:;">录入退款</a>
+    {% if can_operate %}
+    <a class="pause red ml10" href="javascript:;">暂停订单</a>
+    {% endif %}
+    <a class="end_subscribe red ml10" href="javascript:;">终止订单</a>
+    {% if '1' in myself.perms or myself.position == 'RJJHLEADER' or myself.position == 'TPLEADER' %}
+    <a class="edit_subscribe red ml10" href="javascript:;" subscribe_id="" nick="">编辑订单</a>
+    {% endif %}
+</div>
+
+<div id="modal_end_subscribe" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h5>精灵提醒</h5>
+    </div>
+    <div class="modal-body">
+        <p>确定要终止这笔订单吗，订单的结束时间会修改为今天</p>
+        <label class="dib"><input type="checkbox" class="frozen_kcjl"> 禁止使用软件</label>
+        <label class="dib ml10"><input type="checkbox" class="unmnt_all"> 取消托管计划</label>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="end_subscribe btn btn-primary">确定</button>
+    </div>
+</div>

@@ -1,0 +1,329 @@
+.progress_bar{
+  text-align: center;
+  margin-top: 20px;
+  margin-left: 25px;
+  margin-right: 15px;
+  height:40px;
+  .progress_step{
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    line-height: 24px;
+    margin: 5px;
+    text-align: center;
+    font-weight: 900;
+    background-color: @gray-lighter;
+    color: @gray;
+  }
+  .current{
+    background-color: @base-color;
+    color:@white;
+  }
+  .progress-striped{
+    height: 7px;
+    line-height: 7px;
+    margin-top: 13px;
+    width: 267px;
+  }
+}
+div.progress_step_title{
+  width: 100%;
+  height: 20px;
+  span{
+    float: left;
+    width: 20%;
+    font-weight: 900;
+    color: @gray;
+  }
+  .current{
+    color:@base-color;
+  }
+}
+#progress_step_box{
+  margin-top: 25px;
+  .step_top_bar{
+    height: 39px;
+    width: 100%;
+    overflow: hidden;
+    .step_title{
+      font-size: 14px;
+      height: 40px;
+      font-weight: 900;
+      color: @gray-base;
+      line-height: 40px;
+      border: 1px solid @gray-light;
+      border-bottom: none;
+      border-right: none;
+      padding: 0px 10px;
+      border-radius: 5px 0px 0px 0px;
+      -ms-border-radius:5px 0px 0px 0px;	/* IE 9 */
+      -moz-border-radius:5px 0px 0px 0px;	/* Firefox */
+      -webkit-border-radius:5px 0px 0px 0px; /* Safari 和 Chrome */
+      -o-border-radius:5px 0px 0px 0px;
+
+      span{
+        color: @gray-base;
+        font-weight:normal;
+        font-size: 13px;
+      }
+      .label{
+        font-size: 12px;
+        color: @white;
+        font-weight: bolder;
+        background-color: @gray-darker;
+      }
+    }
+    .border-right{
+        width: 1px;
+        height:65px;
+        border: 1px solid @gray-light;
+        border-right: none;
+        margin-left: 15px;
+        margin-top: -17px;
+        transform:rotate(-45deg);
+        -ms-transform:rotate(-45deg); 	/* IE 9 */
+        -moz-transform:rotate(-45deg); 	/* Firefox */
+        -webkit-transform:rotate(-45deg); /* Safari 和 Chrome */
+        -o-transform:rotate(-45deg);
+      }
+  }
+
+  .step_content{
+    padding: 15px 0px;
+    .mnt_type{
+      height: 310px;
+    }
+    #item_cart{
+      i{
+        color: @base-color;
+      }
+    }
+    ul{
+      list-style-type: none;
+      padding-left: 0px;
+      li{
+        padding: 0px 10px 15px 0px;
+        list-style-type: none;
+        span{
+          cursor: pointer;
+        }
+      }
+
+      .def{
+        span{
+          cursor: default;
+        }
+      }
+    }
+    .mnt_type_box{
+      width: 300px;
+      float: left;
+      cursor: pointer;
+      text-align: center;
+      margin-left: 26px;
+      &:hover{
+        background-color: @gray-lighter;
+        opacity: 0.8;
+      }
+      .mnt_type_desc{
+        width: 100%;
+        color: @gray-darker;
+        border: 1px solid @gray-light;
+        border-radius: 10px;
+        -ms-border-radius:10px;	/* IE 9 */
+        -moz-border-radius:10px;	/* Firefox */
+        -webkit-border-radius:10px; /* Safari 和 Chrome */
+        -o-border-radius:10px;
+
+        .mnt_type_title{
+          border-radius: 10px 10px 0px 0px;
+          text-align: center;
+          height: 40px;
+          line-height: 40px;
+          font-size: 16px;
+          font-weight: 900;
+          border-bottom: 1px solid @gray-light;
+          background-color: @gray-lighter;
+          i{
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: -3px;
+          }
+        }
+
+        ul{
+          margin: 20px 10px 20px 20px;
+          text-align: left;
+          li{
+            font-size: 12px;
+            padding:0px 15px 10px 15px;
+          }
+        }
+      }
+      .mnt_type_desc.checked{
+        color: @white;
+        background-color: @base-color;
+        border: 1px solid @base-color;
+        border-radius: 10px;
+        -ms-border-radius:10px;	/* IE 9 */
+        -moz-border-radius:10px;	/* Firefox */
+        -webkit-border-radius:10px; /* Safari 和 Chrome */
+        -o-border-radius:10px;
+
+
+         .mnt_type_title{
+           border-bottom: 1px solid @gray-lighter;
+           background-color: @base-color;
+        }
+        i{
+          color: @white;
+        }
+      }
+    }
+
+    .mnt_type_box:first-child{
+        margin-left: 0px;
+    }
+
+    input{
+      padding: 5px 8px;
+    }
+
+    .commit_step{
+      .step_name{
+        font-size: 14px;
+        font-weight: bolder;
+        color: @gray-base;
+        margin-top: 25px;
+        margin-bottom: 5px;
+      }
+
+      ul{
+        margin-left: 27px;
+        li{
+          height: 30px;
+          padding: 0px;
+          margin-top: 2px;
+          color: @gray-dark;
+          overflow: hidden;
+          .step-index{
+            float: left;
+            width: 20px;
+            .line{
+              width: 1px;
+              height: 12px;
+              margin-left: 6px;
+              background-color: @gray;
+            }
+            .bg_base{
+              background-color: @base-color;
+            }
+            .node{
+              width: 15px;
+              height: 15px;
+              img{
+                width: 15px;
+                height: 15px;
+                margin-left: -2px;
+              }
+            }
+          }
+          .step-title{
+            float: left;
+            margin-top: 12px;
+            span{
+              cursor: auto;
+            }
+          }
+          .step_error{
+            margin-left: 10px;
+            display: none;
+            color: @red;
+          }
+        }
+      }
+
+      .base{
+        color: @base-color;
+      }
+    }
+
+    .commit_step:first-child{
+      .step_name{
+        margin-top: 0px;
+      }
+    }
+
+    .commit_result{
+      margin-top: 30px;
+      width: 100%;
+      display: none;
+      line-height: 40px;
+      .success{
+        font-size:40px;
+        color: @green;
+      }
+    }
+
+    .set_mnt_cfg{
+      tr{
+        td{
+          i{
+            color: @gray-dark;
+          }
+          div{
+            line-height: 12px;
+            i{
+              vertical-align: top;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    // Position radios and checkboxes better
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin: 0px 0px 1px 0px;
+      line-height: normal;
+      vertical-align: text-bottom;
+    }
+  }
+}
+.screen_line{
+  background-color: @gray-light;
+  width: 100%;
+  position: absolute;
+  top:251px;
+  height: 1px;
+}
+#term_service,#modal_set_adg_cfg{
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 0px 0px 1px 0px;
+    line-height: normal;
+    vertical-align: text-bottom;
+  }
+}
+
+#modal_set_adg_cfg{
+  td{
+    line-height: 12px;
+    vertical-align: top;
+    .select{
+      margin-left: 20px;
+      margin-bottom: 15px;
+      .customer_price{
+        padding: 2px 4px;
+      }
+    }
+    i{
+      color: @gray-dark;
+    }
+  }
+}
+
+.select_div{
+  cursor: pointer;
+}

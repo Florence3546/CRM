@@ -1,0 +1,114 @@
+
+<table class="table table-bordered table-hover td_middle mart_0" id="adgroup_table" style="width:100%;">
+    <thead>
+        <tr>
+            <th style="width:100px;">宝贝图片</th>
+            <th style="width:210px;">宝贝标题</th>
+            <th>基础数据</th>
+            <th>转化数据</th>
+            <th class="hide">关键词个数</th>
+            <th>推广状态</th>
+            <th style="width:153px;"><span class="tooltips" data-placement="left" data-original-title="点击按宝贝是否托管排序">优化功能</span></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="modal hide fade" id="modal_limit_price" adg_id="0" mnt_type="0">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3>设置关键词最高限价</h3>
+  </div>
+  <div class="modal-body lh_36">
+    <div class="cat_path">
+      <span class="bld">宝贝所属类目：</span>
+      <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_path"></span>
+    </div>
+    <div class="cat_avg_cpc">
+      <span class="bld">行业市场均价：</span>
+      <span class="loading_tag s_color">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_avg_cpc"></span>元
+      <span class="s_color">(建议关键词最高限价设为行业市场均价的1.2倍)</span>
+    </div>
+    <div>
+      <span class="bld">关键词最高限价：</span>
+      <input type="text" id="adg_limit_price" maxlength="5" class="keyup_restore" style="width:60px;"> 元
+      <span class="in_block" style="width:14px;"><i class="icon-exclamation-sign hide tooltips"></i></span>
+      <span class="s_color" style="margin-left:-15px;">(<span class="limit_price_min">0.80</span>~<span class="limit_price_max">20.00</span> 元)</span>
+    </div>
+<!--    <div class="r_color mart_6 lh_24 bld">
+      注意：系统将删除该宝贝7天无点击的关键词。
+    </div>-->
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:void(0);" class="btn blue" id="submit_mnt_oper">确定</a>
+    <a href="javascript:void(0);" class="btn" data-dismiss="modal">取消</a>
+  </div>
+</div>
+
+<script id="adgroup_tr" type="text/html">
+<tr id="tr_<%=adgroup_id%>" adg_id="<%=adgroup_id%>" <%if(online_status=='offline'){ %> class="mnt_tr" <% } %> >
+	<td><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>'><img src="<%=item_pic_url%>_100x100.jpg" width="100" height="100" /></a></td>
+	<td >
+		<span class="hide"><%=item_price%></span>
+		<div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=item_id%>'><%=item_title%></a></div>
+		<div class="o_color">￥<%=item_price%>
+			<%if (comment_count) { %>
+			<a href="javascript:;" class="open_comment fr marr_12" obj_id="<%=adgroup_id%>" obj_type=2><img src="/site_media/jl/img/comment.gif"></a>
+			<% } %>
+		</div>
+	</td>
+	<td>
+		<span class="hide"><%=total_cost%></span>
+		<div>总花费&nbsp;<span class="bld"><%=total_cost%></span></div>
+		<div><span>展现量&nbsp;<span class="marl_3"><%=impr%></span></span></div>
+		<div><span>点击量&nbsp;<span class="marl_3"><%=click%></span></span></div>
+		<div><span>点击率&nbsp;<span class="marl_3"><%=click_rate%>%</span></span>
+        <%if (click_rate<=0.4 && impr>10) { %><a href='/web/optimize_creative/?from=mnt_adg&ctr=<%=$parseData(click_rate*100, 100)%>%以上&cost=<%=$parseData(total_cost,100)%>00以上&roi=<%=$parseData(roi,1)%>以上' target='_blank' style="color:red;">(点击：立即优化)</a><% }%></div>
+		<div><span>点击花费&nbsp;<span class="marl_3"><%=ppc%></span></span></div>
+	</td>
+	<td>
+		<span class="hide"><%=total_pay%></span>
+		<div class="tooltips" data-placement="right" data-original-title="直接成交金额&nbsp;<%=directpay%>元<br>间接成交金额&nbsp;<%=indirectpay%>元<br>直接成交笔数&nbsp;<%= directpaycount%>笔<br>间接成交笔数&nbsp;<%=indirectpaycount%>笔<br>店铺收藏次数&nbsp;<%=favshopcount%>次<br>宝贝收藏次数&nbsp;<%=favitemcount%>次">
+			<div>成交额&nbsp;<span class="bld"><%=total_pay%></span></div>
+			<div><span>成交量&nbsp;<span><%=paycount%></span></span></div>
+			<div><span>收藏量&nbsp;<span><%=favcount%></span></span></div>
+			<div><span>转化率&nbsp;<span><%=conv%>%</span></span></div>
+			<div><span>投资回报率&nbsp;<span><%=roi%></span></span></div>
+		</div>
+	</td>
+	<td class="tac hide">
+		<span class="hide"><%=kw_num%></span>
+		<div><%=kw_num%>个</div>
+	</td>
+	<td class="tac">
+		<% if(online_status=='online'){ %>
+		<span id='status_<%=adgroup_id%>'>推广中</span><i class="icon-pause update_adg single marl_6 pointer r_color tooltips" data-original-title="暂停推广" name="stop"></i>
+		<%}%>
+		<% if(online_status=='offline'){ %>
+		<span class="r_color" id='status_<%=adgroup_id%>'>已暂停</span><i class="icon-play-circle update_adg single marl_6 pointer g_color tooltips" data-original-title="参与推广" name="start"></i>
+		<%}%>
+		<i class="icon-remove update_adg single marl_3 pointer larger r_color tooltips" data-original-title="删除" name="del"></i>
+		<% if(error_descr && error_descr!="计划手工暂停") {%>
+		<br/><span class="r_color"><%=error_descr%></span>
+		<%}%>
+	</td>
+	<td class='bld normally'>
+		<span class="hide is_mnt"><%=mnt_type%></span>
+		{% if mnt_type == 2 %}
+			<a href="javascript:void(0)" class="mnt_oper single lb_color" mnt_type=<%=mnt_type%> ><% if(mnt_type==0) { %> 加入托管 <% } else { %> 取消托管 <% } %></a><br>
+			<a href="javascript:void(0)"  class="show_price_popover no_mnt lb_color <% if(mnt_type==0){ %> hide <% } %>" >设置限价
+				<span class="<% if(limit_price==0){ %> hide <% } %> ">(<span class='limit_price'><%=limit_price%></span>元)</span>
+			</a>
+		{% else %}
+			<% if(mnt_type==0) { %><a href="javascript:void(0)" class="mnt_oper single lb_color" mnt_type=<%=mnt_type%> > 加入托管</a><% } %>
+		{% endif %}
+		<div class="<% if(mnt_type==0){ %> hide <% } %> no_mnt" ><a class="lb_color" href="/mnt/adgroup_data/<%=adgroup_id%>" target="_blank">托管宝贝管理</a></div>
+	</td>
+</tr>
+</script>
+<script id="limit_price_popover" type="text/html">
+	<input type="text" class="m-wrap" maxlength="8" style="width:50px; height:9px;"/>元 <button type="button" class="btn blue mini limit_price_submit">确定</button><button type="button" class="btn mini limit_price_close">取消</button>
+</script>

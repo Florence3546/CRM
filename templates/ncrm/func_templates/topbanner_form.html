@@ -1,0 +1,128 @@
+<input type="hidden" name="ad_position" value="topbanner">
+<div class="mt10">
+    <span class="w60 dib">广告名称：</span>
+    <input class="w600" data-rule="require" type="text" maxlength="50" value="{{ main_ad.ad_title|default:'' }}" name="ad_title" placeholder="请输入广告名称"><span class="red ml3 f12">*</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">是否显示：</span>
+    <div class="switch vn-3 {% if main_ad.ad_display %} on {% endif %}" data-toggle="switch">
+        <label class="db"></label>
+        <input type="checkbox" name="ad_display" value="1" {% if main_ad.ad_display %} checked="checked" {% endif %}>
+    </div>
+    <span class="ml20 gray f12">开启后才会在前台显示</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">有效时间：</span>
+    <input class="w140" data-rule="require"  placeholder="请选择开始时间" type="text" value="{{ main_ad.ad_start_time|default:'' }}" name="ad_start_time" ><span class="red ml3 f12">*</span>
+    <span class="w40 dib tc">到</span>
+    <input class="w140" data-rule="require"  placeholder="请选择结束时间" type="text" value="{{ main_ad.ad_end_time|default:'' }}" name="ad_end_time"><span class="red ml3 f12">*</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">权&emsp;&emsp;重：</span>
+    <input class="w40" data-rule="require range[0,99]" type="text" name="ad_weight" value="{{ main_ad.ad_weight|default:'0' }}"><span class="red ml3 f12">*</span></span>
+    <span class="ml20 gray f12">权重相同则随机显示；不同则只显示权重高的一条</span>
+</div>
+<div class="mt20">
+    <span class="w60 dib">显示频率：</span>
+    <select class="w160"  name="ad_frequency" data-rule="require">
+        <option value="" selected>请选择...</option>
+        {% for ad_fre in ad_frequencys %}
+        <option value="{{ad_fre.0}}" {% if main_ad.ad_frequency == ad_fre.0 %} selected="selected" {% endif %}>{{ad_fre.1}}</option>
+        {%endfor%}
+    </select>
+    <span class="red ml3 f12">*</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">延时时间：</span>
+    <input class="w60" data-rule="require range[0,6]" type="text" name="ad_delay_secs" value="{{ main_ad.ad_delay_secs|default:'6' }}"><span class="red ml3 f12">*</span>
+    <span class="ml20 gray f12">页面打开后等待N秒才显示，单位:秒；tips:如果图片较大，请设置大一些</span>
+</div>
+<div class="mt20">
+    <span class="w60 dib">显示秒数：</span>
+    <input class="w60" data-rule="require range[0,3600]" type="text" name="ad_show_secs" value="{{ main_ad.ad_show_secs|default:'6' }}"><span class="red ml3 f12">*</span>
+    <span class="ml20 gray f12">显示M秒后自动关闭，单位:秒</span>
+</div>
+<div class="mt10">
+    <span class="w60 dib">关闭按钮：</span>
+    <div class="switch vn-3 {% if main_ad.ad_close_btn %} on {% endif %}"" data-toggle="switch">
+        <label class="db"></label>
+        <input type="checkbox" name="ad_close_btn" value="1" {% if main_ad.ad_close_btn %} checked="checked" {% endif %}>
+    </div>
+    <span class="ml20 gray f12">开启后会显示关闭按钮；关闭后当天内不再显示，改天会再显示</span>
+</div>
+<div class="mt10 vt">
+    <span class="w60 dib vt">广告内容：</span>
+    <textarea name="ad_content" placeholder="输入广告内容（html代码和javascript脚本）"
+              class="w1100 h200" style="max-width: 1100px; min-height: 200px; max-height: 300px;">{{ main_ad.ad_content|default:'' }}</textarea>
+</div>
+<div class="mt10 vt">
+    <span class="w60 dib vt">显示条件：</span>
+    <label class="dib mb0"><input name="condition_type" {% if main_ad.condition_type == 'condition' or not a_id %}checked="checked"{% endif %}  class="vn mr5" value="condition" type="radio">给定条件</label>
+    <label class="dib mb0 ml20"><input name="condition_type" {% if main_ad.condition_type == 'shop_list' %}checked="checked"{% endif %} class="vn mr5" value="shop_list" type="radio">给定nick</label>
+    <span class="ml20 gray f12">多个nick用“,”分隔，“条件”说明在底部列表，目前支持逻辑运算 && 和 || ，算术运算支持 >, <, >=, <=, ==, !=</span><br/>
+    <span class="w60 dib vt"></span>
+    <input class="w1100 mt10" type="text" name="ad_show_condition"
+           {% if main_ad.condition_type == 'condition' or not a_id %}placeholder="请输入显示条件" value="{{ main_ad.ad_show_condition|default:'left_days>-1' }}"
+           {% else %}placeholder="输入nick，以“,”分割 " value="{{ main_ad.ad_show_condition}}"{% endif %}>
+</div>
+<div class="mt10 vt">
+    <span class="w60 dib vt">黑名单：</span>
+    <textarea name="ad_blacklist"  placeholder="注意：会覆盖之前输入的黑名单，仅用于第一次新建（输入nick，以“,”分隔，不允许出现空格）"
+              class="w1100 h100" style="max-width: 1100px; min-height: 100px; max-height: 100px;">{{ main_ad.ad_blacklist|default:'' }}</textarea>
+</div>
+<div class="mt20">
+    <button type="submit" class="btn btn-success submit">保存</button>
+    {% if check_limit %}
+    <a href="javascript:;" class="btn btn-primary check_main_ad" check_id="{{ a_id }}">审核</a>
+    {% endif %}
+    {% if put_out %}
+    <a href="javascript:;" class="btn btn-warning put_main_ad" put_id="{{ a_id }}">投放</a>
+    {% endif %}
+    <a href="../main_ad_manage" class="btn">返回</a>
+    <a class="custom_preview ml10" href="javascript:;">预览效果</a><span class="gray f12 ml5">效果在顶部哦！</span>
+</div>
+{% include "condition_table.html" %}
+<script id="TopBanner_view" type="text/html">
+    <div class="auto bg_striped" id="show_top_banner" style="overflow: hidden;position: relative; height: 0px;">
+        <a class="r hide" href="javascript:;" id="hide_top_banner" style="position: absolute; top: 5px; right: 5px; z-index: 9999"><i class="icon iconfont">&#xe621;</i></a>
+        <div id="top_banner_content">
+            <%==data%>
+        </div>
+    </div>
+</script>
+{% block custom_js %}
+<script>
+
+    //预览顶部横条
+    function view_main_ad(){
+        $("#show_top_banner").remove();
+        var view_html = template.render("TopBanner_view",{'data':$('textarea[ name=ad_content]').val()});
+        $('#custom_header').before(view_html);
+        if($('[name=ad_close_btn]').attr('checked')){
+            $("#hide_top_banner").show();
+        }else{
+            $("#hide_top_banner").hide();
+        }
+        PT.show_loading('广告初始化中');
+        setTimeout(excu_show_ad,3000);
+
+        $('#show_top_banner').on('click','#hide_top_banner',function(){
+            $("#show_top_banner").animate({height:0},1500,function(){
+                $("#show_top_banner").remove();
+            });
+        });
+    }
+
+    var excu_show_ad = function(){
+        PT.hide_loading();
+        var height = $('#top_banner_content').height();
+        $('html, body').animate({scrollTop:0}, 50,function(){
+            $("#show_top_banner").animate({height:height},1500,function(){
+                var ad_show_secs = $('input[name=ad_show_secs]').val();
+                setTimeout('javascript:$("#show_top_banner").animate({height:0},1500,function(){' +
+                    '$("#show_top_banner").remove();});',parseInt(ad_show_secs)*1000);
+            });
+        });
+    }
+</script>
+{% endblock %}

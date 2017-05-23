@@ -1,0 +1,601 @@
+{#utf-8#}{% extends "qnyd_base.html" %}
+{% load rates %}
+{% block content %}
+<section class="PT_page {% if not current_page == 'account' %}hide{%endif%}" id="account" data-isneed-phone={{isneed_phone}}>
+  <div class="alert PT_warp hide"> <strong class="alert-heading">温馨提示：</strong><span class="marl_24 normal s_color"></span>
+    <div class='normally' style="padding-left:12px; margin-top:6px;line-height:25px;">亲，部分用户的无线开车精灵的托管宝贝无法加词，原因是淘宝授权问题，我们正在和小二紧急沟通，小二也在协调处理，期望您的理解和支持。</div>
+  </div>
+  <div class="page_header"> <span class="title">基本数据</span>
+    <label class="select btn in_block fr last_day"><i class="glyphicon glyphicon-calendar"></i><span class="w_color bld">过去<span class="date_value">7</span>天</span>
+      <select>
+        <option value="1">昨天</option>
+        <option value="2">过去2天</option>
+        <option value="3">过去3天</option>
+        <option value="5">过去5天</option>
+        <option value="7" selected="selected">过去7天</option>
+        <option value="10">过去10天</option>
+        <option value="15">过去15天</option>
+      </select>
+    </label>
+  </div>
+  <div class="PT_warp">
+    <table id="account_detail" class="table table_dashed">
+      <tr>
+        <td>直通车余额</td>
+        <td class="large o_color">￥<span class="marr_3 balance">--</span></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>总花费</td>
+        <td><span class="total_cost marr_3">--</span></td>
+        <td>点击率</td>
+        <td><span class="ctr marr_3">--</span></td>
+      </tr>
+      <tr>
+        <td>成交额</td>
+        <td><span class="total_pay marr_3">--</span></td>
+        <td>转化率</td>
+        <td><span class="conv marr_3">--</span></td>
+      </tr>
+      <tr>
+        <td>点击量</td>
+        <td class="click">--</td>
+        <td>点击花费</td>
+        <td class="cpc">--</td>
+      </tr>
+      <tr>
+        <td>成交量</td>
+        <td class="paycount">--</td>
+        <td>投资回报</td>
+        <td class="roi">--</td>
+      </tr>
+    </table>
+  </div>
+  <div id="chart" class="PT_warp" style="height:200px"></div>
+</section>
+<section class="PT_page {% if not current_page == 'keyword_manage' %}hide{%endif%}" id="keyword_manage">
+  <div class="page_header">
+    <label class="select btn orange in_block fl"><span>全部加价</span><i class="glyphicon glyphicon-chevron-down"></i>
+      <select class="plus">
+        <option value="0">不变</option>
+        <option value="5">5%</option>
+        <option value="10">10%</option>
+        <option value="15">15%</option>
+        <option value="20">20%</option>
+        <option value="25">25%</option>
+        <option value="30">30%</option>
+        <option value="35">35%</option>
+        <option value="40">40%</option>
+        <option value="45">45%</option>
+        <option value="50">50%</option>
+      </select>
+    </label>
+    <label class="select btn in_block fl"><span>全部降价</span><i class="glyphicon glyphicon-chevron-down"></i>
+      <select class="fall">
+        <option value="0">不变</option>
+        <option value="5">5%</option>
+        <option value="10">10%</option>
+        <option value="15">15%</option>
+        <option value="20">20%</option>
+        <option value="25">25%</option>
+        <option value="30">30%</option>
+        <option value="35">35%</option>
+        <option value="40">40%</option>
+        <option value="45">45%</option>
+        <option value="50">50%</option>
+      </select>
+    </label>
+    <button class="btn red fr" id="keyword_manage_submit">一键提交</button>
+  </div>
+  <div class="PT_warp padb_12">
+    <table id="keyword_manage_table" class="table table_solid">
+      <thead>
+        <tr>
+          <th width="30%">关键词</th>
+          <th width="30%">昨日花费/成交</th>
+          <th width="20%" class="tac">出价</th>
+          <th width="20%">当前排名</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="tac" style="text-align:center;"><img src="/site_media/qnyd/img/ajax-white.gif" width="18" height="18" style="vertical-align:-4px;" id="keyword_manage_loader_Sign">正在加载...... </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>
+<section class="PT_page {% if not current_page == 'adgroup_cost' %}hide{%endif%}" id="adgroup_cost">
+  <div class="page_header"> <span class="title">有花费的宝贝</span>
+    <label class="select btn in_block fr last_day"><i class="glyphicon glyphicon-calendar"></i><span class="w_color bld">过去<span class="date_value">7</span>天</span>
+      <select>
+        <option value="1">昨天</option>
+        <option value="2">过去2天</option>
+        <option value="3">过去3天</option>
+        <option value="5">过去5天</option>
+        <option value="7" selected="selected">过去7天</option>
+        <option value="10">过去10天</option>
+        <option value="15">过去15天</option>
+      </select>
+    </label>
+  </div>
+  <div class="PT_warp">
+    <table class="table table_solid nav" id="adgroup_table">
+      <tbody>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="tac" style="text-align:center;"><img src="/site_media/qnyd/img/ajax-white.gif" width="18" height="18" style="vertical-align:-4px;" id="adgroup_table_loader_Sign">正在加载...... </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>
+<section class="PT_page {% if not current_page == 'kw_monitor' %}hide{%endif%}" id="kw_monitor" style="background-color:#f0eff5;">
+	<div class="page_header" id="float_title">
+		<ul class="ul_line " id="adg_panel">
+		</ul>
+		<div id="remind_panel">
+			<lable style="font-size:16px;font-weight:600;line-height: 30px;">
+				已改价
+				<span id="modify_keyword_num" style="color:#3399ff;">0</span>
+				个
+			</label>
+			<a class="btn fr" href="javascript:;" style="padding:10px;width:50px;text-align:center;"  id="kw_submit" >提交</a>
+		</div>
+	</div>
+	<div class="mart_6" id="kw_opar_panel" >
+	    <div id="adg_base_infos" class="hide">
+		    <table>
+		       <tr>
+	                <td style="width:70px;vertical-align:top;">
+	                    计划名称：
+	                </td>
+	                <td style="line-height:120%;">
+	                    <span id="camp_name">
+	                    </span>
+	                </td>
+	            </tr>
+		        <tr>
+		            <td style="vertical-align:top;">
+		                宝贝名称：
+		            </td>
+		            <td style="line-height:120%;">
+		                <span id="item_name">
+	                    </span>
+		            </td>
+		        </tr>
+		    </table>
+		</div>
+
+		<div id="content_title" class="hide">
+		  <img src="/site_media/qnyd/img/kw_monitor.png" class="fl">
+		  <div class="padt_3">
+		      关键词监控数据
+		  </div>
+		</div>
+		<ul class="ls_none" id="kw_panel">
+		</ul>
+    </div>
+	<div class="tac hide" id="no_rtrpt" style="margin-top:140px;">
+	   亲，目前为止，今日没有产生花费。
+	</div>
+
+	<div id="popup_div" style="position:relative;margin-top:20px;width:200px;left:50%;margin-left:-200px">
+	    <a href="javascript:;" id="lbl_close" style="position:absolute;right:-115px;top:5px;">关闭</a>
+	    <img src="/site_media/qnyd/img/qnyd_ad_1.png?v={{VERSION}}" usemap="#map1" alt="" >
+        <map name="map1" id="map1">
+            <area shape="rect" coords="0,290,400,230" href ="javascript:;" class="call_wangwang"/>
+        </map>
+	</div>
+	
+</section>
+<section class="PT_page {% if not current_page == 'keyword_cost' %}hide{%endif%}" id="keyword_cost">
+  <div class="page_header"> <span class="title">有花费的关键词</span>
+    <label class="select btn in_block fr"><i class="glyphicon glyphicon-calendar"></i><span class="w_color bld">过去7天</span>
+      <select>
+        <option value="1">昨天</option>
+        <option value="2">过去2天</option>
+        <option value="3">过去3天</option>
+        <option value="5">过去5天</option>
+        <option value="7" selected="selected">过去7天</option>
+        <option value="10">过去10天</option>
+        <option value="15">过去15天</option>
+      </select>
+    </label>
+  </div>
+  <div class="PT_warp">
+    <table class="table table_solid" id="keyword_table">
+      <tbody>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="tac" style="text-align:center;"><img src="/site_media/qnyd/img/ajax-white.gif" width="18" height="18" style="vertical-align:-4px;" id="keyword_table_loader_Sign">正在加载...... </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>
+<section class="PT_page {% if not current_page == 'mnt' %}hide{%endif%}" id="mnt">
+  <div id="none_mnt_campagin">
+    <p>亲，您还没有设置全自动托管计划，请到电脑pc端千牛或者开车精灵软件中设置托管计划。</p>
+    <p>如果您已经设置好了托管计划，请点击下面的“刷新”按钮。</p>
+    <div class="tac">
+      <button class="btn" id="reload_mnt_campaign">刷新</button>
+    </div>
+  </div>
+  <div id="has_mnt_campaign">
+    <nav class="bar" id="mnt_title_list">
+    {% for mnt in MNT_LIST %}
+    <a href="javascript:;" campaign_id = {{mnt.campaign_id}}>{{mnt.name|cut:'重点:'|cut:'长尾:'|cut:'ROI:'|cut:'无线:'|truncatechars:4}}</a>
+    {% endfor %}
+    </nav>
+
+    <div class="page_header"> <span class="title">----</span>
+      <label class="select btn in_block fr last_day"><i class="glyphicon glyphicon-calendar"></i><span class="w_color bld">过去<span class="date_value">7</span>天</span>
+        <select>
+          <option value="1">昨天</option>
+          <option value="2">过去2天</option>
+          <option value="3">过去3天</option>
+          <option value="5">过去5天</option>
+          <option value="7" selected="selected">过去7天</option>
+          <option value="10">过去10天</option>
+          <option value="15">过去15天</option>
+        </select>
+      </label>
+    </div>
+    <div class="PT_warp">
+      <table id="mnt_rpt" class="table table_dashed">
+        <tr>
+          <td>总花费</td>
+          <td><span class="total_cost marr_3">--</span></td>
+          <td>点击率</td>
+          <td><span class="ctr marr_3">--</span></td>
+        </tr>
+        <tr>
+          <td>成交额</td>
+          <td><span class="total_pay marr_3">--</span></td>
+          <td>转化率</td>
+          <td><span class="conv marr_3">--</span></td>
+        </tr>
+        <tr>
+          <td>点击量</td>
+          <td class="click">--</td>
+          <td>点击花费</td>
+          <td class="cpc">--</td>
+        </tr>
+        <tr>
+          <td>成交量</td>
+          <td class="paycount">--</td>
+          <td>投资回报</td>
+          <td class="roi">--</td>
+        </tr>
+      </table>
+    </div>
+    <div class="PT_warp">
+      <table id="mnt_setting" class="table table_solid">
+        <tr>
+          <td><span class="title">关键词最高限价</span><span class="action">
+            <input id="mnt_max_price" class="small" type="number" value="0">
+            </span></td>
+        </tr>
+        <tr>
+          <td><span class="title">推广计划日限额</span><span class="action">
+            <input id="mnt_budget" class="small" type="number" value="0">
+            </span></td>
+        </tr>
+        <tr>
+          <td><span class="title">优化策略</span><span class="action"><a href="javascript:;" stgy="-1" class="quick_oper btn_l marr_12">—减小投入</a><a href="javascript:;" stgy="1" class="quick_oper orange btn_l ">+加大投入</a></span></td>
+        </tr>
+        <tr>
+          <td id="camp_oper_parent" class="online"><span class="title online_span">系统优化中，上次优化时间：<span id="mnt_planned_time">--</span></span><span class="offline_span">推广计划已暂停，同时您已暂停托管</span><span class="action"><a href="javascript:;" class="forecast red btn_l" id="camp_mnt_oper">暂停</a></span></td>
+        </tr>
+        <tr>
+          <td><span class="title">解除托管</span> <span class="action"><a href="javascript:;" id="close_mnt" class="forecast red btn_l ">解除托管</a></span></td>
+        </tr>
+      </table>
+    </div>
+    <div>宝贝列表(<span id="mnt_adg_num">--</span>)</div>
+    <div class="PT_warp">
+      <table class="table table_solid" id="mnt_adgroup">
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="tac" style="text-align:center;"><img src="/site_media/qnyd/img/ajax-white.gif" width="18" height="18" style="vertical-align:-4px;" id="mnt_table_loader_Sign">正在加载...... </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+<section class="PT_page {% if not current_page == 'set' %}hide{%endif%}" id="set">
+<div class="PT_warp">
+  <table class="table table_solid" id="set_table">
+    <tbody>
+      <tr id="sync_button">
+        <td><i class="glyphicon glyphicon-refresh marr_6"></i>同步下载</td>
+      </tr>
+      <tr class="call_wangwang">
+        <td><i class="glyphicon glyphicon-comment marr_6"></i>联系顾问</td>
+      </tr>
+      <tr id="suggestion_button">
+        <td><i class="glyphicon glyphicon-envelope marr_6"></i>意见反馈</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+{% endblock %}
+
+{% block template%}
+<!--自定义模板-->
+<script type="text/html" id="nomal_tr_template">
+<tr id="km_<%=keyword_id%>">
+	<td class="word"><span class="glyphicon glyphicon-plus"></span><i><%=word%></i></td>
+	<td><%=cost%>/<%=pay%></td>
+	<td class="max_price"><input class="small" type="number" value="<%=max_price%>" max_price="<%=max_price%>" data="{'max_price':'<%=max_price%>','keyword_id':'<%=keyword_id%>','item_id':'<%=item_id%>','campaign_id':'<%=campaign_id%>','adgroup_id':'<%=adgroup_id%>','match_scope':'<%=match_scope%>','word':'<%=word%>'}"></td>
+	<td><span class="count" item_id="<%=item_id%>" adgroup_id="<%=adgroup_id%>">查</span></td>
+</tr>
+<tr id="detail_<%=keyword_id%>" class="detail_row hide">
+	<td colspan="4" class="detail">
+		<article>
+		<div class="fl tac mart_6">
+			 <img class="marr_6 marl_6 block bdcc" src="<%=item_pic_url%>_120x120.jpg" width="60" height="60">
+			 <a class="mart_12 marb_24 inline_block cancel_attention btn_l gray" id="cancel_<%=keyword_id%>" adgroup_id="<%=adgroup_id%>" href='javascript:;'>取消关注</a><br>
+			 <label class="select"><a href="javascript:;" class="forecast"><img src="/site_media/qnyd/img/loader-small-white.gif" width="12" height="12">请稍后</a>
+			 </label>
+		</div>
+		<div class="hidden">
+		  <ul class="tal">
+			<li>
+			  <!--<h4>实时数据</h4>-->
+			  <ul class="list-unstyled row">
+				<li class="width100"><span class="title">质量得分</span></span><span class="marl_3"><%=qscore%></span></li>
+				<li><span class="title">成交量</span><span class="marl_3"><%=paycount%></span></li>
+			  </ul>
+			</li>
+			<li>
+			  <!-- <h4 class="mart_3">转化数据</h4>-->
+			  <ul class="row">
+				<li class="width100"><span class="title">点击率</span><span class="marl_3"><%=ctr%></span></li>
+				<li><span class="title">点击量</span><span class="marl_3"></span><%=click%></li>
+				<li class="width100"><span class="title">转化率</span><span class="marl_3"><%=conv%></span></li>
+				<li><span class="title">展现量</span><span class="marl_3"><%=impressions%></span></li>
+				<li class="width100"><span class="title">平均花费</span><span class="marl_3 cpc"><%=cpc%></span></li>
+				<li><span class="title">投资回报</span><span class="marl_3"><%=roi%></span></li>
+			  </ul>
+			</li>
+			<li>
+			  <!--<h4 class="mart_3">全网数据</h4>-->
+			  <ul class="list-unstyled row nbb">
+				<li class="width100"><span class="title">市场均价</span><span class="marl_3"><%=g_cpc%></span></li>
+				<li><span class="title">点击指数</span><span class="marl_3"><%=g_click%></span></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div>
+		</article>
+	</td>
+</tr>
+</script>
+<script type="text/html" id="adgroup_tr_template">
+<tr id="<%=namespace%><%=adgroup_id%>" class="<% if (online_status == "offline"){ %>offline<% } %>" data='{"campaign_id":"<%=campaign_id%>","adgroup_id":"<%=adgroup_id%>","item_pic_url":"<%=item_pic_url%>","item_title":"<%=item_title%>","item_price":"<%=item_price%>","limit_price":"<%=limit_price%>","mnt_type":"<%=mnt_type%>","offline_type":"<%=offline_type%>","online_status":"<%=online_status%>"}'>
+  <td><img src="<%=item_pic_url%>_120x120.jpg" width="60" height="60"></td>
+  <td class="tal"><ul class="detail">
+	  <li>总花费<span class="cost marl_3"><%=total_cost%></span></li>
+	  <li>成交额<span class="cost marl_3"><%=total_pay%></span></li>
+	  <li>点击量<span class="cost marl_3"><%=click%></span></li>
+	  <li>成交量<span class="cost marl_3"><%=paycount%></span></li>
+	  <li>点击率<span class="cost marl_3"><%=click_rate%></span></li>
+	  <li>转化率<span class="cost marl_3"><%=conv%></span></li>
+	</ul></td>
+</tr>
+</script>
+<script type="text/html" id="keyword_tr_template">
+	<tr>
+	  <td><span class="word">连衣裙</span></td>
+	  <td class="tal"><ul class="detail">
+		  <li>总花费<span class="cost marl_3">200000.00</span></li>
+		  <li>成交额<span class="cost marl_3">1999000.00</span></span></li>
+		  <li>点击量<span class="cost marl_3">30000</span></li>
+		  <li>成交量<span class="cost marl_3">1000</span></li>
+		  <li>点击率<span class="cost marl_3">1.23</span>%</li>
+		  <li>转化率<span class="cost marl_3">3.00</span>%</li>
+		</ul></td>
+	</tr>
+</script>
+<script type="text/html" id="creative_info_template">
+	<!--宝贝详情-->
+	<div class="mart_24">
+	  <table id="creative_info" class="table table_dashed layer_adg_info">
+		<tr>
+		  <td>所属计划</td>
+		  <td><span class="total_cost"><%=campaign_title%></span></td>
+		</tr>
+		<tr>
+		  <td>宝贝标题</td>
+		  <td><span class="total_pay"><%=item_title%></span></td>
+		</tr>
+		<% if (creative_title_1){ %>
+		<tr>
+		  <td>推广标题1</td>
+		  <td class="click"><%=creative_title_1%></td>
+		</tr>
+		<% } %>
+		<% if (creative_title_2){ %>
+		<tr>
+		  <td>推广标题2</td>
+		  <td class="paycount"><%=creative_title_2%></td>
+		</tr>
+		<% } %>
+	  </table>
+	</div>
+</script>
+<script type="text/html" id="set_attention_page">
+<section>
+<h2 class="tac marb_24 mart_24 m_color"><span class="glyphicon glyphicon-info-sign vm_4 biggest marr_6"></span>尚未设置重点关注词</h2>
+<ul class="tac" id="choose_set">
+    <li><a class="btn marb_12" href="javasctrip:;"  data-transition="fade" id="auto_set">自动一键设置</a></li>
+    <li><a class="btn orange marb_12 hide" href="http://l.tbcdn.cn/apps/top/c/ui/proxy/proxy.html">DEBUG</a></li>
+</ul>
+</section>
+</script>
+<script type="text/html" id="forecast_template_bak">
+  <select>
+	  <option selected=selected value="default">请选择</option>
+	<% for (var i = 0; i < result.length; i ++) { %>
+	  <option value="<%=result[i].price%>"><%=forecast_dict[result[i].page]%>----<%=result[i].price%>元</td>
+	<% } %>
+  </select>
+</script>
+<script type="text/html" id="forecast_template">
+<select>
+	<option selected="selected" value="default">请选择</option>
+    <%for (var i in rank_data) { %>
+        <option value="<%=rank_data[i][1]%>" ><%=rank_data[i][0]%></option>
+    <% }%>
+</select>
+</script>
+<script type="text/html" id="sync_layer">
+<div class="alert PT_warp">
+	<table id="sync_tips">
+		<tr>
+			<td>全店快速同步</td>
+			<td>直通车后台做过增、删、改，使用快速下载将数据同步到精灵，登录时系统也会自动下载</td>
+		</tr>
+		<tr>
+			<td>直通车报表数据</td>
+			<td>除关键词、推广内容之外的报表数据</td>
+		</tr>
+		<tr>
+			<td>直通车基础数据</td>
+			<td>计划、宝贝、推广内容、关键词，但不下载报表</td>
+		</tr>
+	</table>
+</div>
+<ul id="sync_ul" class="layer_set">
+	<li>全店快速同步<button class="btn">执行</button></li>
+	<li>直通车报表数据<button class="btn">执行</button></li>
+	<li>直通车基础数据<button class="btn">执行</button></li>
+</ul>
+</script>
+<script type="text/html" id="suggestion_layer">
+<div class="tac" id="suggestion_box">
+  <h2 class="tac marb_12">感谢您的参与和鞭策，精灵会做的更好</h2>
+  <textarea name="textfield" id="suggestion" placeholder="您的意见是我们进步最大的动力"></textarea>
+  <div class="tar"><button class="btn red mart_12" id="suggestion_submit">提交建议</button></div>
+</div>
+</script>
+<script type="text/html" id="mnt_adg_layer">
+  <div class="pad_6 mart_24 mnt_adg_layer">
+	<div style="overflow:hidden;">
+		<img class="fl marr_12" src="<%=item_pic_url%>_200x200.jpg" width="100" height="100"/>
+		<span class="item_title"><%=item_title%></span>
+		<div class="mart_6 price" >￥<%=item_price%></div>
+	</div>
+	<ul class="layer_set" data='{"campaign_id":"<%=campaign_id%>","adgroup_id":"<%=adgroup_id%>","item_pic_url":"<%=item_pic_url%>","item_title":"<%=item_title%>","item_price":"<%=item_price%>","limit_price":"<%=limit_price%>","offline_type":"<%=offline_type%>","online_status":"<%=online_status%>"}'>
+		<% if (campaign_mnt_type == 2 || campaign_mnt_type == 4 ){ %>
+      <li>设置限价<input class="small right" type="number" value="<%=limit_price%>" old_value="<%=limit_price%>"></li>
+    <% } %>
+		<li>推广状态<%=campaign_mnt_type%>
+			<span class="right" id="adg_status_btn_<%=adgroup_id%>">
+			<% if (online_status == "online"){ %>
+				<span class="marr_12 b_color normal_size">推广中</span><span class="btn_l red adg_status_btn" mode="stop">暂停推广</span>
+			<% } if (online_status == "offline"){ %>
+				<span class="marr_12 r_color normal_size">未推广</span><span class="btn_l adg_status_btn" mode="start">开启推广</span>
+			<% } %>
+			</span>
+		</li>
+		<li>托管状态
+			<span class="right" id="mut_status_btn_<%=adgroup_id%>">
+			<% if (["1","2"].indexOf(mnt_type) != -1 ){ %>
+				<span class="marr_12 b_color normal_size">托管中</span><span class="btn_l red mnt_type" flag="0">取消托管</span>
+			<% } else{ %>
+				<span class="marr_12 r_color normal_size">未托管</span><span class="btn_l mnt_type" flag="1">加入托管</span>
+			<% } %>
+			<span>
+		</li>
+	</ul>
+ </div>
+</script>
+<script type="text/html" id="common_message_layer">
+<li class="message_btn <%=level%>" msg_id=<%=id%>>
+    <div class="message_title"><%=title%></div>
+    <div class="message_detail"><%=message%></div>
+</li>
+</script>
+<script type="text/html" id="phone_layer">
+<div class="pad_6 tac">
+  <div class="mart_48 lh_24">
+    <div>为了方便与您的沟通和及时向您反馈软件效果，</div>
+    <div>请留下您的联系方式！</div>
+  </div>
+  <div class="block">
+    <ul>
+        <li class="mart_24">
+            <span>手机号<span style="color:red;">*</span></span>
+            <input type="text" class="inpt_b" name="phone" id="id_phone" maxlength="11" value="">
+        </li>
+        <li class="mart_24">
+            <span>QQ号码</span>
+            <input type="text" class="inpt_b" name="qq" id="id_qq" maxlength="12" value="">
+        </li>
+        <li class="mart_24">
+            <a id="id_submit_info" class="btn green">&nbsp提&nbsp交&nbsp</a>
+        </li>
+    </ul>
+  </div>
+</div>
+</script>
+<script type="text/html" id="adgroup_moniter_li">
+<li adg_id="<%=adg_id%>"  class="mart_6 marb_6 marr_6">
+    <img class="adg_img" src="<%=item_pic_url%>" />
+    <h4 class="tac" >点击：<%=adg_rt_click%></h4>
+</li>
+</script>
+<script type="text/html" id="kw_moniter_li">
+<li kw_id="<%=kw_id%>">
+    <div class="kw_border">
+	    <ul class="ul_table kw_top_ul">
+	        <li>
+	            <%=kw_name%>
+	        </li>
+	        <li class="tar">
+	            <span>出价(元)：</span>
+	            <input type="text" class="kw_price" maxlength="5" value="<%=kw_price%>" />
+	        </li>
+	    </ul>
+	    <ul class="ul_table kw_bottom_ul">
+	        <li class="rpt_cell">
+	            <span>点击:</span>
+	            <span>
+	                <%=kw_rt_click%>&nbsp;
+	            </span>
+	        </li>
+	        <li class="rpt_cell">
+                <span>展现:</span>
+                <span>
+                    <%=kw_rt_impr%>&nbsp;
+                </span>
+            </li>
+	        <li class="rpt_cell">
+	            <span>成交:</span>
+	            <span style="color:red;">
+	                <%=kw_rt_pay_count%>&nbsp;
+	            </span>
+	        </li>
+	        <li class="rpt_cell">
+	            <span>花费:</span>
+	            <span>
+	                ￥<%=kw_rt_cost%>
+	            </span>
+	        </li>
+	    </ul>
+  </div>
+</li>
+</script>
+{% endblock %}

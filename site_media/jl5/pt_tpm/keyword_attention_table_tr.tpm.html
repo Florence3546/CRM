@@ -1,0 +1,114 @@
+<tr id="<%=keyword_id%>" adgroup_id="<%=adgroup_id%>" campaign_id="<%=campaign_id%>" item_id="<%=item_id%>">
+    <td class="tc nbl">
+        <span class="hide">0</span><input class="kid_box" name="idx" type="checkbox">
+    </td>
+    <td class="tc p1">
+        <div class="item_picture poi" data="{item_pic_url:'<%=item_pic_url%>',item_title:'<%=item_title%>',item_price:'<%=item_price%>',campaingn_title:'<%=campaingn_title%>'}">
+            <img src="<%=item_pic_url%>_40x40.jpg" width="38">
+        </div>
+    </td>
+    <td>
+        <div class="rel pr60">
+            <span class="hide"><%=match_scope%></span>
+            <span class="word poi" id="word_<%=keyword_id%>"><%=word%></span>
+            <%if (qscore_dict.plflag==1) {%>
+            <img src="/site_media/jl5/images/kw_plflag.png" class="tips" width="" height="" alt="推左" title="淘宝豆腐块展示机会: 有机会在淘宝搜索关键词结果页左侧展示">
+            <%}%>
+            <%if (qscore_dict.wireless_matchflag==1) {%>
+            <img src="/site_media/jl5/images/kw_wlflag.png" class="tips" width="" height="" alt="首屏" title="移动首屏展示机会: 有机会在手机淘宝网和淘宝客户端搜索结果第一屏展示">
+            <%}%>
+            <span class="abs r0 mr2 t50 mt-7 label label-primary poi pointer match" onselectstart="return false;" scope="<%=match_scope%>"><%=$filter_match(match_scope)%></span>
+            <i class="iconfont remove abs r0 mr40 t50 mt-7">&#xe62c;</i>
+            <i class="iconfont abs r0 mr23 t50 mt-7 attention <%if (!is_focus) { %>silver<% }%>" title="关注词">&#xe68f;</i>
+        </div>
+    </td>
+    <td>
+        <span class="hide optm_type"><%=optm_type%></span>
+        <input class="input-small new_price" type="text" value="<%=max_price%>">
+        <i class="iconfont recovery">&#xe632;</i>
+        <i class="iconfont info tips hide">&#xe62b;</i>
+    </td>
+  <td class="rt_rank">
+    <span class="hide"></span>
+    <span class="forecast_rank_before"><a href="javascript:;"class="rt_forecast_order_btn" switch="1">查</a></span>
+    <span class="forecast_rank_info dn">
+      <span class="l">PC<span class="pc"></span></span>
+      <span class="r">移动<span class="yd"></span></span>
+    </span>
+  </td>
+  <td><a href="javascript:;"class="forecast_order_btn">预估排名</a></td>
+  <td class="tr"><span class="max_price"><%=max_price%></span></td>
+  <td class="tc">
+    <span class="hide"></span>
+    <span class="check_rank_before"><a href="javascript:;" class="rt_check_ranking" switch="1">查</a></span>
+    <span class="check_rank_info dn">
+      <span class="l"><a href="javascript:;" class="js_rt_check">PC<span class="pc"></span></a></span>
+      <span class="r"><a href="javascript:;" class="js_rt_check">移动<span class="yd"></span></a></span>
+    </span>
+  </td>
+  <td class="tc"><a href="javascript:;" class="check_ranking" switch="1">查</a></td>
+  <td class="tc">
+    <span class='hide'></span>
+    <span class="l ml5 poi new_qscore" qscore="<%=qscore_dict.qscore%>" cust_score="<%=qscore_dict.custscore%>" creative_score="<%=qscore_dict.creativescore%>" rele_score="<%=qscore_dict.kwscore%>" cvr_score="<%=qscore_dict.cvrscore%>" score_type="pc">
+      <span class='pc'><%=qscore_dict.qscore%></span>分
+    </span>
+    <span class="r mr5 poi new_qscore" qscore="<%=qscore_dict.wireless_qscore%>" cust_score="<%=qscore_dict.wireless_custscore%>" creative_score="<%=qscore_dict.wireless_creativescore%>" rele_score="<%=qscore_dict.wireless_relescore%>" cvr_score="<%=qscore_dict.wireless_cvrscore%>" score_type="yd">
+      <span class='yd'><%=qscore_dict.wireless_qscore%></span>分
+    </span>
+  </td>
+  <td class="tr qscore poi">
+      <div qscore="<%=qscore%>" cust_score="<%=cust_score%>" creative_score="<%=creative_score%>" rele_score="<%=rele_score%>" cvr_score="<%=cvr_score%>">
+          <span class="custom"><%=qscore%></span>分
+          <div class="dib vt ml3 mr3">
+              <div>
+              <%for (var i=0;i<5;i++) { %>
+                  <span class="l <%if (i<cust_score) { %>orange<% } else { %>gray<% }%>"></span>
+              <% }%>
+              </div>
+              <div>
+              <%for (var i=0;i<5;i++) { %>
+                  <span class="l <%if (i<creative_score) { %>orange<% } else { %>gray<% }%>"></span>
+              <% }%>
+              </div>
+              <div>
+              <%for (var i=0;i<5;i++) { %>
+                  <span class="l <%if (i<rele_score) { %>orange<% } else { %>gray<% }%>"></span>
+              <% }%>
+              </div>
+              <div>
+              <%for (var i=0;i<5;i++) { %>
+                  <span class="l <%if (i<cvr_score) { %>orange<% } else { %>gray<% }%>"></span>
+              <% }%>
+              </div>
+          </div>
+      </div>
+  </td>
+  <td class="tr"><%=create_days%></td>
+  <td class="tr bg_striped impressions"><%=impressions%></td>
+  <td class="tr bg_striped click"><%=click%></td>
+  <td class="tr bg_striped ctr"><%=ctr%>%</td>
+  <td class="tr bg_striped cost"><%=cost%></td>
+  <td class="tr bg_striped cpc"><%=cpc%></td>
+  <td class="tr bg_striped cpm"><%=cpm%></td>
+  <td class="tr bg_striped avgpos"><%=avgpos%></td>
+  <td class="tr favcount"><%=favcount%></td>
+  <td class="tr favctr"><%=favctr%>%</td>
+  <td class="tr favpay"><%=favpay%></td>
+  <td class="tr paycount"><%=paycount%></td>
+  <td class="tr pay"><%=pay%></td>
+  <td class="tr conv"><%=conv%>%</td>
+  <td class="tr roi">
+    <span class="hide custom"><%if(cost>0&&roi>0){ %><%=roi%><% }%><%if(cost>0&&roi==0){ %>0.001<% }%></span>
+    <span class="keyword_cys">
+        <%if(roi>1){%>
+        <span class="red l">盈</span>
+        <%}%>
+    </span>
+    <span><%=roi%></span>
+  </td>
+  <td class="tr bg_striped g_pv"><%=g_pv%></td>
+  <td class="tr bg_striped g_click"><%=g_click%></td>
+  <td class="tr bg_striped g_ctr"><%=g_ctr%>%</td>
+  <td class="tr bg_striped g_cpc"><%=g_cpc%></td>
+  <td class="tr bg_striped g_competition"><%=g_competition%></td>
+</tr>

@@ -1,0 +1,185 @@
+/***
+Error Pages
+***/
+
+/* 404 page option #1 */
+
+.page-404 {
+  text-align: center;
+    margin-top:100px;
+}
+
+.page-404 .number {
+  display: inline-block;
+  letter-spacing: -10px;
+  margin-top: 0px;
+  line-height: 128px;
+  font-size: 158px;
+  font-weight: 300;
+  color: #7bbbd6;
+  text-align: right;
+}
+
+.page-404 .details {
+  margin-left: 40px;
+  display: inline-block;
+  padding-top: 0px;
+  text-align: left;
+}
+
+/* 500 page option #1 */
+.page-500 {
+  text-align: center;
+  margin-top:100px;
+}
+
+.page-500 .number {  
+  display: inline-block;
+  line-height: 100px;
+  font-size: 120px;
+  font-weight: 700;
+  color: #ec8c8c;
+  text-align: right;
+  margin-top:0px;
+}
+
+.page-500 .details {
+  margin-left: 40px;
+  display: inline-block;
+  text-align: left;
+}
+
+/* 404 page option #2*/
+.page-404-full-page {
+  padding: 20px;
+  background-color: #fafafa !important;
+}
+
+.page-404-full-page .details input {
+  background-color: #ffffff;
+}
+
+.page-404-full-page .page-404 {
+  margin-top: 100px;
+}
+
+/* 500 page option #2*/
+.page-500-full-page {
+  padding: 20px;
+  background-color: #fafafa !important;
+}
+
+.page-500-full-page .details input {
+  background-color: #ffffff;
+}
+
+.page-500-full-page .page-500 {
+  margin-top: 100px;
+}
+
+/* 404 page option #3*/
+
+.page-404-3 {
+  background: #000 !important ;
+} 
+
+.page-404-3 .page-inner img {
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  position: absolute;
+}
+
+.page-404-3 .error-404 {
+  color: #fff;
+  text-align: left;
+  padding: 70px 20px 0;
+}
+
+.page-404-3 h1 {
+  color: #fff;
+  font-size: 130px;
+  line-height: 160px;
+}
+
+.page-404-3 h2 {
+  color: #fff;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.page-404-3 p {
+  color: #fff;
+  font-size: 16px;
+}
+
+
+@media (max-width: 480px) { 
+
+  .page-404 .number,
+  .page-500 .number,
+  .page-404 .details,
+  .page-500 .details {
+    text-align: center;
+    margin-left: 0px;
+  }
+
+  .page-404-full-page .page-404 {
+    margin-top: 30px;
+  }
+
+  .page-404-3 .error-404 {
+    text-align: left;
+    padding-top: 10px;
+  }
+
+  .page-404-3 .page-inner img {
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    position: fixed;
+  }
+
+}
+
+/*自定义*/
+body{font-family: "Microsoft YaHei","微软雅黑",helvetica,arial,verdana,tahoma,sans-serif; font-size:14px;}
+.poa{position:absolute;}
+.marr_12{margin-right:12px;}
+.page-500 .details{text-align:left;line-height:25px;}
+.page-500 .limit{padding-left:60px;}
+
+.qnyd .page-500 .number {
+  line-height:80px;
+  font-size: 80px;
+}
+
+a.btn{text-decoration:none;}
+.btn{border:#ccc 1px solid;padding: 7px 14px;font-size: 14px;color: #333;cursor: pointer; height:33px; background-color:#fff;}
+.btn:focus{outline-color:transparent;}
+.btn.mini{padding:1px 6px;font-size:12px !important;}
+.btn.big{padding:8px 16px;font-size:16px !important;}
+.btn{padding:6px 14px;}
+.btn.blue{background-color: #4d90fe; color:#fff;}
+.btn.red{background-color: #FF0000; color:#fff;}
+.btn.green{background-color: #679B00; color:#fff;}
+.btn.yellow{background-color: #eca22e; color:#fff;}
+
+.qnpc .go_buy,.qnyd .go_buy{display:none !important;}
+
+.qnpc p,qnyd p{display:none;}
+
+.qnyd .btn {
+	background-color: #39f;
+	color: #fff;
+	padding: 4px 8px;
+	border: none;
+	border-radius: 10px;
+	line-height:16px;
+}
+.qnyd .btn.orange {
+	background-color: #fa6001;
+}
+.qnyd .btn.red {
+	background-color: #f33;
+}

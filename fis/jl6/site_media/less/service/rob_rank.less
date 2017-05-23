@@ -1,0 +1,172 @@
+#rob_rank{
+    .modal-title{
+        padding: 10px 10px 0;
+    }
+
+    .item_img{
+        width: 60px;
+        height: 60px;
+    }
+
+    .modal-footer{
+        padding: 10px;
+    }
+
+    .modal-dialog{
+        width: 630px;
+    }
+
+    .modal-body{
+        line-height: 28px;
+    }
+
+    hr{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 0;
+        border-top: 1px dotted @gray-light;
+    }
+
+    .radio-inline{
+        line-height: initial;
+    }
+
+    .form-control{
+        display: inline-block;
+        padding: 0 5px;
+        height: 25px;
+    }
+
+    .slider{
+        width: 200px;
+        display: inline-block;
+        margin-left: 20px;
+        vertical-align: -2px;
+    }
+
+    .radio-inline.ml40{
+        margin-left: 40px;
+    }
+}
+
+#real_time{
+    tr{
+        td:nth-child(1){
+            width: 220px;
+        }
+    }
+    tr{
+        td:nth-child(3){
+            width: 60px;
+        }
+    }
+
+    .main_info{
+        font-size: 14px;
+        font-weight: bold;
+        background-color: #eee;
+        padding: 10px 0;
+        border: 1px solid #ddd;
+
+        width: 100%;
+        td{
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .img{
+            margin-left: 10px;
+            margin-right: 5px;
+            width: 20px;
+            display: inline-block;
+            background-image: url('../../static/images/small_ajax.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 20px;
+        }
+
+        &.success{
+            color:@green;
+            .img{
+                // background-image: url('../../static/images/success.png');
+                background-image:none;
+            }
+        }
+
+        &.fail{
+            color:@red;
+            .img{
+                // background-image: url('../../static/images/fail.png');
+                background-image:none;
+            }
+        }
+    }
+
+    .sub_info{
+        height: 240px;
+
+        ol{
+            li>span:nth-child(1){
+                width: 193px;
+                display: inline-block;
+
+                span.r{
+                    right: 64px;
+                    position: relative;
+                }
+            }
+            li.finish{
+                &>span:nth-child(2){
+                    position: relative;
+                    padding-left: 40px;
+                    &:before{
+                        content: '结果';
+                        background-color: #000;
+                        padding: 2px 5px;
+                        border-radius: 2px;
+                        color: #fff;
+                        position: absolute;
+                        font-size: 12px;
+                        left: 0;
+                        height: 18px;
+                        line-height: 17px;
+                        top: 0px;
+                    }
+                }
+            }
+        }
+    }
+
+    ol{
+        line-height: 25px;
+        padding-left: 25px;
+        margin-top: 10px;
+        li>span{
+            &.msg{
+                margin-left: 55px;
+            }
+            &.price{
+                margin-left: 20px;
+                display: inline-block;
+                width: 80px;
+            }
+        }
+    }
+}
+
+#rob_record {
+    .show_model{
+        position: absolute;
+        right: 40px;
+        top: 10px;
+    }
+    #table_info{
+        height: 340px;
+        overflow-y: auto;
+        img{
+            width:20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    }
+}

@@ -1,0 +1,138 @@
+<div id="chart_report_detail" class="pct100" style="height:200px; width: 1068px;"></div>
+<div style="height:400px;overflow-y:auto;">
+	<table id="table_report_detail" class="table table-bordered icon_hover_show table-hover">
+	    <thead>
+            <tr class="fixed_tr">
+                <th width="w90">日期<a id="show_rpt_subdivide_all" class="r base_color" href="javascript:;"><i class="iconfont mr5">&#xe640;</i>细分</a></th>
+                <th>展现量</th>
+                <th>点击量</th>
+                <th>点击率</th>
+                <th>PPC<i class="iconfont ml2" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="平均点击花费">&#xe61a;</i></th>
+                <th>总花费</th>
+                <th>成交额</th>
+                <th>成交量</th>
+                <th>收藏量</th>
+                <th>ROI<i class="iconfont ml2" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="投资回报率">&#xe61a;</i></th>
+                <th>转化率</th>
+                <th>购物车总数</th>
+                <th>成交量单价&nbsp;<i class="iconfont f14" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="成交量单价 = 成交额/成交量">&#xe61a;</i></th>
+            </tr>
+            <tr class="inner_tr">
+                <th width="w90">日期<a id="show_rpt_subdivide_all" class="r base_color" href="javascript:;"><i class="iconfont mr5">&#xe640;</i>细分</a></th>
+                <th>展现量</th>
+                <th>点击量</th>
+                <th>点击率</th>
+                <th>PPC<i class="iconfont ml2" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="平均点击花费">&#xe61a;</i></th>
+                <th>总花费</th>
+                <th>成交额</th>
+                <th>成交量</th>
+                <th>收藏量</th>
+                <th>ROI<i class="iconfont ml2" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="投资回报率">&#xe61a;</i></th>
+                <th>转化率</th>
+                <th>购物车总数</th>
+                <th>成交量单价&nbsp;<i class="iconfont f14" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="成交量单价 = 成交额/成交量">&#xe61a;</i></th>
+            </tr>
+	    </thead>
+	    <tbody style="height:400px;overflow-y:scroll;">
+	        {{ if rpt_list.length }}
+	        {{each rpt_list}}
+	        <tr>
+	            <td>{{$value.date}}<i class="iconfont show_subdivide r">&#xe60a;</i></td>
+	            <td>{{$value.summed.impr}}</td>
+	            <td>{{$value.summed.click}}</td>
+	            <td>{{$value.summed.ctr}}%</td>
+	            <td>{{$value.summed.cpc}}</td>
+	            <td>{{$value.summed.cost}}</td>
+	            <td>{{$value.summed.pay}}</td>
+	            <td>{{$value.summed.paycount}}</td>
+	            <td>{{$value.summed.favcount}}</td>
+	            <td>{{$value.summed.roi}}</td>
+	            <td>{{$value.summed.conv}}%</td>
+	            <td>{{$value.summed.carttotal}}</td>
+	            <td>{{$value.summed.avg_pay}}</td>
+	        </tr>
+	        <tr class="hover_non_color hidden">
+	            <td class="tr">计算机 - 站内</td>
+	            {{ if $value.pcin }}
+	            <td>{{$value.pcin.impr}}</td>
+	            <td>{{$value.pcin.click}}</td>
+	            <td>{{$value.pcin.ctr}}%</td>
+	            <td>{{$value.pcin.cpc}}</td>
+	            <td>{{$value.pcin.cost}}</td>
+	            <td>{{$value.pcin.pay}}</td>
+	            <td>{{$value.pcin.paycount}}</td>
+	            <td>{{$value.pcin.favcount}}</td>
+	            <td>{{$value.pcin.roi}}</td>
+	            <td>{{$value.pcin.conv}}%</td>
+	            <td>{{$value.pcin.carttotal}}</td>
+	            <td>{{$value.pcin.avg_pay}}</td>
+	            {{ else }}
+	            <td class="tc item_base" colspan="12">暂无数据</td>
+	            {{ /if }}
+	        </tr>
+	        <tr class="hover_non_color hidden">
+	           <td class="tr">计算机 - 站外</td>
+	            {{ if $value.pcout }}
+	            <td>{{$value.pcout.impr}}</td>
+	            <td>{{$value.pcout.click}}</td>
+	            <td>{{$value.pcout.ctr}}%</td>
+	            <td>{{$value.pcout.cpc}}</td>
+	            <td>{{$value.pcout.cost}}</td>
+	            <td>{{$value.pcout.pay}}</td>
+	            <td>{{$value.pcout.paycount}}</td>
+	            <td>{{$value.pcout.favcount}}</td>
+	            <td>{{$value.pcout.roi}}</td>
+	            <td>{{$value.pcout.conv}}%</td>
+	            <td>{{$value.pcout.carttotal}}</td>
+	            <td>{{$value.pcout.avg_pay}}</td>
+	            {{ else }}
+	            <td class="tc item_base" colspan="12">暂无数据</td>
+	            {{ /if }}
+	        </tr>
+	        <tr class="hover_non_color hidden">
+	            <td class="tr">移动 - 站内</td>
+	            {{ if $value.ydin }}
+	            <td>{{$value.ydin.impr}}</td>
+	            <td>{{$value.ydin.click}}</td>
+	            <td>{{$value.ydin.ctr}}%</td>
+	            <td>{{$value.ydin.cpc}}</td>
+	            <td>{{$value.ydin.cost}}</td>
+	            <td>{{$value.ydin.pay}}</td>
+	            <td>{{$value.ydin.paycount}}</td>
+	            <td>{{$value.ydin.favcount}}</td>
+	            <td>{{$value.ydin.roi}}</td>
+	            <td>{{$value.ydin.conv}}%</td>
+	            <td>{{$value.ydin.carttotal}}</td>
+	            <td>{{$value.ydin.avg_pay}}</td>
+	            {{ else }}
+	            <td class="tc item_base" colspan="12">暂无数据</td>
+	            {{ /if }}
+	        </tr>
+	        <tr class="hover_non_color hidden">
+	            <td class="tr">移动 - 站外</td>
+	            {{ if $value.ydout }}
+	            <td>{{$value.ydout.impr}}</td>
+	            <td>{{$value.ydout.click}}</td>
+	            <td>{{$value.ydout.ctr}}%</td>
+	            <td>{{$value.ydout.cpc}}</td>
+	            <td>{{$value.ydout.cost}}</td>
+	            <td>{{$value.ydout.pay}}</td>
+	            <td>{{$value.ydout.paycount}}</td>
+	            <td>{{$value.ydout.favcount}}</td>
+	            <td>{{$value.ydout.roi}}</td>
+	            <td>{{$value.ydout.conv}}%</td>
+	            <td>{{$value.ydout.carttotal}}</td>
+	            <td>{{$value.ydout.avg_pay}}</td>
+	            {{ else }}
+	            <td class="tc item_base" colspan="12">暂无数据</td>
+	            {{ /if }}
+	        </tr>
+	        {{/each}}
+	        {{ else }}
+	        <tr>
+	            <td class="tc item_base" colspan="13">暂无数据</td>
+	        </tr>
+	        {{ /if }}
+	    </tbody>
+	</table>
+</div>

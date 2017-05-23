@@ -1,0 +1,112 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}推广链接{% endblock %}
+{% block content %}
+<style type="text/css" media="screen">
+    label{display: inline;}
+    table{table-layout:auto;}
+    .hovershow{display: none;}
+    .hover .active .hovershow{display: block;}
+    li.rel.active{z-index:2;}
+    .header .hor-menu ul.nav li a,.header .nav > li.dropdown .dropdown-toggle{padding: 9px 18px;}
+    .header .nav > li.dropdown{padding-left: 0;padding-right: 0;}
+
+    .ks-dtp table{width: auto;}
+    .ks-dtp select{padding: 0;height: auto;}
+    .w430{width: 430px;}
+    .footer{display: none;}
+</style>
+
+<div class="mt20 w1200 auto">
+
+    <div class="mt20">
+        <a href="#create" class="btn btn-primary" data-toggle="modal">新建</a>
+    </div>
+
+    <table class="table-bordered mt10">
+        <thead>
+            <tr>
+                <th class="w40">链接ID</th>
+                <th>链接名称</th>
+                <th>说明</th>
+                <th class="w100">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for sale_link in sale_links%}
+            <tr>
+                <td>{{sale_link.id}}</td>
+                <td>{{sale_link.link_name|default:''}}</td>
+                <td>{{sale_link.desc|default:''}}</td>
+                <td class="tc">
+                    <button class="btn btn-mini copy_btn" copy_text="{%url 'redirect_sale_link'%}?sale_link_id={{sale_link.id}}&a_id={{sale_link.link_id}}">复制</button>
+                    <a href="javascript:;" class="delete vb" sale_link_id="{{sale_link.id}}">删除</a>
+                </td>
+            </tr>
+            {%empty%}
+            <tr>
+                <td class="tc" colspan="4">没有数据</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <div id="create" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">新建</h3>
+        </div>
+        <div class="modal-body">
+           <h4>链接名称</h4>
+            <input type="text" class="w500" maxlength="100" id="link_name"/>
+           <h4>参数接口</h4>
+           <textarea id="param_str" class="w500 h50"></textarea>
+           <h4>链接说明</h4>
+           <textarea id="desc" class="w500 h50"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="save_link">保存</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/jl5/plugins/zclip/jquery.zclip.min.js"></script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+$().ready(function(){
+    $('#save_link').on('click',function(){
+        var param_str,desc,link_name;
+        param_str=$('#param_str').val();
+        desc=$('#desc').val();
+        link_name = $('#link_name').val();
+
+        if(link_name.trim()==''||param_str.trim()==''){
+            PT.alert('错误：连接名称和参数接口不能为空!');
+            return false;
+        }
+
+        PT.sendDajax({'function':'ncrm_create_sale_link','link_name':link_name,'param_str':param_str,'desc':desc});
+    });
+
+    $('a.delete').on('click',function(){
+        if(confirm('删除之后，相关链接将不能使用，您确定删除吗?')){
+            var sale_link_id=$(this).attr('sale_link_id');
+            PT.sendDajax({'function':'ncrm_delete_sale_link','sale_link_id':sale_link_id});
+        }
+    });
+
+    $(".copy_btn").each(function(){
+        $(this).zclip({
+            path:'/site_media/jl5/plugins/zclip/ZeroClipboard.swf',
+            copy:function(){return $(this).attr('copy_text')},
+            afterCopy:function(){PT.light_msg('复制成功','请将链接粘贴到需要的位置');}
+        });
+    });
+});
+</script>
+{% endblock %}

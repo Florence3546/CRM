@@ -1,0 +1,271 @@
+#main_bar{
+    z-index: 10000;
+}
+
+.top_bar{
+    overflow: hidden;
+    line-height: 2.2rem;
+    padding:0 .5rem;
+    background-color: @white;
+    border-bottom: 1px solid #ddd;
+}
+
+.content{
+    bottom: 2.5rem;
+}
+
+.select_days{
+    position: relative;
+    float: right;
+    display: inline-block;
+    color: @base-color;
+
+    select{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        opacity: 0;
+    }
+
+    .button{
+        display: inline-block;
+    }
+}
+
+//自定义box
+#customer_box{
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    // background-color: @white;
+}
+
+
+.flag{
+    position: relative;
+    height: 1rem;
+    line-height: 1rem;
+    margin-left: -.5rem;
+    padding: 0 .5rem;
+    padding-right: 1rem;
+    color: @white;
+    background-color: @gray-dark;
+
+    &:after{
+        position: absolute;
+        content: '';
+        border-width: .5rem;
+        border-color: transparent #FFF transparent transparent;
+        border-style: solid;
+        right: 0;
+    }
+
+    &.base{
+        background-color: @base-color;
+    }
+
+    &.yellow{
+        background-color: @yellow;
+    }
+
+    &.red{
+        background-color: @red;
+    }
+
+    &.green{
+        background-color: @green;
+    }
+
+    &.violet{
+        background-color: @violet;
+    }
+}
+
+.base_color{
+    color:@base-color;
+}
+
+.base_gray{
+    color:@gray;
+}
+
+
+header.top-nav{
+    line-height: 2.2rem;
+    .shop_img_box{
+        img{
+            height: 1.8rem;
+            width: 1.8rem;
+        }
+        border-radius: 1.8rem;
+        overflow: hidden;
+        width: 1.8rem;
+        height: 1.8rem;
+        display: inline-block;
+        border:.1rem @white solid;
+        margin-top: -.3rem;
+        vertical-align: middle;
+    }
+
+    .shop_name{
+        font-size:1rem;
+        margin-left: .2rem;
+    }
+
+    // color: @white;
+    // background-color: @base-color;
+    padding:0 .5rem;
+    &:after{
+        display: none;
+    }
+}
+
+
+.button-fill.button-light{
+    color: @gray-base;
+    background-color: #ddd;
+
+    &:active{
+        color:@white;
+    }
+}
+
+input[type="text"],input[type="number"]{
+    height: 1.5rem;
+    border: 1px solid @gray-light;
+    text-align: right;
+    padding: .2rem .4rem;
+}
+
+input[type="radio"]{
+    position: relative;
+    visibility: hidden;
+    &:after{
+        .icon;
+        font-size: .8rem;
+        visibility: visible;
+        // color:@base-color;
+        content: '\e605';
+        margin-left: -.1rem;
+        margin-top: -.1rem;
+        top: 0;
+        position: absolute;
+
+    }
+    &[disabled]{
+        opacity: .4;
+    }
+    &:checked:after{
+        content: '\e603';
+        margin-top: -.12rem;
+        color: @base-color;
+    }
+}
+
+.dib{
+    display: inline-block;
+}
+
+table{
+    width: 100%;
+    text-align: center;
+
+    th:first-child,td:first-child{
+        text-align: left;
+    }
+
+    th{
+        font-size: .7rem;
+    }
+
+    td{
+        font-size: .6rem;
+    }
+}
+
+.list{
+    #customer_box;
+    border-bottom: none;
+    // border-top-color: @white;
+
+    ul{
+        padding: 0;
+        margin: 0;
+    }
+
+    li{
+        padding: .5rem;
+        list-style: none;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 5px;
+        background-color: white;
+    }
+}
+
+.no-data{
+    text-align: center;
+}
+
+.min-picker{
+    .picker-items{
+        font-size: .75rem;
+    }
+}
+
+tr{
+    &.bg_ok{
+        color: green;
+    }
+
+    &.bg_fail{
+        color: red;
+    }
+}
+
+.sub-text{
+    color: @gray !important;
+}
+
+.primary-text{
+    color: @base-color !important;
+}
+
+.text-overflow{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 99%;
+    display: inline-block;
+}
+
+.mt10{
+    margin-top: 10px;
+}
+
+.mb10{
+    margin-bottom: 10px;
+}
+
+textarea{
+    border-color: #ddd;
+}
+
+.list-sub{
+    padding-left:0.75rem;
+    font-size: 0.65rem;
+    color: @gray;
+    padding-bottom: .5rem;    
+}
+.f12{
+    font-size: .65rem !important;
+}
+.tr{
+    text-align: right;
+}
+.tc{
+    text-align: center;
+}
+.tl{
+    text-align: left;
+}

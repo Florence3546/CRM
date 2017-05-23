@@ -1,0 +1,61 @@
+{{if keywordList.length}}
+    {{each keywordList}}
+    <tr id="{{$value.keyword_id}}" data-adgroup_id="{{$value.adgroup_id}}" data-campaign_id="{{$value.campaign_id}}" data-match="{{$value.match_scope}}" data-mobile_match="{{$value.mobile_is_default_price}}" >
+        <td style="padding:2px; width:60px;" class="img_box">
+            <img  height="60" width="60" src="{{$value.pic_url}}_60x60.jpg_.webp" data-title="{{$value.title}}" data-camp-title="{{$value.camp_title}}" data-price="{{$value.price}}" data-pic-url="{{$value.pic_url}}"></a>
+        </td>
+        <td class="tl">
+            <span class="word">{{$value.word}}</span>
+            {{if $value.qscore_dict.wireless_matchflag == "2" || $value.qscore_dict.wireless_matchflag == "4"}}
+                <span class="iconfont show_tooltip" data-placement="right" data-trigger="hover" data-title="移动首屏展示机会:有机会在手机淘宝网和淘宝客户端搜索结果中屏展示">&#xe605;</span>
+            {{/if}}
+            {{if $value.qscore_dict.pc_left_flag}}
+            <span class="iconfont show_tooltip" data-placement="right" data-trigger="hover" data-title="淘宝豆腐块展示机会:有机会在淘宝搜索关键词结果页左侧展示">&#xe606;</span>
+            {{/if}}
+        </td>
+        <td class="max_price">{{$value.max_price}}</td>
+        <td class="sort_custom">
+            <span class="hide sort_price sort_max_price">{{$value.max_price}}</span>
+            <form class="sui-form rank-form">
+                <input type="text" data-old="{{ $value.max_price }}" placeholder="{{$value.max_price}}" maxlength="5" value="{{$value.max_price}}" class="input-mini new_price edit_price">
+                <i class="iconfont undo">&#xe608;</i>
+            </form>
+        </td>
+        <td class="max_mobile_price">{{$value.max_mobile_price}}</td>
+        <td class="sort_custom">
+            <span class="hide sort_price sort_max_mobile_price">{{$value.max_mobile_price}}</span>
+            <form class="sui-form rank-form">
+                <input type="text" data-old="{{ $value.max_mobile_price }}" placeholder="{{$value.max_mobile_price}}" maxlength="5" value="{{$value.max_mobile_price}}" class="input-mini new_mobile_price edit_price">
+                <i class="iconfont undo">&#xe608;</i>
+            </form>
+        </td>
+        <td class="rob_rank">
+            {{if $value.is_locked}}
+                <a href="javascript:;" class="rob_record">已设为自动</a>&emsp;<a href="javascript:;" class="rob_set ml5">设置</a>
+            {{else}}
+                <a class="rob_set" href="javascript:;">抢</a>
+            {{/if}}
+        </td>
+        <td colspan="2" class="pc_rank">
+            <a class="rank" href="javascript:;">查</a>
+        </td>
+        <td style="display: none" class="mobile_rank"></td>
+        <td class="pc_qs">
+            <span class="pc_qs">{{$value.qscore_dict.qscore}}</span>
+        </td>
+        <td class="mobile_qs sort_custom qscore" pc_qscore="{{$value.qscore_dict.qscore}}" pc_creative_score="{{$value.qscore_dict.creativescore}}" pc_rele_score="{{$value.qscore_dict.kwscore}}" pc_cvr_score="{{$value.qscore_dict.cvrscore}}" yd_qscore="{{$value.qscore_dict.wireless_qscore}}" yd_creative_score="{{$value.qscore_dict.wireless_creativescore}}" yd_rele_score="{{$value.qscore_dict.wireless_relescore}}" yd_cvr_score="{{$value.qscore_dict.wireless_cvrscore}}" matchflag="{{$value.qscore_dict.wireless_matchflag}}" plflag="{{$value.qscore_dict.pc_left_flag}}">
+            {{if $value.qscore_dict.wireless_qscore >-1 }}
+                <span class="hide">{{$value.qscore_dict.wireless_qscore}}</span>
+                {{$value.qscore_dict.wireless_qscore}}
+            {{ else }}<span class="hide">0</span>--{{/if}}
+        </td>
+        <td class="striped">{{$value.impr}}</td>
+        <td class="striped">{{$value.click}}</td>
+        <td class="striped">{{$value.ctr}}%</td>
+        <td class="striped">{{$value.cost}}</td>
+        <td class="striped">{{$value.cpc}}</td>
+        <td>{{$value.conv}}%</td>
+        <td {{if $value.roi>1}}class="red"{{/if}}>{{$value.roi}}</td>
+    </tr>
+    {{/each}}
+{{/if}}

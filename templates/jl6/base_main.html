@@ -1,0 +1,12 @@
+{#utf-8#}
+{% extends "base_jl6.html" %}
+
+{% block base_jl5 %}
+   {% if request.session.visitor_from == 'qnpc'%}
+        {% include "base_qnpc_main.html" %}
+   {% else %}
+        {% include "base_jl6_main.html" %}
+   {% endif %}
+   {% block content %}{%endblock%}
+{% endblock %}
+

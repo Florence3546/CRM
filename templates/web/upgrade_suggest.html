@@ -1,0 +1,871 @@
+{#utf-8#}{% extends "base_jl5.html" %}
+{% load rates %}
+{% block title%}
+    {%if request.GET.referer == 'upgrade' %}
+        续订&升级
+    {%endif%}
+    {%if request.GET.referer == 'qn_upgrade' %}
+        续订&升级
+    {%endif%}
+    {%if request.GET.referer == 'point' %}
+        积分兑换
+    {%endif%}
+{%endblock%}
+
+
+{% block extra_style %}
+<link href="/site_media/jl/css/fuck_ie/upgrade_suggest.css?v={{VERSION}}.css" rel="stylesheet" type="text/css"/>
+<style>
+    .dg_box{
+        position: relative;
+    }
+    .dg_box li:hover .cycle{
+        color: #222;
+    }
+    .dg_box .ul_line{
+        transition: all .2s;
+        -moz-transition: all .2s;
+        -webkit-transition: all .2s;
+        -o-transition: all .2s;
+    }
+    .dg_box .ovh{
+        width: 340px;
+        margin: 0 auto;
+    }
+    .dg_box:after{
+        clear: both;
+        content:'';
+    }
+    .dg_box ul{
+    width: 680px;
+    }
+    .dg_box li{
+        width: 25%;
+        border:1px solid #ccc;
+        float: left;
+        border: none;
+    }
+    .dg_box li .main_box{
+        padding: 10px 0;
+        border:1px solid #ddd;
+        margin: 5px;
+        line-height: 24px;
+    }
+    .dg_box>a{
+        position:absolute;
+        top: 50%;
+        margin-top: -12px;
+    }
+    .dg_box>a i{
+        color: #ccc;
+    }
+    .dg_box>a.active i,.dg_box>a:hover i{
+        color: #999;
+    }
+    .dg_box .prev,.dg_box .next{
+        display: none;
+    }
+    .dg_box:hover .prev,.dg_box:hover .next{
+        display: block;
+    }
+    .dg_box .prev{
+        left: -3px;
+    }
+    .dg_box .next{
+        right: -3px;
+    }
+    @keyframes float_img
+    {
+        0%   {top: 0;}
+        50%  {top: -10px;}
+        100% {top: 0;}
+    }
+
+    @-moz-keyframes float_img /* Firefox */
+    {
+        0%   {top: 0;}
+        50%  {top: -10px;}
+        100% {top: 0;}
+    }
+
+    @-webkit-keyframes float_img /* Safari 和 Chrome */
+    {
+        0%   {top: 0;}
+        50%  {top: -10px;}
+        100% {top: 0;}
+    }
+
+    @-o-keyframes float_img /* Opera */
+    {
+        0%   {top: 0;}
+        50%  {top: -10px;}
+        100% {top: 0;}
+    }
+    table td:hover .float_img{
+        position: relative;
+        animation: float_img 2s ease-out infinite;
+        -moz-animation: float_img 2s ease-out infinite; /* Firefox */
+        -webkit-animation: float_img 2s ease-out infinite;  /* Safari 和 Chrome */
+        -o-animation: float_img 2s ease-out infinite;
+    }
+</style>
+{% endblock %}
+
+{% block base_jl5 %}
+<div id="header" class="navbar-static-top container-fluid">
+    <a href="{%url 'web_home'%}"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+</div>
+
+<div class="container-fluid auto mt20">
+    <div class="row-fluid">
+
+{%if upgrade_dict%}
+    {%if request.GET.referer == 'upgrade' %}
+        <!-- web端升级 -->
+
+        {% if request.GET.type == 'alone' %}
+        <div class="red pb10 f16">
+        <i class="iconfont mr5">&#xe659;</i>
+            对不起，您当前的版本不支持该功能，请升级到以下版本!
+        </div>
+        {%endif%}
+
+        <table class="table-bordered">
+            <tbody>
+                <tr>
+                    <td class="pct25 p0 vt">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">双引擎版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_shuangyinqing.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w120 lh24 pl30 auto">
+                                <li style="list-style-type:disc;">自动托管2计划</li>
+                                <li style="list-style-type:disc;">长尾托管500款</li>
+                                <li style="list-style-type:disc;">重点托管10款</li>
+                            </ul>
+                            <div class="mt20 dg_box">
+                                <div class="ovh">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258118.12.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258118.12.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258118.12.href}}&upgrade_id={{upgrade_dict.ts258118.12.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%else%}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">半年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258118.6.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258118.6.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258118.6.href}}&upgrade_id={{upgrade_dict.ts258118.6.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%else%}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258118.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258118.3.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258118.3.href}}&upgrade_id={{upgrade_dict.ts258118.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%else%}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe615;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe616;</i></a>
+                            </div>
+                        </div>
+                    </td>
+                     <td class="pct25 p0 vt">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">四引擎版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_siyinqing.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w130 lh24 pl40 auto">
+                                <li style="list-style-type:disc;">自动托管4计划</li>
+                                <li style="list-style-type:disc;">长尾托管1000款</li>
+                                <li style="list-style-type:disc;">重点托管20款</li>
+                            </ul>
+                            <div class="mt20 dg_box">
+                                <div class="ovh">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258111.12.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258111.12.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258111.12.href}}&upgrade_id={{upgrade_dict.ts258111.12.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258111.12.href}}&upgrade_id={{upgrade_dict.ts258111.12.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' or request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">半年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258111.6.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258111.6.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258111.6.href}}&upgrade_id={{upgrade_dict.ts258111.6.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258111.6.href}}&upgrade_id={{upgrade_dict.ts258111.6.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' or request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258111.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258111.3.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258111.3.href}}&upgrade_id={{upgrade_dict.ts258111.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258111.3.href}}&upgrade_id={{upgrade_dict.ts258111.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' or request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe615;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe616;</i></a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="pct25 p0 vt">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">类目专家版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_leimuzhuanjia.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w120 lh24 pl30 auto">
+                                <li style="list-style-type:disc;">软件24小时监控</li>
+                                <li style="list-style-type:disc;">人工手动微调</li>
+                                <li style="list-style-type:disc;">个性化设置托管</li>
+                            </ul>
+                            <div class="mt20 dg_box">
+                                <div class="ovh">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一月</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.1.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.1.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.1.href}}&upgrade_id={{upgrade_dict.ts258116.1.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.1.href}}&upgrade_id={{upgrade_dict.ts258116.1.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.3.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.3.href}}&upgrade_id={{upgrade_dict.ts258116.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.3.href}}&upgrade_id={{upgrade_dict.ts258116.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">半年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.6.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.6.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.6.href}}&upgrade_id={{upgrade_dict.ts258116.6.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.6.href}}&upgrade_id={{upgrade_dict.ts258116.6.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.12.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.12.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.12.href}}&upgrade_id={{upgrade_dict.ts258116.12.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts258116.12.href}}&upgrade_id={{upgrade_dict.ts258116.12.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe615;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe616;</i></a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="pct15 vt p0">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">VIP专家版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_vipzhuanjia.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w120 lh24 pl30 auto">
+                                <li style="list-style-type:disc;">专家车手全程交流</li>
+                                <li style="list-style-type:disc;">手动操作5款宝贝</li>
+                                <li style="list-style-type:disc;">效果提升更有保障</li>
+                            </ul>
+                            <div class="dg_box mt20">
+                                <div class="ovh" style="width:170px;">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts25811v9.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts25811v9.3.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts25811v9.3.href}}&upgrade_id={{upgrade_dict.ts25811v9.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%else%}
+                                                        <a href="{%url 'point_record_renewal'%}?redirect={{upgrade_dict.ts25811v9.3.href}}&upgrade_id={{upgrade_dict.ts25811v9.3.id}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- web端升级 -->
+    {%endif%}
+
+    {%if request.GET.referer == 'qn_upgrade' %}
+        <!-- qn端升级 -->
+<div class="w1000 auto">
+    <div class=" w1000 h41 bbc mt20">
+        <h4 class="bdd bg_white p10 w80 mt-10 m0 nbb">
+        四引擎版
+        <span class="label label-important abs mt-15">强力</span>
+        </h4>
+    </div>
+    <ul class="mt5 ml1 h300">
+
+        <li fix-ie="hover" class="active  bdd bg_white pl20 w200 pb20 l rel hover">
+            <div>
+                <h3>一年<i class="iconfont f48 red r mr20 n"></i></h3>
+            </div>
+            <div class="">
+                <div class="hover-r-w ml-20 h80">
+                    <span class="b ml20 f64 pt20 lh80">1.7</span>
+                    <span class=" f24">元/天</span>
+                </div>
+                <div class="f12 h30 lh30 ml-20 pb10 hover-r-w">
+                    <span class="ml2 tdlt ml20"> 优惠价：{{upgrade_dict.FW_GOODS1921400v3.12.original_cost}}元 </span>
+                    <span class=" ml5"> 现价：{{upgrade_dict.FW_GOODS1921400v3.12.current_price}}元 </span>
+                </div>
+                <div>
+                    <a class="btn btn-large btn-danger mt10 ml28" href="{{upgrade_dict.FW_GOODS1921400v3.12.href}}" index="13" target="_blank"><i class="iconfont f24"></i>立即升级</a>
+                </div>
+                <div class="f20 mt10">
+                    30%卖家已经升级
+                </div>
+            </div>
+        </li>
+        <li fix-ie="hover" class="ml37 bdd bg_white pl20 w200 pb20 l rel">
+            <div>
+                <h3>半年</h3>
+            </div>
+            <div class="">
+                <div class="hover-r-w ml-20 h80">
+                    <span class="b ml20 f64 pt20 lh80">1.7</span>
+                    <span class=" f24">元/天</span>
+                </div>
+                <div class="f12 h30 lh30 ml-20 pb10 hover-r-w">
+                    <span class="ml2 tdlt ml20"> 优惠价：{{upgrade_dict.FW_GOODS1921400v3.6.original_cost}}元 </span>
+                    <span class=" ml5"> 现价：{{upgrade_dict.FW_GOODS1921400v3.6.current_price}}元 </span>
+                </div>
+                <div>
+                    <a class="btn btn-large btn-danger mt10 ml28" href="{{upgrade_dict.FW_GOODS1921400v3.6.href}}" index="14" target="_blank"><i class="iconfont f24"></i>立即升级</a>
+                </div>
+                <div class="f20 mt10">
+                    57%卖家已经升级
+                </div>
+            </div>
+
+        </li>
+        <li fix-ie="hover" class="ml37 bdd bg_white pl20 w200 pb20 l rel">
+            <div>
+                <h3>一季度</h3>
+            </div>
+            <div class="">
+                <div class="hover-r-w ml-20 h80">
+                    <span class="b ml20 f64 pt20 lh80">1.7</span>
+                    <span class=" f24">元/天</span>
+                </div>
+                <div class="f12 h30 lh30 ml-20 pb10 hover-r-w">
+                    <span class="ml2 tdlt ml20"> 优惠价：{{upgrade_dict.FW_GOODS1921400v3.3.original_cost}}元 </span>
+                    <span class=" ml5"> 现价：{{upgrade_dict.FW_GOODS1921400v3.3.current_price}}元 </span>
+                </div>
+                <div>
+                    <a class="btn btn-large btn-danger mt10 ml28" href="{{upgrade_dict.FW_GOODS1921400v3.3.href}}" index="14" target="_blank"><i class="iconfont f24"></i>立即升级</a>
+                </div>
+                <div class="f20 mt10">
+                    12%卖家已经升级
+                </div>
+            </div>
+        </li>
+        <li fix-ie="hover" class="ml37 bdd bg_white pl20 w200 pb20 l rel">
+            <div>
+                <h3>一个月</h3>
+            </div>
+            <div class="">
+                <div class="hover-r-w ml-20 h80">
+                    <span class="b ml20 f64 pt20 lh80">1.7</span>
+                    <span class=" f24">元/天</span>
+                </div>
+                <div class="f12 h30 lh30 ml-20 pb10 hover-r-w">
+                    <span class="ml2 tdlt ml20"> 优惠价：{{upgrade_dict.FW_GOODS1921400v3.1.original_cost}}元 </span>
+                    <span class=" ml5"> 现价：{{upgrade_dict.FW_GOODS1921400v3.1.current_price}}元 </span>
+                </div>
+                <div>
+                    <a class="btn btn-large btn-danger mt10 ml28" href="{{upgrade_dict.FW_GOODS1921400v3.1.href}}" index="14" target="_blank"><i class="iconfont f24"></i>立即升级</a>
+                </div>
+                <div class="f20 mt10">
+                    1%卖家已经升级
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+        <!-- qn端升级 -->
+    {%endif%}
+
+    {%if request.GET.referer == 'point' %}
+        <!-- 积分活动 -->
+        <table class="table-bordered">
+            <tbody>
+                <tr>
+                    <td class="pct25 p0 vt">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">双引擎版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_shuangyinqing.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w120 lh24 pl30 auto">
+                                <li style="list-style-type:disc;">自动托管2计划</li>
+                                <li style="list-style-type:disc;">长尾托管500款</li>
+                                <li style="list-style-type:disc;">重点托管10款</li>
+                            </ul>
+                            <div class="mt20 dg_box">
+                                <div class="ovh">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258118.12.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258118.12.original_price}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="javascript:;" data-id="{{upgrade_dict.ts258118.12.id}}" class="btn btn-primary point_convert mt10 dib" target="_blank">立即兑换</a>
+                                                    {%else%}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">半年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258118.6.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258118.6.original_price}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="javascript:;" data-id="{{upgrade_dict.ts258118.6.id}}" class="btn btn-primary point_convert mt10 dib" target="_blank">立即兑换</a>
+                                                    {%else%}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258118.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258118.3.original_price}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="javascript:;" data-id="{{upgrade_dict.ts258118.3.id}}" class="btn btn-primary point_convert mt10 dib" target="_blank">立即兑换</a>
+                                                    {%else%}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe615;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe616;</i></a>
+                            </div>
+                        </div>
+                    </td>
+                     <td class="pct25 p0 vt">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">四引擎版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_siyinqing.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w130 lh24 pl40 auto">
+                                <li style="list-style-type:disc;">自动托管4计划</li>
+                                <li style="list-style-type:disc;">长尾托管1000款</li>
+                                <li style="list-style-type:disc;">重点托管20款</li>
+                            </ul>
+                            <div class="mt20 dg_box">
+                                <div class="ovh">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258111.12.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258111.12.original_price}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-1' or request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="javascript:;" data-id="{{upgrade_dict.ts258111.12.id}}" class="btn btn-primary point_convert mt10 dib" target="_blank">立即兑换</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' or request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">半年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258111.6.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258111.6.original_price}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-1' or request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="javascript:;" data-id="{{upgrade_dict.ts258111.6.id}}" class="btn btn-primary point_convert mt10 dib" target="_blank">立即兑换</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' or request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258111.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258111.3.original_price}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-1' or request.GET.item_code == 'ts-25811-8' %}
+                                                        <a href="javascript:;" data-id="{{upgrade_dict.ts258111.3.id}}" class="btn btn-primary point_convert mt10 dib" target="_blank">立即兑换</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' or request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe615;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe616;</i></a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="pct25 p0 vt">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">类目专家版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_leimuzhuanjia.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w120 lh24 pl30 auto">
+                                <li style="list-style-type:disc;">软件24小时监控</li>
+                                <li style="list-style-type:disc;">人工手动微调</li>
+                                <li style="list-style-type:disc;">个性化设置托管</li>
+                            </ul>
+                            <div class="mt20 dg_box">
+                                <div class="ovh">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一月</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.1.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.1.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{{upgrade_dict.ts258116.1.href}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{{upgrade_dict.ts258116.1.href}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.3.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{{upgrade_dict.ts258116.3.href}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{{upgrade_dict.ts258116.3.href}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">半年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.6.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.6.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{{upgrade_dict.ts258116.6.href}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{{upgrade_dict.ts258116.6.href}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一年</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts258116.12.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts258116.12.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-6' %}
+                                                        <a href="{{upgrade_dict.ts258116.12.href}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-8' or request.GET.item_code == 'ts-25811-1' %}
+                                                        <a href="{{upgrade_dict.ts258116.12.href}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="javascript:;" class="btn disabled mt10 dib" target="_blank">不支持</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a class="prev" href="javascript:;"><i class="iconfont f24">&#xe615;</i></a>
+                                <a class="next active" href="javascript:;"><i class="iconfont f24">&#xe616;</i></a>
+                            </div>
+                            <div class="gray mt10 tc">
+                                类目专家版暂不支持积分兑换
+                            </div>
+                        </div>
+                    </td>
+                    <td class="pct15 vt p0">
+                        <div class="mb40 f14">
+                            <div class="tc">
+                                <h4 class="mt30">VIP专家版</h4>
+                                <img class="mt20 float_img" src="/site_media/jl5/images/vip_vipzhuanjia.gif" width="150" height="150">
+                            </div>
+                            <ul class="mt20 w120 lh24 pl30 auto">
+                                <li style="list-style-type:disc;">专家车手全程交流</li>
+                                <li style="list-style-type:disc;">手动操作5款宝贝</li>
+                                <li style="list-style-type:disc;">效果提升更有保障</li>
+                            </ul>
+                            <div class="dg_box mt20">
+                                <div class="ovh" style="width:170px;">
+                                    <ul class="ul_line">
+                                        <li>
+                                            <div class="main_box">
+                                                <div class="tc gray">
+                                                    <div class="f20 cycle tc mb10">一季度</div>
+                                                    <div class="f20">现价&nbsp;{{upgrade_dict.ts25811v9.3.current_price}}&nbsp;元</div>
+                                                    <div class="tdlt">优惠价&nbsp;{{upgrade_dict.ts25811v9.3.original_cost}}&nbsp;元</div>
+
+                                                    {%if request.GET.item_code == 'ts-25811-v9' %}
+                                                        <a href="{{upgrade_dict.ts25811v9.3.href}}" class="btn btn-primary mt10 dib" target="_blank">立即续订</a>
+                                                    {%else%}
+                                                        <a href="{{upgrade_dict.ts25811v9.3.href}}" class="btn btn-primary mt10 dib" target="_blank">立即升级</a>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="gray mt10 tc">
+                                VIP专家版暂不支持积分兑换
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- 积分活动 -->
+    {%endif%}
+{%else%}
+<!-- 未找到对应订购项目 -->
+<div class="w1000 auto">
+    <div class=" w800 h300 mb40 auto mt100 bg_white bbd">
+        <div class="fix mt20"> <i class="iconfont f150 mt50 l ml30"></i>
+            <div class=" w500 h24  l ml15 mt40">
+                <p class=" f36 b  mt20">亲!没有可用的兑换链接</p>
+                <h5 class="red f20">请检查链接参数是否正确</h5>
+                <div class="mt5 lh24">
+                    <span class="vn">很抱歉您看到这个页面，如果有什么问题，请联系顾问</span>
+                    <a class="ml10" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技">
+                        <img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                    <a href="/web/web_home/" class="btn btn-small ml10">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 未找到对应订购项目 -->
+{%endif%}
+
+    </div>
+</div>
+
+{%endblock%}
+
+{% block custom_js %}
+<script>
+    $().ready(function(){
+        PT.Base.init();
+        PT.UpfradeSuggest.init();
+
+
+        $('.dg_box .next').on('click',function(){
+            $(this).parent().find('.ul_line').css('marginLeft','-100%');
+            $(this).removeClass('active');
+            $(this).prev().addClass('active');
+        });
+
+        $('.dg_box .prev').on('click',function(){
+            $(this).parent().find('.ul_line').css('marginLeft','0');
+            $(this).removeClass('active');
+            $(this).next().addClass('active');
+        })
+    });
+</script>
+{% endblock %}

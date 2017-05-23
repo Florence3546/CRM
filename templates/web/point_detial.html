@@ -1,0 +1,403 @@
+{% extends "base_jl5.html" %}
+{% block title%}积分明细{% endblock %}
+{% block extra_style %}
+
+{% endblock %}
+
+{%block base_jl5%}
+<div id="header" class="navbar-static-top container-fluid">
+    <a href="{%url 'web_home'%}">
+        <img class="db l" src="/site_media/jl5/images/logo.png"></a>
+    <ul class="ul_line ar mr10">
+        <li>
+            <a id="open_msg" href="{%url 'web_home'%}"> <i class="iconfont f18 mr3">&#xe606;</i>
+                返回首页
+            </a>
+        </li>
+        <li>
+            <div class="dropdown rel">
+                <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;"> <i class="iconfont f18 mr5">&#xe640;</i>
+                    {{request.user.nick}}
+                    <i class="iconfont">&#xe626;</i>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li>
+                        <a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'top_logout'%}">退出系统</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="container-fluid mt20">
+
+    <div class="w1100 auto">
+        <div class="row-fluid">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="{%url 'web_home'%}">首页</a>
+                    <span class="divider">/</span>
+                </li>
+                <li>
+                    <a href="{%url 'vip_home'%}">会员中心</a>
+                    <span class="divider">/</span>
+                </li>
+                <li class="active">
+                    {%if request.GET.type == 'jfjl'%}积分明细{%endif%}
+                    {%if request.GET.type == 'jfgl'%}积分攻略{%endif%}
+                </li>
+            </ul>
+
+            <ul class="nav nav-tabs ">
+                <li {%if request.GET.type == 'jfjl'%}class="active"{%endif%}>
+                    <a href="#jfgl" data-toggle="tab">积分明细</a>
+                </li>
+                <li {%if request.GET.type == 'jfgl'%}class="active"{%endif%}>
+                    <a href="#jfmx" data-toggle="tab">积分攻略</a>
+                </li>
+            </ul>
+            <div class="tab-content bg_white">
+                <div class="tab-pane fade {%if request.GET.type == 'jfjl'%}active in{%endif%} pt20 " id="jfgl">
+                    <table class="table-bordered bbd table-no-warp-border">
+                        <thead>
+                            <tr>
+                                <th class="tl pl20">描述</th>
+                                <th class="pct20">积分变化</th>
+                                <th class="pct20">时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for d in data.detial_list%}
+                            <tr>
+                                <td class="pl20">
+                                    {{d.desc}}
+                                    {% if d.type == 'gift' %}
+                                        {% if d.logistics_name %}物流公司：{{d.logistics_name}}{%endif%}
+                                        {% if d.logistics_id %}运单号：{{d.logistics_id}}{%endif%}
+                                        {%if d.logistics_state%}
+                                            【已发货】
+                                        {%else%}
+                                            【未发货】
+                                        {%endif%}
+                                    {%endif%}
+
+                                    {% if d.type == 'virtual' %}
+                                        {%if d.exchange_status%}
+                                            【已兑换】
+                                        {%else%}
+                                            【未兑换】
+                                        {%endif%}
+                                    {%endif%}
+                                </td>
+                                <td class="tc">
+                                     <span class="{%if d.point > 0 %}orange{%else%}green{%endif%}">
+                                        {%if d.point > 0 %}+{%endif%}{{d.point}}
+                                    </span>
+                                </td>
+                                <td class="tc">{{d.create_time}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                    <div class="row mt20 mb20 pagination ">
+                        <nav class="pl20 pr20">
+                          <span>共{{data.page_info.record_count}}条信息，{{data.page_info.page_count}}页</span>
+                          {%if data.page_info.record_count %}
+                          <ul class="pagination pull-right mt0 mb0">
+                            <li>
+                              <a href="./?type=jfjl&page=1" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+                                {%for p in data.page_info.page_xrange%}
+                                <li {%if p == data.page_info.page%}class="active"{%endif%}>
+                                    <a href="./?type=jfjl&page={{p}}">{{p}}</a>
+                                </li>
+                                {%endfor%}
+                            <li>
+                              <a href="./?type=jfjl&page={{data.page_info.page_count}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                          </ul>
+                          {%endif%}
+                        </nav>
+                    </div>
+                </div>
+                <div class="tab-pane fade pt20 {%if request.GET.type == 'jfgl'%}active in{%endif%}" id="jfmx">
+                    <table class="table-bordered table-no-warp-border bbd">
+                        <thead>
+                            <tr>
+                                <th class="pct20">积分攻略</th>
+                                <th class="tl pl20 pct40 ">说明</th>
+                                <th class="nbl"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tc">验证会员</td>
+                                <td class="pl20">
+                                    手机验证后可获得<b>500</b>积分哦！
+                                </td>
+                                <td class="nbl">
+                                    {%if is_need_phone%}
+                                        <a href="javascript:;" id="verify_phone">[立即验证]</a>
+                                    {%else%}
+                                        <a href="javascript:;" id="verify_phone">[修改]</a>
+                                    {%endif%}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tc">续订有礼</td>
+                                <td class="pl20">升级/续签不仅享有优惠，还能获得<b>2500</b>积分。
+                                </td>
+                                <td class="nbl">
+                                    <a href="/web/upgrade_suggest/?referer=upgrade&item_code={{request.session.item_code}}" target="_blank">[马上续签]</a>
+                                    <i class="iconfont ml10 gray poi tips ml3" title="" data-original-title="月/季度：1000分，半年/一年：2500分">&#xe647;</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tc">推荐有礼</td>
+                                <td class="pl20">推荐好友订购最高可获得<b>5000</b>积分，哇！
+                                </td>
+                                <td class="nbl">
+                                    <a href="{%url 'invite_friend'%}" target="_blank">[马上推荐]</a>
+                                    <i class="iconfont ml10 gray poi tips ml3" title="" data-original-title="月/季度：2000分，半年/一年：5000分">&#xe647;</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tc">好评有礼</td>
+                                <td class="pl20">觉得好就说出来吧！每月来一次<b>500</b>分！<span class="red hide">当前活动双倍，共1000分！</span>
+
+                                </td>
+                                <td class="nbl">
+                                    <a href="{%url 'point_praise'%}" target="_blank">[马上好评]</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tc">完善资料</td>
+                                <td class="pl20">
+                                    完善您的收货地址信息，送<b>200</b>分！
+                                </td>
+                                <td class="nbl">
+                                    {%if not data.is_perfect_info%}
+                                    <a href="javascrit:;" id="perfect_info_link">[立即完善]</a>
+                                    {%else%}
+                                    <a href="javascrit:;" id="perfect_info_link">[修改]</a>
+                                    {%endif%}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tc">每日签到</td>
+                                <td class="pl20">首次签到<b>20</b>分，连续签到<b>40</b>分，签到不要停！
+                                </td>
+                                <td class="nbl">
+                                    {%if not data.is_sign_today%}
+                                        <a href="javascript:;" id="sign_point">[马上签到]</a>
+                                    {%else%}
+                                        已签到
+                                    {%endif%}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tc">每日登陆</td>
+                                <td class="pl20">每日登陆就可以获得<b>20</b>分，系统自动给的哦\(^ω^)</td>
+                                <td class="nbl"></td>
+                            </tr>
+                            <tr class="red">
+                                <td class="tc">过期扣分</td>
+                                <td class="pl20">软件过期后每天减少<b>200</b>分，点击“保留积分”，系统会暂存<b>3</b>个月。</td>
+                                <td class="nbl"><a href="javascript:;" class="freeze_point">[保留积分，过期后再订]</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 mb10 pl20 pr20 gray lh24 f12">
+                    <span class="b">补充说明：</span><br>
+                    只有在服务周期内的会员，才能享受会员积分特权；<br>
+                    <b>100</b>积分=<b>1</b>元人民币；老客户没兑换的精灵币已经换算为积分；<br>
+<!--                     <span class="red">软件过期后每天自动减少<b>200</b>分，您可以在快过期之前，点击“<a href="javascript:;" class="freeze_point">[保留积分，过期后再订]</a>”，系统会将积分暂存<b>3</b>个月。</span><br> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade hide" id="perfect_phone">
+        <div class="modal-header">
+            <h5>激活会员中心</h5>
+        </div>
+        <div class="modal-body">
+            <div class="red mb20 lh24"> <i class="iconfont"></i>
+                <span class="ml5">亲，您尚未激活会员特权！现在激活，立享多项会员特权，更有<b>500</b>积分相送！。</span>
+            </div>
+
+            <div class="mt20">
+                <span class="w50 dib">手机号</span>
+                <input type="text" name="phone" id="id_phone" old_value="{{data.customer.phone}}"  maxlength="12" value="{{data.customer.phone}}">
+                <span class="red ml5">*</span>
+            </div>
+
+            <div class="mt20">
+                <span class="w50 dib">QQ号</span>
+                <input type="text" name="qq" id="id_qq" maxlength="11" old_value="{{data.customer.qq}}"  value="{{data.customer.qq}}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="id_submit_info">立即验证</button>
+            <button class="btn" data-dismiss="modal">取消</button>
+        </div>
+</div>
+
+<div class="modal fade hide" data-width="w460" id="perfect_info">
+    <div class="modal-header">
+        <h5>完善信息后有惊喜</h5>
+    </div>
+    <form class="m0" action="">
+    <div class="modal-body">
+        <div class="pl10">
+                <div class="mt10">
+                    收&ensp;件&ensp;人：<input class="ml10" data-rule="require" name="receiver" id="receiver" type="text" value="{{data.info_dict.receiver}}"><span class="red mr5 ml10">*</span>
+                </div>
+                <div class="mt10">
+                    手&ensp;机&ensp;号：<input class="ml10" data-rule="phone" name="receiver_phone" id="receiver_phone" type="text" value="{{data.info_dict.receiver_phone}}"><span class="red mr5 ml10">*</span>
+                </div>
+                <div class="mt10">
+                    邮&emsp;&emsp;编：<input class="ml10" data-rule="require" type="text" name="zip_code" id="zip_code" value="{{data.info_dict.zip_code}}"><span class="red mr5 ml10">*</span>
+                </div>
+                <div class="mt10">
+                    详细地址：<textarea  class="ml10 w300" data-rule="require" cols="30" name="receive_address" id="receive_address" rows="3">{{data.info_dict.receive_address}}</textarea><span class="red mr5 ml10">*</span>
+                    <div class="ml10 gray f12">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;请填写详细的地址，以免寄丢了哦！</div>
+                </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" >提交</button>
+        <button class="btn" data-dismiss="modal">取消</button>
+    </div>
+     </form>
+</div>
+{%endblock%}
+
+
+{% block custom_js %}
+<script>
+PT.namespace('pointDetial');
+PT.pointDetial=function(){
+    var init_dom=function(){
+
+        $('#sign_point').on('click',function(){
+
+            if ($('#sign_point').hasClass('disabled')) {
+                alert('今天已经签过了，明天再来吧！');
+                return false;
+            }
+
+            $('#sign_point').addClass('disabled');
+
+            PT.sendDajax({
+                'function': 'web_sign_point',
+                'callback': 'PT.pointDetial.sign_point_callback'
+            });
+
+        });
+
+
+        $('#perfect_info_link').on('click',function(){
+            $('#perfect_info').modal();
+        });
+
+
+        $('#perfect_info form').vaildata({'placement':'right','call_back':function(obj){
+            var receiver,receiver_phone,receive_address,zip_code;
+
+            receiver=$('#receiver').val();
+            receiver_phone=$('#receiver_phone').val();
+            receive_address=$('#receive_address').val();
+            zip_code=$('#zip_code').val();
+
+            PT.sendDajax({
+                'function': 'web_perfect_info',
+                'receiver':receiver,
+                'receiver_phone':receiver_phone,
+                'receive_address':receive_address,
+                'zip_code':zip_code,
+                'callback': 'PT.pointDetial.perfect_info_callback'
+            });
+
+            $('#perfect_info').modal('hide');
+        }});
+
+         /*
+          *  在base.js中已注册该方法
+          * 
+         $(document).on('click', '#id_submit_info', function(){
+            var qq = $.trim($('#id_qq').val());
+            var phone = $.trim($('#id_phone').val());
+
+            if(isNaN(phone) || !(/^1[3|4|5|7|8]\d{9}$/.test(phone))){
+                PT.alert("手机号码填写不正确！");
+                return false;
+            }
+
+            PT.sendDajax({'function':'web_submit_userinfo', 'phone':phone, 'qq':qq});
+        });*/
+
+        $('#verify_phone').on('click',function(){
+            $('#perfect_phone').modal();
+        });
+
+        $('.tips').tooltip();
+    }
+
+    return {
+        init:function(){
+            init_dom();
+        },
+        sign_point_callback:function(data){
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                $('.point_count').each(function(){
+                    var point=Number($(this).text());
+                    $(this).text(point+data.data.point);
+                });
+                $('#sign_point').replaceWith('已签到');
+                $('#get_attendance_day').text(data.data.attendance_day);
+                PT.light_msg('签到成功','赠送积分'+data.data.point+',连续签到'+data.data.attendance_day+'天');
+            }
+        },
+        perfect_info_callback:function(data){
+            if(data.msg!=''){
+                 PT.alert(data.msg);
+            }else{
+                if(data.data.add_point_is_valid){
+                    $('.point_count').each(function(){
+                        var point=Number($(this).text());
+                        $(this).text(point+data.data.point);
+                    });
+                }
+                PT.light_msg('完善信息','更新成功');
+            }
+        },
+        submit_userinfo_back:function(){
+            $('#perfect_phone').modal('hide');
+            PT.light_msg('消息','感谢您的信任与支持');
+        }
+    }
+
+}();
+
+PT.Base.init()
+PT.pointDetial.init();
+
+PT.namespace('vipHome');
+PT.vipHome.submit_userinfo_back=PT.pointDetial.submit_userinfo_back;
+</script>
+{% endblock %}

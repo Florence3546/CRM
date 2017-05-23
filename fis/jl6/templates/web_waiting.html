@@ -1,0 +1,141 @@
+{% extends "base_jl6.html" %}
+{% block title%}登录{%endblock%}
+{% block base_jl5 %}
+<header>
+  <div id="site_nav">
+    <a href="/web/web_home" class="logo">
+      <img src="../site_media/static/images/logo.png?__inline" alt="">
+    </a>
+   {% if request.session.visitor_from != 'qnpc'%}
+    <aside>
+      <span class="poptip">
+        <a href="" title="联系旺旺">
+          <img src="../site_media/static/images/wangwang.png">
+        </a>
+        <div class="popcontent animate" id="concet_ww">
+          <ul>
+            <li>
+              <div class="title">精灵主旺旺</div>
+              <div class="phone">派生科技</div>
+              <div>
+                <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+              </div>
+              <time>（在线时间：8:30-23:00）</time>
+            </li>
+            <li>
+              <div class="title">顾问专线</div>
+              <div class="phone">400-0610-23</div>
+              <time>（在线时间：9:00-23:00）</time>
+            </li>
+            <li>
+              <div class="title">投诉电话</div>
+              <div class="phone">027-59401772</div>
+              <time>
+              受理时间<br>
+              (周一至周五&ensp;14:00-22:00)
+              </time>
+            </li>
+            <li>
+              <div class="title">人工托管服务</div>
+              <div>
+                <a class="a_WW" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+              </div>
+              <time>
+              受理时间<br>
+              (周一至周五&ensp;8:30-18:00)
+              </time>
+            </li>
+          </ul>
+        </div>
+      </span>
+      <span class="poptip">
+        <a href="" title="微信二维码">
+          <img src="../site_media/static/images/weixin.png">
+        </a>
+        <div class="popcontent animate" id="concat_wx">
+          <img src="../site_media/static/images/wx.png" alt="">
+        </div>
+      </span>
+<!--       <span>
+        <a href="" title="帮助">
+          <img src="../site_media/static/images/bangzhu.png">
+        </a>
+      </span> -->
+      <span class="poptip">
+        <a href="javascript:;" title="意见反馈">
+          <img src="../site_media/static/images/yijian.png">
+        </a>
+        <div class="popcontent animate" id="suggest">
+          <p class="title">意见反馈</p>
+          <textarea class="form-control" placeholder="您的意见是我们前进最大的动力"></textarea>
+          <div class="tip">感谢您的建议与鞭策
+            {% if not request.session.phone %}
+              ，为了方便联系，请留下您的手机号码
+              {%endif%}
+            </div>
+            <button class="btn btn-primary btn-sm">提交反馈</button>
+          </div>
+        </span>
+      </aside>
+   {% endif %}    
+    </div>
+  </header>
+
+<div class="mt20 hide" id="carousel_box">
+  <div id="myCarousel" class="carousel slide">
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="item active">
+        <img src="../site_media/static/images/waiting_2017.jpg"></div>
+    </div>
+
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+  <div class="progress mt20">
+    <div class="progress-bar progress-bar-info progress-bar-striped active" id="progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+    </div>
+</div>
+
+  <div class="tc silver f16">精灵正在努力下载中，请稍候......</div>
+  <div class="tc mt10 text-info">如果您是第一次登录，因数据较多，等待时间可能较长</div>
+</div>
+
+<div class="hide" id="ielimit">
+    <div class="container-fluid">
+        <div class="warp">
+            <div class="fix mt20">
+               <i class="iconfont f150 mt50 l ml30">&#xe637;</i>
+                <div class=" w600 h24  l ml15 mt40">
+                    <p class=" f20 b mt30 mb30">
+                      亲，您的浏览器版本过低，为了不影响您的体验，请升级浏览器
+                    </p>
+                    <p class=" f20 b mt30 mb30">
+                      您可以：点击<a href="http://www.google.cn/chrome/eula.html?hl=zh-CN&platform=win" target="_black"><i class="iconfont">&#xe638;</i></a>下载谷歌浏览器或者点击升级您的IE浏览器
+                    </p>
+                    <p class=" mt30 mb30">
+                      如果您不知道该怎么做请联系：
+                      <a class="ml10" href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--[if lte IE 7]>
+<script>
+  $('#ielimit').show();
+  IeTester=ture;
+</script>
+<![endif]-->
+{% endblock %}
+

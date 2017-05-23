@@ -1,0 +1,183 @@
+{% load rates%}
+<div class="mt20">
+    <h4 style="padding-left:30px;">{{ nick }}<span class="f12 ml10 silver n"> - 订单编辑 - </span></h4>
+	<form method="post" action="" id="edit_subscribe_form">
+	<input type="hidden" id="sb_subscribe_id" name="subscribe_id"  value="{{ subscribe_id }}">
+	<input type="hidden" id="order_id"  value="{{ subscribe.order_id }}">
+    <table class="table-layout">
+        <tr>
+            <td class="w90 tr">签单人</td>
+            <td>
+            	<input type="hidden" id="id_saler_id" name="psuser_id" value="{{form.psuser.value}}">
+            	<input type="text" class="psuser_input" link="#id_saler_id" value="{{form.instance.psuser.name_cn}}" autocomplete="off">
+           	</td>
+            <td class="w90 tr">订单类型</td>
+            <td>
+                <select id="id_biz_type" name="biz_type">
+                    <option value="1" {% if form.biz_type.value == 1 %}selected="selected"{% endif %}>新订</option>
+                    <option value="2" {% if form.biz_type.value == 2 %}selected="selected"{% endif %}>续订</option>
+                    <option value="3" {% if form.biz_type.value == 3 %}selected="selected"{% endif %}>升级</option>
+                    <option value="4" {% if form.biz_type.value == 4 %}selected="selected"{% endif %}>后台赠送</option>
+                    <option value="5" {% if form.biz_type.value == 5 %}selected="selected"{% endif %}>后台自动续订</option>
+                    <option value="6" {% if form.biz_type.value == 6 %}selected="selected"{% endif %}>未知</option>
+                    <option value="7" {% if form.biz_type.value == 7 %}selected="selected"{% endif %}>自我新订</option>
+                    <option value="8" {% if form.biz_type.value == 8 %}selected="selected"{% endif %}>转介绍</option>
+                    <option value="9" {% if form.biz_type.value == 9 %}selected="selected"{% endif %}>软件成交</option>
+                    <option value="10" {% if form.biz_type.value == 10 %}selected="selected"{% endif %}>进账划分客户</option>
+                    <option value="11" {% if form.biz_type.value == 11 %}selected="selected"{% endif %}>店铺提成</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="w90 tr">操作人</td>
+            <td>
+            	<input type="hidden"  id="id_operater_id" name="operater_id" value="{{form.operater.value}}">
+            	<input type="text" class="psuser_input" link="#id_operater_id" value="{{form.instance.operater.name_cn}}" autocomplete="off">
+           	</td>
+            <td class="w90 tr">业务类型</td>
+            <td>
+		        {% if subscribe.order_id == 0 %}
+                <select name="category" id="id_category">
+                    <option value="ztc" article_code="tp-001" {% if subscribe.category == 'ztc' %}selected="selected"{% endif %}>直通车托管</option>
+                    <option value="zz" article_code="tp-002" {% if subscribe.category == 'zz' %}selected="selected"{% endif %}>钻展托管</option>
+                    <option value="zx" article_code="tp-003" {% if subscribe.category == 'zx' %}selected="selected"{% endif %}>店铺装修</option>
+                    <option value="dyy" article_code="tp-004" {% if subscribe.category == 'dyy' %}selected="selected"{% endif %}>代运营</option>
+                    <option value="seo" article_code="tp-006" {% if subscribe.category == 'seo' %}selected="selected"{% endif %}>seo</option>
+                    <option value="kfwb" article_code="tp-007" {% if subscribe.category == 'kfwb' %}selected="selected"{% endif %}>客服外包</option>
+                    <option value="other" article_code="tp-005" {% if subscribe.category == 'other' %}selected="selected"{% endif %}>补单</option>
+                </select>
+                {% else %}
+                <input type="text" value="{{ subscribe.get_category_display }}" disabled="disabled">
+		        {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="w90 tr">顾问</td>
+            <td>
+                <input type="hidden"  id="id_consult_id" name="consult_id" value="{{form.consult.value}}">
+                <input type="text" class="psuser_input" link="#id_consult_id" value="{{form.instance.consult.name_cn}}" autocomplete="off">
+            </td>
+            <td class="w90 tr">成交方式</td>
+            <td>
+	            <select name="source_type" id="id_source_type">
+	                {% if subscribe.order_id != 0 %}
+					<option value="1" {% if subscribe.source_type == 1 %}selected="selected"{% endif %}>淘宝推广</option>
+		            {% endif %}
+					<option value="2" {% if subscribe.source_type == 2 %}selected="selected"{% endif %}>人工洽谈</option>
+{#					<option value="3" {% if subscribe.source_type == 3 %}selected="selected"{% endif %}>转介绍</option>#}
+				</select>
+            </td>
+        </tr>
+        <tr>
+            <td class="w90 tr">订购时间</td>
+            <td>
+            	<input type="text" value="{{form.create_time.value|default:''}}" id="id_create_time" name="create_time" {% if subscribe.order_id != 0 or subscribe.approval_status == 1 %} disabled {% endif %}>
+           	</td>
+            <td class="w90 tr">服务时间</td>
+            <td>
+            	<input type="text" value="{{form.start_date.value|default:''}}" id="id_start_date" name="start_date" class="w90" {% if subscribe.order_id != 0 or subscribe.approval_status == 1 %} disabled {% endif %}>
+            	-
+            	<input type="text" value="{{form.end_date.value|default:''}}" id="id_end_date" name="end_date" class="w90" {% if subscribe.order_id != 0 or subscribe.approval_status == 1 %} disabled {% endif %}>
+           	</td>
+        </tr>
+        <tr>
+            <td class="w90 tr">成交金额</td>
+            <td><input type="text" id="id_pay" name="pay"  value="{{form.pay.value|divide:'100'}}" {% if subscribe.order_id != 0 or subscribe.approval_status == 1 %} disabled {% endif %}> 元</td>
+            <td class="w90 tr">岗位类型</td>
+            <td>
+                <label class="dib f12 mb0 mr3"><input class="mr3" type="radio" name="xf_flag" value="1" {% if subscribe.xf_flag == 1 or subscribe.xf_flag == 2 %}checked="checked"{% endif %}>销售</label>
+                <label class="dib f12 mb0 mr3"><input class="mr3" type="radio" name="xf_flag" value="3" {% if subscribe.xf_flag == 3 %}checked="checked"{% endif %}>市场</label>
+                <label class="dib f12 mb0 mr3"><input class="mr3" type="radio" name="xf_flag" value="4" {% if subscribe.xf_flag == 4 %}checked="checked"{% endif %}>增值事业</label>
+                <label class="dib f12 mb0 mr3"><input class="mr3" type="radio" name="xf_flag" value="5" {% if subscribe.xf_flag == 5 %}checked="checked"{% endif %}>技术</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="w90 tr">付款方式</td>
+            <td>
+
+                <select name="pay_type" id="id_pay_type" {% if subscribe.order_id != 0 or subscribe.approval_status == 1 %} disabled {% endif %}>
+                    <option value="1" {% if subscribe.pay_type == 1 %}selected="selected"{% endif %}>淘宝后台付款</option>
+                    <option value="2" {% if subscribe.pay_type == 2 %}selected="selected"{% endif %}>公司支付宝付款</option>
+                    <option value="3" {% if subscribe.pay_type == 3 %}selected="selected"{% endif %}>公司中国银行账户付款</option>
+                    <option value="4" {% if subscribe.pay_type == 4 %}selected="selected"{% endif %}>香花私人支付宝付款</option>
+                    <option value="5" {% if subscribe.pay_type == 5 %}selected="selected"{% endif %}>派生视觉支付宝付款</option>
+                    <option value="6" {% if subscribe.pay_type == 6 %}selected="selected"{% endif %}>现金付款</option>
+                    <option value="7" {% if subscribe.pay_type == 7 %}selected="selected"{% endif %}>技术一部支付宝付款</option>
+                    <option value="8" {% if subscribe.pay_type == 8 %}selected="selected"{% endif %}>技术二部支付宝付款</option>
+                    <option value="9" {% if subscribe.pay_type == 9 %}selected="selected"{% endif %}>技术三部支付宝付款</option>
+                    <option value="10" {% if subscribe.pay_type == 10 %}selected="selected"{% endif %}>技术四部支付宝付款</option>
+                    <option value="11" {% if subscribe.pay_type == 11 %}selected="selected"{% endif %}>技术五部支付宝付款</option>
+                    <option value="12" {% if subscribe.pay_type == 12 %}selected="selected"{% endif %}>技术六部支付宝付款</option>
+                    <option value="16" {% if subscribe.pay_type == 16 %}selected="selected"{% endif %}>技术七部支付宝付款</option>
+                    <option value="13" {% if subscribe.pay_type == 13 %}selected="selected"{% endif %}>销服一部支付宝付款</option>
+                    <option value="14" {% if subscribe.pay_type == 14 %}selected="selected"{% endif %}>销服二部支付宝付款</option>
+                    <option value="15" {% if subscribe.pay_type == 15 %}selected="selected"{% endif %}>销服三部支付宝付款</option>
+                </select>
+           	</td>
+            <td class="w90 tr">付款信息</td>
+            <td>
+                <input type="text" value="{{subscribe.pay_type_no|default:''}}" placeholder="支付宝账号/银行账号 户主姓名" id="id_pay_type_no" name="pay_type_no">
+            </td>
+        </tr>
+        <tr>
+          <td class="w90 tr">是否有合同</td>
+          <td>
+            <label class="dib f12">
+                <input class="mr3" type="radio" name="has_contract" value="1" {% if subscribe.has_contract%}checked="checked"{% endif %}>是
+             </label>
+            <label class="dib f12">
+                <input class="mr3" type="radio" name="has_contract" value="0" {% if not subscribe.has_contract%}checked="checked"{% endif %}>否
+             </label>
+          </td>
+          <td class="w90 tr">聊天文件</td>
+          <td>
+            <input type="file" class="hide" id="up_chat_file" >
+            <input type="hidden" id="chat_file_path_old" value="{{ subscribe.chat_file_path }}">
+            <div class="input-append">
+              {% if subscribe.chat_file_path %}
+                <input type="text" name="chat_file_path"  id="id_chat_file_path" value="{{ subscribe.chat_file_path }}" class="w100" style="cursor: pointer" readonly="readonly" placeholder="点击选择聊天文件">
+                <span class="add-on poi btn-danger f12" id="del_chat_btn">刪除</span>
+                <a id="down_sub_file" href="/ncrm/download_file/?file_path={{ subscribe.chat_file_path }}" class="add-on poi btn-primary f12" target="_blank">下载</a>
+                {% else %}
+                <input type="text" name="chat_file_path"  id="id_chat_file_path" value="" class="w160" style="cursor: pointer" readonly="readonly" placeholder="点击选择聊天文件">
+                <span class="add-on poi btn-danger f12" id="del_chat_btn" style="display: none">刪除</span>
+                <a id="down_sub_file" href="javascript:;" class="add-on poi btn-primary f12" target="_blank" style="display: none">下载</a>
+              {% endif %}
+              <span class="add-on btn-success	poi f12" id="edit_chat_btn">上传</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+            <td class="w90 tr">备注</td>
+            <td colspan='3'>
+                <div class="editor" style="height:200px;width:568px;" id="id_subscribe_note"></div>
+                <div class="hide init_data">{{form.note.value|default_if_none:''|safe}}</div>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td class="w90 tr">默认可见</td>
+            <td colspan='3'>
+                <label class="dib mb0"><input class="mr3" type="radio" name="visible" value="1">可见</label>
+                <label class="dib mb0"><input class="ml10 mr3" type="radio" name="visible" value="0" checked="checked">隐藏</label>
+            </td>
+        </tr>
+        <tr class="hide">
+            <td class="w90 tr">审核状态</td>
+            <td colspan='3'>
+                {% if can_modify_approval_status %}
+                    <select name="approval_status" id="id_approval_status">
+                        <option value="2">未通过</option>
+                        <option value="3" selected="selected">待再审</option>
+                    </select>
+                {% else %}
+                    {{ subscribe.get_approval_status_display }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    </form>
+    <div class="tc mb20">
+        <a href="javascript:;" id="submit_subscribe" class="btn btn-primary">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn subscribe_btn">关闭</a>
+    </div>
+</div>

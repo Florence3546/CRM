@@ -1,0 +1,43 @@
+#loading{
+    position: fixed;
+    z-index: 9999;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .opacity(0);
+
+    .transition(all .3s);
+
+    &.active{
+        .opacity(1);
+    }
+
+    .loading_backdrop{
+        .modal-backdrop;
+        .opacity(.6);
+    }
+
+    .content{
+        z-index:10000;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        margin-top:-110px;
+        text-align: center;
+        color: #fff;
+        .imgs{
+            img{
+                position:absolute;
+                left:50%;
+                margin-left:-80px;
+                width:150px;
+                height:150px;
+            }
+        }
+    }
+
+    .tip{
+        margin-top: 150px;
+    }
+}

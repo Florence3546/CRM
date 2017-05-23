@@ -1,0 +1,124 @@
+<div class="modal fade" can_set_nonsearch = {{can_set_nonsearch}}>
+    <div class="modal-dialog" style="width:860px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">设置投放平台</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning f12">
+                    <li class="">您可通过选择来设置是否投放。</li>
+                    <li class="">您只有投放淘宝站内的定向推广后，才能选择投放淘宝站外的定向推广，
+                        <a href="http://shuyuan.taobao.com/?spm=0.0.0.0.dweo9h#!/selftutorial/detail?id=187" target="_blank">了解详情&nbsp;&gt;&gt;</a>
+                    </li>
+                </div>
+                <table class="table table-bordered m0" >
+                    <tbody>
+                        <tr class="h36 tc f14">
+                            <td rowspan="2" class="f16">
+                                <div class="mt30 pt30"><i class="iconfont f30 mr2">&#xe657;</i>计算机设备</div>
+                            </td>
+                            <td class="bgeb ">
+                                <div class="mt5">淘宝站内</div>
+                            </td>
+                            <td class="bgeb ">
+                                <div class="mt5">淘宝站外
+                                    <i class="iconfont poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="淘宝直通车外投（站外投放），是淘宝站内推广资源的拓展和补充。<br/>为更好的满足客户需求，淘宝直通车联合多家外部优质合作网站，<br/>将潜在买家流量引入到淘宝客搜索页面和热卖淘宝页面，<br/>所有参与直通车外投的宝贝将有机会在这两个页面展现。">&#xe61a;</i>
+                                    <a class="r f12 mr10" href="https://bbs.taobao.com/catalog/thread/14181510-318792182.htm?spm=0.0.0.0.gAD0nS" target="_blank" >网站列表&nbsp;&gt;&gt;</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <div class="mt10">搜索推广<i class="iconfont ml3 poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="推广宝贝会展现在淘宝关键词搜索或类目搜索结果页面的右侧或下方的“掌柜热卖”中。<br/>搜索推广按照关键词出价或类目出价进行点击扣费">&#xe61a;</i>：投放</div>
+                                </div>
+                                <div class="radio">
+                                    定向推广<i class="iconfont ml3 poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="通过多维度的人群定向技术，推广宝贝将展现在相关的浏览页面。<br/>按照宝贝的定向推广出价进行点击扣费">&#xe61a;</i>：
+                                    <span class="dn not_set" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="该功能只对一钻以上卖家和天猫卖家开放">暂不可投放</span>
+                                    <label class="checkbox-inline can_set"><input name="pc_insite_nonsearch" {{if !pc_insite_nonsearch}}checked{{/if}} value="0" type="radio">不投放</label>
+                                    <label class="checkbox-inline can_set"><input name="pc_insite_nonsearch" {{if pc_insite_nonsearch}}checked{{/if}} value="1" type="radio">投放</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    搜索推广：
+                                    <label class="checkbox-inline"><input name="pc_outsite_search" {{if !pc_outsite_search}}checked{{/if}} value="0" type="radio">不投放</label>
+                                    <label class="checkbox-inline"><input name="pc_outsite_search" {{if pc_outsite_search}}checked{{/if}} value="1" type="radio">投放</label>
+                                </div>
+                                <div class="radio">
+                                    定向推广：
+                                    <span class="dn not_set" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="该功能只对一钻以上卖家和天猫卖家开放">暂不可投放</span>
+                                    <label class="checkbox-inline can_set"><input name="pc_outsite_nonsearch" {{if !pc_outsite_nonsearch}}checked{{/if}} value="0" type="radio">不投放</label>
+                                    <label class="checkbox-inline can_set"><input name="pc_outsite_nonsearch" {{if pc_outsite_nonsearch}}checked{{/if}} value="1" type="radio">投放</label>
+                                </div>
+                                <div class="radio">
+                                    投放价格 = 淘宝站内投放价格 * 站外折扣
+                                </div>
+                                <div class="mb20 h30">
+                                    <div class="w140 b lh20 l base_color">
+                                        <span class="item_base">站外折扣：</span>
+                                        <span class="show_discount w40">{{outside_discount}}</span>
+                                        <input class="w40 hide update_discount mr2" type="text" range="1~200" value="{{outside_discount}}"/>%&nbsp;&nbsp;
+                                        <i class="iconfont base_color edit_discount poi mr10">&#xe609;</i>
+                                    </div>
+                                    <span class="w200 dib"><input type="text" value="{{outside_discount}}" class="slider_input" name="outside_discount"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="h36 tc f14">
+                            <td rowspan="3" class="f16">
+                                <div class="mt30 pt30"><i class="iconfont f24 mr2">&#xe625;</i>移动设备</div>
+                            </td>
+                            <td class="bgeb ">
+                                <div class="mt5">淘宝站内<i class="iconfont ml5 poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="移动设备淘宝站内，是淘宝/天猫直通车推广在淘宝站内移动设备资源上的拓展。<br/>其范围包括手机淘宝网m.taobao.com（标准版和触屏版），<br/>以及淘宝主客户端（iPhone，android，iPad）等。">&#xe61a;</i></div>
+                            </td>
+                            <td class="bgeb ">
+                                <div class="mt5">淘宝站外<i class="iconfont ml5 poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="移动设备淘宝站外，是淘宝/天猫直通车推广在淘宝站外移动设备资源（淘宝无线联盟）上的拓展。<br/>其范围包括淘宝与外部移动站点，移动应用合作所获取的移动设备流量资源（含搜索和定向流量）。<br/>勾选之后，您可以在移动设备流量上获取更多的推广展现机会。">&#xe61a;</i></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="radio">
+                                    推广：
+                                    <label class="checkbox-inline"><input name="yd_insite" value="0" {{if !yd_insite}}checked{{/if}} type="radio">不投放</label>
+                                    <label class="checkbox-inline"><input name="yd_insite" value="1" {{if yd_insite}}checked{{/if}} type="radio">投放</label>
+                                </div>
+                                <div class="radio">
+                                    投放价格 = 计算机淘宝站内投放价格 * 移动折扣
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    推广：
+                                    <label class="checkbox-inline"><input name="yd_outsite" value="0" {{if !yd_outsite}}checked{{/if}} type="radio">不投放</label>
+                                    <label class="checkbox-inline"><input name="yd_outsite" value="1" {{if yd_outsite}}checked{{/if}} type="radio">投放</label>
+                                </div>
+                                <div class="radio">
+                                    投放价格 = 计算机淘宝站内投放价格 * 站外折扣 * 移动折扣
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                            <div class="mb30 mt10">
+                                <div class="w140 b lh20 base_color l">
+                                    <span class="item_base">移动折扣：</span>
+                                    <span class="show_discount w40">{{mobile_discount}}</span>
+                                    <input class="w40 hide update_discount" range="1~400" type="text" value="{{mobile_discount}}"/>%&nbsp;&nbsp;
+                                    <i class="iconfont base_color edit_discount poi mr10">&#xe609;</i>
+                                </div>
+                                <span class="dib w400"><input type="text" value="{{mobile_discount}}" class="slider_input" name="mobile_discount"></span>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

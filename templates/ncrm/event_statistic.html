@@ -1,0 +1,191 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}事件统计{% endblock %}
+{% block extra_style %}
+<style>
+tr[level_flag="2"] {background-color:rgba(255, 255, 153, 0.5);}
+tr[level_flag="1"] {background-color:rgba(255, 255, 204, 0.5);}
+a.red:hover, a.red:focus {color:#e74049;}
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <form id="search_form" action="" method="GET">
+			<input type="hidden" name="load" value="1">
+            起止时间：
+            <input class="w100" name="start_time" id="start_time" type="text" value="{{ request.GET.start_time }}"> -
+            <input class="w100" name="end_time" id="end_time" type="text" value="{{ request.GET.end_time }}">
+            <input type="text" name="server_name" class="psuser_input f12 w100 ml20" link="#server_id" placeholder="签单人/操作/顾问" autocomplete="off" value="{{ server_name }}">
+			<input type="hidden" id="server_id" name="server_id" value="{{ server_id }}">
+		    <select name="position_type" id="position_type" class="w100 ml20 f12">
+		        <option value="">- 职　位 -</option>
+		        <option value="1" {% if request.GET.position_type == '1' %}selected{% endif %}>销　售</option>
+		        <option value="2" {% if request.GET.position_type == '2' %}selected{% endif %}>操　作</option>
+		        <option value="3" {% if request.GET.position_type == '3' %}selected{% endif %}>人　机</option>
+		        <option value="4" {% if request.GET.position_type == '4' %}selected{% endif %}>售　后</option>
+		    </select>
+            <select name="department" id="department" class="w100 ml20 f12">
+                <option value="">- 部　门 -</option>
+                <option value="GROUP1" {% if request.GET.department == 'GROUP1' %}selected{% endif %}>服务一部</option>
+                <option value="GROUP2" {% if request.GET.department == 'GROUP2' %}selected{% endif %}>服务二部</option>
+                <option value="GROUP3" {% if request.GET.department == 'GROUP3' %}selected{% endif %}>服务三部</option>
+                <option value="GROUP4" {% if request.GET.department == 'GROUP4' %}selected{% endif %}>服务四部</option>
+                <option value="GROUP5" {% if request.GET.department == 'GROUP5' %}selected{% endif %}>服务五部</option>
+            </select>
+            <label class="dib ml20">
+                <input type="checkbox" id="check_all_events" name="event_type" value="all" {% if "all" in event_type_list %}checked="checked"{% endif %}> 所有事件：
+            </label>
+            <label class="dib">
+                <input type="checkbox" name="event_type" value="subscribe" {% if "subscribe" in event_type_list %}checked="checked"{% endif %}> 订购 & 转介绍
+            </label>
+            <label class="dib ml10">
+                <input type="checkbox" name="event_type" value="contact" {% if "contact" in event_type_list %}checked="checked"{% endif %}> 联系
+            </label>
+            <label class="dib ml10">
+                <input type="checkbox" name="event_type" value="operate" {% if "operate" in event_type_list %}checked="checked"{% endif %}> 操作
+            </label>
+            <label class="dib ml10">
+                <input type="checkbox" name="event_type" value="comment" {% if "comment" in event_type_list %}checked="checked"{% endif %}> 评论
+            </label>
+            <label class="dib ml10">
+                <input type="checkbox" name="event_type" value="unsubscribe" {% if "unsubscribe" in event_type_list %}checked="checked"{% endif %}> 退款
+            </label>
+            <button class="btn btn-primary r" type="button" id="search">查　询</button>
+        </form>
+        <table id="table_event_statistic" class="table-bordered mt20"  loaded="{{ request.GET.load }}">
+	        <thead>
+		        <tr>
+			        <th class="w100">部门</th>
+			        <th class="w100">职位</th>
+			        <th class="w100">姓名</th>
+			        <th class="hide">订购 & 转介绍</th>
+			        <th class="hide w120">联系</th>
+			        <th class="hide w120">操作</th>
+			        <th class="hide w120">评论</th>
+			        <th class="hide w180">退款</th>
+		        </tr>
+	        </thead>
+	        <tbody>
+	            {% for data in statistic_data %}
+	            <tr level_flag="{{ data.0 }}" department="{{ data.1 }}" position="{{ data.2 }}" {% if data.0 < show_flag %}class="hide"{% endif %}>
+		            <td class="tc">{{ data.4.department }}</td>
+		            <td class="tc">{{ data.4.position }}{% if data.0 == 2 %}<a href="javascript:;" class="cascade_switch red b" flag="0">展开</a>{% endif %}</td>
+		            <td class="tc">{{ data.4.psuser }}{% if data.0 == 1 %}<a href="javascript:;" class="cascade_switch red b" flag="0">展开</a>{% endif %}</td>
+		            <td class="hide vt">
+		                <div>共订购：{{ data.4.subscribe.sum|default:"0" }}笔，{{ data.4.subscribe.sum_money|default:"0"|divide:"100" }}元</div>
+		                <div class="mt5 btd">
+		                    {% if data.4.subscribe.from_tb %}
+			                <span class="dib w200">淘宝推广：{{ data.4.subscribe.from_tb }}笔，{{ data.4.subscribe.from_tb_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.from_man %}
+			                <span class="dib w200">人工洽谈：{{ data.4.subscribe.from_man }}笔，{{ data.4.subscribe.from_man_money|default:"0"|divide:"100" }}元</span>{% endif %}			                
+			                <div>转介绍：{{ data.4.reintro.sum|default:"0" }}次，成交{{ data.4.subscribe.from_reintro|default:"0" }}笔，{{ data.4.subscribe.from_reintro_money|default:"0"|divide:"100" }}元</div>
+		                </div>
+		                {% if data.4.subscribe.new or data.4.subscribe.renew or data.4.subscribe.upgrade %}
+		                <div class="mt5 btd">
+		                    {% if data.4.subscribe.new %}
+			                <span class="dib w200">新订：{{ data.4.subscribe.new }}笔，{{ data.4.subscribe.new_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.renew %}
+			                <span class="dib w200">续订：{{ data.4.subscribe.renew }}笔，{{ data.4.subscribe.renew_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.upgrade %}
+			                <span class="dib w200">升级：{{ data.4.subscribe.upgrade }}笔，{{ data.4.subscribe.upgrade_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                </div>
+		                {% endif %}
+		                {% if data.4.subscribe.kcjl or data.4.subscribe.rjjh or data.4.subscribe.ztc or data.4.subscribe.qn or data.4.subscribe.zz or data.4.subscribe.zx or data.4.subscribe.dyy or data.4.subscribe.unknown %}
+		                <div class="mt5 btd">
+		                    {% if data.4.subscribe.kcjl %}
+			                <span class="dib w200">软件：{{ data.4.subscribe.kcjl }}笔，{{ data.4.subscribe.kcjl_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.rjjh %}
+			                <span class="dib w200">类目：{{ data.4.subscribe.rjjh }}笔，{{ data.4.subscribe.rjjh_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.ztc %}
+			                <span class="dib w200">人工：{{ data.4.subscribe.ztc }}笔，{{ data.4.subscribe.ztc_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.qn %}
+			                <span class="dib w200">千牛：{{ data.4.subscribe.qn }}笔，{{ data.4.subscribe.qn_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.zz %}
+			                <span class="dib w200">钻展：{{ data.4.subscribe.zz }}笔，{{ data.4.subscribe.zz_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.zx %}
+			                <span class="dib w200">装修：{{ data.4.subscribe.zx }}笔，{{ data.4.subscribe.zx_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.dyy %}
+			                <span class="dib w200">代运营：{{ data.4.subscribe.dyy }}笔，{{ data.4.subscribe.dyy_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.seo %}
+			                <span class="dib w200">seo：{{ data.4.subscribe.seo }}笔，{{ data.4.subscribe.seo_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.kfwb %}
+			                <span class="dib w200">客服外包：{{ data.4.subscribe.kfwb }}笔，{{ data.4.subscribe.kfwb_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                    {% if data.4.subscribe.unknown %}
+			                <span class="dib w200">未知：{{ data.4.subscribe.unknown }}笔，{{ data.4.subscribe.unknown_money|default:"0"|divide:"100" }}元</span>{% endif %}
+		                </div>
+                        {% endif %}
+		            </td>
+		            <td class="hide vt">
+			            <div class="pb5 bbd">共联系：{{ data.4.contact.sum|default:"0" }}次</div>
+			            {% if data.4.contact.qq %}
+			            <div>QQ：{{ data.4.contact.qq }}次</div>{% endif %}
+			            {% if data.4.contact.phone %}
+			            <div>电话：{{ data.4.contact.phone }}次</div>{% endif %}
+			            {% if data.4.contact.ww %}
+			            <div>旺旺：{{ data.4.contact.ww }}次</div>{% endif %}
+			            {% if data.4.contact.weixin %}
+			            <div>微信：{{ data.4.contact.weixin }}次</div>{% endif %}
+			            {% if data.4.contact.visible %}
+			            <div>有效联系：{{ data.4.contact.visible }}次</div>{% endif %}
+		            </td>
+		            <td class="hide vt">
+                        <div class="pb5 bbd">共操作：{{ data.4.operate.sum|default:"0" }}次</div>
+                        {% if data.4.operate.ztc %}
+                        <div>直通车：{{ data.4.operate.ztc }}次</div>{% endif %}
+                        {% if data.4.operate.zz %}
+                        <div>钻展：{{ data.4.operate.zz }}次</div>{% endif %}
+                        {% if data.4.operate.rjjh %}
+                        <div>人机：{{ data.4.operate.rjjh }}次</div>{% endif %}
+                        {% if data.4.operate.zx %}
+                        <div>装修：{{ data.4.operate.zx }}次</div>{% endif %}
+                        {% if data.4.operate.visible %}
+                        <div>关键操作：{{ data.4.operate.visible }}次</div>{% endif %}
+		            </td>
+		            <td class="hide vt">
+                        <div class="pb5 bbd">共评论：{{ data.4.comment.sum|default:"0" }}次</div>
+                        {% if data.4.comment.c100 %}
+                        <div>好评：{{ data.4.comment.c100 }}次</div>{% endif %}
+                        {% if data.4.comment.c200 %}
+                        <div>差评未改：{{ data.4.comment.c200 }}次</div>{% endif %}
+                        {% if data.4.comment.c300 %}
+                        <div>差评已改：{{ data.4.comment.c300 }}次</div>{% endif %}
+		            </td>
+		            <td class="hide vt">
+		                <div class="pb5 bbd">共退款：{{ data.4.unsubscribe.sum|default:"0" }}笔，{{ data.4.unsubscribe.sum_money|default:"0"|divide:"100" }}元</div>
+		                {% if data.4.unsubscribe.software %}
+		                <div>软件退款：{{ data.4.unsubscribe.software }}笔，{{ data.4.unsubscribe.software_money|default:"0"|divide:"100" }}元</div>{% endif %}
+		                {% if data.4.unsubscribe.tp %}
+		                <div>TP退款：{{ data.4.unsubscribe.tp }}笔，{{ data.4.unsubscribe.tp_money|default:"0"|divide:"100" }}元</div>{% endif %}
+		                {% if data.4.unsubscribe.friend %}
+		                <div>友情退款：{{ data.4.unsubscribe.friend }}笔，{{ data.4.unsubscribe.friend_money|default:"0"|divide:"100" }}元</div>{% endif %}
+		                {% if data.4.unsubscribe.other %}
+		                <div>其他：{{ data.4.unsubscribe.other }}笔，{{ data.4.unsubscribe.other_money|default:"0"|divide:"100" }}元</div>{% endif %}
+		            </td>
+	            </tr>
+	            {% empty %}
+	            {% if request.GET.load %}
+                <tr >
+                    <td colspan="8" class="tc">没有记录，请修改过滤条件再次搜索（起止时间必选）</td>
+                </tr>
+	            {% else %}
+	            <tr >
+		            <td colspan="8" class="tc">输入过滤条件后点击搜索（起止时间必选）</td>
+	            </tr>
+	            {% endif %}
+	            {% endfor %}
+	        </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/event_statistic.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.EventStatistic.init();
+});
+</script>
+{% endblock %}

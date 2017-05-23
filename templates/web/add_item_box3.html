@@ -1,0 +1,531 @@
+<div class="hide modal fade" id="add_item_box3" data-hidetype="nomal">
+  {% for camp_id, title in camp_dict.items %}
+  <input type="hidden" name="camp_title" camp_id="{{ camp_id }}" value="{{ title }}" />
+  {% endfor %}
+  <div class="modal_header hide">
+    <span class="title b"></span>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  </div>
+  <div class="row-fluid" id="model_select_box" style="min-width: 1200px;">
+    <div class="span12">
+      <ul class="nav nav-tabs mt1" id="candidate">
+        <li><a href="#adgroup_pane" data-toggle="tab">当前计划宝贝</a></li>
+        <li><a href="#item_pane" data-toggle="tab">其他宝贝</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="adgroup_pane" class="tab-pane pt10 rel" inited="0">
+          <div class="statistic_div pl5">
+              <div class="dib vn4">
+                  <span class="b"><i class="iconfont mr5">&#xe61c;</i>候选宝贝</span>(<span class="total_count red_num b" init_value="">---</span>个)
+              </div>
+              <div class="input-append input-append-small ml10">
+                   <input class="search_keyword w180" type="text" placeholder="请输入标题或部分关键词">
+                   <span class="search_btn add-on btn"><i class="iconfont">&#xe645;</i></span>
+              </div>
+              <button class="batch_add btn btn-small r mr5 btn-primary">批量添加<span class="batch_num">50</span>个</button>
+          </div>
+          <div class="abs zx1 pct100">
+            <div class="pr15 mr2">
+                <table source="adgroup_table" class="table_4fixedhead table-bordered table-no-warp-border td_p1">
+                     <thead class="lh18">
+                         <tr>
+                          <th class="tc w80">
+                              <span>宝贝图片</span>
+                          </th>
+                          <th class="tc">宝贝标题</th>
+                          <th class="tc w140">
+                            <div class="dropdown db table_sort_dropdown">
+                              <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                <span>基础数据</span>
+                                <i class="iconfont r f16">&#xe614;</i>
+                              </div>
+                              <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                <li><a value="total_cost" href="javascript:;">总花费</a></li>
+                                <li><a value="click" href="javascript:;">点击量</a></li>
+                                <li><a value="ppc" href="javascript:;">PPC</a></li>
+                              </ul>
+                            </div>
+                          </th>
+                          <th class="tc w140">
+                            <div class="dropdown db table_sort_dropdown">
+                              <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                <span>7天转化数据</span>
+                                <i class="iconfont r f16">&#xe614;</i>
+                              </div>
+                              <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                <li><a value="total_pay" href="javascript:;">成交额</a></li>
+                                <li><a value="paycount" href="javascript:;">成交量</a></li>
+                                <li><a value="roi" href="javascript:;">ROI</a></li>
+                              </ul>
+                            </div>
+                          </th>
+                      </tr>
+                    </thead>
+                </table>
+            </div>
+          </div>
+          <div class="h520 rel ofys">
+              <table id="adgroup_table" class="table-bordered table-no-warp-border td_p1 td_pl5">
+                  <thead class="lh18">
+                      <tr>
+                          <th class="tc w80">
+                              <span>宝贝图片</span>
+                          </th>
+                          <th class="tc">宝贝标题</th>
+                          <th class="tc w140">
+                            <div class="dropdown db table_sort_dropdown">
+                              <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                <span>基础数据</span>
+                                <i class="iconfont r f16">&#xe614;</i>
+                              </div>
+                              <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                <li><a value="total_cost" href="javascript:;">总花费</a></li>
+                                <li><a value="click" href="javascript:;">点击量</a></li>
+                                <li><a value="ppc" href="javascript:;">PPC</a></li>
+                              </ul>
+                            </div>
+                          </th>
+                          <th class="tc w140">
+                            <div class="dropdown db table_sort_dropdown">
+                              <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                <span>7天转化数据</span>
+                                <i class="iconfont r f16">&#xe614;</i>
+                              </div>
+                              <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                <li><a value="total_pay" href="javascript:;">成交额</a></li>
+                                <li><a value="paycount" href="javascript:;">成交量</a></li>
+                                <li><a value="roi" href="javascript:;">ROI</a></li>
+                              </ul>
+                            </div>
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody class="lh20"></tbody>
+                  <tfoot>
+                    <tr>
+                      <td class="nbb nbl tc" colspan="4">
+                        <div class="load_more mt5 hide">
+                         <img src="/site_media/jl5/images/forecast_orde_ajax.gif"><span class="ml5">正在加载</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+              </table>
+
+          </div>
+        </div>
+        <div id="item_pane" class="tab-pane pt10 rel" inited="0">
+            <div class="statistic_div pl5">
+              <div class="dib vn4">
+                  <span class="b"><i class="iconfont mr5">&#xe61c;</i>候选宝贝</span>(<span class="total_count red_num b" init_value="">---</span>个)
+              </div>
+              <div class="input-append input-append-small ml3">
+                 <input class="search_keyword w180" type="text" placeholder="请输入标题或部分关键词">
+                 <span class="search_btn add-on btn"><i class="iconfont">&#xe645;</i></span>
+              </div>
+              <label class="dib ml3 gray">
+	              <input type="checkbox" id="filter_other_camp">
+	              未加入其他计划
+              </label>
+              <button class="batch_add btn btn-small r mr5 w100 btn-primary">批量添加<span class="batch_num">50</span>个</button>
+            </div>
+            <div class="abs zx1 pct100 ">
+                <div class="pr15 mr2">
+                    <table source="item_table" class="table_4fixedhead table-bordered table-no-warp-border td_p1">
+                         <thead class="lh18">
+                            <tr>
+                                <th class="tc w80">
+                                    <span>宝贝图片</span>
+                                </th>
+                                <th class="tc">宝贝标题</th>
+                                <th class="tc w140">已加入的推广计划</th>
+                                <th class="tc w140">销量&库存</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="h520 ofys">
+                <table id="item_table" class="table-bordered table-no-warp-border td_p1 td_pl5">
+                    <thead class="lh18">
+                        <tr>
+                            <th class="tc w80">
+                                <span>宝贝图片</span>
+                            </th>
+                            <th class="tc">宝贝标题</th>
+                            <th class="tc w140">已加入的推广计划</th>
+                            <th class="tc w140">销量&库存</th>
+                        </tr>
+                    </thead>
+                    <tbody class="lh20"></tbody>
+                    <tfoot>
+                      <tr>
+                        <td class="nbb nbl tc" colspan="4">
+                          <div class="load_more mt5 hide">
+                           <img src="/site_media/jl5/images/forecast_orde_ajax.gif"><span class="ml5">正在加载</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="span12">
+      <ul class="nav nav-tabs mt1">
+        <li class="active"><a href="javascript:;">已选宝贝</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="pt10 pl5 h36 tab-pane active">
+          <span class="box_l b"> <i class="iconfont mr5 f14">&#xe61c;</i>已选 </span>(<span class="doing_count red_num b">0</span>个<span class="doable_count_info">，还可添加<span class="doable_count red_num b">---</span>个</span><span class="danger_cats_info hide">，<span class="danger_item_count red_num red b">0</span>个宝贝类目有推广限制</span>)
+          <span class="box_r mr5">
+            <button class="btn_OK btn btn-small btn-primary r mr5 hide"><i class="iconfont mr5">&#xe67e;</i>提交</button>
+          </span>
+        </div>
+      </div>
+      <div class="box rel">
+        <div class="abs zx1 pct100">
+            <div class="pr15 mr2">
+                <table source="item_cart" class="table-bordered table-no-warp-border nbt td_p1 td_pl5">
+                <thead class="lh18">
+                  <tr>
+                    <th class="tc w80">宝贝图片</th>
+                    <th class="tc">宝贝标题</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+        </div>
+        <div class="h520 box_bd p0 ofys rel">
+          <table id="item_cart" class="table-bordered table-no-warp-border nbt td_p1 td_pl5">
+            <thead class="lh18">
+              <tr>
+                <th class="tc w80">宝贝图片</th>
+                <th class="tc">宝贝标题</th>
+              </tr>
+            </thead>
+            <tbody class="lh24">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 设置关键词最高限价 -->
+<div class="modal hide fade" id="modal_init_limit_price" item_id="">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <p style="margin:2px 0 0">设置关键词最高限价</p>
+  </div>
+  <div class="modal-body f12 lh36">
+    <div class="cat_path">
+      <span class="b">宝贝所属类目：</span>
+      <span class="loading_tag silver">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_path"></span>
+    </div>
+    <div class="cat_avg_cpc">
+      <span class="b">行业市场均价：</span>
+      <span class="loading_tag silver">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_avg_cpc"></span>元
+      <span class="silver">(建议关键词最高限价设为行业市场均价的1.2倍 = <span class="prompt_price"></span>元)</span>
+    </div>
+    <div>
+      <span class="b">关键词最高限价：</span>
+      <input type="text" id="init_limit_price" maxlength="5" class="keyup_restore w60"> 元
+      <span class="dib" style="width:14px;"><i class="iconfont hide tooltips">&#xe62b;</i></span>
+      <span class="silver" style="margin-left:-15px;">(<span class="limit_price_min">1.00</span>~<span class="limit_price_max">20.00</span> 元)</span>
+    </div>
+    <div>
+      <span class="b red">友情提示：</span>
+      <span>限价过低，会导致没有流量、没有转化。</span>
+    </div>
+<!--    <div class="r_color mart_6 lh_24 bld">
+      注意：系统将删除该宝贝7天无点击的关键词。
+    </div>-->
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:void(0);" class="btn btn-primary" id="submit_limit_price">确定</a>
+    <a href="javascript:void(0);" class="btn" data-dismiss="modal">取消</a>
+  </div>
+</div>
+
+<!-- 重点托管计划页面设置关键词最高限价 -->
+<div class="modal hide fade" id="modal_limit_price" adg_id="0" mnt_type="0">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <p style="margin:2px 0 0">设置关键词最高限价</p>
+  </div>
+  <div class="modal-body f12 lh36">
+    <div class="cat_path">
+      <span class="b">宝贝所属类目：</span>
+      <span class="loading_tag silver">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_path"></span>
+    </div>
+    <div class="cat_avg_cpc">
+      <span class="b">行业市场均价：</span>
+      <span class="loading_tag silver">查询中<span class="ajax_loading"></span></span>
+      <span name="cat_avg_cpc"></span>元
+      <span class="silver">(建议关键词最高限价设为行业市场均价的1.2倍 = <span class="prompt_price"></span>元)</span>
+    </div>
+    <div>
+      <span class="b">关键词最高限价：</span>
+      <input type="text" id="adg_limit_price" maxlength="5" class="keyup_restore w60"> 元
+      <span class="dib" style="width:14px;"><i class="iconfont hide tooltips">&#xe62b;</i></span>
+      <span class="silver" style="margin-left:-15px;">(<span class="limit_price_min">1.00</span>~<span class="limit_price_max">20.00</span> 元)</span>
+    </div>
+    <div>
+      <span class="b red">友情提示：</span>
+      <span>限价过低，会导致没有流量、没有转化。</span>
+    </div>
+<!--    <div class="r_color mart_6 lh_24 bld">
+      注意：系统将删除该宝贝7天无点击的关键词。
+    </div>-->
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:void(0);" class="btn btn-primary" id="submit_mnt_oper">确定</a>
+    <a href="javascript:void(0);" class="btn" data-dismiss="modal">取消</a>
+  </div>
+</div>
+
+<!-- 点击选择创意图片 -->
+<div class="modal hide fade" id="modal_select_creative_img" item_id="" no="0">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4>点击选择创意图片<span id="creative_img_no"></span></h4>
+  </div>
+  <div class="tc image_list pl10">
+  </div>
+  <div class="modal-footer">
+    <button class="btn r" data-dismiss="modal" aria-hidden="true">取消</button>
+    <button class="btn btn-primary r mr10" id="update_creative">提交</button>
+  </div>
+</div>
+
+<!-- 临时回收站  -->
+<div class="hide">
+    <table id="recycle_bin">
+    </table>
+</div>
+
+<!-- 新添宝贝信息提示 -->
+<div class="modal hide fade" id="modal_new_item_info">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <p style="margin:2px 0 0">新添宝贝信息</p>
+    </div>
+    <div class="modal-body f12 lh36">
+        <div>
+            已选<span class="doing_count red_num">0</span>个宝贝添加推广<span class="to_mnt">并托管</span>，请再次确认推广宝贝和推广标题！
+        </div>
+        <div class="danger_cats_info red">
+            <i class="iconfont red mr5 f16">&#xe62b;</i><span class="danger_item_count red_num">0</span>个新添宝贝的类目有推广限制，已用红色标记！
+        </div>
+        <div id="add_item_warning" class="ml20 red">
+            请您仔细确认宝贝是否符合直通车规范！因此而产生的违规，精灵不负任何责任！
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="btn" id="return_2add_item">返回添加宝贝</a>
+        <a href="javascript:void(0);" class="btn btn-primary into_next_step">确定并进入下一步</a>
+        <a href="javascript:void(0);" class="btn btn-primary btn_OK2">确定并提交</a>
+    </div>
+</div>
+
+<!-- ajax自定义加载动画用 -->
+<input id="ajax_loading_animate_id" type="hidden" value="---">
+
+<script id="item_tr" type="text/html">
+<%for (var i in data) { %>
+<tr item_id="<%=data[i].item_id%>" cat_id="<%=data[i].cat_id%>">
+    <td class="rel p1">
+        <a href="javascript:void(0);" name="item" class='db h80 J_image tc vm'>
+          <img src="<%=data[i].pic_url%>_80x80.jpg"/>
+        </a>
+        <ul class="hide" name="item_imgs">
+        <%for (var j in data[i].item_imgs) { %>
+          <li><%=data[i].item_imgs[j]%></li>
+        <% }%>
+        </ul>
+    </td>
+    <td>
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+        <div class="orange"><%=data[i].price%></div>
+    </td>
+    <td>
+      <%for (var ii in data[i].camp_id_list) { %>
+      <div title="<%=camp_dict[data[i].camp_id_list[ii]].title%>"><%=camp_dict[data[i].camp_id_list[ii]].text%></div>
+      <% }%>
+    </td>
+    <td class="rel">
+    <div>销量：<%=data[i].sales_count%></div>
+      <div>库存：<%=data[i].stock%></div>
+      <button class="add_item btn btn-mini abs b0 mb5 r5">添加</button>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="item_cart_tr" type="text/html">
+<%for (var i in data) { %>
+<tr item_id="<%=data[i].item_id%>" cat_id="<%=data[i].cat_id%>" tb="0" <%if (data[i].danger_cat) { %>class="danger_cat"<% }%>>
+    <td class="p0">
+        <a href='javascript:void(0);' class="rel db h80 p1 bbd edit_pen_image">
+          <img name='creative_img' src="<%=data[i].pic_url%>" width="80" height="80" title="点击换图" />
+      </a>
+        <a href='javascript:void(0);' class="rel db h80 p1 edit_pen_image">
+      <%if (mnt_type=='2') { %>
+        <span name="creative_img" class="none_crt_img dib white bg_silver tc f16 b pct100" style="padding: 16px 0;">选 择<br>图 片</span>
+      <% } else { %>
+        <img name='creative_img' src="<%=data[i].pic_url%>" width="80" height="80" title="点击换图" />
+      <% }%>
+
+        </a>
+        <ul class="hide" name="item_imgs">
+        <%for (var j in data[i].item_imgs) { %>
+            <li><%=data[i].item_imgs[j]%></li>
+        <% }%>
+        </ul>
+    </td>
+    <td class="rel">
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+        <div class="cat_path">
+          <span class="b">类目：</span>
+          <span class="loading_tag silver">查询中<span class="ajax_loading"></span></span>
+          <span name="cat_path"></span>
+        </div>
+        <%if (mnt_type=='2') { %>
+        <div>
+          <span class="b">关键词限价：</span>
+          <span class="orange">￥<span name="limit_price"><%=data[i].limit_price%></span></span>
+        </div>
+        <% }%>
+        <div class="adg_title lh30">
+            <span class="orange b">新增创意1 </span>
+            <span class="loading_tag silver">正在生成<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide f12 p2_4 vba w250">
+            <span name="length_prompt" class="hide"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <div class="adg_title lh30">
+            <span class="orange b">新增创意2 </span>
+            <span class="loading_tag silver">正在生成<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide f12 p2_4 vba w250">
+            <span name="length_prompt" class="hide"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <span class="opert_tag orange abs t0 l0 hide lh16">&lt;点击图片换图</span>
+        <button class="undo btn btn-mini abs b0 mb5 r5">撤消</button>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="add_item_fail_msg" type="text/html">
+<div class="f12 b dib p3"><i class="iconfont f14 mr3 red">&#xe62b;</i>添加失败的宝贝</div>
+<div class="bdd ofys" style="max-height:500px;">
+<%for (var item in fail_msg) { %>
+<div class="bgf0 bbw">
+    <div class="dib w80 vt">
+        <img src="<%=fail_msg[item][0]%>">
+    </div>
+    <div class="dib p5 f12">
+    <div class="b"><%=fail_msg[item][1]%></div>
+        <div class="red">错误信息：<%=fail_msg[item][2]%></div>
+    </div>
+</div>
+<% }%>
+</div>
+</script>
+
+<script id="adgroup_tr" type="text/html">
+<%for (var i in data) { %>
+<tr adgroup_id="<%=data[i].adgroup_id%>" item_id="<%=data[i].item_id%>" cat_id="<%=data[i].cat_id%>" limit_price="<%=data[i].limit_price%>">
+    <td class="rel p1">
+        <a href='javascript:void(0);' name='adgroup' class='db h80 J_image tc vm'>
+            <img src="<%=data[i].pic_url%>_80x80.jpg"/>
+        </a>
+    </td>
+    <td>
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+        <div class="orange">￥<%=data[i].price%></div>
+    </td>
+    <td>
+        <span class="hide"><%=total_pay%></span>
+        <div><span>总花费：<span class="total_cost b">￥<%=data[i].total_cost%></span></span></div>
+        <div><span>点击量：<span class="click ml3"><%=data[i].click%></span></span></div>
+        <div><span>PPC：<span class="ppc ml3"><%=data[i].ppc%></span></span></div>
+    </td>
+    <td class="rel">
+      <span class="hide"><%=total_pay%></span>
+      <div><span>成交额：<span class="total_pay b">￥<%=data[i].total_pay%></span></span></div>
+      <div><span>成交量：<span class="paycount"><%=data[i].paycount%></span></span></div>
+      <div><span>ROI：<span class="roi"><%=data[i].roi%></span></span></div>
+      <button class="add_adgroup btn btn-mini abs b0 mb5 r5">添加</button>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="mnt_adgroup_tr" type="text/html">
+<%for (var i in data) { %>
+<tr adgroup_id="<%=data[i].adgroup_id%>" item_id="<%=data[i].item_id%>" tb="1">
+    <td class="p0">
+        <a href='javascript:void(0);' class="rel db h80 p1 bbd edit_pen_image">
+            <img name='creative_img' src="<%=data[i]['item_imgs'][0]%>_80x80.jpg" width="80" height="80" title="点击换图" />
+        </a>
+        <a href='javascript:void(0);' class="rel db h80 p1 edit_pen_image">
+        <%if (mnt_type=='2') { %>
+            <span name="creative_img" class="none_crt_img dib white bg_silver tc f16 b pct100" style="padding: 16px 0;">选 择<br>图 片</span>
+        <% } else { %>
+            <img name='creative_img' src="<%=data[i]['item_imgs'][0]%>_80x80.jpg" width="80" height="80" title="点击换图" />
+        <% }%>
+        </a>
+        <ul class="hide" name="item_imgs">
+        <%for (var j in data[i]['item_imgs']) { %>
+            <li><%=data[i]['item_imgs'][j]%></li>
+        <% }%>
+        </ul>
+    </td>
+    <td class="rel">
+        <div><a target='_blank' href='http://item.taobao.com/item.htm?id=<%=data[i].item_id%>' name="item_title"><%=data[i].title%></a></div>
+        <%if (mnt_type=='2') { %>
+        <div>
+            <span class="b">关键词限价：</span>
+            <span class="orange">￥<span name="limit_price"><%=data[i].limit_price%></span></span>
+        </div>
+        <% }%>
+        <div class="adg_title lh30">
+            <span class="b">创意标题1 </span>
+            <span class="loading_tag silver">正在查询<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide f12 p2_4 vba w250">
+            <span name="length_prompt" class="hide"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <div class="adg_title lh30">
+            <span class="b">创意标题2 </span>
+            <span class="loading_tag silver">正在查询<span class="ajax_loading"></span></span>
+            <input type="text" name="adg_title" value="" class="hide f12 p2_4 vba w250">
+            <span name="length_prompt" class="hide"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+        </div>
+        <div class="error_list lh30 red b hide">
+        </div>
+<!--        <button class="set_unmnt btn btn-mini abs t5 r5">撤消</button>-->
+        <button class="undo btn btn-mini abs b0 mb5 r5">撤消</button>
+    </td>
+</tr>
+<% }%>
+</script>
+<script id="item_imgs" type="text/html">
+<!--不要换行，保证图片间距-->
+<ul class="ul_line h160 J_image_list">
+  <%for (var i in item_imgs) { %>
+    <li class="bdd mr10 rel J_image" fix-ie="hover">
+      <img src="<%=item_imgs[i]%>_160x160.jpg" width="160" height="160"></li>
+  <% }%>
+</ul>
+</script>
+<script id="ul_item_imgs" type="text/html">
+<ul class="hide" name="item_imgs">
+<%for (var i in item_imgs) { %>
+    <li><%=item_imgs[i]%></li>
+<% }%>
+</ul>
+</script>

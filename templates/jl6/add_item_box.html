@@ -1,0 +1,167 @@
+<div class="l item_box left_box">
+    <div class="search">
+        <div class="l"><strong class="f16">候选宝贝</strong></div>
+        <div class="r ml10">
+            <div class="form-inline" autocomplete="on">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" class="form-control" autocomplete="on" id="search_val_left" placeholder="宝贝标题关键字">
+                  <div class="btn input-group-addon" id="search_btn_left"><i class="iconfont"></i></div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!--<div class="r">
+            <div class="dropdown category">
+
+            </div>
+        </div>-->
+
+        <div class="r hide_no_pic mr20 hide f12 select_div">
+            <input type="checkbox" id="hide_no_pic" checked/>&nbsp;隐藏无主图的宝贝
+        </div>
+    </div>
+
+  <div class="panel-group pt10" id="accordion">
+      <div class="panel panel-default" adg_type="other">
+        <div class="panel-heading">
+          <h4 class="panel-title tl">
+            <a data-toggle="collapse" data-parent="#accordion"
+              href="#collapseOne">
+              <strong>
+                  <i class="iconfont collapse-icon {% if add_adgroup %}hide{% endif %}">&#xe605;</i>
+                  <i class="iconfont collapse-icon {% if not add_adgroup %}hide{% endif %}">&#xe607;</i>
+              </strong> 没有在当前计划下推广的宝贝
+            </a>
+            <div class="r tr w350">
+                <span class="select_div"><input type="checkbox" id="hide_adgs">&nbsp;隐藏已推广宝贝</span>&emsp;&emsp;&emsp;&emsp;
+                <span id="more_other_items" class="hide">
+                    <a href="javascript:;" class="mr10 last_page" page_no="1" load_type="0">上一页</a>
+                    <span class="current_page hide">0</span></a>
+                    <a href="javascript:;" class= "mr30 next_page" page_no="1" load_type="0">下一页</a>
+                </span>
+                <a href="javascript:;" class="mr10 batch_add">添加当前页&nbsp;<i class="iconfont f16">&#xe65c;</i></a>
+            </div>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse {% if not add_adgroup %}in{% endif %}">
+           <div class="panel-body">
+               <table id="item_table_title" class="table">
+                   <thead class="table-thead">
+                        <tr>
+                            <th style="width:75px" class="tc">宝贝图片</th>
+                            <th style="width:270px" class="tc">宝贝标题</th>
+                            <th style="width:85px" class="tc">销量</th>
+                            <th style="width:85px" class="tc">库存</th>
+                            <th style="width:100px" class="tc">推广状态</th>
+                            <th></th>
+                        </tr>
+                   </thead>
+               </table>
+               <div class="adg_t_body {% if not add_adgroup %}h780{% endif %}">
+                   <table id="other_adg_table" class="table">
+                        <tbody class="table-tbody">
+                            <tr class="load_adg">
+                                <td colspan="6">
+                                  <div class="text-center">
+                                    <img src="/site_media/jl6/static/images/ajax_loader.gif" alt=""><br>
+                                    <span>请稍候...</span>
+                                  </div>
+                              </td>
+                            </tr>
+                        </tbody>
+                  </table>
+              </div>
+           </div>
+        </div>
+      </div>
+      {% if add_adgroup %}
+      <div class="panel panel-default" adg_type="current">
+        <div class="panel-heading">
+          <h4 class="panel-title tl">
+            <a data-toggle="collapse" data-parent="#accordion"
+              href="#collapseTwo">
+              <strong>
+                  <i class="iconfont collapse-icon">&#xe605;</i>
+                  <i class="iconfont collapse-icon hide">&#xe607;</i>
+              </strong> 当前计划下已推广的宝贝
+            </a>
+            <div class="r tr w250">
+               <span id="more_adgs" class="hide">
+                    <a href="javascript:;" class="mr10 last_page" page_no="1" load_type="1">上一页</a>
+                    <a href="javascript:;" class="mr10 hide"><span class="current_page">0</span>/<span class="page_count">0</span></a>
+                    <a href="javascript:;" class="mr30 next_page" page_no="1" load_type="1">下一页</a>
+                </span>
+                <a href="javascript:;" class="mr10 batch_add">添加当前页&nbsp;<i class="iconfont f16">&#xe65c;</i></a>
+            </div>
+          </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in">
+          <div class="panel-body" id="adgroup_table_sort">
+            <table id="adg_table_title" class="table">
+                <thead class="table-thead">
+                    <tr class="load_adg">
+                        <th class="hide"></th>
+                        <th style="width:75px" class="tc">宝贝图片</th>
+                        <th style="width:270px;" class="tc">宝贝标题</th>
+                        <th style="width:85px" class="tc" type="number">7天成交量</th>
+                        <th style="width:85px" class="tc" type="number">7天点击量</th>
+                        <th style="width:100px" class="tc" type="number">ROI</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="adg_t_body">
+                <table class="table"  id="cur_campaign_adg_table">
+                    <tbody class="table-tbody">
+                        <tr>
+                          <td colspan="6">
+                              <div class="text-center">
+                                <img src="/site_media/jl6/static/images/ajax_loader.gif" alt=""><br>
+                                <span>请稍候...</span>
+                              </div>
+                          </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+  </div>
+</div>
+<div class="l item_box right_box ml10">
+    <div class="search">
+        <div class="pull-left"><strong class="f16">已选<span class="doing_count">0</span>个<span class="show_doable_count">(还可选<span class="doable_count">500</span>个)</span></strong></div>
+        <div class="pull-right">
+            <div class="form-inline" autocomplete="on">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" class="form-control" autocomplete="on" id="search_cart_val" placeholder="宝贝标题关键字">
+                  <div class="btn input-group-addon" id="search_cart"><i class="iconfont"></i></div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="pull-right mr30 pl30"><a href="javascript:;" class="undo_all"><i class="iconfont b f16">&#xe62a;</i>取消所有已选</a></div>
+    </div>
+    <div class="mt10 select_item">
+        <div class="table-thead">
+            <div class="adg_img">宝贝图片</div>
+            <div class="adg_title">标题</div>
+        </div>
+        <div class="table-body">
+            <table class="table" id="item_cart">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 临时回收站  -->
+<div class="hide">
+    <table id="recycle_bin">
+    </table>
+</div>

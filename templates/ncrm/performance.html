@@ -1,0 +1,97 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}业绩排行榜{% endblock %}
+{% block extra_style %}
+<style>
+.bg_theme {background-color: #4e89ba !important;}
+.data-calendar {display: none;}
+.ks-dtp {padding-top: 8px !important;}
+/*#xfgroup_table tbody td{padding: 5px 4px;}*/
+</style>
+{% endblock %}
+{% block content %}
+<input class="hide" type="text" value="{{pa.deatail_dict.consult_pay_limit}}" id='consult_pay_limit' />
+<div class="w1200 auto pt20">
+  <div class="" style="border-bottom: 1px dashed #ccc;">
+    <h4>统计月份:
+      <form id="tj_month_form" action="" method="get" class="dib mb0">
+        <input class="w60 ml5 dib" name="tj_month" id="tj_month" type="text" value="{{date_month}}">
+        <a href="javascript:;" class="btn submit">查询</a>
+      </form>
+      <span class="ml20 f14 n">注意：本月数据每隔1小时刷新一次。</span>
+    </h4>
+  </div>
+  <div class="w700 l">
+    <h4>排行榜</h4>
+    <div class="">
+      <table id="xfgroup_table" class="table-striped table-bordered f14">
+        <thead>
+          <tr>
+            <th class="w30"><div class="">销服组</div></th>
+            <th class="w30"><div class="">团队积分</div></th>
+            <th class="w20"><div class="">积分排名</div></th>
+            <th class="w30"><div class="">团队金额(元)</div></th>
+            <th class="w20"><div class="">金额排名</div></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="w700 r lh30 f14 hide">
+    <h4>团队绩效</h4>
+    <div class="bg_white p10">
+      <div id="person">
+
+      </div>
+      <div class="lh24 mt10">
+        {% include "perf_cfg_table.html" %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block template%}
+<script id="xfgroup_table_tr" type="text/html">
+  <tr <% if (is_current_user) { %> class="bg_theme" <% } %> >
+    <td class="tc"><%=xfgroup_name%></td>
+    <td class="tr">
+      <div class="hide"><%=score%></div>
+      <div class="tooltips" data-placement="right" data-original-title="<div class='tl'><% for(var i in score_detail_str_list) { %><%=score_detail_str_list[i]%></br><% } %></div>"><%=score%></div>
+    </td>
+    <td class="tr"><%=score_rank%></td>
+    <td class="tr"><%=order_pay%></td>
+    <td class="tr"><%=order_pay_rank%></td>
+  </tr>
+</script>
+
+<script id="person_info" type="text/html">
+  <div><span class="pct50 dib">团队金额：<%=order_pay%>元</span><span class="ml5">团队金额排名：第<span class="red"><%=order_pay_rank%></span>名</span></div>
+  <div>
+    <span class="pct50 dib">团队积分：<%=score%><i class="iconfont tooltips f14 ml5" data-toggle="tooltip" data-original-title="团队积分 = 月活跃用户人天 * 1 + 用户存活增量 * 2 + 好评数 * 10 - 差评数 * 80">&#xe68b;</i></span>
+    <span class="">团队积分排名：第<span class="red"><%=score_rank%></span>名</span>
+  </div>
+  <div>
+    <span class="pct50 dib">退款金额：<%=refund_pay%>元</span>
+    <span>团队提成：
+      <span class="red" id="team_pay" team_pay = "<%=team_pay%>" ><%=team_pay%></span>元
+      <i class="iconfont tooltips f14 ml5" data-toggle="tooltip" data-original-title="团队提成 = (团队金额 - 退款金额) * 团队提成系数">&#xe68b;</i>
+    </span>
+  </div>
+</script>
+
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/performance.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.Performance.init();
+});
+</script>
+{% endblock %}

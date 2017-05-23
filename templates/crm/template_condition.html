@@ -1,0 +1,480 @@
+<input type="hidden" value="{{cond_type_list}}" id="cond_type_list" />
+<input type="hidden" value="{{consult_id}}" id="consult_id" />
+<input type="hidden" value="{{consult_group_id}}" id="consult_group_id" />
+
+{%if ps_type == 'RJJH' or ps_type == 'RJJHLEADER' or ps_type == 'DEV' %}
+<div id="rjjh_remind_dev" class="portlet box grey">
+  <div class="portlet-title">
+  	<input type="hidden" id="rjjh_remind_flag" value="0">
+    <div class="caption"><i class="icon-reorder"></i><span id="rjjh_remind_show">人机提示</span></i></div>
+		<div class="tools">
+    	<a href="javascript:;" class="collapse" id="pull_but"></a>
+    </div>
+  </div>
+  <div class="portlet-body">
+	  <table class="table table-striped table-hover hide" id="rjjh_remind_table" >
+			<thead>
+				<tr>
+					<th style="width:100px">#</th>
+					<th style="width:150px">描述</th>
+					<th class="hidden-480">店铺</th>
+				</tr>
+			</thead>
+			<tbody >
+			</tbody>
+	  </table>
+	  <div class='tac' id="rjjh_noremide_div">
+			 <label for="male">亲, 当下您所管理的账户中不存在问题账户.</label>
+	  </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="portlet box grey">
+  <div class="portlet-title">
+    <div class="caption"><i class="icon-reorder"></i>选择条件</div>
+		<div class="tools">
+    	<a href="javascript:;" class="collapse"></a>
+    </div>
+  </div>
+  <div class="portlet-body">
+  	<div id="condition_div">
+    	<div id="c_base_div" class="condtion_select">
+        <div class="c_title"></div>
+        <div class="c_content">
+        	<div class="special" fix-ie="hover">
+        	<span class="tooltips" data-placement="bottom" data-original-title="" id='group_tips' >
+              <span >部门导航</span>
+              <select class="single is_usable" id="base_consult_group_id"
+	              {% if not '1' in perms %}
+		              disabled ="disabled"
+	              {% endif %}
+              ></select>
+            </span>
+        	<span class="tooltips" data-placement="bottom" data-original-title="" id='group_tips' >
+              <span >顾问</span>
+              <select class="single is_usable" id="base_consult_id"
+	              {% if not '1' in perms %}
+		              disabled ="disabled"
+	              {% endif %}
+              ></select>
+            </span>
+        	<span>
+              <span>一级类目</span>
+              <select class="single" id="base_cat_id">
+                <option value='' selected="selected">---------</option>
+                {% for cat in top_cats_list %}
+                <option value='{{cat.cat_id}}'>{{cat.cat_name}}</option>
+                {% endfor %}
+              </select>
+            </span>
+            <span style="display: none;">
+              <span>基于跳转结果</span>
+              <select class="single" id="base_is_jumped" disabled="disabled">
+                <option value="0" selected="selected">否</option>
+                <option value="1">是</option>
+              </select>
+            </span>
+            <span style="display: none;">
+              <span>统计报表</span>
+              <select class="single" id="base_is_rpt">
+                <option value="0" selected="selected">否</option>
+                <option value="1">是</option>
+              </select>
+            </span>
+            <span>
+              <span>报表统计天数</span>
+              <select class="single" id="base_rpt_day">
+                <option value="1">昨天</option>
+                <option value="2">过去2天</option>
+                <option value="3">过去3天</option>
+                <option value="5">过去5天</option>
+                <option value="7">过去7天</option>
+                <option value="10">过去10天</option>
+                <option value="14">过去14天</option>
+                <option value="15" selected="selected">过去15天</option>
+              </select>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {% for cond_type in cond_type_list %}
+      <div class="condtion_select">
+      	<div class="c_title"><span>{{cond_type.1}}</span></div>
+        <div class="c_content">
+
+        	{% if cond_type.0 == 'account' %}
+        	<div class="special" fix-ie="hover">
+            <span><span>昵称</span><input type="text" class="single" id="account_nick"/></span>
+            <span><span>ID</span><input type="text" class="single" id="account_id"/></span>
+            <span class="double" id="account_balance"><span>账户余额</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span>
+              <span>长尾计划</span>
+              <select class="single" id="account_is_gsw">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已开通</option>
+                <option value="0">未开通</option>
+              </select>
+          	</span>
+            <span>
+              <span>重点计划</span>
+              <select class="single" id="account_is_rjjh">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已开通</option>
+                <option value="0">未开通</option>
+              </select>
+          	</span>
+          	<!--
+          	<span>
+              <span>操作状态</span>
+              <select class="single" id="account_opar_status">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已操作</option>
+                <option value="0">未操作</option>
+              </select>
+          	</span>
+          	<span>
+              <span>报表状态</span>
+              <select class="single" id="account_is_dl">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已下载</option>
+                <option value="0">未下载</option>
+              </select>
+          	</span>
+          	-->
+          </div>
+          <div class="special hide" fix-ie="hover">
+            <span >
+              <span>关注状态</span>
+              <select class="single" id="account_attention_status">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已关注</option>
+                <option value="0">未关注</option>
+              </select>
+          	</span>
+            <span >
+              <span>评论状态</span>
+              <select class="single" id="account_comment_status">
+                <option value="" selected="selected">------------</option>
+                <option value="0">未评论</option>
+                <option value="1">好评</option>
+                <option value="2">中评</option>
+                <option value="3">差评</option>
+                <option value="4">待评</option>
+              </select>
+          	</span>
+            <span >
+              <span>退款状态</span>
+              <select class="single" id="account_refund_status">
+                <option value="" selected="selected">---------</option>
+                <option value="1">未退款</option>
+                <option value="0">退款</option>
+              </select>
+          	</span>
+            <span >
+              <span>关系状态</span>
+              <select class="single" id="account_relation_status">
+                <option value="" selected="selected">---------</option>
+                <option value="0">正常客户</option>
+                <option value="1">托管客户</option>
+                <option value="2">友情客户</option>
+                <option value="3">内部客户</option>
+                <option value="4">差评客户</option>
+                <option value="5">误订客户</option>
+              </select>
+          	</span>
+            <span >
+              <span>介绍状态</span>
+              <select class="single" id="account_introduce_status">
+                <option value="" selected="selected">---------</option>
+                <option value="0">未转介绍</option>
+                <option value="1">已转介绍</option>
+              </select>
+          	</span>
+            <span >
+              <span>灰&nbsp;名&nbsp;单</span>
+              <select class="single" id="account_ban_status">
+                <option value="" selected="selected">---------</option>
+                <option value="0">正常</option>
+                <option value="1">灰名单</option>
+              </select>
+          	</span>
+            <span >
+              <span>危险程度</span>
+              <select class="single" id="account_dangerous_status">
+                <option value="" selected="selected">---------</option>
+                <option value="0">正常</option>
+                <option value="1">一般般</option>
+                <option value="2">危险</option>
+              </select>
+          	</span>
+            <span class="double" id="account_revisit_count"><span>回访次数</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+          </div>
+          {% endif %}
+
+          {% if cond_type.0 == 'campaign' %}
+          <div class="special" fix-ie="hover">
+            <span>
+              <span>推广状态</span>
+              <select class="single is_usable" id="campaign_online_status" disabled="disabled">
+                <option value="">---------</option>
+                <option value="1" selected="selected">推广中</option>
+                <option value="0">已暂停</option>
+              </select>
+          	</span>
+            <span>
+              <span>计划类型</span>
+              <select class="single is_usable" id="campaign_mnt_type" disabled="disabled">
+                <option value="">---------</option>
+                <option value="0">普通计划</option>
+                <option value="1">长尾计划</option>
+                <option value="2" selected="selected">重点计划</option>
+                <option value="3" >ROI托管</option>
+                <option value="4" >无线托管</option>
+              </select>
+          	</span>
+          	<span>
+              <span>全自动状态</span>
+              <select class="single is_usable" id="campaign_mnt_status" disabled="disabled">
+                <option value="">---------</option>
+                <option value="0">暂停</option>
+                <option value="1" selected="selected">开启</option>
+              </select>
+          	</span>
+            <!--
+            <span>
+              <span>日限额状态</span>
+              <select class="single" id="campaign_budget_status">
+                <option value="" selected="selected">---------</option>
+                <option value="1" >超过日限额</option>
+                <option value="0" >未超过过日限额</option>
+              </select>
+          	</span>
+          	<span>
+              <span>操作状态</span>
+              <select class="single" id="campaign_opar_status">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已操作</option>
+                <option value="0">未操作</option>
+              </select>
+          	</span>
+          	<span>
+              <span>操作类型</span>
+              <select class="single" id="campaign_opar_type">
+                <option value="" selected="selected">---------</option>
+                <option value="1">人工操作</option>
+                <option value="0">系统优化</option>
+              </select>
+          	</span>
+          	-->
+          	<span>
+              <span>统计类型</span>
+              <select class="single" id="campaign_stat_type">
+                <option value="" selected="selected">---------</option>
+                <option value="0">托管宝贝</option>
+                <option value="1">非托管宝贝</option>
+              </select>
+          	</span>
+            <span class="double" id="campaign_budget"><span>计划日限额</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span class="double" id="campaign_exec_days"><span>推广天数</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+          </div>
+          {% endif %}
+
+          {% if cond_type.0 == 'adgroup' %}
+          <div class="special" fix-ie="hover">
+            <span>
+              <span>推广状态</span>
+              <select class="single is_usable" id="adgroup_online_status" disabled="disabled">
+                <option value="">---------</option>
+                <option value="1" selected="selected">推广中</option>
+                <option value="0">已暂停</option>
+              </select>
+          	</span>
+            <span>
+              <span>监控类型</span>
+              <select class="single is_usable" id="adgroup_mnt_type" disabled="disabled">
+                <option value="">---------</option>
+                <option value="0">普通宝贝</option>
+                <option value="1">长尾宝贝</option>
+                <option value="2" selected="selected">重点宝贝</option>
+                <option value="3">ROI宝贝</option>
+                <option value="4">无线宝贝</option>
+                <option value="9">托管宝贝</option>
+              </select>
+          	</span>
+          	<!--
+            <span>
+              <span>关键词报表</span>
+              <select class="single" id="adgroup_is_dl">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已下载</option>
+                <option value="0">未下载</option>
+              </select>
+          	</span>
+          	<span>
+              <span>操作状态</span>
+              <select class="single" id="adgroup_opar_status">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已操作</option>
+                <option value="0">未操作</option>
+              </select>
+          	</span>
+          	 -->
+          	 <span>
+              <span>推广标题</span>
+              <select class="single" id="adgroup_title_num">
+                <option value="" selected="selected">---------</option>
+                <option value="2">双推广标题</option>
+                <option value="1">单推广标题</option>
+              </select>
+          	</span>
+            <span class="double" id="adgroup_create_days"><span>宝贝推广天数</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span class="double" id="adgroup_mnt_time"><span>自动推广天数</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span class="double" id="adgroup_limit_price"><span>宝贝限价</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+	          <span><span>类目ID</span><input type="text" class="single" id="adgroup_cat_id"/></span>
+          </div>
+          {% endif %}
+
+          {% if cond_type.0 == 'keyword' %}
+          <div class="special" fix-ie="hover">
+            <span>
+              <span>匹配模式</span>
+              <select class="single" id="keyword_match_scope">
+                <option value="" selected="selected">---------</option>
+                <option value="1">精准匹配</option>
+                <option value="2">中心匹配</option>
+                <option value="4">广泛匹配</option>
+              </select>
+          	</span>
+            <span>
+              <span>无展现词</span>
+              <select class="single" id="keyword_is_garbage">
+                <option value="" selected="selected">---------</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+              </select>
+          	</span>
+            <span>
+              <span>是否关注</span>
+              <select class="single" id="keyword_is_focus">
+                <option value="" selected="selected">---------</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+              </select>
+          	</span>
+            <span>
+              <span>宝贝默认出价</span>
+              <select class="single" id="keyword_is_default_price">
+                <option value="" selected="selected">---------</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+              </select>
+          	</span>
+          	<!--
+            <span>
+              <span>报表状态</span>
+              <select class="single" id="keyword_is_dl">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已下载</option>
+                <option value="0">未下载</option>
+              </select>
+          	</span>
+          	<span>
+              <span>今日修改状态</span>
+              <select class="single" id="keyword_is_modify">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已修改</option>
+                <option value="0">未修改</option>
+              </select>
+          	</span>
+          	<span >
+              <span>冻结状态</span>
+              <select class="single" id="keyword_is_freeze">
+                <option value="" selected="selected">---------</option>
+                <option value="1">已冻结</option>
+                <option value="0">未冻结</option>
+              </select>
+          	</span>
+          	 -->
+          </div>
+          <div class="special" fix-ie="hover">
+            <span class="double" id="keyword_qscore"><span>质量得分</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span class="double" id="keyword_max_price"><span>关键词出价</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span class="double" id="keyword_create_days"><span>养词天数</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+            <span><span>包含关键字</span><input type="text" class="single" id="keyword_contain"/></span>
+          </div>
+          {% endif %}
+
+          <div class="rpt hide" fix-ie="hover">
+          {% for cond in cond_type.2 %}
+            <span id="{{cond_type.0}}_{{cond.1}}"><span>{{cond.0}}</span><input type="text" class="min" /> ~<input type="text" class="max" /></span>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="fr">
+      	<button class="btn tooltips hide marr_6" data-placement="left" data-original-title="根据搜索结果进行统计" id="show_summary_rpt">统&nbsp;&nbsp;&nbsp;计</button>
+        <button class="btn blue" id="button_search">搜&nbsp;&nbsp;&nbsp;索</button></div>
+      <br style="clear:both">
+    </div>
+  </div>
+</div>
+
+<div id="modal_msg" class="modal hide fade tac" tabindex="-1" data-width="760" aria-hidden="true" data-backdrop="static" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4>添加备注&留言</h4>
+    </div>
+    <div class="modal-body padb_0">
+		<form action="#" id="msg_form" class="marb_0">
+            <div class="alert alert-info" style="width: 660px; margin: 0 auto; text-align: left;">
+                <strong>说明：</strong> 1、备注是公司内部交流使用的；2、留言是写消息给客户看的；3、添加备注时，标题可以为空
+            </div>
+
+            <div class="mart_12 marb_12 {% if cond_type_list|length > 1 %} hide {% endif %}">
+                <label class="fl marl_24">标题：</label>
+                <div><input type="text" placeholder="" style="width:80%;" id="msg_title" /></div>
+            </div>
+
+            <div class="mart_12">
+                <label class="fl marl_24">内容：</label>
+                <div><textarea id="msg_content" style=" height:160px; width:80%;"></textarea></div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer tac">
+        <button type="button" class="btn blue submit_msg marr_12" msg_type=0>添加 备注</button>
+        <button type="button" class="hide btn green submit_msg marr_12" msg_type=1>添加 留言</button>
+        <button type="button" data-dismiss="modal" class="btn">取消</button>
+    </div>
+</div>
+
+<script id='rjjh_remind_tr' type="text/html" >
+	<tr>
+		<td><%=num%></td>
+		<td><%=title%></td>
+		<td class="hidden-480">
+			<% for(var i = 0 ; i < shop_ids.length ; i ++) {%>
+				<a href="/crm/crm_redirect?shop_id=<%=shop_ids[i][0]%>&amp;login_type=web&amp;next_url=" target="_blank"><%=shop_ids[i][1]%></a>
+			<% } %>
+		</td>
+	</tr>
+</script>
+
+<script id="msg_template" type="text/html">
+<%for (var i in msg_list) { %>
+	<tr class="details" >
+		<td style="width:80px;"><%=msg_list[i].last_modified%></td>
+		<td style="width:50px;"><%=msg_list[i].psuser%></td>
+		<td style="width:45px;"><%=msg_list[i].msg_type%></td>
+		<td style="width:45px;"><%=msg_list[i].read_status%></td>
+		<td >
+			<% if (msg_list[i].title) { %>标题：<%=msg_list[i].title%> <br><% } %>
+			<%=msg_list[i].content%>
+		</td>
+	</tr>
+<% } %>
+</script>

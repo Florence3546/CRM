@@ -1,0 +1,22 @@
+<div class="l" fix-ie="hover">
+    <div class="hover-show J_edit_img" >
+        <i class="iconfont abs zx1 f64 white mt50 ml50 poi">&#xe60e;</i>
+        <span class="db abs h160 w160 bg_black opt3"></span>
+    </div>
+    <img class="l" src="<%=$replace(img_url,'sum','160x160')%>" width="160" height="160" creative_id="<%=id%>">
+</div>
+<div class="l w400 pl10">
+    <div class="h40"><span id="creative_title_<%=id%>"><%=title%></span><i class="iconfont ml5 baseColor poi J_edit_title" creative_id="<%=id%>">&#xe60e;</i></div>
+    <ul class="ul_line lh24">
+        <li class="w180">总花费：<span class="b baseColor">￥<%=$format(qr_cost,100,1,2)%></span></li>
+        <li class="w180">成交额：<span class="b baseColor">￥<%=$format(qr_pay,100,1,2)%></span></li>
+        <li class="w180">展现量：<span><%=qr_impressions%></span></li>
+        <li class="w180">收藏数：<span><%=qr_favcount%></span></li>
+        <li class="w180">点击量：<span><%=qr_click%></span></li>
+        <li class="w180">成交数：<span><%=qr_paycount%></span></li>
+        <li class="w180">点击率：<span><%=$format(qr_ctr,1,1,2)%></span></li>
+        <li class="w180">点击转化率：<%=$format(qr_conv,1,1,2)%></li>
+        <li class="w180">PPC：<span><%=$format(qr_cpc,100,1,2)%></span></li>
+        <li class="w180">ROI：<span><%=$format(qr_roi,1,1,2)%></span></li>
+    </ul>
+</div>

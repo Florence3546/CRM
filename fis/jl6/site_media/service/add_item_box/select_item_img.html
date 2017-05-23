@@ -1,0 +1,32 @@
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modal_select_creative_img" item_id="{{ item_id }}" no="{{ no }}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close"
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title b">
+               点击选择创意图片<span id="creative_img_no">{{ img_no }}</span>
+            </h4>
+         </div>
+         <div class="modal-body pt20 pl30 pr30 pt10">
+               <div class="tc image_list pl10">
+                   <ul class="ul_line h160">
+                      {{ each item_imgs as img_url index}}
+                        <li class="bdd mr10 mt10 rel {{ if cur_img == img_url }}active{{ /if }}" fix-ie="hover">
+                          <img src="{{ img_url }}_160x160.jpg" width="160" height="160">
+                          <i class="iconfont select">&#xe656;</i>
+                        </li>
+                      {{ /each }}
+                    </ul>
+               </div>
+         </div>
+         <div class="modal-footer tc">
+             <button class="btn r" data-dismiss="modal" aria-hidden="true">取消</button>
+            <button class="btn btn-primary r mr10" id="update_creative">确定</button>
+         </div>
+      </div>
+    </div>
+</div>

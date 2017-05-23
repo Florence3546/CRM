@@ -1,0 +1,116 @@
+#content_wrapper {
+    width: 1260px;
+    margin: 0 auto;
+    padding: 0;
+}
+th {
+    font-weight: 700 !important;
+}
+td {
+    vertical-align: middle !important;
+}
+.no_data>table,
+.no_data>button,
+.loading>table,
+.loading>button,
+.loading .no_data_tips,
+.loading_tips,
+.no_data_tips {
+    display: none;
+}
+.no_data>.no_data_tips,
+.loading>.loading_tips {
+    display: block;
+}
+.mark {
+    width: 300px;
+}
+td.nick {
+    width: 60px;
+}
+.hover_show {
+    visibility: hidden;
+}
+.hover .hover_show {
+    visibility: visible;
+}
+.navbar {
+    height: 42px;
+}
+.select_ul{
+     margin: 0 0 12px 0;
+    background: #f1f2f3;
+    border:1px solid #ccc;
+    padding: 10px;
+}
+
+.select_ul li {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    line-height: 45px;
+    margin-left: 12px;
+}
+.select_ul li span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+.select_ul li .title {
+    font-weight: 600;
+}
+.select_ul li .sp {
+    color: #FA6001;
+}
+.select_ul li .line {
+    width: 20px;
+    text-align: center;
+}
+.select_ul li input {
+    width: 80px;
+    margin-bottom: 0px;
+}
+.accordion {
+  margin-bottom: 20px;
+}
+.accordion-group {
+  margin-bottom: 2px;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.accordion-heading {
+  border-bottom: 0;
+}
+.accordion-heading .accordion-toggle {
+  display: block;
+  padding: 8px 15px;
+}
+.accordion-toggle {
+  cursor: pointer;
+}
+.accordion-inner {
+  padding: 9px 15px;
+  border-top: 1px solid #e5e5e5;
+}
+.collapse {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  -webkit-transition: height 0.35s ease;
+  -moz-transition: height 0.35s ease;
+  -o-transition: height 0.35s ease;
+  transition: height 0.35s ease;
+}
+.collapse.in {
+  height: auto;
+}
+textarea {
+  margin-bottom: 10px;
+}
+.modal-body {
+  font-size: 12px;
+}
+.accordion textarea{width:100%; font-family: "Microsoft YaHei","微软雅黑",'helvetica','arial','verdana','tahoma','sans-serif'}
+table td{padding: 4px;}

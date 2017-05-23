@@ -1,0 +1,121 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}订单分析{% endblock %}
+
+{% block content %}
+<style>
+    .DTTT{
+        display: none !important;
+    }
+</style>
+<div class="w1329 auto">
+    <div class="mt20">
+        <form id="search_form" action="" method="GET">
+            <input type="hidden" name="load" value="1">
+            起止时间：
+            <input class="w100" name="start_date" id="start_date" type="text" value="{{start_date}}" style="position: relative;"> -
+            <input class="w100" name="end_date" id="end_date" type="text" value="{{end_date}}" style="position: relative;">
+            <select name="article" id="article" class="w100 ml20 f12">
+                <option value="0" {%if article == '0' %}selected{%endif%}>- 平  台 -</option>
+                <option value="1" {%if article == '1' %}selected{%endif%}>网页web</option>
+                <option value="2" {%if article == '2' %}selected{%endif%}>千牛</option>
+            </select>
+            <button class="btn btn-primary ml20" type="submit" id="search">查　询</button>
+            <button class="btn r rel mr10" type="button"  id="save_summary">导出汇总</button>
+            <button class="btn r rel mr10" type="button" id="save_detial">导出明细</button>
+        </form>
+
+        <h5>--汇总--</h5>
+        <table class="table-bordered table-striped" id="summary_table">
+            <thead>
+                <th class="w160"><div>版本</div></th>
+                <th><div>总金额</div></th>
+                <th><div>新订金额</div></th>
+                <th><div>续订金额</div></th>
+                <th><div>升级金额</div></th>
+                <th><div>总订单数</div></th>
+                <th><div>新订数量</div></th>
+                <th><div>续订数量</div></th>
+                <th><div>升级数量</div></th>
+                <th><div>新订占比%</div></th>
+                <th><div>续订占比%</div></th>
+                <th><div>升级占比%</div></th>
+            </thead>
+            <tbody>
+                {%for s in summary.item_list %}
+                    {% if s %}
+                    <tr>
+                        <td class="tc">{{s}}</td>
+                        <td class="tc js_calc"><span class="hide">({{summary.new_total_pay_dict|get_dict:s|divide:'100'|default:'0'}}+{{summary.renew_total_pay_dict|get_dict:s|divide:'100'|default:'0'}}+{{summary.upgrade_total_pay_dict|get_dict:s|divide:'100'|default:'0'}}).toFixed(2)</span>--</td>
+                        <td class="tr">{{summary.new_total_pay_dict|get_dict:s|divide:'100'|default:'0'}}</td>
+                        <td class="tr">{{summary.renew_total_pay_dict|get_dict:s|divide:'100'|default:'0'}}</td>
+                        <td class="tr">{{summary.upgrade_total_pay_dict|get_dict:s|divide:'100'|default:'0'}}</td>
+                        <td class="tr js_calc"><span class="hide">{{summary.new_total_dict|get_dict:s|default:'0'}}+{{summary.renew_total_dict|get_dict:s|default:'0'}}+{{summary.upgrade_total_dict|get_dict:s|default:'0'}}</span>--</td>
+                        <td class="tr">{{summary.new_total_dict|get_dict:s|default:'0'}}</td>
+                        <td class="tr">{{summary.renew_total_dict|get_dict:s|default:'0'}}</td>
+                        <td class="tr">{{summary.upgrade_total_dict|get_dict:s|default:'0'}}</td>
+                        <td class="tr js_calc percent"><span class="hide">{{summary.new_total_dict|get_dict:s|default:'0'}}/({{summary.new_total_dict|get_dict:s|default:'0'}}+{{summary.renew_total_dict|get_dict:s|default:'0'}}+{{summary.upgrade_total_dict|get_dict:s|default:'0'}})</span>--</td>
+                        <td class="tr js_calc percent"><span class="hide">{{summary.renew_total_dict|get_dict:s|default:'0'}}/({{summary.new_total_dict|get_dict:s|default:'0'}}+{{summary.renew_total_dict|get_dict:s|default:'0'}}+{{summary.upgrade_total_dict|get_dict:s|default:'0'}})</span>--</td>
+                        <td class="tr js_calc percent"><span class="hide">{{summary.upgrade_total_dict|get_dict:s|default:'0'}}/({{summary.new_total_dict|get_dict:s|default:'0'}}+{{summary.renew_total_dict|get_dict:s|default:'0'}}+{{summary.upgrade_total_dict|get_dict:s|default:'0'}})</span>--</td>
+                    </tr>
+                    {%endif%}
+                {%endfor%}
+            </tbody>
+        </table>
+
+        <h5>--明细--</h5>
+        <div class="alert">
+            某一项的占比是指当前项与所有总和的比（例如某顾问新订占比，是指当前顾问的新订数与所有该版本的新订总数之比）
+        </div>
+        <table class="table-bordered table-striped mt10" id="main_table">
+            <thead>
+                <th><div>部门</div></th>
+                <th><div>员工</div></th>
+                <th class="w160"><div>版本</div></th>
+                <th><div>总金额</div></th>
+                <th><div>新订金额</div></th>
+                <th><div>续订金额</div></th>
+                <th><div>升级金额</div></th>
+                <th><div>总订单数</div></th>
+                <th><div>新订数量</div></th>
+                <th><div>续订数量</div></th>
+                <th><div>升级数量</div></th>
+                <th><div>新订占比%</div></th>
+                <th><div>续订占比%</div></th>
+                <th><div>升级占比%</div></th>
+            </thead>
+            <tbody>
+                {% for r in  result_list %}
+                    {%for k,v in r.result.items %}
+                    <tr>
+                        <td class="tc">{{r.psuser.get_department_display}}</td>
+                        <td class="tc">{{r.psuser.name_cn}}</td>
+                        <td class="tc">{{k}}</td>
+                        <td class="tr">{{v.total_pay|divide:'100'}}</td>
+                        <td class="tr">{{v.new_pay|default:'0'|divide:'100'}}</td>
+                        <td class="tr">{{v.renew_pay|default:'0'|divide:'100'}}</td>
+                        <td class="tr">{{v.upgrade_pay|default:'0'|divide:'100'}}</td>
+                        <td class="tr">{{v.total_count|default:'0'}}</td>
+                        <td class="tr">{{v.new_count|default:'0'}}</td>
+                        <td class="tr">{{v.renew_count|default:'0'}}</td>
+                        <td class="tr">{{v.upgrade_count|default:'0'}}</td>
+                        <td class="tr">{{v.new_percent}}</td>
+                        <td class="tr">{{v.renew_percent}}</td>
+                        <td class="tr">{{v.upgrade_percent}}</td>
+                    </tr>
+                    {%endfor%}
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/subscribe_analyze.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+    $().ready(function(){
+        PT.subscribeAnalyze.init();
+    });
+</script>
+{% endblock %}

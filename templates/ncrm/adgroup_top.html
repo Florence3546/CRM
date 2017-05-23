@@ -1,0 +1,175 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}宝贝TOP榜{% endblock %}
+{% block extra_style %}
+<style>
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1200 auto pt20">
+    <form method="post" action="" id="adg_top_form" class="m0">
+        <div class="bg_white p10 mb20">
+            <div>
+                <span>宝贝链接：</span>
+                <input type="text" id="item_url" name="item_url" class="w1000" placeholder="https://item.taobao.com/item.htm..." value="{{ request.POST.item_url }}">
+                <a href="javascript:;" class="btn btn-success r" id="a_search_item">搜索宝贝</a>
+            </div>
+            <div class="lh22 mt5">
+                <span>宝贝类目：</span>
+                <input type="hidden" name="item_cat_path_id" value="{{ request.POST.item_cat_path_id }}">
+                <input type="hidden" name="item_cat_path_name" value="{{ request.POST.item_cat_path_name }}">
+                <a href="javascript:;" id="item_cat_path">{{ request.POST.item_cat_path_name }}</a>
+            </div>
+            <div class="lh22 mt5" id="item_prdtword_list">
+                <span>宝贝产品词：</span>
+                <input type="hidden" name="item_prdtwords" value="{{ request.POST.item_prdtwords }}">
+                {% for prdtword in item_prdtword_list %}
+                <a href="javascript:;" class="item_prdtword mr10">{{ prdtword }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="bg_white p10 mb20">
+          <div>
+            <label class="dib">
+              <span>类目</span>
+              <input type="text" class="cat_name_input f12 w350" name="cat_path_name" link="#cat_path_id" placeholder="" value="{{request.POST.cat_path_name}}" autocomplete="off">
+              <input type="hidden" id="cat_path_id" name="cat_path_id" value="{{request.POST.cat_path_id}}">
+            </label>
+            <label class="dib ml15">
+              <span>产品词</span>
+              <input type="text" name="product_word" class="f12 w80" placeholder="" value="{{request.POST.product_word}}">
+            </label>
+            <label class="dib ml15">
+              <span>客单价</span>
+              <input type="text" class="check_num f12 w50 min" name="avg_pay_min" value="{{request.POST.avg_pay_min}}" />
+              ~
+              <input type="text" class="check_num f12 w50 max" name="avg_pay_max" value="{{request.POST.avg_pay_max}}" />
+            </label>
+            <label class="dib ml15">
+              <span>报表天数</span>
+              <select class="f12 single w90" id="rpt_day" name="rpt_day">
+                <option value="1" {% if request.POST.rpt_day == '1' %} selected="selected" {% endif %} >昨天</option>
+                <option value="3" {% if request.POST.rpt_day == '3' %} selected="selected" {% endif %} >过去3天</option>
+                <option value="7" {% if request.POST.rpt_day == '7' or not request.POST.rpt_day %} selected="selected" {% endif %} >过去7天</option>
+                <option value="15" {% if request.POST.rpt_day == '15' %} selected="selected" {% endif %} >过去15天</option>
+                <option value="30" {% if request.POST.rpt_day == '30' %} selected="selected" {% endif %} >过去30天</option>
+              </select>
+            </label>
+            <label class="dib ml15">
+              <span>屏蔽店铺</span>
+              <input class="w140 f12" placeholder="店铺名/店铺id" name="exclude_nick" type="text" value="{{ request.POST.exclude_nick }}">
+            </label>
+          </div>
+          <div class="mt10">
+            <label class="dib">
+              <span>花费</span>
+              <input type="text" class="check_num f12 w50 min" name="cost_min" value="{% if not request.POST %}70{% else %}{{request.POST.cost_min}}{% endif %}" />
+              ~
+              <input type="text" class="check_num f12 w50 max" name="cost_max" value="{{request.POST.cost_max}}" />
+            </label>
+            <label class="dib ml15">
+              <span>成交量</span>
+              <input type="text" class="check_num f12 w50 min" name="paycount_min" value="{{request.POST.paycount_min}}" />
+              ~
+              <input type="text" class="check_num f12 w50 max" name="paycount_max" value="{{request.POST.paycount_max}}" />
+            </label>
+            <label class="dib ml15">
+              <span>点击率</span>
+              <input type="text" class="check_num f12 w50 min" name="ctr_min" value="{{request.POST.ctr_min}}" />
+              ~
+              <input type="text" class="check_num f12 w50 max" name="ctr_max" value="{{request.POST.ctr_max}}" />
+            </label>
+            <label class="dib ml15">
+              <span>转化率</span>
+              <input type="text" class="check_num f12 w50 min" name="cnv_min" value="{{request.POST.cnv_min}}" />
+              ~
+              <input type="text" class="check_num f12 w50 max" name="cnv_max" value="{{request.POST.cnv_max}}" />
+            </label>
+            <label class="dib ml15">
+              <span>ROI</span>
+              <input type="text" class="check_num f12 w50 min" name="roi_min" value="{{request.POST.roi_min}}" />
+              ~
+              <input type="text" class="check_num f12 w50 max" name="roi_max" value="{{request.POST.roi_max}}" />
+            </label>
+            <button class="btn btn-primary r w80" id="submit_form">查&nbsp;询</button>
+          </div>
+        </div>
+    </form>
+
+  <div class="">
+    <div class="mb10 gray">注意：1、不一定是全网数据TOP榜，如果符合条件的宝贝太多，这里只从中取出一批宝贝中来排名；&nbsp;&nbsp;2、只显示前TOP 50名，不显示50名以外符合条件的数据。</div>
+    <table class="table-striped table-bordered" id="adg_top_table">
+      <thead>
+        <tr>
+          <th><div>宝贝</div></th>
+          <th><div>客单价(元)</div></th>
+          <th><div>展现量</div></th>
+          <th><div>点击量</div></th>
+          <th><div>点击率</div></th>
+          <th><div>总花费(元)</div></th>
+          <th><div>PPC(元)</div></th>
+          <th><div>收藏量</div></th>
+          <th><div>购物车数</div></th>
+          <th><div>成交量</div></th>
+          <th><div>成交额(元)</div></th>
+          <th><div>转化率</div></th>
+          <th><div>ROI</div></th>
+          <th><div>操作</div></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for adg in adg_list %}
+        <tr>
+          <td class="tr">
+            <a class="item_base tooltips" target="_blank" href="http://item.taobao.com/item.htm?id={{adg.item_id}}" title="{{adg.item_title}}">
+                <img width="70" height="70" src="{{adg.pic_url}}">
+            </a>
+          </td>
+          <td class="tr">{{adg.avg_pay}}</td>
+          <td class="tr">{{adg.impressions}}</td>
+          <td class="tr">{{adg.click}}</td>
+          <td class="tr">{{adg.ctr}}%</td>
+          <td class="tr">{{adg.cost}}</td>
+          <td class="tr">{{adg.ppc}}</td>
+          <td class="tr">{{adg.favcount}}</td>
+          <td class="tr">{{adg.carttotal}}</td>
+          <td class="tr">{{adg.paycount}}</td>
+          <td class="tr">{{adg.pay}}</td>
+          <td class="tr">{{adg.cnv}}%</td>
+          <td class="tr">{{adg.roi}}</td>
+          <td>
+            {% if mnt_type > 0 %}
+              <a href="/crm/crm_redirect?shop_id={{adg.shop_id}}&login_type=web&next_url=/mnt/adgroup_data/{{adg.adgroup_id}}" target="_blank">登录开车精灵</a>
+            {% else %}
+              <a href="/crm/crm_redirect?shop_id={{adg.shop_id}}&login_type=web&next_url=/web/smart_optimize/{{adg.adgroup_id}}" target="_blank">登录开车精灵</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block template%}
+<script id="person_table_tr" type="text/html">
+  <tr id="">
+    <td class="tc"><%=department%></td>
+    <td class="tr"><%=name%></td>
+    <td class="tr"><%=pay%></td>
+    <td class="tr"><%=xfgroup_list%></td>
+  </tr>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/adgroup_top.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.AdgroupTop.init();
+});
+</script>
+{% endblock %}

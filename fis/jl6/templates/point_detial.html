@@ -1,0 +1,81 @@
+{% extends "base_main.html" %}
+{% block title%}积分明细{% endblock %}
+{% block extra_style %}
+
+{% endblock %}
+
+{%block content%}
+<div class="container">
+    <ol class="breadcrumb">
+      <li><a href="{%url 'web_home'%}">首页</a></li>
+      <li><a href="{%url 'vip_home'%}">会员中心</a></li>
+      <li class="active">积分明细</li>
+    </ol>
+
+   <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="tl pl20">描述</th>
+                <th class="pct20">积分变化</th>
+                <th class="pct20">时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for d in data.detial_list%}
+            <tr>
+                <td class="pl20">
+                    {{d.desc}}
+                    {% if d.type == 'gift' %}
+                        {% if d.logistics_name %}物流公司：{{d.logistics_name}}{%endif%}
+                        {% if d.logistics_id %}运单号：{{d.logistics_id}}{%endif%}
+                        {%if d.logistics_state%}
+                            【已发货】
+                        {%else%}
+                            【未发货】
+                        {%endif%}
+                    {%endif%}
+
+                    {% if d.type == 'virtual' %}
+                        {%if d.exchange_status%}
+                            【已兑换】
+                        {%else%}
+                            【未兑换】
+                        {%endif%}
+                    {%endif%}
+                </td>
+                <td class="tc">
+                     <span class="{%if d.point > 0 %}orange{%else%}green{%endif%}">
+                        {%if d.point > 0 %}+{%endif%}{{d.point}}
+                    </span>
+                </td>
+                <td class="tc">{{d.create_time}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    <div class="mt20 mb20 ">
+        <nav class="pl20 pr20">
+          <span>共{{data.page_info.record_count}}条信息，{{data.page_info.page_count}}页</span>
+          {%if data.page_info.record_count %}
+          <ul class="pagination r m0">
+            <li>
+              <a href="./?type=jfjl&page=1" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+                {%for p in data.page_info.page_xrange%}
+                <li {%if p == data.page_info.page%}class="active"{%endif%}>
+                    <a href="./?type=jfjl&page={{p}}">{{p}}</a>
+                </li>
+                {%endfor%}
+            <li>
+              <a href="./?type=jfjl&page={{data.page_info.page_count}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+          {%endif%}
+        </nav>
+    </div>
+</div>
+{% endblock %}

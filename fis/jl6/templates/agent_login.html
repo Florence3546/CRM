@@ -1,0 +1,36 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% block title %}开车精灵代理登陆入口{% endblock %}
+
+{% block content %}
+<section class="container-fluid">
+<div class="mt20 w500 auto">
+    <div class="box pb10">
+        <header>
+            <div class="line_box">
+                <span class="title f16">代理用户登录</span>
+            </div>
+        </header>
+        <!-- BEGIN LOGIN FORM -->
+        <form class="form-vertical login-form p10" method="post" action="" id="login-form" >{% csrf_token %}
+
+            <div class="err_alert alert alert-warning mb10 {% if not errors %}hide{% endif %}">
+                <strong>错误：</strong><span id="err_msg">{% if errors %}{{errors}}{% endif %}</span>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">用户名：</span>
+                <input type="text" id="username" class="form-control w200" placeholder="请输入用户名" autocomplete="on" value = "{{form.username.value}}" name="username">
+            </div>
+            <div class="input-group mt15">
+                <span class="input-group-addon" id="basic-addon2">密&emsp;码：</span>
+                <input type="password" id="password" class="form-control w200" placeholder="请输入密码" autocomplete="on" value = "{{form.password.value}}" name="password">
+            </div>
+            <div class="input-group mt15 pull-right">
+                <button id="agent_login" class="btn btn-primary r">登录<i class="m-icon-swapright m-icon-white"></i></button>
+            </div>
+        </form>
+     </div>
+</div>
+</section>
+{%endblock%}

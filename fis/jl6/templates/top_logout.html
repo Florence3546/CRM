@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta charset="utf-8" />
+        <title>退出页面-开车精灵</title>
+        <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+        {% if theme == 'dark_blue' %}
+        <link rel="stylesheet" href="../site_media/themes/dark_blue/theme.less"/><!--ignore-->
+        {% else %}
+        {% if theme == 'light_blue' %}
+        <link rel="stylesheet" href="../site_media/themes/light_blue/theme.less"/><!--ignore-->
+        {% else %}
+        {% if theme == 'green' %}
+        <link rel="stylesheet" href="../site_media/themes/green/theme.less"/><!--ignore-->
+        {% else %}
+        <link rel="stylesheet" href="../site_media/themes/orange/theme.less"/><!--ignore-->
+        {% endif %}{% endif %}{% endif %}
+
+        <link id="systheme" rel="stylesheet" href="../site_media/static/css/quickLayout.css" />
+        <style>
+		@font-face {
+		  font-family: 'iconfont';
+		  src: url('//at.alicdn.com/t/font_1444737326_384677.eot'); /* IE9*/
+		  src: url('//at.alicdn.com/t/font_1444737326_384677.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		  url('//at.alicdn.com/t/font_1444737326_384677.woff') format('woff'), /* chrome、firefox */
+		  url('//at.alicdn.com/t/font_1444737326_384677.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+		  url('//at.alicdn.com/t/font_1444737326_384677.svg#iconfont') format('svg'); /* iOS 4.1- */
+		}
+		#login_from_tb {
+		    background:url(../site_media/static/images/top_logout/2.png?__inline) no-repeat;
+		    width:301px;
+		    height:61px;
+		    display:inline-block;
+		}
+		#login_from_tb:hover {background:url(../site_media/static/images/top_logout/3.png?__inline) no-repeat;}
+		#weibo {
+		    background:url(../site_media/static/images/top_logout/4.png?__inline) no-repeat;
+		    width:40px;
+		    height:40px;
+		    display:inline-block;
+		}
+		#weibo:hover {opacity:0.6;}
+		#bangpai {
+		    background:url(../site_media/static/images/top_logout/5.png?__inline) no-repeat;
+		    width:40px;
+		    height:40px;
+		    display:inline-block;
+		    margin-left:3px;
+		}
+		#bangpai:hover {opacity:0.6;}
+		#haoping {
+		    background:url(../site_media/static/images/top_logout/6.png?__inline) no-repeat;
+		    width:40px;
+		    height:40px;
+		    display:inline-block;
+		    margin-left:2px;
+		}
+		#haoping:hover {opacity:0.6;}
+        #wangwang {
+            background:url(../site_media/static/images/top_logout/7.png?__inline) no-repeat;
+            width:40px;
+            height:40px;
+            display:inline-block;
+            margin-left:2px;
+        }
+        #wangwang:hover {opacity:0.6;}
+		</style>
+    </head>
+    <body id="{{PAGE_MARK.2}}">
+        <input id="systhemes" type="hidden" value="request.session.theme"/>
+        <section id="main_content">
+			<div style="height:95px; padding-top:22px;">
+				<div style="width:1345px;margin:0 auto;">
+					<img src="../site_media/static/images/top_logout/logo.png?__inline" alt="" class="ml50">
+					<div style="line-height:50px;float:right;">
+						<a href="http://www.paithink.com/" target="_blank" class="dib vt item_base pl20 pr20 mr60">公司网站</a>
+						<a href="http://www.paithink.com/promotion.html" target="_blank" class="dib vt item_base pl20 pr20 mr60">店铺推广服务</a>
+						<a href="http://www.paithink.com/operate.html" target="_blank" class="dib vt item_base pl20 pr20 mr60">店铺运营服务</a>
+					</div>
+				</div>
+			</div>
+			<div class="bg_base" style="height:520px;">
+			    <div style="width:1345px;margin:0 auto;padding-top:60px;">
+                    <div class="dib" style="margin-left:60px;">
+                        <embed width="650" height="400" src="http://cloud.video.taobao.com/play/u/836440495/p/1/e/1/t/1/11028961.swf" type="application/x-shockwave-flash" allowFullScreen="true"/>
+                    </div>
+			        <div class="dib r" style="margin:80px">
+				        <div>
+					        <img src="../site_media/static/images/top_logout/1.png?__inline">
+				        </div>
+				        <div class="mt30">
+					        <a id="login_from_tb" href="{% url 'main_port' %}"></a>
+				        </div>
+				        <div class="mt30">
+					        <a id="weibo" target="_blank" href="http://weibo.com/ztcjl" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-title="关注官方微博"></a>
+					        <a id="bangpai" target="_blank" href="http://bangpai.taobao.com/group/14487125.htm" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-title="加入开车精灵帮派"></a>
+					        <a id="haoping" target="_blank" href="https://fuwu.taobao.com/score/my_score.htm" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-title="去服务市场打好评"></a>
+					        <a id="wangwang" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"></a>
+				        </div>
+			        </div>
+			    </div>
+			</div>
+            <footer>
+                <p>
+                    Copyright@2014&emsp;www.paithink.com Inc.All Rights Reserved.武汉派生科技有限公司&emsp;保留一切权利
+                </p>
+            </footer>
+        </section>
+    </body>
+    <script type="text/javascript" data-main="service/main" src="jl6/site_media/static/js/require.js"></script>
+</html>
+			

@@ -1,0 +1,70 @@
+/* CSS Document */
+#left_box .icon-btn div{margin:0;padding:0;}
+#right_box .icon-btn div{margin:0;padding:0;}
+.img_class{width:122px; font-size:12px; text-align:center;position:relative;float:left; margin:10px; border:solid 1px #f2f2f2;}
+.img_class img{width:120px; height:120px; padding:1px;}
+.alert_ly{color:#FE6001;font-weight:900;  text-align:center; padding-left:3px;}
+.img_title{height: 70px;text-align: left;}
+.img_rtitle{ width:100%;margin-left:80px !important; text-align:left; margin-top:5px !important; color:#000;}
+.img_rtitle a,.img_title a{color:#666; text-decoration:none;}
+.img_rtitle a:hover,.img_title a:hover{color:red; text-decoration:underline;}
+.zhe_jia{width:50px !important; height:50px !important; position:absolute; left: 37px; top: 37px; border:none !important; display:none; z-index:100; cursor:pointer;}
+.zhezhao{position:absolute; width:120px; height:120px; background-color:#000; display:none; z-index:50;}
+.gs_block{float:left; position:relative;}
+.gs_zhezhao{width:25px !important; height:25px !important; position:absolute; z-index:100; border:none !important; top:19px; left:19px; display:none;}
+.gs_zhe{background-color:#000; width:64px; height:64px; position:absolute; z-index:50;display:none;}
+#gs_right_table{vertical-align:top;}
+#left_main{border:grey solid 1px; }
+#topInfo{padding:3px 5px; height:33px; line-height:33px; background-color: gray}
+
+.thumbnails {
+  margin-left: -20px;
+  list-style: none;
+  *zoom: 1;
+}
+
+.thumbnails:before,
+.thumbnails:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.thumbnails:after {
+  clear: both;
+}
+
+.row-fluid .thumbnails {
+  margin-left: 0;
+}
+
+.thumbnails > li {
+  float: left;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.thumbnail {
+  display: block;
+  padding: 4px;
+  line-height: 20px;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+  -webkit-transition: all 0.2s ease-in-out;
+     -moz-transition: all 0.2s ease-in-out;
+       -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
+}
+
+a.thumbnail:hover,
+a.thumbnail:focus {
+  border-color: #0088cc;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+     -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+          box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}

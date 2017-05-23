@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+{% load rates %}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8" />
+    <title>登录后台</title>
+    <link href="http://g.alicdn.com/kissy/k/5.0.1/css/base.css" rel="stylesheet">
+    <link href="http://g.alicdn.com/kg/editor-plugins/1.1.3/assets/editor.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/site_media/assets/img/favicon.png">
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/ncrm/bootstrap.min.css'|file_time_stamp}}" />
+    {%if DEBUG%}
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/quick_layout.css'|file_time_stamp}}" />
+    <link rel="stylesheet" href="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.css'|file_time_stamp}}" />
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.css'|file_time_stamp}}" />
+    {%else%}
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/quick_layout.min.css'|file_time_stamp}}" />
+    <link rel="stylesheet" href="{{'/site_media/jl5/plugins/data-tables/DT_bootstrap.css'|file_time_stamp}}" />
+    <link rel="stylesheet" href="{{'/site_media/jl5/css/ptui.min.css'|file_time_stamp}}" />
+    {%endif%}
+    <link rel="stylesheet" href="/site_media/jl5/plugins/gritter/css/jquery.gritter.css">
+    {% block extra_style %} {% endblock %}
+    <script src="/site_media/jl5/js/jquery-1.10.1.min.js"></script>
+    <script src="/site_media/jl5/plugins/jquery-migrate-1.2.1.min.js"></script>
+</head>
+    <style>
+    .header {width: 100%; background-color: #4687bd; height: 60px; background-image: url(/site_media/jl5/images/header-nav-bg.jpg);background-repeat: no-repeat;background-position: -80px -40px;box-shadow: 1px 1px 5px #204F77;}
+    #custom_header ul{margin:0;display: inline-block; line-height: 60px;}
+    #custom_header ul li{display: inline-block;}
+    #custom_header ul a{color:#fff;padding: 21px;position: relative;font-size: 16px;}
+    /*#custom_header ul a:hover,#custom_header li.active a{font-weight: 700;}*/
+    #custom_header ul a:hover:after,#custom_header li.active a:after{content: ''; position: absolute; width: 100%; height: 60px; left: 0; background-color: #fff; opacity: 0.2;}
+    .ks-dtp{z-index: 9999 !important;}
+    @font-face {
+      font-family: 'iconfont';
+      src: url('{{'/site_media/jl5//font/iconfont.eot'|file_time_stamp}}'); /* IE9*/
+      src: url('{{'/site_media/jl5//font/iconfont.eot'|file_time_stamp}}?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+      url('{{'/site_media/jl5//font/iconfont.woff'|file_time_stamp}}') format('woff'), /* chrome、firefox */
+      url('{{'/site_media/jl5//font/iconfont.ttf'|file_time_stamp}}') format('truetype'), /* chrome、firefox、opera、Safari,Android, iOS 4.2+*/
+      url('{{'/site_media/jl5//font/iconfont.svg'|file_time_stamp}}#iconfont') format('svg'); /* iOS 4.1- */
+    }
+  </style>
+<body>
+    <div class="w320 auto mt50">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#ztc" data-toggle="tab">直通车后台</a>
+            </li>
+            <li>
+                <a href="#mjzx" data-toggle="tab">卖家中心</a>
+            </li>
+            <li>
+                <a href="#zz" data-toggle="tab">钻展</a>
+            </li>
+        </ul>
+
+        <div class="tab-content bg_white p10">
+            <div class="tab-pane active in pt20" id="ztc">
+				<form method="post" action="https://login.taobao.com/member/login.jhtml" id="J_StaticForm_ztc">
+                    <div>
+                        <span class="dib w60">用户名：</span>
+                        <input type="text" tabindex="1" maxlength="32" value="{{customer.ztc_name|default:''}}" name="TPL_username">
+                    </div>
+                    <div class="mt20">
+                        <span id="J_StandardPwd_ztc" style="">
+                            <span class="dib w60">密&nbsp;&nbsp;&nbsp;码：</span>
+                            <input type="password" tabindex="2" maxlength="20" value="{{customer.ztc_psw|default:''}}" name="TPL_password" aria-labelledby="password-label">
+                        </span>
+                    </div>
+                    <button tabindex="5" class="btn mt20 btn-primary btn-block" type="submit">登录</button>
+                    <input type="hidden" name="loginsite" value="0" id="J_loginsite">
+		            <input type="hidden" name="newlogin" value="">
+		            <input type="hidden" name="TPL_redirect_url" value="http://subway.simba.taobao.com:80/entry/login.htm">
+                    <input type="hidden" name="from" value="subway">
+                    <input type="hidden" name="fc" value="default">
+		            <input type="hidden" name="style" value="miniall">
+		            <input type="hidden" name="css_style" value="">
+		            <input type="hidden" name="tid">
+		            <input type="hidden" name="support" value="000001">
+		            <input type="hidden" name="CtrlVersion" value="1,0,0,7">
+                    <input type="hidden" name="loginType" value="3">
+                    <input type="hidden" name="minititle" value="">
+                    <input type="hidden" name="minipara" value="">
+		            <input type="hidden" name="umto" value="taobao_login:a702c281fa58fc8fc9ab4a4a0db02a99taobao_login:a702c281fa58fc8fc9ab4a4a0db02a99,">
+		            <input type="hidden" name="pstrong" value="">
+                    <input type="hidden" name="llnick" id="llnick1" value="">
+		            <input type="hidden" name="sign" value="">
+		            <input type="hidden" name="need_sign" value="">
+		            <input type="hidden" name="isIgnore" value="">
+		            <input type="hidden" name="full_redirect" value="false">
+		            <input type="hidden" name="popid" value="">
+		            <input type="hidden" name="callback" value="">
+		            <input type="hidden" name="guf" value="">
+		            <input type="hidden" name="not_duplite_str" value="">
+		            <input type="hidden" name="need_user_id" value="">
+		            <input type="hidden" name="poy">
+		            <input type="hidden" name="gvfdcname" value="10">
+		            <input type="hidden" name="gvfdcre" value="687474703A2F2F7375627761792E73696D62612E74616F62616F2E636F6D2F">
+		            <input type="hidden" name="from_encoding" value="">
+                    <input type="hidden" name="sub" value="true"> 
+                    <input type="hidden" name="TPL_password_2">
+                    <input type="hidden" name="loginASR" value="1">
+                    <input type="hidden" name="loginASRSuc" value="0">
+                    <input type="hidden" name="allp" value="">
+                    <input type="hidden" name="oslanguage" value="zh-CN">
+                    <input type="hidden" name="sr" value="1920*1080">
+                    <input type="hidden" name="osVer" value="windows|6.1">
+                    <input type="hidden" name="naviVer" value="chrome|44.02403155">
+                </form>
+            </div>
+            <div class="tab-pane pt20" id="mjzx">
+                <form method="post" action="https://login.taobao.com/member/login.jhtml" id="J_StaticForm_mjzx">
+                    <div>
+                        <span class="dib w60">用户名：</span>
+                        <input type="text" tabindex="1" maxlength="32" value="{{customer.lz_name|default:''}}" name="TPL_username">
+                    </div>
+                    <div class="mt20">
+                        <span id="J_StandardPwd_mjzx" style="">
+                            <span class="dib w60">密&nbsp;&nbsp;&nbsp;码：</span>
+                            <input type="password" tabindex="2" maxlength="20" value="{{customer.lz_psw|default:''}}" name="TPL_password" aria-labelledby="password-label">
+                        </span>
+                    </div>
+                    <button tabindex="5" class="btn mt20 btn-primary btn-block" type="submit">登录</button>
+                    <input type="hidden" name="loginsite" value="0" id="J_loginsite">
+                    <input type="hidden" name="newlogin" value="">
+                    <input type="hidden" name="TPL_redirect_url" value="https://mai.taobao.com/seller_admin.htm">
+                    <input type="hidden" name="from" value="subway">
+                    <input type="hidden" name="fc" value="default">
+                    <input type="hidden" name="style" value="miniall">
+                    <input type="hidden" name="css_style" value="">
+                    <input type="hidden" name="tid">
+                    <input type="hidden" name="support" value="000001">
+                    <input type="hidden" name="CtrlVersion" value="1,0,0,7">
+                    <input type="hidden" name="loginType" value="3">
+                    <input type="hidden" name="minititle" value="">
+                    <input type="hidden" name="minipara" value="">
+                    <input type="hidden" name="umto" value="taobao_login:a702c281fa58fc8fc9ab4a4a0db02a99taobao_login:a702c281fa58fc8fc9ab4a4a0db02a99,">
+                    <input type="hidden" name="pstrong" value="">
+                    <input type="hidden" name="llnick" id="llnick1" value="">
+                    <input type="hidden" name="sign" value="">
+                    <input type="hidden" name="need_sign" value="">
+                    <input type="hidden" name="isIgnore" value="">
+                    <input type="hidden" name="full_redirect" value="false">
+                    <input type="hidden" name="popid" value="">
+                    <input type="hidden" name="callback" value="">
+                    <input type="hidden" name="guf" value="">
+                    <input type="hidden" name="not_duplite_str" value="">
+                    <input type="hidden" name="need_user_id" value="">
+                    <input type="hidden" name="poy">
+                    <input type="hidden" name="gvfdcname" value="10">
+                    <input type="hidden" name="gvfdcre" value="687474703A2F2F7375627761792E73696D62612E74616F62616F2E636F6D2F">
+                    <input type="hidden" name="from_encoding" value="">
+                    <input type="hidden" name="sub" value="true"> 
+                    <input type="hidden" name="TPL_password_2">
+                    <input type="hidden" name="loginASR" value="1">
+                    <input type="hidden" name="loginASRSuc" value="0">
+                    <input type="hidden" name="allp" value="">
+                    <input type="hidden" name="oslanguage" value="zh-CN">
+                    <input type="hidden" name="sr" value="1920*1080">
+                    <input type="hidden" name="osVer" value="windows|6.1">
+                    <input type="hidden" name="naviVer" value="chrome|44.02403155">
+                </form>
+            </div>
+            <div class="tab-pane pt20" id="zz">
+                <form method="post" action="https://login.taobao.com/member/login.jhtml" id="J_StaticForm_zz">
+                    <div>
+                        <span class="dib w60">用户名：</span>
+                        <input type="text" tabindex="1" maxlength="32" value="{{customer.zz_name|default:''}}" name="TPL_username">
+                    </div>
+                    <div class="mt20">
+                        <span id="J_StandardPwd_zz" style="">
+                            <span class="dib w60">密&nbsp;&nbsp;&nbsp;码：</span>
+                            <input type="password" tabindex="2" maxlength="20" value="{{customer.zz_psw|default:''}}" name="TPL_password" aria-labelledby="password-label">
+                        </span>
+                    </div>
+                    <button tabindex="5" class="btn mt20 btn-primary btn-block" type="submit">登录</button>
+                    <input type="hidden" name="loginsite" value="0" id="J_loginsite">
+                    <input type="hidden" name="newlogin" value="">
+                    <input type="hidden" name="TPL_redirect_url" value="http://zuanshi.taobao.com/index.html?#!/login">
+                    <input type="hidden" name="from" value="subway">
+                    <input type="hidden" name="fc" value="default">
+                    <input type="hidden" name="style" value="miniall">
+                    <input type="hidden" name="css_style" value="">
+                    <input type="hidden" name="tid">
+                    <input type="hidden" name="support" value="000001">
+                    <input type="hidden" name="CtrlVersion" value="1,0,0,7">
+                    <input type="hidden" name="loginType" value="3">
+                    <input type="hidden" name="minititle" value="">
+                    <input type="hidden" name="minipara" value="">
+                    <input type="hidden" name="umto" value="taobao_login:a702c281fa58fc8fc9ab4a4a0db02a99taobao_login:a702c281fa58fc8fc9ab4a4a0db02a99,">
+                    <input type="hidden" name="pstrong" value="">
+                    <input type="hidden" name="llnick" id="llnick1" value="">
+                    <input type="hidden" name="sign" value="">
+                    <input type="hidden" name="need_sign" value="">
+                    <input type="hidden" name="isIgnore" value="">
+                    <input type="hidden" name="full_redirect" value="false">
+                    <input type="hidden" name="popid" value="">
+                    <input type="hidden" name="callback" value="">
+                    <input type="hidden" name="guf" value="">
+                    <input type="hidden" name="not_duplite_str" value="">
+                    <input type="hidden" name="need_user_id" value="">
+                    <input type="hidden" name="poy">
+                    <input type="hidden" name="gvfdcname" value="10">
+                    <input type="hidden" name="gvfdcre" value="687474703A2F2F7375627761792E73696D62612E74616F62616F2E636F6D2F">
+                    <input type="hidden" name="from_encoding" value="">
+                    <input type="hidden" name="sub" value="true"> 
+                    <input type="hidden" name="TPL_password_2">
+                    <input type="hidden" name="loginASR" value="1">
+                    <input type="hidden" name="loginASRSuc" value="0">
+                    <input type="hidden" name="allp" value="">
+                    <input type="hidden" name="oslanguage" value="zh-CN">
+                    <input type="hidden" name="sr" value="1920*1080">
+                    <input type="hidden" name="osVer" value="windows|6.1">
+                    <input type="hidden" name="naviVer" value="chrome|44.02403155">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {%if DEBUG%}
+      <script src="{{'/site_media/jl5/js/bootstrap.js'|file_time_stamp}}"></script>
+    {%else%}
+      <script src="{{'/site_media/jl5/js/bootstrap.min.js'|file_time_stamp}}"></script>
+    {%endif%}
+</body>
+</html>

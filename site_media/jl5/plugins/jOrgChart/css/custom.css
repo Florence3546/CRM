@@ -1,0 +1,71 @@
+/* Custom chart styling */
+.jOrgChart {
+  margin                : 10px;
+  padding               : 20px;
+}
+
+/* Custom node styling */
+.jOrgChart .node, .jOrgChart .node.silver {
+	font-size 			: 14px;
+/*	background-color 	: #35363B;*/
+	background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+	border-radius 		: 8px;
+    /*	border 				: 3px solid gray;*/
+    border 				: 1px solid #ccc;
+    border-bottom-color: #b3b3b3;
+    /*	color 				: white;*/
+	color 				: #000;
+	-moz-border-radius 	: 8px;
+}
+.jOrgChart .node:hover, .jOrgChart .node.selected {
+    background-image: linear-gradient(to bottom,#add,#5191D8);
+    color: black;
+}
+.jOrgChart .node.red {
+    background-image: linear-gradient(to bottom,#f66a39,#e74049);
+    color: white;
+}
+.jOrgChart .node.gold {
+    background-image: linear-gradient(to bottom,#FFEB3B,#FFC107);
+    color: #795548;
+}
+.jOrgChart .node.gray {
+    background-image: linear-gradient(to bottom,#eee,#9E9E9E);
+    color: #795548;
+}
+.jOrgChart .node.green {
+    background-image: linear-gradient(to bottom,#CDDC39,#8BC34A);
+    color: #795548;
+}
+.jOrgChart .node.cyan {
+    background-image: linear-gradient(to bottom,#00BCD4,#00BCD4);
+    color: #795548;
+}
+.jOrgChart .node.fire {
+    background-image: linear-gradient(to bottom,#F44336,#FFEB3B);
+    color: white;
+}
+.node p{
+	font-family 	: tahoma;
+	font-size 		: 10px;
+	line-height 	: 11px;
+	padding 		: 2px;
+}
+.node div {
+    cursor: inherit;
+}
+.jOrgChart table {
+    width: initial;
+    margin: auto;
+}
+.jOrgChart table tr {
+    background-color: initial;
+}
+.jOrgChart td {
+    border:none;
+}
+.big .jOrgChart .node {
+    width: 180px;
+    height: initial;
+    min-height: 60px;
+}

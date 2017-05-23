@@ -1,0 +1,332 @@
+[
+    {
+        "pk":1,
+        "model": "router.user",
+        "fields": {
+            "nick": "yunqilu",
+            "reg_date": "2012-05-28 08:00:00",
+            "user_id": 1,
+            "shop_type":"B",
+            "level": "0",
+            "perms_code": "ABCDEFHJKS0123",
+            "credit": 0,
+            "is_active": true,
+            "shop_id": 1,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2013-07-10 00:00:00",
+            "password": "sha1$b334f$98a1f39bf30a0c2c995195cd20401b742d313390",
+            "session": "",
+            "date_joined": "2013-07-10 00:00:00"
+        }
+    },
+    {
+        "pk":2,
+        "model": "router.user",
+        "fields": {
+            "nick": "cncys1",
+            "reg_date": "2010-07-23 13:39:29",
+            "user_id": 454449631,
+            "shop_type": "C",
+            "level": "7",
+            "perms_code": "ABCDEFHJKS",
+            "credit": 838,
+            "is_active": true,
+            "shop_id": 63518068,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-06-26 18:29:30",
+            "password": "sha1$75720$9cb758a253ba033bbc624e074ca7863581cf83c9",
+            "session": "6102500c1722cc1951cf8d514a80d204b4c849e76acfb82454449631",
+            "date_joined": "2012-05-28 14:36:34"
+        }
+    },
+    {
+    	"pk": 3000,
+        "model": "common.Config",
+        "fields": {
+            "key":"common.SYS_LOG_LEVEL",
+            "sub_key": "",
+            "value": "",
+            "extra": "",
+            "shop_id": "",
+            "help": "用于动态配置和修改日志级别，默认级别由logger.conf配置，不由Config的配置决定"
+        }
+    },
+    {
+    	"pk": 3001,
+        "model": "common.Config",
+        "fields": {
+            "key":"common.API_LOG_OUTPUT",
+            "sub_key": "",
+            "value": "0",
+            "extra": "",
+            "shop_id": "",
+            "help": "是否打印api调用日志（0 不打印；1 只打印request日志；2 只打印response日志；3 全部打印）"
+        }
+    },
+    {
+    	"pk": 3002,
+        "model": "common.Config",
+        "fields": {
+            "key":"common.SHOP_TASK_TIME",
+            "sub_key": "",
+            "value": "(05,30)",
+            "extra": "",
+            "shop_id": "",
+            "help": "店铺大任务的执行时间"
+        }
+    },
+    {
+    	"pk": 4001,
+        "model": "common.Config",
+        "fields": {
+            "key":"common.ISV_APICONTROL_14121601",
+            "sub_key": "",
+            "value": "{'isv_get_itemcats':5000,'isv_get_item':10000}",
+            "extra": "",
+            "shop_id": "",
+            "help": "慕思城的API接口流控"
+        }
+    },
+    {
+    	"pk": 4002,
+        "model": "common.Config",
+        "fields": {
+            "key":"common.ISV_APICONTROL_14121602",
+            "sub_key": "",
+            "value": "{'isv_get_account_rpt':100000,'isv_get_select_word':100000,'isv_get_split_title':100000,'isv_get_related_words':100000,'isv_get_top_words':100000}",
+            "extra": "",
+            "shop_id": "",
+            "help": "欢乐逛的API接口流控"
+        }
+    },
+    {
+    	"pk":18100,
+    	"model":"common.Config",
+    	"fields":{
+    		"key":"router.LOGIN_EMERG_FLAG",
+    		"sub_key":"",
+    		"value":"False",
+    		"extra": "",
+            "shop_id": "",
+            "help": "是否禁止所有用户登陆，用于紧急情况"
+    	}
+    },
+    {
+    	"pk":18200,
+    	"model":"common.Config",
+    	"fields":{
+    		"key":"title.garbage_words",
+    		"sub_key":"",
+    		"value":"`~#$%^&*_+|}{:\"?=;'',./@￥……——，",
+    		"extra": "",
+            "shop_id": "",
+            "help": "标题中的垃圾词"
+    	}
+    },
+    {
+    	"pk":18201,
+    	"model":"common.Config",
+    	"fields":{
+    		"key":"title.can_del_words",
+    		"sub_key":"",
+    		"value":"{'del_words':'专柜,正品,日单,最,高仿,假一赔命,A货,原单,外贸,品牌,正版,尾单,淘宝推荐,淘宝热卖,进口,最低,丰胸,壮阳,缩阴,军用,军品,天然,减肥,鹿胎,保健药,*,#,※,△,◇,★,▲,【,】,『,』,<,>,[,]','check_len_words':'新款,2012,2013,2014,2015,2016,夏季新款,秋季新款,新品,夏季,秋季,冬季,秋冬'}",
+    		"extra": "",
+            "shop_id": "",
+            "help": "可以删除的词"
+    	}
+    },
+    {
+    	"pk":18202,
+    	"model":"common.Config",
+    	"fields":{
+    		"key":"web.break_egg_switch",
+    		"sub_key":"",
+    		"value":"0",
+    		"extra": "",
+            "shop_id": "",
+            "help": "是否开启精灵币的砸蛋活动"
+    	}
+    },
+    {
+        "pk":18203,
+        "model":"common.Config",
+        "fields":{
+            "key":"router.SYS_THEMEM",
+            "sub_key":"",
+            "value":"",
+            "extra": "",
+            "shop_id": "",
+            "help": "系统强制主题"
+        }
+    },
+    {
+        "pk":19000,
+        "model":"common.Config",
+        "fields":{
+            "key":"sms.is_enabled",
+            "sub_key":"",
+            "value":"1",
+            "extra": "",
+            "shop_id": "",
+            "help": "是否发送系统提示短信"
+        }
+    },
+    {
+    	"pk":1,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-1",
+            "perms_code": "ABCDEFHJKS",
+            "note":"八引擎版"
+    	}
+    },
+    {
+    	"pk":2,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-2",
+            "perms_code": "ABCDFJS",
+            "note":""
+    	}
+    },
+    {
+    	"pk":3,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-3",
+            "perms_code": "ABCDFJS",
+            "note":"双引擎版，不能自动抢排名，托管计划受限"
+    	}
+    },
+    {
+    	"pk":4,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-4",
+            "perms_code": "ABCDFJS",
+            "note":""
+    	}
+    },
+    {
+    	"pk":5,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-5",
+            "perms_code": "ABCFJ",
+            "note":"基础版，只包含基础功能"
+    	}
+    },
+    {
+    	"pk":6,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-6",
+            "perms_code": "ABCDEFHJKS",
+            "note":"类目专家版"
+    	}
+    },
+    {
+    	"pk":7,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-7",
+            "perms_code": "ABCDFJS",
+            "note":""
+    	}
+    },
+    {
+    	"pk":8,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-8",
+            "perms_code": "ABCDFJS",
+            "note":"双引擎版"
+    	}
+    },
+    {
+    	"pk":9,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-v9",
+            "perms_code": "ABCDEFHJKS",
+            "note":"VIP托管版"
+    	}
+    },
+    {
+    	"pk":10,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"开车精灵",
+    		"article_code":"ts-25811",
+    		"item_name":"",
+    		"item_code": "ts-25811-10",
+            "perms_code": "ABCDFJS",
+            "note":""
+    	}
+    },
+    {
+    	"pk":11,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"无线精灵",
+    		"article_code":"FW_GOODS-1921400",
+    		"item_name":"",
+    		"item_code": "FW_GOODS-1921400-1",
+            "perms_code": "AEJK",
+            "note":"试用版"
+    	}
+    },
+    {
+    	"pk":12,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"无线精灵",
+    		"article_code":"FW_GOODS-1921400",
+    		"item_name":"",
+    		"item_code": "FW_GOODS-1921400-v2",
+            "perms_code": "AEJK",
+            "note":"标准版"
+    	}
+    },
+    {
+    	"pk":13,
+    	"model":"router.ArticleItem",
+    	"fields":{
+    		"article_name":"无线精灵",
+    		"article_code":"FW_GOODS-1921400",
+    		"item_name":"",
+    		"item_code": "FW_GOODS-1921400-v3",
+            "perms_code": "AEJK",
+            "note":"八引擎版"
+    	}
+    }
+]

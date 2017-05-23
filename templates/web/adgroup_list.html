@@ -1,0 +1,159 @@
+{#utf-8#}{% extends "base_mainjl5.html" %}
+{% block title%}
+  宝贝列表
+{% endblock %}
+{% block content %}
+  <input type="hidden" value="0" id="page_type">
+  <input type="hidden" value="{{cur_camp_id}}" id="campaign_id">
+  <input type="hidden" value="{{ mnt_type }}" id="mnt_type" />
+  <input type="hidden" value="{{ add_item_flag }}" id="add_item_flag" />
+  <input type="hidden" value="{{ CONSULT_WW }}" id="CONSULT_WW" />
+  <div class="row-fluid">
+    <div class="box">
+      <div class="box_hd">
+        <span class="box_l">
+        <i class="iconfont mr5">&#xe61c;</i>宝贝列表（共<span class="f20 adgroup_count">--</span>个/选中<span class='f20 current_count'>0</span>个)
+        </span>
+        <span class="box_r">
+        <div class="dropdown adgroup_select_days">
+          <a class="dropdown-toggle btn btn-small" data-toggle="dropdown" data-autowidth="true"  data-type="select" href="#"><i class="iconfont mr5">&#xe61e;</i><span class="dropdown-value">过去1天</span><i class="iconfont">&#xe626;</i></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a value="1" href="javascript:;">过去1天</a></li>
+            <li><a value="3" href="javascript:;">过去3天</a></li>
+            <li><a value="7" href="javascript:;">过去7天</a></li>
+            <li><a value="15" href="javascript:;">过去15天</a></li>
+          </ul>
+        </div>
+        </span>
+      </div>
+      <div class="box_bd pt10">
+        <div class="pl10 pr10 mb10" id="adg_control">
+          <button class="btn update_adg" type="button" name="start"><i class="iconfont">&#xe64e;</i>参与推广</button>
+          <button class="btn update_adg" type="button" name="stop"><i class="iconfont">&#xe64d;</i>暂停推广</button>
+          <button class="btn update_adg" type="button" name="del"><i class="iconfont">&#xe62c;</i>批量删除</button>
+          {% if mnt_type == 0%}
+            {% if cur_camp_id > 2 or no_mnt_campaigns %}
+	          <button class="btn hide" id="{% if cur_camp_id > 2 %}add_item{% else %}select_campaign{% endif %}" type="button"><i class="iconfont mr3">&#xe61a;</i>推广新宝贝</button>
+            {% endif %}
+          {% endif %}
+          <div class="r">
+            <div class="btn-group">
+              <button class="btn show_count" type="button" value="keyword">显示关键词数</button>
+              <button class="btn show_count" type="button" value="creative">显示创意数</button>
+            </div>
+            <div class="dropdown" id="id_campaign_id">
+              <a class="dropdown-toggle btn h20" data-toggle="dropdown" data-trigger="hover" data-type="select" href="#"><span class="dropdown-value dib ell w100">
+              {% for c in main_list %}
+                {%if c.0 == cur_camp_id %}{{ c.1 }}{%endif%}
+              {%endfor%}
+              </span><i class="iconfont vn3">&#xe65b;</i></a>
+              <ul class="dropdown-menu" data-toggle="dropdown" role="menu" aria-labelledby="dLabel">
+                {% for c in main_list %}
+                <li><a value="{{c.0}}" href="javascript:;">{{c.1}}</a></li>
+                {%endfor%}
+              </ul>
+            </div>
+            <div class="input-append mb0 ml10">
+              <input class="w140" type="text" id="search_val">
+              <button class="btn" id="search_btn" type="button"><i class="iconfont lh14">&#xe645;</i></button>
+            </div>
+          </div>
+        </div>
+        {% include 'adg_table.html' %}
+      </div>
+    </div>
+  </div>
+<!-- 添加新宝贝 -->
+{% if not mnt_type and no_mnt_campaigns %}
+  <div id="select_campaign_div" class="dn">
+    <div>
+      <span>推广计划：</span>
+      <select id="campaign_2add_item">
+        {% for camp in no_mnt_campaigns %}
+        <option value="{{ camp.campaign_id }}">{{ camp.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mt10 gray dn">该功能只针对还未加入全自动优化的推广计划</div>
+  </div>
+{% endif %}
+<!-- 添加新宝贝 END -->
+<div class="modal hide fade" id="modal_add_imgorder2" role="dialog" data-width="700" data-backdrop="static" data-hidetype="nomal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<!--        <h4 class="m0 mt2">创建订单</h4>-->
+        <h4 class="m0 mt2">优化分析</h4>
+    </div>
+    <div class="modal-body ml5 mt10">
+        <div class="mb10">
+            <div class="f16 mb20">
+                <a href="" class="item_title" target="_blank"></a><span class="baseColor ml10">￥<span class="item_price"></span></span>
+            </div>
+            <div class="row-fluid">
+                <div class="span7">
+                    <div class="bdd w160">
+                        <img class="item_pic_url" src="" onload="PT.CreativeFactoryHome.adjust_img_size(this, 160);" />
+                    </div>
+                </div>
+                <div class="span17 lh30">
+                    <div class="f18">创意图片优化标准价为<span class="red m0_3 f20">40~80</span>元/张</div>
+                    <div class="b">优化后：</div>
+                    <div>当点击率提升<span class="dib w60 tc red m0_3 f20">20%</span>时，预计每千次点击能为您节省花费<span class="saved_money dib w40 tc red m0_3 f20"></span>元</div>
+                    <div>当点击率提升<span class="dib w60 tc red m0_3 f20">50%</span>时，预计每千次点击能为您节省花费<span class="saved_money dib w40 tc red m0_3 f20"></span>元</div>
+                    <div>当点击率提升<span class="dib w60 tc red m0_3 f20">100%</span>时，预计每千次点击能为您节省花费<span class="saved_money dib w40 tc red m0_3 f20"></span>元</div>
+                </div>
+            </div>
+        </div>
+        <div class="hide">
+            <div class="b">填写联系方式</div>
+            <div class="row-fluid p3 ml10 mt5">
+                <div class="l">手机：<input type="text" name="phone" class="f12 w100 vba"><span class="red ml5">*</span></div>
+                <div class="l ml10"><span class="red"></span>旺旺：<input type="text" name="ww" class="f12 w100 vba"></div>
+                <div class="l ml10"><span class="red"></span>QQ：<input type="text" name="qq" class="f12 w100 vba"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="submit_imgorder btn btn-primary" item_id="">下订单</a>
+<!--		<span>专属顾问:</span>
+		<span class="red b">{{CONSULT_WW}}</span>
+		<a class="ml5" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{CONSULT_WW}}">
+		    <img class="vb" src="http://amos.alicdn.com/realonline.aw?v=2&uid={{CONSULT_WW}}&site=cntaobao&s=1&charset=utf-8">
+		</a>-->
+    </div>
+</div>
+<div class="modal hide fade" id="modal_contact_us" role="dialog" data-backdrop="static" data-hidetype="nomal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="m0 mt2">联系我们</h4>
+    </div>
+    <div class="modal-body ml5 mt10">
+        <div class="lh30">
+            您已下单成功，请点击
+            <a class="w_color" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技:设计顾问">
+                <img class="marl_6" src="/site_media/jl/img/online.ww.gif">
+            </a>
+            ，联系我们的顾问，沟通具体的细节问题。
+        </div>
+        <div class="lh30 mt5">或者留下您的联系方式，便于我们联系您</div>
+        <div class="mt5">
+            <div class="dib">手机：<input type="text" class="phone f12 w100 vba"></div>
+            <div class="dib ml10">QQ：<input type="text" class="qq f12 w100 vba"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="update_contact_info btn btn-primary" contact_id="">确定</a>
+    </div>
+</div>
+{% include 'add_item_box3.html' %}
+{% endblock %}
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function() {
+	PT.Adgroup_list.init();
+	PT.AddItemBox3.init(0);
+	PT.AddItemBox3.ajax_loading_animate('。', 3, 300); //自定义ajax加载动画
+});
+</script>
+{% endblock %}

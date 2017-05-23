@@ -1,0 +1,104 @@
+<div class="page" style="display:none;" id="my" ng-controller="myCtrl">
+    <!-- 标题栏 -->
+    <header class="bar bar-nav top-nav">
+        <div class="shop_img_box">
+            <img src="http://img01.taobaocdn.com/imgextra/{{request.user.shop.pic_path}}_110x110.jpg" class="shop_img">
+        </div>
+        <span class="shop_name">{{request.user.nick}}</span>
+    </header>
+    <!-- 这里是页面内容区 -->
+    <div class="content">
+        <div class="list-block mt10 mb10">
+            <ul>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">当前版本</div>
+                        <div class="item-after">{{version_name}}</div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">到期时间</div>
+                        <div class="item-after">{{request.session.deadline}}</div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">剩余天数</div>
+                        <div class="item-after">{{request.session.left_days}}天</div>
+                    </div>
+                </li>                
+            </ul>
+        </div>
+
+        <div class="list-block mt10 mb10">
+            <ul>
+                <li class="item-content" ng-click="sync()">
+                    <div class="item-media"><i class="icon">&#xe608;</i></div>
+                    <div class="item-inner">
+                        <div class="item-title">同步数据</div>
+                    </div>
+                </li>
+                <li class="item-content item-link" ng-click="suggestion()">
+                    <div class="item-media"><i class="icon">&#xe60b;</i></div>
+                    <div class="item-inner">
+                        <div class="item-title">意见反馈</div>
+                    </div>
+                </li>                
+            </ul>
+        </div>
+        <div class="list-block mt10 mb10">
+            <ul>
+                {% if CONSULT_WW %}
+               <li class="item-content item-link" ng-click="contact_ww('{{CONSULT_WW}}')">
+                    <div class="item-media"><i class="icon primary-text">&#xe609;</i></div>
+                    <div class="item-inner">
+                        <div class="item-title primary-text f12">我的顾问:{{CONSULT_WW}}</div>
+                        <div class="item-after sub-text f12">8:30-23:00</div>
+                    </div>                    
+                </li>
+                {% endif %}
+               <li class="item-link" ng-click="contact_ww('派生科技')">
+                   <div class="item-content">
+                        <div class="item-media"><i class="icon primary-text">&#xe609;</i></div>
+                        <div class="item-inner">
+                            <div class="item-title primary-text f12">精灵主号:派生科技</div>
+                            <div class="item-after sub-text f12">8:30-23:00</div>
+                        </div>
+                    </div>
+                </li> 
+               <li class="item-link">
+                   <a href="tel:400-0610-203">
+                    <div class="item-content">
+                            <div class="item-media"><i class="icon primary-text">&#xe69c;</i></div>
+                            <div class="item-inner">
+                                <div class="item-title primary-text f12">顾问专线：400-0610-203</div>
+                                <div class="item-after sub-text f12">9:00-23:00</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>  
+               <li class="item-link">
+                   <a href="tel:027-59401772">
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon primary-text">&#xe814;</i></div>
+                            <div class="item-inner">
+                                <div class="item-title primary-text f12">投诉电话：027-59401772</div>
+                                <div class="item-after sub-text f12">14:00-22:00</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>   
+               <li class="item-link" ng-click="contact_ww('派生科技')">
+                   <div class="item-content">
+                        <div class="item-media"><i class="icon primary-text">&#xe60a;</i></div>
+                        <div class="item-inner">
+                            <div class="item-title primary-text f12">预约专家免费诊断</div>
+                            <div class="item-after sub-text f12">8:30-18:30</div>
+                        </div>
+                    </div>
+                </li>                                                                    
+            </ul>
+        </div>        
+    </div>
+</div>

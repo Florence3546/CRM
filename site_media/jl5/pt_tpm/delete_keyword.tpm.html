@@ -1,0 +1,31 @@
+<tr id="<%=keyword_id%>" cat_id="">
+    <td class="tc">
+        <span class='hide'></span>
+        <input type="checkbox" name="hidx" class="kid_box"/>
+    </td>
+    <td class="keyword_td">
+        <span class="hide"><%=match_scope%></span>
+        <span class="keyword"id="word_<%=keyword_id%>"><%=word%></span>
+        <span class="label label-primary poi r mt4 match" onselectstart="return false;" scope=4><%=$filter_match(4)%></span>
+    </td>
+    <td class="tc">
+        <span class="hide"><%=init_price%></span>
+        <input type="text" class="input-small new_price" value="<%=init_price%>" />
+    </td>
+
+    <td class="tc">
+        <%if(word_from==0){ %><span>开车精灵</span><% }%>
+        <%if(word_from==1){ %><span>屏蔽词</span><% }%>
+        <%if(word_from==2){ %><span>直通车或其他软件</span><% }%>
+    </td>
+    <td class="tc">
+        <%if (op_type==9) { %>删除关键词<% }%>
+        <%if (op_type==10) { %>删除违规词<% }%>
+        <%if (op_type==11) { %>删除屏蔽词<% }%>
+    </td>
+    <td class="tc"><%=opt_time%></td>
+    <td class="tr"><%=$empty(g_click)%></td>
+    <td class="tr"><%=$format(g_ctr,1,1,2)%><% if(g_click){ %>%<% } %></td>
+    <td class="g_cpc tr"><%=$empty(g_cpc)%></td>
+    <td class="tr"><%=$empty(g_competition)%></td>
+</tr>

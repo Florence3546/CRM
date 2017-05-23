@@ -1,0 +1,1 @@
+python.exe start_update_wordcat_info.py

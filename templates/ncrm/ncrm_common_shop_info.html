@@ -1,0 +1,111 @@
+{% load rates %}
+<td class="vt pt0 pb0">
+    {% for common_group in c.common_groups %}
+    <label class="f12 m0 orange {% if not common_group.1 and not common_group.2 %}hide{% endif %}"><input type="checkbox" class="common_group vn" name="{{ common_group.0 }}" {% if common_group.1 %}checked="checked"{% endif %} {% if not common_group.2 %}disabled="disabled"{% endif %}>{{ common_group.3 }}</label>
+    {% endfor %}
+    {% for cg in all_client_group %}
+    <label class="f12 m0 {% if cg.group_type %}orange{% else %} {% if not cg.id in c.client_group_ids %}hide{% endif %}{% endif %}" title="{{cg.title}}"><input class="vn client_group_input" value="{{cg.id}}" {%if cg.id in c.client_group_ids %}checked{%endif%} type="checkbox">{{cg.title|truncatechars_ch:8}}</label>
+    {% endfor %}
+    <a href="javascript:;" class="f12 group_switch" flag="1">展开</a>
+</td>
+<td class="vt" shop_id='{{c.shop_id}}'>
+    <div>
+        <img src='/site_media/jl/img/credit/{{c.user.level}}.gif'>
+        {%if c.is_b2c%}
+        <a href="{%url 'login_ztc' c.shop_id%}" target="_blank" class="r red mr3 tips" data-toggle="tooltip" data-title="类目: {{c.category|default:'-'}}">B店</a>
+        {%else%}
+        <a href="{%url 'login_ztc' c.shop_id%}" target="_blank" class="r mr3 tips" data-toggle="tooltip" data-title="类目: {{c.category|default:'-'}}">C店</a>
+        {%endif%}
+    </div>
+    <div>
+        <a href="http://shop{{c.shop_id}}.taobao.com" class="orange" target="_blank" title="进入店铺">{{c.shop_id}}</a>
+        <div class="r">
+            <a class="ml10 r edit_customer" href="javascript:void(0);" cust_id="{{c.id}}">修改</a>
+        </div>
+    </div>
+    <div>
+	    <a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{c.nick}}" title="联系主旺旺" {% if c.temp_flag and c.temp_flag != myself.id %}class="red bdr"{% endif %}>{{c.nick}}</a>
+	    <a class="ml5" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{c.ww|default:c.nick}}">
+	        <img alt="点这里给我发消息" border="0" src="http://amos.alicdn.com/online.aw?v=2&amp;uid=%E5%BC%80%E8%BD%A6%E7%B2%BE%E7%81%B5&amp;site=cntaobao&amp;s=2&amp;charset=utf-8">
+	    </a>
+        {% if c.is_pausing %}
+        <span class="r label label-info mt3">已暂停</span>
+        {% endif %}
+    </div>
+    <div>QQ：
+        {% if c.qq_tip %}
+            <a href="javascript:;" class="qq_tip" tip="{{ c.qq_tip }}" status="0">查看</a>
+        {% else %}
+            {{c.qq|default:'-'}}
+        {% endif %}
+    </div>
+    <div>TEL：
+        {% if c.phone_tip %}
+            <a href="javascript:;" class="phone_tip" tip="{{ c.phone_tip }}" status="0">查看</a>
+        {% else %}
+            {{c.phone|display_phone|default:'-'}}
+        {% endif %}
+    </div>
+    <div class="dropdown rel">
+        <a class="login_record dropdown-toggle" id="login_record_{{ c.shop_id }}" role="button" data-toggle="dropdown" href="javascript:;" loaded="0">
+            上次登录：{{c.user.last_login|date:"Y-m-d H:i"}}<i class="iconfont">&#xe626;</i>
+        </a>
+        <ul class="login_record dropdown-menu p0" role="menu" aria-labelledby="login_record_{{ c.shop_id }}">
+            <li class="dib p10 w200">
+                <div>&nbsp;</div>
+            </li>
+        </ul>
+    </div>
+    {% if c.balance != None %}
+    <div>账户余额: <span class="orange">{{ c.balance }}</span> 元</div>
+    {% endif %}
+    <div>
+        <div class="dropdown rel">
+            <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" href="javascript:;">
+                归属{{ c.domain }}<i class="iconfont">&#xe626;</i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li>
+                    <a href="javascript:;" class="reset_shopmngtask">重置任务</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="exec_shopmngtask">执行任务</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="get_mnt_info">全自动管理</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="repair_lastrpt">修复昨日报表</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="modify_server marl_6">修改服务器</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="clear_token">清除授权信息</a>
+                </li>
+            </ul>
+        </div>
+        <div class="r">
+            <a href="{%url 'login_kcjl' 'web' c.shop_id%}" onclick="javascript:void(0);" target="_blank" > <i class="iconfont f18 mt3 poi" title="登录开车精灵">&#xe683;</i></a>
+            <a href="{%url 'login_kcjl' 'qnpc' c.shop_id%}" onclick="javascript:void(0);" target="_blank" ><i class="iconfont f18 mt3 ml5 poi" title="登录千牛电脑版">&#xe65e;</i></a>
+            <a href="{%url 'login_kcjl' 'qnyd' c.shop_id%}" onclick="javascript:void(0);" target="_blank" ><i class="iconfont f18 mt3 poi" title="登录千牛手机版">&#xe68e;</i></a>
+            <a href="javascript:;" class="report_view"><i class="iconfont f18 mt3 poi" title="报表视图">&#xe65c;</i></a>
+            <a href="javascript:;" class="order_view hide"><i class="iconfont f18 mt3 poi" title="订单视图">&#xe61c;</i></a>
+        </div>
+    </div>
+    <div>
+	    <a href="javascript:;" class="open_perms_model" id="open_perms_model_{{c.user.id}}" cust_id="{{c.user.id}}" perms_code="{{ c.user.perms_code }}" ad_perms="{{ c.ad_perms }}">{{c.user.perms_code}}{% if c.ad_perms %}~{{ c.ad_perms }}{% endif %}</a>
+    </div>
+    <div>
+        <a href="{% url 'ncrm_bulk_optimize' %}?shop_id={{c.shop_id}}" target="_blank">新人工干预</a>
+        <div class="r">
+            {% if 'B' in myself.perms %}<a href="javascript:;" class="allocation_record" shop_id="{{ c.shop_id }}">查看分配记录</a>{% endif %}
+        </div>
+    </div>
+    <div class="{% if myself.position != 'RJJH' and myself.position != 'RJJHLEADER' %}hide{% endif %}">
+        <a href="{% url 'crm_account' %}?base_consult_id={{ myself.id }}&account_nick={{ c.nick }}&base_is_jumped=0" target="_blank">操作平台</a>
+    </div>
+    <div class="goldmember-group">
+        <a title="{% if c.is_goldmember or c.is_goldmember == 'True' %}点击取消黄金会员{% else %}点击成为黄金会员{% endif %}" class="lh18 modify-memberorder {% if c.is_goldmember or c.is_goldmember == 'True' %}gold-member-y{% else %}gold-member-n{% endif %}"  value="{{ c.is_goldmember|lower }}"  shop_id="{{c.shop_id}}">黄金会员</a>
+    </div>
+</td>

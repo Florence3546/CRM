@@ -1,0 +1,27 @@
+<div class="select-tool select-fixed">
+    <input type="checkbox" class="select-all">&nbsp;全选&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已选宝贝 <a><strong class="select_rows f20">0</strong></a> 个
+    <button class="btn btn-primary btn-sm ml10 batch-opt" opt_type="1">开启推广</button>
+    <button class="btn btn-primary btn-sm ml10 batch-opt" opt_type="2">暂停推广</button>
+    <button class="btn btn-primary btn-sm ml10 batch-opt" opt_type="3">批量删除</button>
+    {{ if list_type=='2' || list_type=='4' }}
+    <div class="btn-group ml10 quick_oper">
+        <button class="btn btn-primary btn-sm batch-opt" opt_type="4">加大投入</button>
+        <button class="btn btn-primary btn-sm batch-opt" opt_type="5">减少投入</button>
+    </div>
+    {{ /if }}
+    <!--
+    {{ if list_type=='1' || list_type=='3' }}
+    <span class="dropup ml10">
+      <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        优化设置
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li><a href="javascript:;" class="batch-opt" opt_type="6">自动优化</a></li>
+        <li><a href="javascript:;" class="batch-opt" opt_type="7">只改价</a></li>
+        <li><a href="javascript:;" class="batch-opt" opt_type="8">不托管</a></li>
+      </ul>
+    </span>
+    {{ /if }}
+    -->
+</div>

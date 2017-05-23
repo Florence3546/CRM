@@ -1,0 +1,54 @@
+<table class="pct100 table-bordered m0">
+    <thead>
+        <tr class="h40">
+            <th class="pl20 vm w100">时间</th>
+            <th class="pl20 vm w100">积分变化</th>
+            <th class="pl20 vm w100">积分方式</th>
+            <th class="tl pl20 vm ">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each list as value index }}
+        <tr class="h40">
+            <td class="pl20 h40 vm">{{value.create_time | dateFormat:'yyyy-MM-dd'}}</td>
+            <td class="pl20 h40 vm">
+                 <span class="{{if value.point > 0}}red{{else}}green{{/if}}">
+                    {{if value.point > 0 }}+{{/if}}{{value.point}}
+                </span>
+            </td>
+            <td class="pl20 h40 vm">
+                 <span >
+                    {{value.type_desc}}
+                </span>
+            </td>
+            <td class="pl20 vm ">
+                {{value.desc}}
+
+                {{if value.type == 'gift' }}
+                    {{if value.logistics_name}}
+                        物流公司：{{value.logistics_name}}
+                    {{/if}}
+
+                    {{if value.logistics_id}}
+                        运单号：{{value.logistics_id}}
+                    {{/if}}
+
+                    {{if value.logistics_state}}
+                        【已发货】
+                    {{else}}
+                        【未发货】
+                    {{/if}}
+                {{/if}}
+
+                {{if value.type == 'virtual' }}
+                    {{if value.exchange_status}}
+                        【已兑换】
+                    {{else}}
+                        【未兑换】
+                    {{/if}}
+                {{/if}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

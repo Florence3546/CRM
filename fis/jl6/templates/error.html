@@ -1,0 +1,12 @@
+﻿{#utf-8#}{% extends "base_main.html" %}
+{% block title %}访问错误{% endblock %}
+{% block content %}
+    <div class="error_warp">
+        <div class="row">
+            <div class="tc">
+                <img src="../site_media/static/images/error.png">
+                <div class="mt10 f16">{%if msg%}{% autoescape off %}错误信息：{{msg}}{% endautoescape %}{%endif%}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

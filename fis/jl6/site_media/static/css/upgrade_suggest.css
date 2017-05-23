@@ -1,0 +1,175 @@
+.dg_box {
+    position: relative;
+    height: 200px;
+}
+.dg_box li:hover .cycle {
+    color: #222;
+}
+.dg_box .ul_line {
+    transition: all .2s;
+    -moz-transition: all .2s;
+    -webkit-transition: all .2s;
+    -o-transition: all .2s;
+    border-top: 2px dashed #ddd;
+}
+.dg_box .ul_line:after{
+    content: '';
+    position: absolute;
+    height: 145px;
+    border-left: 2px dashed #ddd;
+    left: 150px;
+}
+
+.dg_box .ul_line.single:after{
+    position: absolute;
+    height: 100px;
+    border: none;
+}
+.dg_box .ul_line.single li{
+    width:50%;
+}
+
+.dg_box .ovh {
+    width: 300px;
+    margin: 0 auto;
+}
+.dg_box:after {
+    clear: both;
+    content: '';
+}
+.dg_box ul {
+    width: 600px;
+}
+.dg_box li {
+    width: 25%;
+    border: 1px solid #ccc;
+    float: left;
+    border: none;
+    text-align: center;
+}
+.dg_box li .main_box {
+    padding: 10px 0;
+    line-height: 24px;
+}
+.dg_box>a {
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+}
+.dg_box>a i {
+    color: #ccc;
+}
+.dg_box>a.active i, .dg_box>a:hover i {
+    color: #999;
+}
+.dg_box .prev, .dg_box .next {
+    display: block;
+}
+.dg_box:hover .prev, .dg_box:hover .next {
+    display: block;
+}
+.dg_box .prev {
+    left: -3px;
+}
+.dg_box .next {
+    right: -3px;
+}
+@keyframes float_img {
+    0% {
+        top: 0;
+    }
+    50% {
+        top: -10px;
+    }
+    100% {
+        top: 0;
+    }
+}
+@-moz-keyframes float_img
+
+/* Firefox */
+{
+    0% {
+        top: 0;
+    }
+    50% {
+        top: -10px;
+    }
+    100% {
+        top: 0;
+    }
+}
+@-webkit-keyframes float_img
+
+/* Safari 和 Chrome */
+{
+    0% {
+        top: 0;
+    }
+    50% {
+        top: -10px;
+    }
+    100% {
+        top: 0;
+    }
+}
+@-o-keyframes float_img
+
+/* Opera */
+{
+    0% {
+        top: 0;
+    }
+    50% {
+        top: -10px;
+    }
+    100% {
+        top: 0;
+    }
+}
+table td:hover .float_img {
+    position: relative;
+    animation: float_img 2s ease-out infinite;
+    -moz-animation: float_img 2s ease-out infinite; /* Firefox */
+    -webkit-animation: float_img 2s ease-out infinite;  /* Safari 和 Chrome */
+    -o-animation: float_img 2s ease-out infinite;
+}
+ul {
+    padding: 0;
+    box-sizing: content-box;
+}
+
+li{
+    list-style: none;
+}
+
+.tdlt{
+    text-decoration: line-through;
+    color:#aaa;
+}
+
+.f36{
+    font-size: 36px;
+}
+
+.yuan{
+    font-size: 14px;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: -8px;
+}
+
+.item{
+    font-size: 14px;
+    background-color: #f6f6f6;
+    margin: 10px;
+}
+
+hr.red{
+    height: 5px;
+    background-color: #b22301;
+    margin-bottom: -1px;
+}
+
+#upgrade_suggest_bg{
+}

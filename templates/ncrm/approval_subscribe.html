@@ -1,0 +1,248 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}进账审计{% endblock %}
+{% block extra_style %}
+<style>
+table td {padding: 4px 4px; line-height: 26px;}
+.approval_status_0 { background-color: #FFFDE9; }
+.approval_status_1 { background-color: #DEEDF9; }
+.approval_status_2 { background-color: #FFEBED; }
+.approval_status_3 { background-color: #3d9970; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto">
+  <input type="hidden" id="approval_tag" value="1">
+  <form id="search_form" action="" method="post" class="mt20">
+    <div>
+      <input type="hidden" id="is_export" name="is_export" value="{{request.POST.is_export}}">
+      <input type="hidden" id="page_no" name="page_no" value="{{request.POST.page_no}}">
+      <input class="w140 f12" placeholder="店铺名/店铺id" name="nick" type="text" value="{{request.POST.nick}}">
+
+      <input type="text" class="psuser_input w100 f12 ml10" name="name_cn" link="#subscribe_psuser_id" placeholder="签单人" value="{{ request.POST.name_cn }}" autocomplete="off">
+      <input type="hidden" id="subscribe_psuser_id" name="subscribe_psuser_id" value="{{ request.POST.subscribe_psuser_id }}">
+
+      <input class="w140 f12 ml10" name="pay_type_no" id="pay_type_no" type="text" value="{{request.POST.pay_type_no}}" placeholder="付款信息">
+
+      <select name="approval_status" id="approval_status" class="w90 f12 ml10">
+          <option value="">-审批状态-</option>
+          <option value="0" {% if approval_status == '0' %}selected{% endif %}>未审核</option>
+          <option value="1" {% if approval_status == '1' %}selected{% endif %}>已通过</option>
+          <option value="2" {% if approval_status == '2' %}selected{% endif %}>未通过</option>
+          <option value="3" {% if approval_status == '3' %}selected{% endif %}>待再审</option>
+      </select>
+
+      <label class="dib mb0 ml10" style="display: none;"><input class="mr3" type="checkbox" name="exclude_market_order" id="exclude_market_order" {% if request.POST.exclude_market_order %}checked{% endif %} >排除市场订单</label>
+
+
+      <span class="ml10">审批时间</span>
+      <input class="w70 ml3 f12" name="approval_starttime" id="approval_starttime" type="text" value="{{request.POST.approval_starttime}}">
+      -
+      <input class="w70 f12" name="approval_endtime" id="approval_endtime" type="text" value="{{request.POST.approval_endtime}}">
+
+      <span class="ml10">订购时间</span>
+      <input class="w70 ml3 f12" name="order_create_starttime" id="order_create_starttime" type="text" value="{{order_create_starttime}}">
+      -
+      <input class="w70 f12" name="order_create_endtime" id="order_create_endtime" type="text" value="{{order_create_endtime}}">
+
+      <span class="ml10">实付金额(元)</span>
+      <input class="w50 ml3 f12" name="pay_min" id="pay_min" type="text" value="{{request.POST.pay_min}}">
+      -
+      <input class="w50 f12" name="pay_max" id="pay_max" type="text" value="{{request.POST.pay_max}}">
+
+    </div>
+
+    <div class="mt10">
+      <span class="vm">订单类型：
+        <label class="dib mb0 vm"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="1" type="checkbox" class="mr3" {% if 1 in biz_type_list %}checked="checked"{% endif %}>新订</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="2" type="checkbox" class="mr3" {% if 2 in biz_type_list %}checked="checked"{% endif %}>续订</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="3" type="checkbox" class="mr3" {% if 3 in biz_type_list %}checked="checked"{% endif %}>升级</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="4" type="checkbox" class="mr3" {% if 4 in biz_type_list %}checked="checked"{% endif %}>后台赠送</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="5" type="checkbox" class="mr3" {% if 5 in biz_type_list %}checked="checked"{% endif %}>后台自动续订</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="6" type="checkbox" class="mr3" {% if 6 in biz_type_list %}checked="checked"{% endif %}>未知</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="7" type="checkbox" class="mr3" {% if 7 in biz_type_list %}checked="checked"{% endif %}>自我新订</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="8" type="checkbox" class="mr3" {% if 8 in biz_type_list %}checked="checked"{% endif %}>转介绍</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="9" type="checkbox" class="mr3" {% if 9 in biz_type_list %}checked="checked"{% endif %}>软件成交</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="10" type="checkbox" class="mr3" {% if 10 in biz_type_list %}checked="checked"{% endif %}>进账划分客户</label>
+        <label class="dib mb0 vm ml5"><input name="biz_type" value="11" type="checkbox" class="mr3" {% if 11 in biz_type_list %}checked="checked"{% endif %}>店铺提成</label>
+      </span>
+    </div>
+
+    <div class="mt10">
+      <span class="vm">业务类型：
+        <label class="dib mb0 vm"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="kcjl" type="checkbox" class="mr3" {% if 'kcjl' in category_list %}checked="checked"{% endif %}>开车精灵</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="rjjh" type="checkbox" class="mr3" {% if "rjjh" in category_list %}checked="checked"{% endif %}>类目专家</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="vip" type="checkbox" class="mr3" {% if "vip" in category_list %}checked="checked"{% endif %}>VIP专家托管</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="qn" type="checkbox" class="mr3" {% if "qn" in category_list %}checked="checked"{% endif %}>千牛</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="ztc" type="checkbox" class="mr3" {% if "ztc" in category_list %}checked="checked"{% endif %}>直通车托管</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="zz" type="checkbox" class="mr3" {% if "zz" in category_list %}checked="checked"{% endif %}>钻展托管</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="zx" type="checkbox" class="mr3" {% if "zx" in category_list %}checked="checked"{% endif %}>店铺装修</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="dyy" type="checkbox" class="mr3" {% if "dyy" in category_list %}checked="checked"{% endif %}>代运营</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="seo" type="checkbox" class="mr3" {% if "seo" in category_list %}checked="checked"{% endif %}>seo</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="kfwb" type="checkbox" class="mr3" {% if "kfwb" in category_list %}checked="checked"{% endif %}>客服外包</label>
+        <label class="dib mb0 vm ml5"><input name="category" value="other" type="checkbox" class="mr3" {% if "other" in category_list %}checked="checked"{% endif %}>补单</label>
+        <label class="dib mb0 vm ml5"><a href="javascript:;" id="soft_biz_type">软件订单</a></label>
+        <label class="dib mb0 vm ml5"><a href="javascript:;" id="person_biz_type">人工订单</a></label>
+      </span>
+    </div>
+
+    <div class="mt10">
+      <span class="vm">付款方式：
+        <label class="dib mb0 vm"><input type="checkbox" value="all" class="checkbox_all mr3">全选</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="1" type="checkbox" class="mr3" {% if 1 in pay_type_list %}checked="checked"{% endif %}>淘宝后台付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="2" type="checkbox" class="mr3" {% if 2 in pay_type_list %}checked="checked"{% endif %}>公司支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="3" type="checkbox" class="mr3" {% if 3 in pay_type_list %}checked="checked"{% endif %}>公司中国银行账户付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="4" type="checkbox" class="mr3" {% if 4 in pay_type_list %}checked="checked"{% endif %}>香花私人支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="5" type="checkbox" class="mr3" {% if 5 in pay_type_list %}checked="checked"{% endif %}>派生视觉支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="6" type="checkbox" class="mr3" {% if 6 in pay_type_list %}checked="checked"{% endif %}>现金付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="7" type="checkbox" class="mr3" {% if 7 in pay_type_list %}checked="checked"{% endif %}>技术一部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="8" type="checkbox" class="mr3" {% if 8 in pay_type_list %}checked="checked"{% endif %}>技术二部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="9" type="checkbox" class="mr3" {% if 9 in pay_type_list %}checked="checked"{% endif %}>技术三部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="10" type="checkbox" class="mr3" {% if 10 in pay_type_list %}checked="checked"{% endif %}>技术四部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="11" type="checkbox" class="mr3" {% if 11 in pay_type_list %}checked="checked"{% endif %}>技术五部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="12" type="checkbox" class="mr3" {% if 12 in pay_type_list %}checked="checked"{% endif %}>技术六部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="16" type="checkbox" class="mr3" {% if 16 in pay_type_list %}checked="checked"{% endif %}>技术七部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="13" type="checkbox" class="mr3" {% if 13 in pay_type_list %}checked="checked"{% endif %}>销服一部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="14" type="checkbox" class="mr3" {% if 14 in pay_type_list %}checked="checked"{% endif %}>销服二部支付宝付款</label>
+        <label class="dib mb0 vm ml5"><input name="pay_type" value="15" type="checkbox" class="mr3" {% if 15 in pay_type_list %}checked="checked"{% endif %}>销服三部支付宝付款</label>
+      </span>
+    </div>
+
+  </form>
+
+  <div class="f16 b lh30">
+      总计：<span id="unsubscribe_sum" class="red mr3">{{ pay_sum|divide:'100' }}</span>元，<span id="unsubscribe_count" class="red mr3">{{ pay_count }}</span>笔
+    <button class="btn r mb5 btn-primary w100" id="submit_form">搜&nbsp;&nbsp;索</button>
+    <button class="btn r mb5 mr20" onclick="javascript:$('#is_export').val(1);$('#search_form').submit();">导&nbsp;出</button>
+  </div>
+
+  <table id="approval_subscribe_table" class="bdd table-striped tc">
+    <thead>
+      <tr>
+        <th class="w60 tc"><div>签单人部门</div></th>
+        <th class="w60 tc"><div>店铺名</div></th>
+        <th class="w40 tc"><div>签单人</div></th>
+        <th class="w30 tc"><div>新/续</div></th>
+        <th class="w30 tc"><div>版本</div></th>
+        <th class="w60 tc"><div>订购时间</div></th>
+        <th class="w60 tc"><div>结束日期</div></th>
+        <th class="w50 tc"><div>实付</div></th>
+        <th class="w50 tc"><div>付款方式</div></th>
+        <th class="w80 tc"><div>付款信息</div></th>
+        <th class="w50 tc"><div>审批状态</div></th>
+        <th class="w50 tc"><div>操作</div></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for obj in subscribe_list %}
+        <tr id="{{obj.id}}">
+          <td>{{obj.psuser.get_department_display|default:'系统'}}</td>
+          <td>{{obj.shop.nick}}</td>
+          <td class="tc">{{obj.psuser.name_cn|default:'系统'}}</td>
+          <td class="biz_type tc">{{obj.get_biz_type_display|default:''}}</td>
+          <td class="">{{obj.get_category_display}}</td>
+          <td class="tc">{{obj.create_time|date:"Y-m-d H:i:s"}}</td>
+          <td class="tc end_date">{{obj.end_date|date:"Y-m-d"}}</td>
+          <td class="pay tc">{{obj.pay|divide:'100'}}</td>
+          <td class="tc">{{obj.get_pay_type_display|default:'淘宝后台付款'}}</td>
+          <td class="tr">{{obj.pay_type_no|default:''}}</td>
+          <td class="approval_status tc {% if obj.approval_status == 1 %}approval_status_1{% else %}{% if obj.approval_status == 2%}approval_status_2{% else %}approval_status_0{% endif %}{% endif %}">
+              <span class="hide">{{obj.approval_status|default:'0'}}</span>
+              {% if 'G' in request.session.perms %}
+                  <div class="dropdown rel">
+                      <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" href="javascript:;">
+                          <span class="approval_status_display">{{ obj.get_approval_status_display }}</span><i class="iconfont">&#xe626;</i>
+                      </a>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                          <li><a href="javascript:;" class="modify_approval_status" approval_status="1">通过</a></li>
+                          <li><a href="javascript:;" class="modify_approval_status" approval_status="2">不通过</a></li>
+                      </ul>
+                  </div>
+              {% else %}
+                  <span class="text approval_status_display">{{ obj.get_approval_status_display }}</span>
+                  {% if obj.can_modify %}
+                      <a href="javascript:;" class="edit_subscribe ml5" subscribe_id="{{ obj.id }}" nick="{{obj.shop.nick}}">修改</a>
+                  {% endif %}
+              {% endif %}
+          </td>
+{#          {% if 'G' in request.session.perms %}#}
+{#            <td class="tc">#}
+{#              <span class="hide">{{obj.approval_status|default:'0'}}</span>#}
+{#              <select class="w80 f12 approval_status {% if obj.approval_status == 1 %}approval_status_1{% else %}{% if obj.approval_status == 2%}approval_status_2{% else %}approval_status_0{% endif %}{% endif %}">#}
+{#                <option value="0" {% if obj.approval_status == 0 %}selected{% endif %}>未审核</option>#}
+{#                <option value="1" {% if obj.approval_status == 1 %}selected{% endif %}>已通过</option>#}
+{#                <option value="2" {% if obj.approval_status == 2 %}selected{% endif %}>未通过</option>#}
+{#                <option value="3" {% if obj.approval_status == 3 %}selected{% endif %}>待再审</option>#}
+{#              </select>#}
+{#            </td>#}
+{#          {% else %}#}
+{#            <td class="approval_status tc {% if obj.approval_status == 1 %}approval_status_1{% else %}{% if obj.approval_status == 2%}approval_status_2{% else %}approval_status_0{% endif %}{% endif %}">#}
+{#              <span class="hide">{{obj.approval_status|default:'0'}}</span>#}
+{#              <span class="text">#}
+{#              {% if obj.approval_status == 1 %}#}
+{#                  已通过#}
+{#              {% elif obj.approval_status == 2 %}#}
+{#                  未通过#}
+{#                  {% if obj.can_modify %}#}
+{#                      <a href="javascript:;" class="edit_subscribe ml5" subscribe_id="{{ obj.id }}">修改</a>#}
+{#                  {% endif %}#}
+{#              {% elif obj.approval_status == 3 %}#}
+{#                  待再审#}
+{#              {% else %}#}
+{#                  未审核#}
+{#              {% endif %}#}
+{#              </span>#}
+{#            </td>#}
+{#          {% endif %}#}
+          <td class="tc">
+            {% if obj.note %}
+              <i class="tooltips iconfont b f20 mr10" data-placement="left" title='{{obj.note|safe}}' style="cursor: not-allowed;">&#xe6a8;</i>
+            {% endif %}
+            {% if obj.has_contract %}
+            <a href="{% url 'export_contract_file' obj.id %}" target="_blank" class="mr10"><i class="iconfont tooltips b f20" title="下载合同">&#xe6a9;</i></a>
+            {% elif obj.pay_type > 1 or obj.category == 'vip' %}
+              <input type="file" accept=".pdf,.doc,.docx,image/*"  class="hide upload_contract mr10" name = 'contract'/>
+              <a href="javascript:;" onclick="$(this).prev().click();" class="mr10"><i class="iconfont tooltips b f20 gray" title="上传合同">&#xe6aa;</i></a>
+              <a href="{% url 'export_contract_file' obj.id %}" target="_blank" class="hide download_contract mr10"><i class="iconfont tooltips b f20" title="下载合同">&#xe6a9;</i></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="fix mt10">
+      <span class="dib mt10">共{{page_info.record_count}}条记录，当前第{{page_info.page}}/{{page_info.page_count}}页</span>
+      <div class="pagination r">
+          <ul>
+              <li {%if page_info.page == 1%}class="active"{%endif%}>
+                  <a href="javascript:;">首页</a>
+              </li>
+              {%for p in page_info.page_xrange%}
+              <li {%if p == page_info.page%}class="active"{%endif%}>
+                  <a href="javascript:;" page_no = {{p}}>{{p}}</a>
+              </li>
+              {%endfor%}
+              <li {%if page_info.page == page_info.page_count%}class="active"{%endif%}>
+                  <a href="javascript:;" page_no = {{page_info.page_count}}>尾页</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</div>
+<div id="subscribe_edit_layout" class="modal hide fade" data-width="700">
+    <div id="subscribe_edit_box"></div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/approval_subscribe.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.ApprovalSubscribe.init();
+});
+</script>
+{% endblock %}

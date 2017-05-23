@@ -1,0 +1,86 @@
+{% extends "base_jl5.html" %}
+{% load rates %}
+{% block title%}好评有礼{% endblock %}
+
+{%block base_jl5%}
+<div id="header" class="navbar-static-top container-fluid">
+    <a href="{%url 'web_home'%}">
+        <img class="db l" src="/site_media/jl5/images/logo.png"></a>
+    <ul class="ul_line ar mr10">
+        <li>
+            <a id="open_msg" href="{%url 'web_home'%}"> <i class="iconfont f18 mr3">&#xe606;</i>
+                返回首页
+            </a>
+        </li>
+        <li>
+            <div class="dropdown rel">
+                <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-trigger="hover" href="javascript:;"> <i class="iconfont f18 mr5">&#xe640;</i>
+                    {{request.user.nick}}
+                    <i class="iconfont">&#xe626;</i>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li>
+                        <a href="http://shop{{request.user.shop_id}}.taobao.com/" target="_blank">店铺首页</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'top_logout'%}">退出系统</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="container-fluid w1100 auto mt20">
+
+    <ul class="breadcrumb p0">
+        <li>
+            <a href="{%url 'web_home'%}">首页</a>
+            <span class="divider">/</span>
+        </li>
+        <li>
+            <a href="{%url 'vip_home'%}">会员中心</a>
+            <span class="divider">/</span>
+        </li>
+        <li class="active">
+            好评有礼
+        </li>
+    </ul>
+
+    <h3><i class="iconfont mr5">&#xe688;</i>好评有礼<span class="f14 n ml10 black">（当前积分：<span class="point_count">{{point_count|default:0}}</span>）</span></h3>
+
+    <div class=" auto tc ova bg_white bbd ">
+
+            <div class="mt40 mb20 lh30 f30">亲，全5分  好评 + 评语 将获得 <span class="orange">500</span> 会员积分<span class="red hide">，当前活动双倍，共1000积分！</span></div>
+            <div class="mt40 f12">
+                <span>
+                <span>说明：亲，30天内只能新评一次和修改一次哦！ 好评后积分添加会稍有延迟，如果长时间没有赠送，请联系客服</span><a class="ml10" href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao派生科技"><img class="marl_6" src="/site_media/jl/img/online.ww.gif"></a>
+                </span>
+            </div>
+            <div class="mt10 mb10 w1220 auto">
+                <a href="{%url 'point_record_appraise'%}" target="_blank" class="btn btn-primary btn-large">马上好评</a>
+                <a class="ml10 btn btn-large" id="show_history_praise" href="javascript:;">获取评语</a>
+            </div>           
+ 			<div class="mt20 mb20 lh30 ml20 mr20 hide" id="div_msg">
+ 				<div class="large m_color f24 baseColor" id="smart_explain">
+                    <i class="iconfont">&#xe659;</i>以下好评已复制到剪贴板，请点击‘马上好评’粘贴评语。
+                </div>            	
+				<div id="div_content" class="f16">
+				</div>		
+			</div>            
+           
+    </div>
+</div>
+{%endblock%}
+
+{% block custom_js %}
+<script src="/site_media/jl5/plugins/zclip/jquery.zclip.min.js"></script>
+
+<script>
+$().ready(function(){
+    PT.Point.init();
+    
+});
+
+</script>
+{% endblock %}

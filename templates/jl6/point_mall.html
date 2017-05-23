@@ -1,0 +1,106 @@
+{% extends "base_main.html" %}
+{% load rates %}
+{% block title%}积分商城{% endblock %}
+
+{%block content%}
+<input type="hidden" value="{{is_perfect_info}}" id="is_perfect_info" />
+<input type="hidden" value="{%url 'upgrade_suggest'%}" id="exurl" />
+<div class="container">
+    <ol class="breadcrumb">
+      <li><a href="{%url 'web_home'%}">首页</a></li>
+      <li><a href="{%url 'vip_home'%}">会员中心</a></li>
+      <li class="active">会员商城</li>
+    </ol>
+    <div class="mall_list">
+        {% for shop_item in shop_items %}
+	        <div class="col-md-3">
+	            <div class="item">
+	                <img src="{{shop_item.img_url}}">
+	                <div class="info">
+                       {% if shop_item.shop_type == 'ticket' %}
+		                    <h4>
+		                           续订/升级{{shop_item.name}}
+		                    </h4>
+		                    <div class="sub">
+		                        <span>{{shop_item.desc}}</span>
+		                    </div>
+
+		                        <a href="javascript:;" data-type="{{shop_item.id}}"  target="_blank"  class="btn exchange" et="{{shop_item.shop_type}}">{{shop_item.point}}积分兑换
+				                    {%if point_count >= shop_item.point  %}
+			                             <span>(可兑换)</span>
+				                    {%else%}
+				                        <span>(积分不够)</span>
+				                    {%endif%}
+		                        </a>
+                       {% endif %}
+                       
+                       {% if shop_item.shop_type == 'gift' %}
+                           <h4>
+                                   {{shop_item.name}}
+                            </h4>
+                            <div class="sub">
+                                <span>
+                                ￥{{shop_item.worth|divide:"100"|floatformat:"0"}} 
+                                {% if shop_item.limit_point %}
+                                    (满{{shop_item.limit_point }}分可用)
+                                {% endif %}
+                                </span>
+                            </div>
+                            
+                            {% if shop_item.limit_point %}
+                                <a href="javascript:;" data-type="{{shop_item.id}}" class="btn exchange" et="{{shop_item.shop_type}}">{{shop_item.point}}积分兑换
+		                            {%if point_count >= shop_item.limit_point  %}
+		                                <span>(可兑换)</span>
+		                            {%else%}
+		                                <span>(积分不够)</span>
+		                            {%endif%}
+	                            </a>
+                            {% else %}
+                                <a href="javascript:;" data-type="{{shop_item.id}}" class="btn exchange" et="{{shop_item.shop_type}}">{{shop_item.point}}积分兑换
+                                    {%if point_count >= shop_item.point  %}
+                                        <span>(可兑换)</span>
+                                    {%else%}
+                                        <span>(积分不够)</span>
+                                    {%endif%}
+                                </a>
+                            {% endif %}
+                       {% endif %}
+                       
+                       {% if shop_item.shop_type == 'virtual' %}
+                           <h4>
+                                   {{shop_item.name}}
+                            </h4>
+                            <div class="sub">
+                                <span>
+                                ￥{{shop_item.worth|divide:"100"|floatformat:"0"}} 
+                                {% if shop_item.limit_point %}
+                                    (满{{shop_item.limit_point }}分可用)
+                                {% endif %}
+                                </span>
+                            </div>
+                            
+                            {% if shop_item.limit_point %}
+                                <a href="javascript:;" data-type="{{shop_item.id}}" class="btn exchange" et="{{shop_item.shop_type}}">{{shop_item.point}}积分兑换
+	                                {%if point_count >= shop_item.limit_point  %}
+	                                    <span>(可兑换)</span>
+	                                {%else%}
+	                                   <span>(积分不够)</span>
+	                                {%endif%}
+                                </a>
+                            {% else %}
+                                <a href="javascript:;" data-type="{{shop_item.id}}" class="btn exchange" et="{{shop_item.shop_type}}">{{shop_item.point}}积分兑换
+                                    {%if point_count >= shop_item.point  %}
+                                        <span>(可兑换)</span>
+                                    {%else%}
+                                       <span>(积分不够)</span>
+                                    {%endif%}
+                                </a>
+                            {% endif %}
+                       {% endif %}
+	                </div>
+	            </div>
+	        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

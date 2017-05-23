@@ -1,0 +1,56 @@
+
+<script id="id_instruction_template" type="text/html">
+    <tr tag_name="<%=instrcn.name%>">
+        <td class="tac"><input type="checkbox" name="instrcn_checkbox" id="<%=instrcn.name%>"></td>
+        <td class="tac">
+            <% if(instrcn.name) { %><%=instrcn.name%><% } else { %><input type="text" id="id_new_instrcn" value="" style="width:60px;" /> <% } %>
+        </td>
+        <td class="tac"><input type="text" class="instrcn" key_name="desc" value="<%=instrcn.desc%>" style="width:180px;"></td>
+        <td class="tac" style="white-space: nowrap;">
+            <span class="hide"><%=instrcn.scope%></span>
+            <input type="text" id="" class="instrcn scope_slider" key_name="scope" value="<%=instrcn.scope%>">
+        </td>
+        <td class="tac"><input type="text" class="instrcn" key_name="cond" value="<%=instrcn.cond%>" style="width:300px;"></td>
+        <td class="tac">
+            <span class="hide"><%=instrcn.operate%></span>
+            <input type="text" class="instrcn" key_name="operate" value="<%=instrcn.operate%>" style="width:200px;">
+        </td>
+        <td class="tac">
+            <a class="save_instrcn btn"><i class="icon-save"></i></a>
+            <a class="delete_instrcn btn"><i class="icon-remove"></i></a>
+        </td>
+   </tr>
+</script>
+
+<script id="id_instrcn_porlet_template" type="text/html">
+    <div class="portlet mart_12" id="id_instrcn_list_div">
+        <div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>改价指令(<span id="id_instrcn_count"><%=instrcn_list.length%></span>个)</div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse"></a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <a id="add_new_instrcn" class="btn blue vab">添加指令</a>            
+            <input type="text" id="id_search_instrcn" class="marb_0" style="width:120px;" placeholder="回车搜索指令名"/>
+            <table class="table table-bordered table-hover mart_6" id="id_instrcn_table">
+                <thead>
+                    <tr>
+                        <th width="70">改价指令</th>
+                        <th width="70">名称</th>
+                        <th width="200">描述</th>
+                        <th width="240">分类</th>
+                        <th width="320">条件</th>
+                        <th width="210">指令操作</th>
+                        <th width="120"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% for(var i=0;i<instrcn_list.length;i++){%>
+                <%include('id_instruction_template', {'instrcn':instrcn_list[i]})%>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>

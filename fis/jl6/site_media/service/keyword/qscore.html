@@ -1,0 +1,101 @@
+<div class="qscore_details black">
+    <div class="item">
+        <h4 class="mb20">计算机质量得分&ensp;<span class="base_color">{{pc_qscore}}</span>分<span class="f12 text-muted">（1-10）</span></h4>
+        <div class="bar">
+            <div class="l">创意质量：</div>
+            <div class="l">
+            {{each [0,1,2,3,4]}}
+                <span class="scroe_item {{if $index<pc_creative_score }}base_color{{else}}gray{{/if}}"></span>
+            {{/each}}
+            <i class="iconfont" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="推广创意近期的关键词动态点击反馈">&#xe628;</i>
+            </div>
+        </div>
+        <div class="bar">
+            <div class="l">相&ensp;关&ensp;性：</div>
+            <div class="l">
+            {{each [0,1,2,3,4]}}
+                <span class="scroe_item {{if $index<pc_rele_score }}base_color{{else}}gray{{/if}}"></span>
+            {{/each}}
+            <i class="iconfont" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="关键词与宝贝类目、属性及文本等信息的相符程度">&#xe628;</i>
+            </div>
+        </div>
+        <div class="bar">
+            <div class="l">买家体验：</div>
+            <div class="l">
+            {{each [0,1,2,3,4]}}
+                <span class="scroe_item {{if $index<pc_cvr_score }}base_color{{else}}gray{{/if}}"></span>
+            {{/each}}
+            <i class="iconfont" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="根据买家在店铺的购买体验给出的动态反馈">&#xe628;</i>
+            </div>
+        </div>
+        <div class="bar">
+            <div class="l mt5">展示机会：</div>
+            <div class="l">
+                {{if plflag == "0"}}
+                    <i class="iconfont f30 none">&#xe65f;</i><span class="ml5 gray va6 f12">无PC左推机会</span>
+                    <i class="iconfont va6" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="暂无机会在PC端首页左侧推广位置展示">&#xe628;</i>
+                {{/if}}
+                {{if plflag == "1"}}
+                    <i class="iconfont f30 chance">&#xe626;</i><span class="ml5 gray va6 f12">有PC左推机会</span>
+                    <i class="iconfont va6" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="有机会在PC端首页左侧推广位置展示">&#xe628;</i>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="item">
+        <h4 class="mb20">移动质量得分&ensp;<span class="base_color">{{yd_qscore}}</span>分<span class="f12 text-muted">（1-10）</span></h4>
+        {{if yd_qscore > -1}}
+            {{if yd_qscore > 0 }}
+            <div class="bar">
+                <div class="l">创意质量：</div>
+                <div class="l">
+                {{each [0,1,2,3,4]}}
+                    <span class="scroe_item {{if $index<yd_creative_score }}base_color{{else}}gray{{/if}}"></span>
+                {{/each}}
+                <i class="iconfont" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="推广创意近期的关键词动态点击反馈">&#xe628;</i>
+                </div>
+            </div>
+            <div class="bar">
+                <div class="l">相&ensp;关&ensp;性：</div>
+                <div class="l">
+                {{each [0,1,2,3,4]}}
+                    <span class="scroe_item {{if $index<yd_rele_score }}base_color{{else}}gray{{/if}}"></span>
+                {{/each}}
+                <i class="iconfont" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="关键词与宝贝类目、属性及文本等信息的相符程度">&#xe628;</i>
+                </div>
+            </div>
+            <div class="bar">
+                <div class="l">买家体验：</div>
+                <div class="l">
+                {{each [0,1,2,3,4]}}
+                    <span class="scroe_item {{if $index<yd_cvr_score }}base_color{{else}}gray{{/if}}"></span>
+                {{/each}}
+                <i class="iconfont" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="根据买家在店铺的购买体验给出的动态反馈">&#xe628;</i>
+                </div>
+            </div>
+            <div class="bar">
+                <div class="l mt5">展示机会：</div>
+                <div class="l">
+                    {{if matchflag == "0"}}
+                        <i class="iconfont f30 none">&#xe659;</i><span class="gray va6 f12">无移动展示机会</span><i class="iconfont ml5 va6" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="暂无移动端暂时机会">&#xe628;</i>
+                    {{/if}}
+                    {{if matchflag == "1"}}
+                        <i class="iconfont f30 none">&#xe659;</i><span class="gray va6 f12">无移动展示机会</span><i class="iconfont ml5 va6" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="暂无移动端暂时机会">&#xe628;</i>
+                    {{/if}}
+                    {{if matchflag == "2"}}
+                        <i class="iconfont f30 chance">&#xe65a;</i><span class="gray va6 f12">有移动展示机会</span><i class="iconfont ml5 va6" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="有机会在手机移动端展示">&#xe628;</i>
+                    {{/if}}
+                    {{if matchflag == "4"}}
+                        <i class="iconfont f30 top">&#xe658;</i><span class="gray va6 f12">有首屏展示机会</span><i class="iconfont ml5 va6" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="有机会在移动端第一屏展示">&#xe628;</i>
+                    {{/if}}
+                </div>
+            </div>
+            {{/if}}
+            {{if yd_qscore == 0 }}
+                <p class="text-muted">请检查宝贝的创意是否正常</p>
+            {{/if}}
+        {{else}}
+            <p class="text-muted">移动端未开启投放</p>
+        {{/if}}
+    </div>
+</div>

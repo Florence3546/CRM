@@ -1,0 +1,500 @@
+{#utf-8#}{% extends "base_mainjl5.html" %}
+{% load rates %}
+{% block title%}
+    我的关注
+{% endblock %}
+{% block extra_style %}
+<style>
+table.mini th.p0 {padding:0;}
+</style>
+{% endblock %}
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#bulk_optomize_main" data-toggle="tab">现有关键词 <span class="f24" id="keyword_count">--</span>个</a>
+        </li>
+        <li>
+            <div class="mt10 ml10 ">
+                <div class="dropdown l" id="keyword_select_days">
+                    <a class="dropdown-toggle btn btn-info btn-small" data-toggle="dropdown" data-autowidth="true" data-type="select" href="#"><i class="iconfont mr5">&#xe61e;</i><span class="dropdown-value">过去7天</span><i class="iconfont">&#xe626;</i></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a value="1" href="javascript:;">过去1天</a></li>
+                        <li><a value="3" href="javascript:;">过去3天</a></li>
+                        <li><a value="7" href="javascript:;">过去7天</a></li>
+                        <li><a value="15" href="javascript:;">过去15天</a></li>
+                    </ul>
+                </div>
+                <span class="ml10">关键词最高出价提醒：</span>
+                <div class="input-append m0" id="user_limit_price">
+                    <input class="w50 " type="text" value="{%if adg.limit_price%}{{adg|div:'limit_price,100,2'}}{% else %}5.00{%endif%}">
+                    <span class="add-on">元</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade active in bg_white rel pt92" id="bulk_optomize_main">
+
+            <div class="t0 bg_white abs pct100" id="fixed_box">
+                <!-- 关键词开始 -->
+                <div class="row-fluid pt10">
+                    <fieldset class="p10 nbl nbb l">
+                        <legend>批量操作</legend>
+                        <div class="btn-group mb10">
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-mini bdrtr0 bdrbr0" id="up_price_btn" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe624;</i>加价</button>
+                                <div class="dropdown-menu f14">
+                                    <div class="p10">
+                                        <span>基于</span>
+                                        <select class="mr3 w100" id="bulk_up_price_base">
+                                            <option value="max_price" selected="selected">当前出价</option>
+                                            <option value="g_cpc">市场均价</option>
+                                        </select>
+                                        <span class="mr3">，加</span>
+                                        <input type="text" class="mr3 w50" id="bulk_up_price_delta">
+                                        <select class="mr3 w60" id="bulk_up_price_mode">
+                                            <option value="int" selected="selected">元</option>
+                                            <option value="percent">%</option>
+                                        </select>
+                                        <span class="mr3">最高限价</span><input type="text" class="w50 mr3" id="bulk_up_price_limit"><span>元</span>
+                                        <button class="btn btn-small btn-info ml10" id="bulk_up_btn">确定</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-mini ml-1 bdr0" id="up_price_btn" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe623;</i>降价</button>
+                                <div class="dropdown-menu f14">
+                                    <div class="p10">
+                                        <span>基于</span>
+                                        <select class="mr3 w100" id="bulk_fall_price_base">
+                                            <option value="max_price" selected="selected">当前出价</option>
+                                            <option value="g_cpc">市场均价</option>
+                                        </select>
+                                        <span class="mr3">，降</span>
+                                        <input type="text" class="mr3 w50" id="bulk_fall_price_delta">
+                                        <select class="mr3 w60" id="bulk_fall_price_mode">
+                                            <option value="int" selected="selected">元</option>
+                                            <option value="percent">%</option>
+                                        </select>
+                                        <span class="mr3">最低限价</span>
+                                        <input type="text" class="w50 mr3" id="bulk_fall_price_limit"><span>元</span>
+                                        <button class="btn btn-small btn-info ml10" id="bulk_fall_btn">确定</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-mini ml-1 bdr0" id="up_price_btn" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe677;</i>自定义</button>
+                                <div class="dropdown-menu f14">
+                                    <div class="p10">
+                                      <span class="ml3">请设置自定义出价</span>
+                                      <input type="text" class="w50" id="custom_price">
+                                      <span>元</span><span class="ml10 silver">(不推荐使用)</span>
+                                        <button class="btn btn-small btn-info ml10" id="bulk_custom_btn">确定</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-mini ml-1 bdr0" id="bulk_del_btn"><i class="iconfont mr2">&#xe62c;</i>删除</button>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-mini ml-1 bdrtl0 bdrbl0" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe642;</i>修改匹配</button>
+                                <div class="dropdown-menu pl5 pr5" id="keyword_match">
+                                    <label class="dib mb0 ml10">
+                                        <input type="radio" name="bulk_match_radio" value="1" checked="checked">
+                                    <span class="ml3">精准匹配</span></label>
+                                    <label class="dib mb0 ml10">
+                                        <input type="radio" name="bulk_match_radio" value="4">
+                                    <span class="ml3">广泛匹配</span></label>
+                                    <label class="dib mb0 ml10">
+                                        <input type="radio" name="bulk_match_radio" value="2">
+                                    <span class="ml3">中心匹配</span></label>
+                                    <label class="dib mb0 ml10">
+                                        <button class="btn btn-small btn-info" id="bulk_match_btn">确定</button>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-mini ml-1 bdrtl0 bdrbl0" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe630;</i>批量预估</button>
+                                <div class="dropdown-menu pl5 pr5 f14" id="keyword_match">
+                                    <div class="p10">
+                                        <span>期望排名：</span>
+                                        <select class="w120" id="bulk_worder_select">
+                                            <option value="0" selected="selected">第1名</option>
+                                            <option value="1">第2名</option>
+                                            <option value="2">第3名</option>
+                                            <option value="3">第4名</option>
+                                            <option value="4">第5~12名</option>
+                                            <option value="5">第1页底部</option>
+                                            <option value="6">第2页第1名</option>
+                                            <option value="7">第2页第2名</option>
+                                            <option value="8">第2页第3名</option>
+                                            <option value="9">第2页第4名</option>
+                                            <option value="10">第2页5~12名</option>
+                                            <option value="11">第2页底部</option>
+                                            <option value="12">第3页1~6名</option>
+                                            <option value="13">40名以后</option>
+                                        </select>
+                                        <span>但出价不高于：</span>
+                                        <input type="text" class="w50" id="bulk_worder_limit">
+                                        <button class="btn btn-info" id="bulk_worder_btn">确定</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="p10 nbl nbb l">
+	                    <legend>其他</legend>
+	                    <div class="btn-group mb10">
+	                        <a class="btn btn-mini rel mr5" id="save_as_csv"><i class="iconfont mr2">&#xe67e;</i>导出关键词</a>
+	                        <div class="dropdown">
+	                            <button class="dropdown-toggle btn btn-mini" id="select_column_show_btn" data-toggle="dropdown" data-hold="true"><i class="iconfont mr2">&#xe635;</i>更多数据</button>
+	                            <div class="dropdown-menu pl5 pr5 left" id="select_column">
+	                                <ul class="ul_line mt10">
+	                                    <li class="title">
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox">
+	                                        <span class="marl_3 b">基础数据</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="12">
+	                                        <span class="marl_3">展现量</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="13">
+	                                        <span class="marl_3">点击量</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="14">
+	                                        <span class="marl_3">点击率</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="15">
+	                                        <span class="marl_3">总花费</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="16">
+	                                        <span class="marl_3">PPC</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="17">
+	                                        <span class="marl_3">千次展现花费</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="18">
+	                                        <span class="marl_3">昨日平均排名</span></label>
+	                                    </li>
+	                                </ul>
+	                                <ul class="ul_line mt10">
+	                                    <li class="title">
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox">
+	                                        <span class="marl_3 b">转化数据</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="19">
+	                                        <span class="marl_3">收藏量</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="20">
+	                                        <span class="marl_3">收藏率</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="21">
+	                                        <span class="marl_3">收藏成本</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="22">
+	                                        <span class="marl_3">成交量</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="23">
+	                                        <span class="marl_3">成交额</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="24">
+	                                        <span class="marl_3">转化率</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="25">
+	                                        <span class="marl_3">ROI</span></label>
+	                                    </li>
+	                                </ul>
+	                                <ul class="ul_line mt10">
+	                                    <li class="title">
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox">
+	                                        <span class="marl_3 b">全网数据</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="26">
+	                                        <span class="marl_3">全网展现指数</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="27">
+	                                        <span class="marl_3">全网点击指数</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="28">
+	                                        <span class="marl_3">全网点击率</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="29">
+	                                        <span class="marl_3">全网市场均价</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="30">
+	                                        <span class="marl_3">全网竞争度</span></label>
+	                                    </li>
+	                                </ul>
+	                                <ul class="ul_line mt10">
+	                                    <li class="title">
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox">
+	                                        <span class="marl_3 b">其他数据</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="9" checked="checked">
+	                                        <span class="marl_3">质量得分</span></label>
+	                                    </li>
+	                                    <li>
+	                                        <label>
+	                                            <input class="mt-3 ml10" type="checkbox" value="11" checked="checked">
+	                                        <span class="marl_3">养词天数</span></label>
+	                                    </li>
+	                                </ul>
+	                                <ul class="ul_line">
+	                                    <li class="r">
+	                                        <!-- <button class="btn mr5 select_column_btn" mode="show">确定</button> -->
+	                                        <button class="btn select_column_btn" mode="save">确定</button>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+                    </fieldset>
+                    <fieldset class="mt15 nbl nbr nbb">
+                        <div class="r pt10 mt5">
+	                        <span class="pr10 mt20 pt5 l"><span class="dib mt4">当前选中：</span><span class="linkColor f24 vt" id="batch_optimize_count">0</span></span>
+                            <ul class="ul_line pr10 mt20 pt5 l">
+                                <li class="select_status poi" mode="0"><span>加价</span><span class="f24 ml5" id="plus_count">0</span></li>
+                                <li class="select_status poi" mode="1"><span>降价</span><span class="f24 ml5" id="fall_count">0</span></li>
+                                <li class="select_status poi" mode="2"><span>删除</span><span class="f24 ml5" id="del_count">0</span></li>
+                                <li class="select_status poi" mode="3"><span>修改匹配</span><span class="f24 ml5" id="match_count">0</span></li>
+                            </ul>
+                            <button class="btn btn-large btn-primary mr10" id="id_curwords_submit"><i class="iconfont mr5">&#xe62e;</i>确认提交</button>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <!-- 关键词分类的表格 -->
+                <table class="table-bordered table-no-warp-border table-hover keyword mini hide" id="common_table">
+                    <thead>
+                        <tr>
+                            <th class="w20 nbl"><input class="father_box" type="checkbox" link="common_table"></th>
+                            <th class="w40 p0">宝贝<br>详情</th>
+                            <th class="w200"><div><span class="mr5">关键词</span></div></th>
+                            <th class="w60"><div>新出价</div></th>
+                            <th class="w90" th_name="rt_forecast">
+                              <div class="dropdown db common_table_sort_dropdown">
+                                <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                  <span class='dib'>新出价<br>实时排名</span>
+                                  <i class="iconfont r f10 mt15 g0">&#xe614;</i>
+                                </div>
+                                <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                  <li><a value="pc" href="javascript:;">PC排名</a></li>
+                                  <li><a value="yd" href="javascript:;">移动排名</a></li>
+                                </ul>
+                              </div>
+                            </th>
+                            <th class="w80"><div>预估排名</div></th>
+                            <th class="w40"><div>当前<br>出价</div></th>
+                            <th class="w90" th_name="rt_rank">
+                              <div class="dropdown db common_table_sort_dropdown">
+                                <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                  <span class='dib'>当前出价<br>实时排名</span>
+                                  <i class="iconfont r f10 mt15 g0">&#xe614;</i>
+                                </div>
+                                <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                  <li><a value="pc" href="javascript:;">PC排名</a></li>
+                                  <li><a value="yd" href="javascript:;">移动排名</a></li>
+                                </ul>
+                              </div>
+                            </th>
+                            <th class="w60"><div>当前<br>排名</div></th>
+                            <th class="w60 {%if 'new_qscore' in custom_column %}hide{%endif%}"  th_name="new_qscore">
+                              <div class="dropdown db common_table_sort_dropdown">
+                                <div class="dropdown-toggle"  data-toggle="dropdown" data-trigger="hover"  data-type="select" >
+                                  <span class='dib'>质量<br>得分</span>
+                                  <i class="iconfont r f10 mt15 g0">&#xe614;</i>
+                                </div>
+                                <ul class="dropdown-menu pct100" role="menu" aria-labelledby="dLabel">
+                                  <li><a value="pc" href="javascript:;">计算机</a></li>
+                                  <li><a value="yd" href="javascript:;">移动</a></li>
+                                </ul>
+                              </div>
+                            </th>
+                            <th class="w60 {%if 'qscore' in custom_column %}hide{%endif%}"><div>质量得分</div></th>
+                            <th class="w40 {%if 'create_days' in custom_column %}hide{%endif%}"><div>养词<br>天数</div></th>
+                            <th class="w50 {%if 'impressions' in custom_column %}hide{%endif%}"><div>展现量</div></th>
+                            <th class="w50 {%if 'click' in custom_column %}hide{%endif%}"><div>点击量</div></th>
+                            <th class="w50 {%if 'ctr' in custom_column %}hide{%endif%}"><div>点击率</div></th>
+                            <th class="w50 {%if 'cost' in custom_column %}hide{%endif%}"><div>总花费</div></th>
+                            <th class="w50 {%if 'ppc' in custom_column %}hide{%endif%}"><div>PPC</div></th>
+                            <th class="w50 {%if 'cpm' in custom_column %}hide{%endif%}"><div>千次展<br>现花费</div></th>
+                            <th class="w50 {%if 'avgpos' in custom_column %}hide{%endif%}"><div>昨日平<br>均排名</div></th>
+                            <th class="w50 {%if 'favcount' in custom_column %}hide{%endif%}"><div>收藏量</div></th>
+                            <th class="w50 {%if 'favctr' in custom_column %}hide{%endif%}"><div>收藏率</div></th>
+                            <th class="w50 {%if 'favpay' in custom_column %}hide{%endif%}"><div>收藏<br>成本</div></th>
+                            <th class="w50 {%if 'paycount' in custom_column %}hide{%endif%}"><div>成交量</div></th>
+                            <th class="w50 {%if 'pay' in custom_column %}hide{%endif%}"><div>成交额</div></th>
+                            <th class="w50 {%if 'conv' in custom_column %}hide{%endif%}"><div>转化率</div></th>
+                            <th class="w50 {%if 'roi' in custom_column %}hide{%endif%}"><div>ROI</div></th>
+                            <th class="w50 {%if 'g_pv' in custom_column %}hide{%endif%}"><div>全网展<br>现指数</div></th>
+                            <th class="w50 {%if 'g_click' in custom_column %}hide{%endif%}"><div>全网点<br>击指数</div></th>
+                            <th class="w50 {%if 'g_ctr' in custom_column %}hide{%endif%}"><div>全网<br>点击率</div></th>
+                            <th class="w50 {%if 'g_cpc' in custom_column %}hide{%endif%}"><div>全网市<br>场均价</div></th>
+                            <th class="w50 {%if 'g_competition' in custom_column %}hide{%endif%}"><div>全网<br>竞争度</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="loading_keyword" class="btd">
+                    <div class="tc f20 p10 mb30 mt30">
+                        <img src="/site_media/jl5/images/ajax-loader.gif" width="32" height="32">正在获取关键词信息.......
+                    </div>
+                </div>
+                <div id="no_keyword" class="hide btd tc">
+                    <div class="f20 p10 mt30">您还没有关注任何关键词，您可以如下图所示，添加您特别关注的关键词：</div>
+                    <img src="/site_media/jl5/images/add_attention_help.jpg" width="600" class="p10 bdd mb30">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block custom_js %}
+<script src="/site_media/jl5/plugins/data-tables/ZeroClipboard.js"></script>
+<script src="/site_media/jl5/plugins/data-tables/TableTools.js"></script>
+<script id="template_item_picture" type="text/html">
+<div class="w160">
+    <img class="item_picture" style="height:160px; width:160px; border:#eee 1px solid" src="<%=item_pic_url%>_160x160.jpg">
+    <div class="mt5">
+	    <%=item_title%>
+	    <div class="orange r">￥<%=item_price%></div>
+    </div>
+    <div class="silver mt5">[ <%=campaingn_title%> ]</div>
+</div>
+</script>
+<script id="template_noSearch_tr" type="text/html">
+<tr class="unsort noSearch">
+  <td class="nbl"></td>
+  <td></td>
+  <td>
+    <div class="input-append m0 abs mt-15">
+      <input class="w140 search_val" type="text">
+      <button class="btn search_btn" type="button"><i class="iconfont lh14">&#xe645;</i></button>
+    </div>
+  </td>
+  <td class="tc"><button class="btn btn-mini bulk_recover_all_btn">全部重置</button>  </td>
+  <td><button class="btn btn-mini" id="bulk_rt_forecast_order">实时排名</button> </td>
+  <td><button class="btn btn-mini" id="bulk_forecast_order">批量预估</button> </td>
+  <td></td>
+  <td class="tc"><button class="btn btn-mini" id="bulk_rt_check_order">批量查</button></td>
+  <td class="tc">
+    <select class="h22 f12 p0" id="ip_zone">
+      <option value="">选地区</option>
+      <option value="localhost">当地</option>
+      <option value="202.96.0.133">北京</option>
+      <option value="202.96.199.132">上海</option>
+      <option value="110.76.46.215">杭州</option>
+      <option value="202.96.128.143">广州</option>
+      <option value="202.99.96.68">天津</option>
+      <option value="218.2.135.1">南京</option>
+      <option value="61.128.128.68">重庆</option>
+      <option value="202.103.24.68">武汉</option>
+      <option value="202.98.96.68">成都</option>
+      <option value="202.96.134.133">深圳</option>
+      <option value="222.172.200.68">云南</option>
+      <option value="222.74.242.189">内蒙</option>
+      <option value="219.149.194.56">吉林</option>
+      <option value="218.6.145.111">四川</option>
+      <option value="202.100.96.68">宁夏</option>
+      <option value="202.102.192.68">安徽</option>
+      <option value="202.102.134.68">山东</option>
+      <option value="219.149.190.60">山西</option>
+      <option value="220.192.32.103">广东</option>
+      <option value="202.103.224.68">广西</option>
+      <option value="61.128.99.133">新疆</option>
+      <option value="202.102.29.3">江苏</option>
+      <option value="202.101.224.68">江西</option>
+      <option value="202.99.160.68">河北</option>
+      <option value="202.102.227.68">河南</option>
+      <option value="202.96.102.3">浙江</option>
+      <option value="202.100.209.123">海南</option>
+      <option value="202.103.24.68">湖北</option>
+      <option value="202.103.100.206">湖南</option>
+      <option value="61.178.152.40">甘肃</option>
+      <option value="202.101.115.55">福建</option>
+      <option value="202.98.224.68">西藏</option>
+      <option value="119.1.42.35">贵州</option>
+      <option value="221.202.189.57">辽宁</option>
+      <option value="124.115.214.58">陕西</option>
+      <option value="202.100.138.68">青海</option>
+      <option value="202.45.84.58">香港</option>
+      <option value="202.175.3.8">澳门</option>
+      <option value="168.95.1.1">台湾</option>
+      <option value="202.97.224.69">黑龙江</option>
+    </select>
+  </td>
+  <td class="tc bld"></td>
+  <td class="tc"></td>
+  <td class="tr">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr">-</td>
+  <td class="tr">-</td>
+  <td class="tr">-</td>
+  <td class="tr">-</td>
+  <td class="tr">-</td>
+  <td class="tr">-</td>
+  <td class="tr">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+  <td class="tr bg_striped">-</td>
+</tr>
+</script>
+<script>
+    jQuery(document).ready(function() {
+        PT.Attention.init();
+    });
+</script>
+{% endblock %}

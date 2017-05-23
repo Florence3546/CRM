@@ -1,0 +1,95 @@
+<div id="id_manual_add_customer_layout" class="modal hide fade p10" data-width="w800" >
+    <div class="fix lh30 pt10 ">
+        <span class="f16 b"> <i class="iconfont mr5"></i>
+            手动批量添加客户
+        </span>
+        <span class="r "><i class="iconfont mr3 f18"></i><span class="f14 b">昵称以回车分割</span></span>
+    </div>
+   <table class="table-layout table-bordered mini mt10" >
+        <thead>
+            <tr>
+                <th class="pct90">客户昵称列表</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <textarea class="h200 p0 pct100 f16 bd_none b rsn ofyn" id="id_list_textarea" client_group_id="-1" spellcheck="false"  placeholder="示例：
+cncys1
+神话鞋业
+您乐诚品
+国玉之乡
+"></textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="tr mt20">
+        <a href="javascript:;" class="btn btn-primary" id="manual_submit_ids">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="close_model btn">关闭</a>
+    </div>
+</div>
+
+<script>
+    PT.namespace('ManualImportCustomer');
+    PT.ManualImportCustomer = function() {
+        var init_plug = function(){
+	        $('#open_manual_layout').on('click', function() {
+	            // $("#id_list_textarea").val(""); 暂不做清理工作
+	            $("#id_manual_add_customer_layout").modal();
+	        });
+	
+	        $('#manual_submit_ids').on('click', function() {
+	            var cur_obj = $("#id_list_textarea");
+	            var client_group_id = cur_obj.attr('client_group_id');
+	            
+	            if(! (parseInt(client_group_id) > 0) ){
+	                PT.alert("请选择 客户群");
+	            }else if(cur_obj.val() == ""){
+	                PT.alert("请编写 客户昵称 列表");
+	            } else {
+	                var id_list_text = cur_obj.val();
+	                var nick_list = id_list_text.replace(/ /g,'').split(/\n/g);
+	                
+	                //if(id_list.split(',').length> 1000){
+	//                    PT.alert("添加用户ID太多了，请适当的删减"); 暂不提供该校验
+	//                }
+	                
+	                if(nick_list.length == 0){
+	                    PT.alert('昵称列表 不能为空');
+	                } else {
+	                    PT.show_loading('正在批量添加客户到当前用户群');
+	                    PT.sendDajax({
+	                        'function': 'ncrm_manual_add_customers',
+	                        'nick_list': $.toJSON(nick_list),
+	                        'client_group_id': client_group_id,
+	                        'call_back': 'PT.ManualImportCustomer.manual_add_customers_back'
+	                    });
+	                }
+	            }
+	        });
+        };
+        return {
+            init : init_plug ,
+            manual_add_customers_back : function(json) {
+                if (json.error) {
+                    PT.alert(json.error);
+                } else {
+                    $("#id_manual_add_customer_layout .close_model").click();
+                    var no_exsited = json.data[0];
+                    var is_exsited = json.data[1];
+                    var success  = json.data[2];
+                    PT.alert("已成功导入客户 "+success+" 人,   其中无效客户 "+no_exsited+"人,   已存在客户"+is_exsited+" 人.");
+                    $("#id_list_textarea").val("");
+                }
+            }
+        }
+    }();
+    
+    $().ready(function(){
+         PT.ManualImportCustomer.init();
+	});
+</script>
+
+
+

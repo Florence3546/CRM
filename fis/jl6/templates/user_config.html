@@ -1,0 +1,59 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% block title %}代理设置{% endblock %}
+
+{% block content %}
+<section class="container-fluid">
+<div class="mt20 w800 auto">
+    <div id="id_agent_setting">
+        <h3><i class="iconfont">&#xe601;</i>&nbsp;设置精灵代理账号</h3>
+        <div><span class="b">说明：</span>给精灵设置一个代理账号，可以让别人帮忙操作开车精灵。【请谨慎设置，代理用户名和密码请务必保密！】</div>
+        <div class="mt5">设置好之后，代理用户可以通过<a href="/agent_login">http://www.ztcjl.com/agent_login</a>登录到精灵，登录后拥有与您相同的开车精灵使用权限。</div>
+        <div class="p20 bg_white bdd mt10 user_config">
+            <div class="mt10">
+                <span>代&nbsp;&nbsp;理&nbsp;&nbsp;名:</span>
+                <select id="id_select_agent" class="w200">
+                    {% for ag in agent_list %}
+                    <option value="{{ag.id}}">{{ag.name}}</option>
+                    {% endfor %}
+                </select>
+                <span>
+                    <a href="javascript:void(0);" class="btn btn-default edit_agent mt-3 btn-sm">编辑</a>
+                </span>
+                <span>
+                    <a href="javascript:void(0);" class="btn btn-default delete_agent mt-3 btn-sm">删除</a>
+                </span>
+                <span>
+                    <a href="javascript:void(0);" class="btn btn-default add_agent  mt-3 btn-sm">增加</a>
+                </span>
+            </div>
+            <div class="edit_box" id="id_edit_box">
+                <ul>
+                    <li class="mt10">
+                        <span>用&nbsp;&nbsp;户&nbsp;&nbsp;名:</span>
+                        <input type="text" class="w200 show_msg" db_id="" id="id_name" value="" >
+                        <span class="hint hide" id="id_name_hint">用户名必须是淘宝网账号(5~25个字符)</span>
+                    </li>
+                    <li class="mt10">
+                        <span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</span>
+                        <input type="password" class="w200 show_msg" id="id_password" maxlength="16" value="" >
+                        <span class="hint hide" id="id_password_hint">6~16个字符，建议使用字母加数字或符号的组合密码</span>
+                        <input type="hidden" id="id_password_bak" value="">
+                    </li>
+                    <li class="mt10">
+                        <span>确认密码:</span>
+                        <input type="password" class="w200 show_msg" id="id_repsd" maxlength="16" value="" >
+                        <span class="hint hide" id="id_repsd_hint">再输一次密码</span>
+                    </li>
+                    <li class="mt10" style="margin-left:60px;">
+                        <a href="javascript:void(0);" class="btn btn-primary submit_agent">保存</a>
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="$('#id_edit_box').slideUp('fast');">隐藏</a>
+                    </li>
+                    <input type="hidden" id="agent_id" value="">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{%endblock%}

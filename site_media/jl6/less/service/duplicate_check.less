@@ -1,0 +1,105 @@
+#duplicate_check{
+  .fixedHeader{
+    display: none;
+  }
+  margin-left: 0;
+  table {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    thead {
+      tr {
+        border-top: none;
+        border-right: 1px solid @table-border-color;
+      }
+      th {
+        vertical-align: middle;
+        background-image: none;
+        background-color: #fff;
+        font-weight: 700;
+        height: 36px;
+        font-weight: normal;
+        border-bottom: 1px solid @table-border-color;
+      }
+    }
+    tbody{
+      tr:last-child td {
+          border-bottom: 1px solid @table-border-color;
+      }
+    }
+  }
+}
+.custom_tab{
+  padding-bottom: 10px;
+  border-bottom: 1px solid @table-border-color;
+}
+.del_box{
+  margin-top: 30px;
+  padding: 10px;
+  line-height: 30px;
+  border: 1px solid @gray-lighter;
+  .del_img{
+    width: 60px;
+    height: 60px;
+    float: left;
+  }
+}
+#duplicate_box{
+  float: left;
+  width: 400px;
+  .pagination_bar{
+    border: 1px solid @table-border-color;
+    border-left: none;
+    padding: 5px;
+    display: none;
+  }
+  table {
+    .loading_tr{
+      background-color: @white;
+    }
+    tbody{
+      tr{
+        border-right: 1px solid @table-border-color;
+        background-color: @gray-lighter;
+        height: 49px;
+      }
+    }
+  }
+  .cur_dupl_detail{
+    background-color: @white;
+    border-right: none;
+  }
+}
+#dupl_detail_box{
+  width: 818px;
+  float: left;
+  padding-left: 1px;
+}
+
+.dupl_del_column{
+   position: relative;
+   .del_span{
+     position: absolute;
+     top: -7px;
+     right: 0px;
+     .del_count{
+       position: absolute;
+       top: 6px;
+       width: 100px;
+       text-align: right;
+       right: 80px;
+     }
+   }
+}
+#dupl_del_carousel{
+  .carousel-inner{
+    min-height: 400px;
+    .select_warp {
+      ul{
+        span{
+          padding: 6px 17px;
+        }
+      }
+    }
+  }
+}

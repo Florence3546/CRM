@@ -1,0 +1,128 @@
+<header>
+    {%if request.user.nick %}
+    <div class="bg_layer"></div>
+    <!--顶部横条 start-->
+    {% if top_banner %}
+    <div class="auto bg_striped tc" id="show_top_banner" ad_show_secs="{{ top_banner.ad_show_secs }}"
+            ad_close_btn="{{ top_banner.ad_close_btn }}" ad_delay_secs="{{ top_banner.ad_delay_secs }}"
+            ad_frequency="{{ top_banner.ad_frequency }}" ad_id="{{ top_banner.obj_id }}">
+        <div class="r" id="hide_top_banner">
+            <a href="javascript:;" >关闭广告<strong><i class="icon iconfont">&#xe614;</i></strong></a>
+        </div>
+        <div id="top_banner_content" class="tc">
+            {% autoescape off %}
+            {{ top_banner.ad_content }}
+            {% endautoescape %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="auto tc hide" id="top_user_info" >
+        <div class="r" id="hide_user_info">
+            <!--<a href="javascript:;" id="close_user_info" >下次再填<strong><i class="icon iconfont">&#xe614;</i></strong></a>-->
+        </div>
+        <div class="tc">
+            {% autoescape off %}
+            <p id="lbl_title">完善会员信息，享受更贴心的服务，更优惠的价格</p>
+            <p id="lbl_descr">获得500会员积分，续订/升级更加优惠，计划烧下线短信提醒，宝贝违规下架短信提醒，免费店铺诊断</p>
+            <div class="line_box">
+                <input type="text" id="txt_tel" placeholder="请输入您的手机号">
+                <input type="text" id="txt_qq" placeholder="请输入您的QQ号">
+                <button class="btn btn-sm btn-primary" id="btn_save_info">确认</button>
+                <span id="lbl_msg">(完善信息后将不再显示)</span>
+            </div>
+            {% endautoescape %}
+        </div>
+    </div>
+    <!--顶部横条 end-->
+    {%endif%}
+</div>
+<div id="site_nav" class="qnpc_site_nav">
+    <a href="/web/web_home" class="logo">
+        <img src="../site_media/static/images/logo_qn.png?__inline" height="48">
+    </a>
+    {%if request.user.nick %}
+    <nav>
+        <ul>
+            <li {% if PAGE_MARK.2 == "web_home" %}class="active"{%endif%}>
+                <a href="/web/web_home">首页</a>
+            </li>
+            <li class="poptip {% if PAGE_MARK.2 == 'mnt_campaign' or PAGE_MARK.2 == 'choose_mnt_campaign' %}active{%endif%}">
+                <a href="javascript:void(0);">自动优化</a>
+                <ul class="popcontent animate">
+                    {% for mnt in MNT_LIST %}
+                    <li class="mnt_index {% if camp.campaign_id == mnt.campaign_id%}active{% endif %}" id="li_camp_{{mnt.campaign_id}}">
+                        <a href="/mnt/mnt_campaign/{{mnt.campaign_id}}">
+                            <span class="label label-gray f14">
+                            {{ mnt.mnt_type_name }}
+                            </span>
+                            <span class="camp_title ml5">{{mnt.name}}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                    {% if MNT_LIST|length < 8 %}
+                    <li>
+                        <a href="/mnt/choose_mnt_campaign/0">添加托管计划</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="poptip {% if PAGE_MARK.2 == 'hand_optimize' or PAGE_MARK.2 == 'duplicate_check' or PAGE_MARK.2 == 'shop_core' %}active{%endif%}">
+                <a href="javascript:void(0);">手动优化</a>
+                <ul class="popcontent animate">
+                    <li><a href="/web/hand_optimize/">宝贝列表</a></li>
+                    <li><a id="duplicate_check_id" href="javascript:;">全店删词</a></li>
+                    <li><a href="{%url 'shop_core'%}">全店核心词</a></li>
+                </ul>
+            </li>
+            <li class="poptip {% if PAGE_MARK.2 == 'auto_rob_rank' %}active{%endif%}">
+                <a href="javascript:void(0);">工具</a>
+                <ul class="popcontent animate">
+                    <li><a href="{%url 'op_history'%}">操作记录</a></li>
+                    <li><a href="{%url 'auto_rob_rank'%}">自动抢排名</a></li>
+                </ul>
+            </li>
+            {%if SERVER_MENU_LIST %}
+                <li class="poptip {% if PAGE_MARK.2 == 'paithink_services' %}active{%endif%}">
+                <a href="javascript:void(0);">服务中心</a>
+                <ul class="popcontent animate w200">
+                    {%for ad in SERVER_MENU_LIST%}
+                        <li class="server_menu" value="{{ ad.obj_id }}"><a href="{%url 'paithink_services' ad.id %}" target="_blank">{{ad.title}}</a></li>
+                    {%endfor%}
+                </ul>
+            </li>
+            {%endif%}
+        </ul>
+    </nav>
+    <aside>
+        <span class="poptip">
+            <a href="javascript:;" id="id_sync_data" title="联系旺旺">
+                全店数据下载
+            </a>
+        </span>        
+        <span class="poptip">
+            <a target="_blank" href="https://www.taobao.com/webww/ww.php?ver=3&touid=派生科技&siteid=cntaobao&status=1&charset=utf-8" title="联系旺旺">
+                <img src="../site_media/static/images/wangwang.png">
+            </a>
+        </span>
+        <span class="jpoptip">
+            <a href="javascript:;" title="意见反馈">
+                <img src="../site_media/static/images/yijian.png">
+            </a>
+            <div class="popcontent animate" id="suggest">
+                <p class="title">意见反馈</p>
+                <textarea class="form-control" placeholder="您的意见是我们前进最大的动力"></textarea>
+                <div class="tip form-inline">感谢您的建议与鞭策
+                    {% if not request.session.phone %}
+                    ，为了方便联系，请留下您的手机：<input type="text" class="form-control">
+                    {%endif%}
+                </div>
+                <button class="btn btn-primary btn-sm">提交反馈</button>
+            </div>
+        </span>
+    </aside>
+    {%endif%}
+</div>
+</header>
+

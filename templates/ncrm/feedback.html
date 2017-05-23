@@ -1,0 +1,80 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}意见反馈{% endblock %}
+{% block extra_style %}
+<style>
+#table_feedback_wrapper {
+    position: relative;
+}
+#pagination_bar {
+    position: absolute;
+    top: -50px;
+    right: 0;
+}
+#table_feedback_info, .dataTables_paginate {
+    display: inline-block;
+}
+#table_feedback_info {
+    vertical-align: top;
+    line-height: 30px;
+    margin-right: 10px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <form id="search_form" action="" method="GET">
+            <span>
+	            起止时间：
+	            <input class="w100" name="start_time" id="start_time" type="text" value="{{ start_time }}"> -
+	            <input class="w100" name="end_time" id="end_time" type="text" value="{{ request.GET.end_time }}">
+            </span>
+	        <input type="text" name="server_name" class="psuser_input f12 w130 ml20" link="#server_id" placeholder="顾问" autocomplete="off" value="{{ request.GET.server_name }}">
+	        <input type="hidden" id="server_id" name="server_id" value="{{ request.GET.server_id }}">
+            <select name="handle_status" id="handle_status" class="w120 ml20 f12">
+                <option value="">- 处理状态 -</option>
+                <option value="-1" {% if request.GET.handle_status == '-1' %}selected{% endif %}>未处理</option>
+                <option value="1" {% if request.GET.handle_status == '1' %}selected{% endif %}>已处理</option>
+            </select>
+	        <button class="btn btn-primary ml20" id="btn_search">查　询</button>
+        </form>
+        <table id="table_feedback" class="table-bordered tc">
+	        <thead>
+		        <tr>
+			        <th class="w150"><div>时间</div></th>
+			        <th class="w120"><div>店铺名</div></th>
+			        <th class="w120"><div>手机</div></th>
+			        <th><div>反馈内容</div></th>
+			        <th class="w80"><div>顾问</div></th>
+			        <th class="w120"><div>顾问备注</div></th>
+			        <th class="w80"><div>状态</div></th>
+		        </tr>
+	        </thead>
+	        <tbody>
+	            {% for obj in feedback_list %}
+	            <tr>
+	                <td>{{ obj.create_time|date:"Y-m-d H:i:s" }}</td>
+	                <td><a href="aliim:sendmsg?uid=cntaobao&siteid=cntaobao&touid=cntaobao{{ obj.shop.nick }}" title="联系主旺旺">{{ obj.shop.nick }}</a></td>
+	                <td>{{ obj.shop.phone  }}</td>
+	                <td class="tl">{{ obj.content }}</td>
+	                <td>{{ obj.consult.name_cn }}</td>
+	                <td class="tl">{{ obj.note|default:'' }}</td>
+	                <td>{% if obj.handle_status == -1 %}未处理{% else %}已处理{% endif %}</td>
+	            </tr>
+	            {% endfor %}
+	        </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/feedback.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.Feedback.init();
+});
+</script>
+{% endblock %}

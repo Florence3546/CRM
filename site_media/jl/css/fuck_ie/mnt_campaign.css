@@ -1,0 +1,22 @@
+/* CSS Document */
+table td{padding:8px;}
+#camp_oper {border:#DDD 1px solid; padding:12px;}
+.min_input{width: 40px; padding: 0; margin: 0 3px 3px 0; text-align:right;}
+
+#dashboard-report-range{background-color:#fff; color:#333; border:1px solid #ccc;}
+
+a{cursor:pointer;}
+
+.mnt_discr{border: 1px #CCC dashed; padding: 5px 14px; font-weight: bold; font-size: 14px; display: inline-block; vertical-align: middle; background-color:#EEE; width:300px;}
+#camp_online_status{margin-right:-4px;}
+.bd{border:#DDD 1px solid;}
+
+.table_a {border:1px solid #ccc;width:100%;margin:0 auto 0 auto;text-align:left;background:#fff;border-spacing: 0;border-collapse: collapse;}
+.table_a td,.table_a th {border:1px solid #ccc !important;}
+.btn_width{width:100px;}
+
+.r_btn{ color:red; border-color:red;}
+.g_btn{ color:green; border-color:green;}
+.quick_oper.btn.disabled {border-color:#333;background-color:#fff !important;}
+
+.blackword {border:1px dashed #FF0000; background-color:#FFFFFF; cursor:pointer; padding:5px 10px;}

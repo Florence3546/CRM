@@ -1,0 +1,72 @@
+#site_nav.qnpc_site_nav{
+    nav {
+        line-height: 0;
+        margin-left: 4000/1366%;
+        &>ul {
+            &>li {
+                &:hover, &.active {
+                    &>a {
+                        background-color: @base-color;
+                        border-bottom: 4px solid #eee;
+                    }
+                }
+            }
+        }
+    }
+    .poptip,.jpoptip{
+        float: left;
+        a>img{
+            width: 24px;
+            height: 24px;
+            top:30px;
+            margin-right: 4px;
+        }
+    }
+
+    aside > span > a{
+        cursor: pointer;
+        width: auto;
+    }
+    aside > span > a > img{
+        position: initial;
+    }
+}
+
+.from-qnpc{
+    // 修复#3433
+    .operate{
+        span.dropdown{
+            display: inline-block;
+        }
+    }
+
+    #filter_warp.open{
+        .dropdown-menu.dropdown-table{
+            width: 1000px;
+            display: block;
+        }
+    }
+    #price_warp.open,#mobile_price_warp.open{
+        .dropdown-menu.dropdown-table{
+            width: 285px;
+            display: block;
+        }
+    }
+    #match_warp.open{
+        .dropdown-menu.dropdown-table{
+            width: 150px;
+            display: block;
+        }
+    }
+    #mnt_warp.open{
+        .dropdown-menu.dropdown-table{
+            width: 150px;
+            display: block;
+        }
+    }
+
+    #siet_info{
+        display: none;
+    }
+
+}

@@ -1,0 +1,22 @@
+/* CSS Document */
+.td_middle td{vertical-align:middle;}
+.dashboard-stat .visual{width:0; height:0;}
+.span3.responsive button {height: 66px;}
+.portfolio-info.pad_0 span {font-size:20px !important;}
+#detailed_table tr th {font-size:12px;padding:4px;vertical-align:middle;text-align:center;font-weight:700}
+.top-news.mart_0 a {margin-bottom:12px;height:80px; display:block; text-decoration:none; padding:10px;}
+.top-news.mart_0 a span{display:block; font-size:16px;}
+.top-news.mart_0 a em{display:block; font-style:normal;}
+.nbsp_2{text-indent:2em;}
+#adg_trend_chart{margin-top:30px;height:320px;}
+#adg_p .portfolio-block{background: #e6e6e6;padding: 6px 0;}
+#adg_p .portfolio-block .portfolio-info{color:#000;}
+
+.portfolio-info{padding:0;}
+.portfolio-info span{color:#000;}
+.portfolio-info span.r_color{color: #FF0000;}
+.breadcrumb{overflow:hidden; padding:0;}
+.breadcrumb li {margin-right: 0;}
+
+#content_wrapper{width:80%; margin:0 auto;}
+#detailed_table td{ padding: 1px 6px;}

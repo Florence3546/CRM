@@ -1,0 +1,1 @@
+start python.exe tj_30avg_cost.py

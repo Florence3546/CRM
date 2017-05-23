@@ -1,0 +1,38 @@
+﻿{% extends "base_jl5.html" %}
+
+{% block title%}退出系统{%endblock%}
+{%block base_jl5%}
+    <div id="header" class="navbar-static-top">
+        <div class="container-fluid">
+            <a  href="#"><img class="db l" src="/site_media/jl5/images/logo.png"></a>
+        </div>
+    </div>
+    <div class=" container-fluid">
+      <div class=" w800 h300 mb40 auto mt100 bg_white bdd">
+          <div class="fix mt20">
+              <i class="iconfont f150 mt50 l ml30">&#xe668;</i><div class=" w600 h24  l ml15 mt40">
+                  <p class=" f36 b  mt30 mb20">感谢您的使用，您已经退出！</p>
+                <ul class="lh24">
+                    <li>开车精灵官方微博地址：<a href="http://weibo.com/ztcjl" target="_self">http://weibo.com/ztcjl</a></li>
+                      <li>开车精灵帮派地址：<a href="http://bangpai.taobao.com/group/14487125.htm" target="_self">http://bangpai.taobao.com/group/14487125.htm</a></li>
+                      <li><a class="btn btn-primary btn-mini" href="http://www.ztcjl.com">重新登录</a><a class="btn btn-mini ml10" href="javascript:window.opener=null;window.open('','_self');window.close();PT.alert('您已经退出系统，关闭浏览器即可')">关闭</a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+    </div>
+<script type="text/javascript" language="javascript" >
+function add2fav(address,name){
+  var ctrl = (navigator.userAgent.toLowerCase()).indexOf('mac') != -1 ? 'Command/Cmd': 'CTRL';
+  if(document.all){
+    window.external.addFavorite(address, name);
+  }
+  else if(window.sidebar){
+    window.sidebar.addPanel(name, address, "");
+  }
+  else{
+    return true;
+  }
+}
+</script>
+{% endblock %}

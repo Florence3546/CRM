@@ -1,0 +1,10 @@
+/* CSS Document */
+.table th,.table td{ padding:8px; }
+a.btn{vertical-align:middle;}
+#camp_control i{margin-left:3px;}
+
+.pf_div>span,.pf_div>label{padding-right: 6px;}
+.pf_div>label>span{padding-left: 3px;}
+
+.platform_table td td {padding: 0;}
+.non_cursor {cursor: not-allowed !important}

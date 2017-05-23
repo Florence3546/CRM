@@ -1,0 +1,86 @@
+<div class="page" style="display:none;" id="rob_rank" ng-controller="robRankCtrl">
+    <!-- 标题栏 -->
+    <header class="bar bar-nav top-nav">
+        <div class="searchbar" id="rob_rank_search">
+          <a class="searchbar-cancel">取消</a>
+          <div class="search-input">
+            <label class="icon icon-search" for="search"></label>
+            <input type="search" ng-model="keyword" placeholder='输入关键词' ng-change="search(keyword)"/>
+          </div>
+        </div>
+    </header>
+    <!-- 这里是页面内容区 -->
+    <div class="content pull-to-refresh-content">
+
+      <!-- 默认的下拉刷新层 -->
+      <div class="pull-to-refresh-layer">
+          <div class="preloader"></div>
+          <div class="pull-to-refresh-arrow"></div>
+      </div>
+
+        <div class="top_bar" ng-show="keyword_list.length" style="margin-bottom: 10px;">
+            <div class="warpper">
+                <!-- <a href="#" class="button button-fill button-light dib" id="refresh_rank">刷新当前出价和排名</a> -->
+                <span class="content-block-title" style="margin:0;">下拉刷新出价、排名</span>
+                <span class="select_days">
+                    <span class="button">今日实时</span>
+                    <select ng-change="selectDays(day)" ng-model="day">
+                        <option value="0">今日实时</option>
+                        <option value="1">昨天</option>
+                        <option value="3">过去3天</option>
+                        <option value="7">过去7天</option>
+                        <option value="15">过去15天</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <div id="rob_rank_list" class="list" ng-if="keyword_list.length>=0;">
+          <ul>
+            <li ng-repeat="kw in keyword_list|filter:{word:keyword}" ng-click="setKeyword()">
+              <img ng-src="{?kw.pic_url?}_80x80.jpg" width="80" height="80">
+              <div>
+                  <div class="item">
+                      {?kw.word?}
+                      <i class="icon icon-arrow-left"></i>
+                  </div>
+                  <div class="item">
+                      <ul>
+                          <li>
+                              <span class="data-title">PC出价</span><span>{?kw.max_price?}元</span>
+                          </li>
+                          <li>
+                              <span class="data-title">PC排名</span><span>{?kw.rank.pc_rank_desc?}</span>
+                          </li>
+                          <li>
+                              <span class="data-title">点击量</span><span>{?kw.click?}</span>
+                          </li>
+                      </ul>
+                      <ul>
+                          <li>
+                              <span class="data-title">移动出价</span><span>{?kw.max_mobile_price?}元</span>
+                          </li>
+                          <li>
+                              <span class="data-title">移动排名</span><span>{?kw.rank.mobile_rank_desc?}</span>
+                          </li>
+                          <li>
+                              <span class="data-title">ROI</span><span>{?kw.roi?}</span>
+                          </li>
+                      </ul>                      
+                  </div>                  
+                <!--<div>{?kw.word?}</div>
+                <div>PC出价：￥{?kw.max_price?}&emsp;移动出价：￥{?kw.max_mobile_price?}&emsp;</div>
+                <div><span ng-if="kw.rank.pc_rank">PC：<span ng-bind="kw.rank.pc_rank_desc">-</span>&emsp;移动：<span ng-bind="kw.rank.mobile_rank_desc">-</span></span></div>
+                <div>点击量：{?kw.click?}&emsp;ROI：{?kw.roi?}&emsp;限价：￥<span ng-bind="kw.limit_price|formatNum"></span></div>
+                <div>
+                    <span ng-if="kw.platform=='pc'">计算机</span><span ng-if="kw.platform!='pc'">移动</span>&emsp;<span ng-bind="kw.exp_rank_start_desc"></span> - <span ng-bind="kw.exp_rank_end_desc"></span>
+                </div>-->
+              </div>
+            </li>
+          </ul>
+        </div>
+        <p ng-if="keyword&&(keyword_list|filter:{word:keyword})==0" class="no-data">没有符合的关键词，请重新输入</p>
+        <p ng-if="keyword_list.length==0" class="no-data">暂时没有抢排名数据,请到核心词中点抢排名设置</p>
+    </div>
+</div>
+

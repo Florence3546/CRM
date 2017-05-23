@@ -1,0 +1,99 @@
+{#utf-8#}{% extends "base_main.html" %}
+{% load rates %}
+{% block title%}
+    推荐有礼
+{% endblock %}
+
+{% block content %}
+<input type="hidden" value="{{request.user.nick}}" id="shop_nick" />
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="{%url 'web_home'%}">首页</a></li>
+    <li><a href="{%url 'vip_home'%}">会员中心</a></li>
+    <li class="active">推荐有礼</li>
+  </ol>
+
+  <div class="alert alert-warning dib pct100">
+    <i class="iconfont f24 mr10">&#xe63e;</i>把链接推荐给你的小伙伴，小伙伴可享受2折优惠，小伙伴订购后，您不仅续订优惠，还可以获得最高5000积分;点击<a href="javascript:;" id="point_rule">[送分规则]</a>查看详细
+  </div>
+
+  <div class="box1">
+    <header class="pt5 pb5">
+      <span class="f20">
+        推荐方式一：指定要订购的小伙伴（链接只能指定的店铺使用）
+        <i class="iconfont f16 gray poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="" data-original-title="如果您知道哪个小伙伴要订购，可以根据小伙伴的要求，生成专用订购链接，发给他就可以哦~">&#xe641;</i>
+      </span>
+    </header>
+    <div class="content">
+      <div class="p10 pt20 pb20">
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" id="recommend_nick" class="form-control input_selected" style="width:600px" placeholder="请输入小伙伴的店铺主旺旺，务必正确">
+            <button type="button" class="btn btn-primary" id="generate_link">生成链接</button>
+          </div>
+        </form>
+      </div>
+      <div id="invited_box" class="dn">
+      </div>
+    </div>
+  </div>
+
+  <div class="box1 mt20">
+    <header class="pt5 pb5">
+      <span class="f20">
+        推荐方式二：不指定小伙伴（任何开通了直通车的店铺都可以订购）
+        <i class="iconfont f16 gray poi" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="" data-original-title="您可以把复制的内容分享到QQ群、微博和您的掌柜朋友圈，小伙伴们就可以用您的链接订购啦~">&#xe641;</i>
+      </span>
+    </header>
+    <div class="content">
+      <div class="p10 pt20 pb20">
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control input_selected" style="width:800px" id="share_anybody" disabled value="最近我使用了开车精灵，操作直通车方便省事，全自动托管效果不错。推荐给你也试试：http://tb.cn/r5Tt1By">
+            <button type="button" class="btn btn-primary" id="copy_link" >复制链接</button>
+            <button type="button" class="btn btn-primary" id="share_btn" >立即分享</button>
+            <div id="share_component" class="abs dn">
+            </div>
+          </div>
+        </form>
+      </div>
+        <table class="pct100 table-bordered">
+          <thead>
+            <tr class="h40">
+              <th class="pl20 vm">订购了的小伙伴</th>
+              <th class="tc vm w200">订购版本</th>
+              <th class="tc vm w200">您的积分奖励</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for promotion in  promotion_list%}
+            <tr class="h40">
+              <td class="pl20 vm">
+                {{promotion.invited_name}}&emsp;(奖励分{% if promotion.point == 5000 %}2500{%endif%}
+                {% if promotion.point == 4000 %}2000{%endif%}
+                {% if promotion.point == 2500 %}1500{%endif%}
+                {% if promotion.point == 1500 %}1000{%endif%}
+                )
+              </td>
+              <td class="tc vm">
+                <div>
+                  {{ promotion.order_desc }}
+                </div>
+              </td>
+              <td class="tc vm">
+                <div class="f16 red b">+{{promotion.point}}</div>
+              </td>
+            </tr>
+            {% empty %}
+                <tr class="h40">
+	              <td colspan="3" class="tc pl20 pt10 pb10 vm">
+	                   目前没有订购的小伙伴
+	              </td>
+	            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

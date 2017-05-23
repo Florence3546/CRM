@@ -1,0 +1,119 @@
+{{each list}}
+<tr class="adg_tr {{if $value.online_status=="offline"}}gray{{/if}}" data-camp_mnt_type="{{ $value.camp_mnt_type }}" data-camp_max_price="{{ $value.camp_max_price }}" data-camp_max_mobile_price="{{ $value.camp_max_mobile_price }}" data-id="{{$value.campaign_id}}" adgroup_id="{{$value.adgroup_id}}" campaign_id="{{$value.campaign_id}}" is_quick_opered="{{ $value.is_quick_opered }}" cat_id="{{ $value.cat_id }}">
+    <td class="check_column vm"><input type="checkbox" class="kid_check" value="{{$value.adgroup_id}}"></td>
+    <td class="td-img">
+        <a class="item_base" target="_blank" href="http://item.taobao.com/item.htm?id={{$value.item_id}}">
+            {{if $value.item_pic_url != ""}}
+                <img width="70" height="70" src="{{$value.item_pic_url}}_70x70.jpg"/>
+            {{ else }}
+                <img width="70" height="70" src=""/>
+            {{/if}}
+        </a>
+    </td>
+    <td class="item_dark">
+        {{ if list_type==-1 }}
+        <div>
+            <span class="w240 l">
+                {{if $value.camp_mnt_type == 0}}
+                  <span class="label label-default">手动</span>
+                 {{else if $value.camp_mnt_type == 1}}
+                 <span class="label label-primary">长尾</span>
+                  {{else if $value.camp_mnt_type == 2}}
+                 <span class="label label-primary">重点</span>
+                  {{else if $value.camp_mnt_type == 3}}
+                 <span class="label label-primary">ROI</span>
+                  {{else if $value.camp_mnt_type == 4}}
+                  <span class="label label-primary">无线</span>
+                  {{ /if }}
+                 {{ $value.campaign_title }}</span>
+        </div>
+        {{ /if }}
+        <span class="title w280">
+            <a id="show_title_{{$value.campaign_id}}" class="item_base to_optimize" target="_blank" adgroup_id="{{ $value.adgroup_id }}" href="javascript:;">{{$value.item_title}}</a>
+            &nbsp;￥<span class="item_price">{{$value.item_price}}</span>
+            <span class="badge r count-cr hide mt5">0</span>
+            <span class="badge r count-kw hide mt5 mr5">0</span>
+            <span class="state_opt r mr10">
+                <i class="iconfont mr5 show_chart hover_show">&#xe60c;</i>
+                <i class="iconfont show_subdivide hover_show">&#xe60a;</i>&nbsp;&nbsp;
+                <i class="iconfont set_follow_status {{if $value.is_follow != 1}}hover_show{{ /if }}"
+                    data-toggle="tooltip" data-placement="top"
+                               title="{{if $value.is_follow == 1}}点击可取消关注{{else}}点击可设置为关注宝贝{{ /if }}"
+                   value="{{ $value.is_follow }}">{{if $value.is_follow == 1}}&#xe675;{{else}}&#xe674;{{ /if }}</i>
+            </span>
+        </span>
+    </td>
+    <td><span class="hide">{{$value.impr}}</span>{{$value.impr}}</td>
+    <td><span class="hide">{{$value.click}}</span>{{$value.click}}</td>
+    <td><span class="hide">{{$value.ctr}}</span>{{$value.ctr}}%</td>
+    <td><span class="hide">{{$value.cost}}</span>￥{{$value.cost}}</td>
+    <td><span class="hide">{{$value.cpc}}</span>￥{{$value.cpc}}</td>
+    <td><span class="hide">{{$value.favcount}}</span>{{$value.favcount}}</td>
+    <td><span class="hide">{{$value.carttotal}}</span>{{$value.carttotal}}</td>
+    <td><span class="hide">{{$value.paycount}}</span>{{$value.paycount}}</td>
+    <td><span class="hide">{{$value.conv}}</span>{{$value.conv}}%</td>
+    <td><span class="hide">{{$value.pay}}</span>￥{{$value.pay}}</td>
+    <td><span class="hide">{{$value.roi}}</span>{{$value.roi}}</td>
+    <td class="vt w120">
+        {{ if $value.online_status=='online'}}
+        <span class="hide sort_online">1</span>
+        <span class="lbl_online">推广中&nbsp;&nbsp;</span>
+        <a href="javascript:;" class="hover_show switch_status">暂停</a>
+        {{ else }}
+        <span class="hide sort_online">0</span>
+        <span class="lbl_online">已暂停&nbsp;&nbsp;</span>
+        <a href="javascript:;" class="hover_show switch_status">开启</a>
+        {{ /if }}
+        <a href="javascript:;" class="hover_show del_good">删除</a>
+        <br/>
+        移动折扣： <span class="adg_mobdiscount" campaign_id="{{ $value.campaign_id }}">{{$value.mobile_discount}}% </span>
+        <i class="iconfont edit_adg_mobdiscount">&#xe609;</i>
+        {{ if $value.error_descr != "" }}
+        <br/><span class="item_dark">{{ $value.error_descr }}</span>
+        {{ /if }}
+    </td>
+    <td class="vt item_base" style="width: 125px;">
+        {{ if $value.mnt_type != 0 }}
+            {{ if $value.mnt_opt_type ==2 }}
+                <span class="hide sort_value">2</span>
+                <span class="opt_status">只改价</span>
+            {{ else }}
+                <span class="hide sort_value">1</span>
+                <span class="opt_status">自动优化</span>
+            {{ /if }}
+        {{ else }}
+            <span class="hide sort_value">3</span>
+            <span class="opt_status">未托管</span>
+        {{ /if }}
+        {{ if $value.camp_mnt_type != 0 }}
+        <i class="iconfont ml5 mnt_opt_type change_mnt_type" use_camp_limit="{{ $value.use_camp_limit }}" mnt_type="{{ $value.mnt_type }}" page_type="{{ list_type }}"
+             mnt_opt_type="{{ if $value.mnt_type != 0 }}{{ $value.mnt_opt_type }} {{ else }}0{{ /if }}">&#xe609;</i>
+        {{ /if }}
+        <span class="show_limit_price {{ if $value.mnt_type == 0 }} hide {{ /if }}"><br>
+        限价：<span class="limit_price pr5" data-toggle="tooltip" title="PC端限价">{{ $value.limit_price }}</span><span class="mobile_limit_price left_dotted pl5" data-toggle="tooltip" title="移动端限价">{{ $value.mobile_limit_price }}</span></span>
+         <span class="optm_submit_time {{ if $value.mnt_type!=0 }}hide{{ /if }}"><br/>{{ if $value.optm_submit_time }}{{ $value.optm_submit_time }}优化过{{ else }}目前尚未优化过{{ /if }}</span>
+
+    </td>
+    <td class="w90 opt_url">
+        <div class="dropdown">
+            <a class="dropdown-toggle to_optimize" href="javascript:;" adgroup_id="{{ $value.adgroup_id }}">
+                <span class="dropdown-value" ><strong>进入宝贝</strong></span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="mnt_type_true {{ if $value.mnt_type != 0 }}hide {{ /if }}"><a href="/web/smart_optimize/{{ $value.adgroup_id }}" target="_blank">智能优化</a></li>
+              <li class="mnt_type_true {{ if $value.mnt_type != 0 }}hide {{ /if }}"><a href="/web/bulk_optimize/{{ $value.adgroup_id }}" target="_blank">批量优化</a></li>
+              <li class="mnt_type_false {{ if $value.mnt_type == 0 }}hide {{ /if }}"><a href="/mnt/adgroup_data/{{ $value.adgroup_id }}" target="_blank">托管详情</a></li>
+              <li><a href="/web/select_keyword/quick?adgroup_id={{ $value.adgroup_id }}" target="_blank">快速选词</a></li>
+              <li><a href="/web/select_keyword/precise?adgroup_id={{ $value.adgroup_id }}" target="_blank">精准淘词</a></li>
+              <li><a href="/web/title_optimize/?adgroup_id={{ $value.adgroup_id }}" target="_blank">标题优化</a></li>
+              <li><a href="/web/image_optimize/{{ $value.adgroup_id }}?t=list" target="_blank">创意优化</a></li>
+            </ul>
+        </div>
+        {{ if $value.mnt_type==0 }}
+        <a href="javascript:;" class="onekey" adgroup_id="{{ $value.adgroup_id }}" campaign_id="{{ $value.campaign_id }}">
+            <span class="dropdown-value" ><strong>一键优化</strong></span>
+        </a>
+        {{ /if }}
+    </td>
+</tr>
+{{/each}}

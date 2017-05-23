@@ -1,0 +1,206 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}订单催付{% endblock %}
+
+{% block content %}
+<style>
+   .order_paid td{color: #4687bd}
+   .order_close td{color: #888888}
+</style>
+<div class="w1329 auto">
+
+    <div class="mt20 mb10">
+        <form method="get">
+            <span class="b f16">{{list_desc}}(<span style="color:red;" id="id_unpaid_count">{{order_list|length}}</span>个)</span>
+            <select id="id-cond-select" class="vba ml10 w140" name="view_type">
+                <option value="unpaid" {% if view_type == 'unpaid' %}selected="selected"{% endif %}>未支付订单</option>
+                <option value="closed" {% if view_type == 'closed' %}selected="selected"{% endif %}>已关闭订单</option>
+                <!--<option value="paid" {% if view_type == 'paid' %}selected="selected"{% endif %}>已支付订单</option>-->
+                <!--<option value="all" {% if view_type == 'all' %}selected="selected"{% endif %}>所有订单</option>-->
+            </select>
+            <span class="hide">
+                <a href="javascript:void(0);" id="id-clear-order">清理未支付订单</a>
+            </span>
+            <!--<p>-->
+                <!--<input type="text" value="{{request.GET.start_date}}">-->
+                <!--<input type="text" value="{{request.GET.end_date}}">-->
+            <!--</p>-->
+            <select name="latest_days" class="vba ml10 w140">
+                <option value="3" {% if not request.GET.latest_days or request.GET.latest_days == '3' %}selected="selected"{% endif %}>最近3天</option>
+                <option value="7" {% if request.GET.latest_days == '7' %}selected="selected"{% endif %}>最近7天</option>
+                <option value="30" {% if request.GET.latest_days == '30' %}selected="selected"{% endif %}>最近30天</option>
+            </select>
+            <button class="btn btn-primary ml10 vb">查　询</button>
+        </form>
+    </div>
+    <table class="bdd" id="order_table">
+        <thead>
+            <tr>
+                <th class="">店铺主旺旺</th>
+                <th class="w140">业务类型</th>
+                <th class="w200">
+                    订单归属
+                    {% if 'A' in request.session.perms %}
+                    <a href="#modal_activity_code_list" class="n" data-toggle="modal" role="button">【设置】</a>
+                    {% endif %}
+                </th>
+                <th class="w80">创建时间</th>
+                <th class="w80">开始时间</th>
+                <th class="w80">结束时间</th>
+                <th class="w60">原价(元)</th>
+                <th class="w60">实付(元)</th>
+                <th class="w60">订单类型</th>
+                <th class="w160">备注</th>
+                <th class="w120">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if order_list %}
+                {% for order in order_list %}
+                <tr class="tc {% if order.is_closed == 1 %}order_close{% endif %}{% if order.pay_status == 1%} order_paid{% endif %}" id="{{order.order_id}}">
+                    <td>
+                        <div>
+                            <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao{{order.nick}}" title="联系主旺旺">{{order.nick}}</a>
+                        </div>
+                    </td>
+                    <td>
+                        {%if order.article_code == 'ts-25811' %}
+                            <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+                        {%else %}
+                            <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+                        {%endif%}
+                        <span class="article_code">{{ order.article_code }}</span><br/>
+                        <span class="item_code ml5">{{ order.item_name }}</span>
+                    </td>
+                    <td class="activity_code">
+                        <div>{{ order.psuser_name_cn|default:'' }}</div>
+                        <div>{{ order.activity_code|default:'' }}</div>
+                    </td>
+                    <td create_time="{{order.create_time}}">{{order.create_time}}</td>
+                    <td class="start_date">{{order.start_date|date:'Y-m-d'}}</td>
+                    <td class="end_date">{{order.end_date|date:'Y-m-d'}}</td>
+                    <td class="fee">{{order.fee|divide:'100'}}</td>
+                    <td class="pay">{{order.pay|divide:'100'}}</td>
+                    <td class="biz_type">{{order.get_biz_type_display}}</td>
+                    <td class="note" id="id-{{order.order_id}}-note">{{order.note|default:''}}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="edit_note">备注</a>
+                        {% if order.is_closed == 0 %}
+                        <span class="silver">/</span>
+                        <a href="javascript:void(0);" class="close_fuwuorder">不再显示</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {%endfor%}
+            {% else %}
+                <tr class="no_data"><td class="tc" colspan="11">暂无订单</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+
+<div id="id_edit_note_layout" class="modal hide fade p10" data-width="300">
+    <input type="hidden"  id="id_order_id" />
+    <div>
+        备注：<input type="text" id="id_order_note" />
+    </div>
+    <div class="tr mt10">
+        <a href="javascript:;" id="submit_note" class="btn btn-primary">提交</a>
+        <a href="javascript:;" data-dismiss="modal" class="btn subscribe_btn">关闭</a>
+    </div>
+</div>
+
+<div id="modal_activity_code_list" class="modal hide fade" role="dialog" data-width="400">
+    <div class="modal-body p10" style="max-height: 500px;overflow-y: auto;">
+        <table class="table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>活动代码</th>
+                    <th class="w80">所属人</th>
+                    <th class="w60">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for obj in activity_code_list %}
+                <tr>
+                    <td>{{ obj.activity_code }}</td>
+                    <td>{{ obj.name_cn }}</td>
+                    <td class="tc"><a href="javascript:;" class="del_activity_code" activity_code="{{ obj.activity_code }}">删除</a></td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3" class="tc">暂无数据</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <a href="#modal_add_activity_code" data-toggle="modal" role="button" class="btn btn-primary">添加</a>
+    </div>
+</div>
+
+<div id="modal_add_activity_code" class="modal hide fade" role="dialog" data-width="350">
+    <div class="modal-header p10">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h5>设置活动代码的所属人</h5>
+    </div>
+    <div class="modal-body">
+        <div>
+            <label>
+                <span class="w60 dib">活动代码：</span>
+                <input name="activity_code" type="text" class="w220">
+            </label>
+            <label>
+                <span class="w60 dib">所属人：</span>
+                <input name="psuser_name_cn" type="text" class="w220">
+            </label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="submit_activity_code">保存</button>
+    </div>
+</div>
+
+<script id="order_dunning_template" type="text/html">
+    <tr class="tc order_<%= order.opt_type%>" id="<%=order.order_id %>">
+        <td>
+            <div>
+                <a href="aliim:sendmsg?uid=cntaobao&amp;siteid=cntaobao&amp;touid=cntaobao<%= order.nick%>" title="联系主旺旺"><%= order.nick%></a>
+            </div>
+        </td>
+        <td>
+            <% if(order.article_code == 'ts-25811'){ %>
+                <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+            <% }else{ %>
+                <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+            <% }%>
+            <span class="article_code"><%=order.article_code %></span><br/>
+            <span class="item_name ml5"><%=order.item_name %></span>
+        </td>
+        <td class="activity_code"><%=order.activity_code %></td>
+        <td create_time="<%=order.create%>"><%=order.create%></td>
+
+        <td class="start_date"><%=order.order_cycle_start %></td>
+        <td class="end_date"><%=order.order_cycle_end %></td>
+        <td class="fee"><%=order.fee%></td>
+        <td class="pay"><%=order.total_pay_fee%></td>
+        <td class="biz_type"><%=order.biz_type %></td>
+        <td class="note" id="id-<%=order.order_id%>-note"><%=order.note%></td>
+        <td>
+            <a href="javascript:void(0);" class="btn btn-small edit_note">备注</a>
+        </td>
+    </tr>
+</script>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/order_dunning.js'|file_time_stamp}}" type="text/javascript"></script>
+<script>
+$().ready(function(){
+    PT.OrderDunning.init();
+});
+</script>
+{% endblock %}
+

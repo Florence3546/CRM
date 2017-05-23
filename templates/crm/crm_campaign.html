@@ -1,0 +1,357 @@
+{#utf-8#}{% extends "base_crm.html" %}
+{% block title%}
+	计划列表
+{% endblock %}
+{% block extra_style %}
+<style>
+#log_operater table .log_filter_types{float:left;font-size:12px;width:20%}
+#log_operater table .log_filter_types input{margin:0px}
+</style>
+{% endblock %}
+{% block content %}
+<!-- 计划操作日志 开始 -->
+<div id="log_operater" class="hide span8" style="height:485px" >
+	<input type="hidden" id="log_camp_id" value="0"/>
+    <table border="0" class="" id="" style="padding:2px;margin-top:10px">
+        <thead>
+        	<tr id="log_manager">
+        		<th class="span4" style="text-align:left"><span style="font-size:20px;font-weight:bold">操作日志</span></th>
+        		<th class="span5">
+                	<span style="float:left;font-size:14px;width:20%">日志过滤:</span>
+                	<ul style="float:left; list-style:none;width:70%;margin-left:5px;margin-bottom:0px">
+                		<li class="log_filter_types"><input type="radio" id="reset_status" class="select_filter_type active" checked="checked" name="filter_logs" value="all">全部</li>
+                		<li class="log_filter_types"><input type="radio" class="select_filter_type" name="filter_logs" value="sys">系统</li>
+                		<li class="log_filter_types"><input type="radio" class="select_filter_type" name="filter_logs" value="user">用户</li>
+                		<li class="log_filter_types"><input type="radio" class="select_filter_type" name="filter_logs" value="aes">AE</li>
+                	</ul>
+                </th>
+        		<th class="span3">
+        			<span style="float:left;margin-top:5px;font-size:14px">统计天数：</span>
+                    <select style="float:left;height: 27px;font-size: 12px;margin: 0px;" id="log_days">
+                    	<option value="1">近一天</option>
+                    	<option value="3">近三天</option>
+                    	<option value="5">近五天</option>
+                    	<option value="7" selected="selected">近七天</option>
+                    	<option value="10">近十天</option>
+                    	<option value="15">近十五天</option>
+                    </select>
+        		</th>
+        	</tr>
+        </thead>
+        <tbody id="record_content">
+		</tbody>
+	</table>
+</div>
+<!-- 计划操作日志 结束 -->
+<input type="hidden" value="{{source_type}}" id="source_type" />
+
+<div id="conditions_template">{% include 'template_condition.html'  %}</div>
+
+<div class="portlet box grey">
+	<div class="portlet-title">
+  	<div class="caption"><i class="icon-reorder"></i>计划查询结果</div>
+    <div class="mal_6">（共<span class="page_count">0</span>页/<span class="total_count">0</span>个计划，涉及到<span class="account_count">0</span>个店铺）</div>
+  </div>
+  <div class="portlet-body">
+    <div id="summary_rpt">
+        <div class="hide tac" style="border:#ccc solid 1px;" id="summary_info_tip">
+            <img src="/site_media/jl/img/ajax-loader.gif" width="32" height="32" style="display:inline-block">正在统计结果，请稍候......
+        </div>
+        <div id="summary_rpt_table" class="hide">
+        	<table class="table table-bordered">
+            	<thead>
+                	<tr>
+                    	<th>平均展现量</th>
+                    	<th>平均点击量</th>
+                    	<th>平均点击率</th>
+                    	<th>平均总花费</th>
+                    	<th>平均PPC</th>
+                    	<th>平均收藏量</th>
+                    	<th>平均成交量</th>
+                    	<th>平均成交额</th>
+                    	<th>平均转化率</th>
+                    	<th>平均ROI</th>
+                	</tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="fixed_div">
+      <span class="fl" id="camp_control">
+      	<span class="current_count" id="all_selected" table="camp_table" page_index="1" is_all="0"></span>
+        <span class="current_count">当前选中<span id="current_count">0</span>个</span>
+        <div class="btn-group hide">
+        <a class="por btn blue" id="save_as_csv">复制店铺ID</a>
+        </div>
+        <div class="btn-group hide">
+        <a class="btn blue" data-toggle="modal" href="#modal_msg">留言&备注</a>
+        </div>
+        <button type="button" class="camp blue btn hide" oper="1">参与推广</button>
+        <button type="button" class="camp blue btn hide" oper="0">暂停推广</button>
+      <div class="btn-group hide">
+          <a href="javascript:;" class="btn blue dropdown_a" id="search_top_ratio">当页到顶词查看<i class="icon-angle-down marl_3"></i></a>
+          <div class="dropdown-menu hide" id="search_top_ratio_panel">
+            <div class="dropdown_contain">
+              <div style="margin:1px">
+              	<span style='font-size: 12px;'>限价百分比</span>&nbsp;<input type="radio" name="search_top_ratio_radio" value="ratio" checked='checked' style="margin-top:-2px"/>&nbsp;&nbsp;&nbsp;<span style='font-size: 12px;'>自定义价位</span>&nbsp;<input type="radio" value="custom" name="search_top_ratio_radio" style="margin-top:-2px"/>
+              </div>
+              <div class="fr" style="margin-top:3px">
+              	<input type="text" class="min" style="margin:0px;width:30px;height:12px" value="80" /> ~<input type="text" class="max" style="margin:0px;width:30px;height:12px" />&nbsp;&nbsp;&nbsp;
+                <button class="btn blue closer mini" id="search_camp_ratio">确定</button>&nbsp;&nbsp;
+              </div>
+              <br class="clearb">
+            </div>
+          </div>
+    </div>
+        <button type="button" class="btn blue hide">设置日限额</button>
+        <!--
+        <div class="btn-group hide" style="margin-bottom:0 !important">
+          <a href="javascript:;" class="btn blue" data-toggle="dropdown">修复计划数据<i class="icon-angle-down marl_3"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:;" data_type=0 class="repair_data">修复【结构】</a></li>
+            <li><a href="javascript:;" data_type=1 class="repair_data">修复【报表】</a></li>
+          </ul>
+        </div>
+        <div class="btn-group">
+        </div>
+         -->
+      </span>
+      <span class="fr">
+        <span>跳转到</span>
+        <button type="button" class="btn jump" target_url="crm_adgroup">宝贝列表</button>
+        <button type="button" class="btn jump hide" target_url="crm_keyword">关键词列表</button>
+      </span>
+    </div>
+    <div>
+      <table class="table table-bordered table-hover td_middle dataTable" id="camp_table">
+        <thead>
+          <tr>
+            <th class="link_inner_checkbox pointer" style="width:8px;"><input type="checkbox" class="group-checkable father_box" data-set="#sample_1 .checkboxes" link="camp_table"/></th>
+            <th>序号</th>
+            <th style="min-width:150px;">计划名称</th>
+            <th style="min-width:50px;">店铺ID</th>
+            <th>日限额</th>
+            <th>展现量</th>
+            <th>点击量</th>
+            <th>点击率</th>
+            <th>总花费</th>
+            <th>PPC</th>
+            <th>收藏量</th>
+            <th>成交量</th>
+            <th>成交额</th>
+            <th>转化率</th>
+            <th>ROI</th>
+            <th>昨日花费比</th>
+            <th style="min-width:100px;">计划状态</th>
+            <th class="hide">备注</th>
+            <th style="min-width:110px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div class="row-fluid">
+        <div class="span6 dataTables_info" id="page_info">
+           每页显示<span class="page_size">---</span>个计划，共<span class="page_count">0</span>页/<span class="total_count">0</span>个计划
+        </div>
+        <div class="span6">
+          <div class="dataTables_paginate pagination" id="dynamic_pager"></div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!--跳转页面时提交的表单-->
+<form action="" method="post" class="hide" id="jump_form" target="_blank">
+  <input type="hidden" value="1" name="source_type" />
+  <input type="hidden" value="0" name="is_jump" />
+  <input type="hidden" value="" name="id_dict" />
+</form>
+
+<!-- 计划趋势图弹出层 开始 -->
+<div id="modal_camp_trend"  class="modal hide fade" tabindex="-1" data-width="900" style="height:400px;">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	  <h4 class="tac"><span  id="camp_trend_title"></span>&nbsp;&nbsp;趋势图</h4>
+	</div>
+	<div class="modal-body">
+		<div id="camp_trend_chart" style="height:300px;width:870px;"></div>
+    </div>
+</div>
+<!-- 计划趋势图弹出层 结束 -->
+
+<div id="modal_camp_cfg"  class="modal hide fade" data-width="300" >
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="tac">&nbsp;&nbsp;任务配置</h4>
+  </div>
+  <div class="modal-body">
+    <div id="camp_mntcfg"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn green" id="id_save_camp_cfg">保存计划配置</button>
+    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/site_media/assets/plugins/jquery.bootpag.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/ZeroClipboard.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/TableTools.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/data-tables/FixedHeader.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/plugins/jslider/js/jquery.slider.min.js" type="text/javascript"></script>
+<script src="/site_media/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/crm_campaign.js?v={{VERSION}}.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/template_condition.js?v={{VERSION}}.js" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/taskcfg_list.js?v={{VERSION}}" type="text/javascript"></script>
+<script src="/site_media/jl/scripts/crm/instruction_list.js?v={{VERSION}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block template%}
+<script id="camp_table_tr" type="text/html">
+<tr>
+	<td class="link_inner_checkbox"><input type="checkbox" name="result_item" class="checkboxes kid_box" value="<%=camp_id%>" shop_id="<%=shop_id%>"/></td>
+	<td class='tar'><%=index%></td>
+	<td>
+		<a class="camp_title single" href="/crm/crm_redirect?shop_id=<%=shop_id%>&login_type=web&next_url=/web/adgroup_list/<%=camp_id%>" target="_blank"><%=title%></a>
+	</td>
+	<td><%=shop_id%></td>
+	<td>
+		<span class="hide" id="budget_value_hide_<%=campaign_id%>"><%=$format(budget,100,1,0)%></span>
+		<span><%if (budget == 2000000000) { %>不限<% } else { %> <%=$format(budget,100,1,0)%> <% }%></span>
+	</td>
+	<td class="tar base_data"><% if (impressions) { %><%=impressions%><% }else{ %>0<% } %></td>
+	<td class="tar base_data"><% if (click) { %><%=click%><% }else{ %>0<% } %></td>
+	<td class="tar base_data"><% if (ctr) { %><%=$format(ctr,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+	<td class="tar base_data"><% if (cost) { %><%=$format(cost,100,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar base_data"><% if (cpc) { %><%=$format(cpc,100,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar conv_data"><% if (favcount) { %><%=favcount%><% }else{ %>0<% } %></td>
+	<td class="tar conv_data"><% if (paycount) { %><%=paycount%><% }else{ %>0<% } %></td>
+	<td class="tar conv_data"><% if (pay) { %><%=$format(pay,100,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar conv_data"><% if (conv) { %><%=$format(conv,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+	<td class="tar conv_data"><% if (roi) { %><%=$format(roi,1,1,2)%><% }else{ %>0.00<% } %></td>
+	<td class="tar conv_data"><% if (cons_ratio) { %><%=$format(cons_ratio,1,100,2)%><% }else{ %>0.00<% } %>%</td>
+	<td class="tal">
+		<span class="hide">0</span>
+    <%if (online_status == 'online') { %>
+			<span class="alert-info" id="status_<%=camp_id%>">推广中</span>
+    <%} else {%>
+			<span class="alert-error" id="status_<%=camp_id%>">已暂停</span>
+		<%}%>
+		<span class="alert-error"><% if (mnt_type == 1 ) { %>长尾计划<% } else if (mnt_type == 2) { %> 重点计划 <% } %> </span>
+		</br>
+		<span class="label label-danger"><% if (mnt_type == 1 ) { %>已长尾托管<%=exec_days %>天<% } else if (mnt_type == 2) { %>已重点托管<%=exec_days %>天<% } %></span>
+		</br>
+		<span class="label label-danger price_ratio"></span>
+	</td>
+	<td class='msg_td tac hide'> <% if(msg_status != null){ %> <a herf="javascript:;" class="open_msg cur">展开</a> <% } else { %> 无 <% } %></td>
+	<td class='tac'>
+		<a herf="javascript:;" class="opar single" onclick="PT.CrmCampaign.update_opar_status(this)"  opar_status="<%= opar_status %>" shop_id="<%= shop_id %>" camp_id="<%= camp_id %>" ><% if (opar_status == 1 ) { %>解除干预<% } else if (opar_status == 0) { %> 人工干预 <% } %></a>
+		<a herf="javascript:;" class="quray_logs single">日志跟踪</a><br>
+		<a herf="javascript:;" class="jump single" target_url="crm_adgroup">查看所有宝贝</a>
+		<a herf="javascript:;" class="open_charts single" >趋势图</a>
+	</td>
+</tr>
+</script>
+
+<script id="summary_rpt_table_td" type="text/html">
+<td class="tar base_data"><%=impressions%></td>
+<td class="tar base_data"><%=click%></td>
+<td class="tar base_data"><%=ctr%>%</td>
+<td class="tar base_data"><%=cost%></td>
+<td class="tar base_data"><%=cpc%></td>
+<td class="tar conv_data"><%=favcount%></td>
+<td class="tar conv_data"><%=paycount%></td>
+<td class="tar conv_data"><%=pay%></td>
+<td class="tar conv_data"><%=conv%>%</td>
+<td class="tar conv_data"><%=roi%></td>
+</script>
+
+<script id="log_record" type="text/html">
+<tr name="crm_log"
+		<%if (record.opter == '0') { %>
+			class="sys"
+		<% } else if(record.opter == '1') { %>
+			class="user"
+		<% } else if(record.opter == '2') {%>
+			class="aes"
+		<% } %>
+	>
+	<td colspan="3" style="padding-right:5%" >
+   		<div class="scroller"  data-always-visible="1" data-rail-visible="0" style="overflow: hidden; width: auto; ">
+			<ul class="feeds" style="padding-top:5px" id="record_content">
+				<li style="margin:1px" >
+					<div class="col1">
+						<div class="cont">
+							<div class="cont-col1">
+									<%if (record.opter == '0') { %>
+											<div class="label label-important">
+												<i class="icon-android"></i>
+											</div>
+									<% } else if(record.opter == '1') { %>
+											<div class="label label-info">
+												<i class="icon-user"></i>
+											</div>
+									<% } else if(record.opter == '2') {%>
+											<div class="label label-success">
+												<i class="icon-group"></i>
+											</div>
+									<% } %>
+							</div>
+							<div class="cont-col2">
+								<div class="desc">
+									<span style="font-size:13px;font-weight:bold"><%=record.opt_type%>:</span>&nbsp;
+									<span><%=record.opt_desc%></span>
+								  	 <% if(record.opter == '2') {%>
+								  	 	(操作者:&nbsp; <%=record.opter_name%>)
+									<% } %>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col2" style="width:150px;margin-left:-150px">
+						<div class="date">
+							<%=record.opt_time%>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</td>
+</tr>
+</script>
+
+<script id="camp_cfg_template" type="text/html">
+    <div class="row-fluid">
+        <div class="span12">
+            <input type="hidden" id="id_campaign_id"  value="<%=campaign_id%>"/>
+            <input type="hidden" id="id_shop_id"  value="<%=shop_id%>"/>
+            <div class="">
+              <% for (var i in data_list) { %>
+                <label>
+                  <input type="checkbox" name="camp_cfg" class="marb_6" value="<%=data_list[i].name%>" <% if (data_list[i].is_current == 1) { %> checked <% } %> >
+                  <span class="marl_6"><%=data_list[i].name%></span>
+                </label>
+              <%}%>
+            </div>
+        </div>
+    </div>
+</script>
+
+{%endblock%}
+
+{% block custom_js %}
+<script>
+jQuery(document).ready(function(){
+	PT.CrmCampaign.init();
+	PT.CrmCondition.init();
+	PT.CrmCondition.init_condition({{base_condition|safe}},{{filter_condition|safe}});
+});
+</script>
+{% endblock %}

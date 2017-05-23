@@ -1,0 +1,122 @@
+<div id="creative_box" class="modal hide clearfix pad_24" tabindex="-1" data-width="1000" >
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <div class="clearfix">
+        <div class="dashboard-date-range mart_0">
+            <i class="icon-calendar white"></i>
+            <span>统计天数：<span class="date_value">过去{{ adg.rpt_days|default:'7' }}天</span></span>
+            <i class="icon-angle-down white"></i>
+            <form action="./" method="post" class="hide" post_mode="ajax" post_fuc="PT.CreativeBox.creative_select_call_back">
+                <input type="hidden" id="creative_last_day" value="{{ adg.rpt_days|default:'7' }}" />
+            </form>
+        </div>
+        <div class="tac fl large marl_12" style="width:100px;" id="creative_info_tip">
+            <img src="/site_media/jl/img/ajax-loader.gif">请稍候......
+        </div>
+    </div>
+    <div id="spread_content" class="mart_12 marb_12 row-fluid">
+    </div>
+    <div>
+        <div id="creative_trend_chart1" class="in_block vat" style="width:520px;margin-left:-21px;">
+        </div><div id="creative_trend_chart2" class="in_block" style="width:520px;margin-right:-20px;">
+        </div>
+    </div>
+</div>
+
+<!-- 点击选择创意图片 -->
+<div class="modal hide fade" id="modal_select_creative_img" creative_id="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h3 class="no_bld initial">选择创意图片<span id="creative_img_no"></span></h3>
+    </div>
+    <div class="modal-body">
+        <img src="/site_media/jl/img/ajax-loader.gif">正在加载。。。
+    </div>
+</div>
+
+<!--添加新创意-->
+<div class="modal hide fade" id="modal_new_creative">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h3 class="bld initial">添加新创意</h3>
+    </div>
+    <div class="modal-body">
+        <fieldset class="border_ccc marb_24 initial">
+            <legend>选择创意图片</legend>
+            <div id="new_creative_img">
+                <img src="/site_media/jl/img/ajax-loader.gif">正在加载。。。
+            </div>
+        </fieldset>
+        <fieldset class="border_ccc marb_6 initial">
+            <legend>编辑创意标题</legend>
+            <div>
+                <input id="new_creative_title" class="normal_size lh_24 input_text" style="width:400px;">
+                <span name="title_length_prompt"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+                <button type="button" class="generate_crt_title btn green mini vab">系统推荐</button>
+                <span class="loading_tag s_color hide"><img src="/site_media/jl/img/ajax-loader.gif">正在自动生成标题。。。</span>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer tac">
+        <button id="submit_new_creative" type="button" class="btn red">提交</button>
+    </div>
+</div>
+
+<script id="template_creative" type="text/html">
+<div class="vat in_block span6 <%if (i=='1') { %>padl_12<% }%>">
+    <div class="marb_12 por">
+        <a class="edit_title marb_12" href="javascript:void(0);" title="编辑标题">
+            <span id="creative_title_<%=id%>" class="title normally bld"><%=title%></span>
+            <i class="icon-pencil black lh_18 vatb decr_none"></i>
+        </a>
+        <div class="popover bottom" style="margin-top:28px;">
+            <span class="close mar_6"></span>
+            <div class="arrow"></div>
+            <h3 class="popover-title">修改推广标题</h3>
+            <div class="popover-content">
+                <input class="input_text creative_input" creative_id="<%=id%>" id="crt_input_<%=id%>">
+                <button type="button" class="btn red submit_title">提交</button>
+                <div></div>
+                <span name="title_length_prompt" class="lh_36 marr_6"><span class="margin_flag">剩</span><span class="overflow_flag">超</span><span name="char_delta"></span>个汉字</span>
+                <button type="button" class="generate_crt_title btn green mini vab">系统推荐</button>
+                <span class="loading_tag s_color hide"><img src="/site_media/jl/img/ajax-loader.gif">正在自动生成标题。。。</span>
+            </div>
+        </div>
+    </div>
+    <a class="creative_img pad_3 pointer por vat in_block" title="点击换图" creative_id="<%=id%>">
+        <img src="<%=$replace(img_url,'sum','160x160')%>">
+        <i class="icon-pencil poa black decr_none" style="bottom:3px;right:-12px;"></i>
+    </a>
+    <div class="marl_24 marr_48 in_block">
+        <ul class="fl marl_0 marb_0">
+            <li>总花费：<span class="m_color bld"><%=$format(qr_cost,100,1,2)%></span></li>
+            <li>展现量：<span><%=qr_impressions%></span></li>
+            <li>点击量：<span><%=qr_click%></span></li>
+            <li>点击率：<span><%=$format(qr_ctr,1,1,2)%></span></li>
+            <li>PPC：<span><%=$format(qr_cpc,100,1,2)%></span></li>
+        </ul>
+        <ul class="fl marb_0 marl_24">
+            <li>成交额：<span class="m_color bld"><%=$format(qr_pay,100,1,2)%></span></li>
+            <li>收藏数：<span><%=qr_favcount%></span></li>
+            <li>成交数：<span><%=qr_paycount%></span></li>
+            <li>点击转化率：<%=$format(qr_conv,1,1,2)%></li>
+            <li>ROI：<span><%=$format(qr_roi,1,1,2)%></span></li>
+        </ul>
+    </div>
+</div>
+</script>
+<script id="template_add_creative" type="text/html">
+<div id="add_creative_box" class="in_block" style="margin-top:33px">
+    <a href="javascript:void(0);" class="add_creative mar_3">+</a>
+    <div class="in_block marl_12 tal">
+        <div class="larger bld">请点击左侧图标，再添加一个推广内容</div>
+        <div class="mart_12 explain lh_24">使用两个推广内容，可以提高更多关键词的标题相关性，增加高质量得分的关键词个数；同时不同风格的标题和图片，能够吸引更多买家</div>
+    </div>
+</div>
+</script>
+<script id="item_imgs" type="text/html">
+<!--不要换行，保证图片间距-->
+<%for (var i in item_imgs) { %><a href="javascript:void(0);" class="in_block pad_3 item_img por">
+    <img name="item_img" src="<%=item_imgs[i]%>_160x160.jpg" width="160" height="160"/>
+    <img src="/site_media/jl/css/img/circle_ok.png" class="poa hide" style="bottom: 0;right: 0;"/>
+</a><% }%>
+</script>

@@ -1,0 +1,83 @@
+/*tianxiaohe*/
+.pl70 { padding-left: 70px; }
+.pt70 { padding-top: 70px; }
+.pr70 { padding-right: 70px; }
+.pb70 { padding-bottom: 70px; }
+.pl80 { padding-left: 80px; }
+.pt80 { padding-top: 80px; }
+.pr80 { padding-right: 80px; }
+.pb80 { padding-bottom: 80px; }
+.pl90 { padding-left: 90px; }
+.pt90 { padding-top: 90px; }
+.pr90 { padding-right: 90px; }
+.pb90 { padding-bottom: 90px; }
+.pl100 { padding-left: 100px; }
+.pt100 { padding-top: 100px; }
+.pr100 { padding-right: 100px; }
+.pb100 { padding-bottom: 100px; }
+/*end*/
+
+.h600 { height: 600px; }
+.h300 { height: 300px; }
+.h140 { height: 140px; }
+.h130 { height: 130px; }
+.h36 {height: 36px;}
+.h90 { height: 90px; }
+.h50 { height: 50px; }
+.h40 { height: 40px; }
+.h30 { height: 30px; }
+.f30 { font-size: 30px; }
+.f36 { font-size: 36px; }
+.f48 { font-size: 48px; }
+.f64 {font-size: 64px;}
+.f72 {font-size: 72px;}
+.f150 { font-size: 150px; }
+.f250 { font-size: 250px; }
+.f55 { font-size: 55px; }
+.p4 { padding: 4px; }
+.pb90 { padding-bottom: 90px; }
+.gf { color: White; }
+.mt50{margin-top: 50px;}
+.ml50{margin-left: 50px;}
+.tdlt{text-decoration:line-through;}
+.w25 { width: 25px; }
+.mt-15{margin-top: -15px;}
+.ml37{margin-left: 37px;}
+.h80{height: 80px;}
+.lh80{line-height: 80px;}
+.pt92{padding-top: 92px;}
+.pt146{padding-top: 146px;}
+.pt161{padding-top: 161px;}
+.pt136{padding-top: 136px;}
+.lh30{line-height: 30px;}
+.mr23{margin-right: 23px;}
+.mr57{margin-right: 57px;}
+.pr60{padding-right: 60px;}
+.r10{right: 10px;}
+.bgtp{background: transparent;}
+.mt45{margin-top: 45px;}
+.w880{width:880px;}
+.h230{height: 230px;}
+.mt15{margin-top: 15px;}
+.w65 { width: 65px; }
+.h250{height: 250px;}
+.rsn{resize:none;}
+.ofyn{overflow-y:none;}
+.wbba{word-break:break-all;}
+.w1300{width: 1300px;}
+.w1329{width: 1329px;}
+.w1500{width: 1500px;}
+.h400{height:400px}
+.w1100{width: 1100px;}
+.w440{width: 440px;}
+.w520{width: 520px;}
+.mt-30{margin-top: -30px;}
+.ml-5{margin-left: -5px;}
+input[type=text].ajax_edit { border: 0px; outline: none;background-color:transparent; }
+input[type=text].ajax_edit:focus {
+    box-shadow: none; -webkit-box-shadow:none;border-bottom:1px solid #ccc ;
+}
+input[type=text].f12 {font-size:12px;}
+.mr140{margin-right: 140px;}
+.fix-margin{border: 1px solid transparent;}
+.zx-1 { z-index: -1; }

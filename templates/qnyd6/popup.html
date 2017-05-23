@@ -1,0 +1,300 @@
+<!-- 修改日限额 -->
+<div class="popup popup_edit_budget" ng-controller="budgetCtl">
+    <div class="content">
+        <header class="top-nav">修改日限额</header>   
+        <div class="item" style="margin-top:10px;">
+            <label>
+                <input type="radio" ng-checked="budget==20000000" ng-model="is_limit" name="is_limit" value="1"/> 不设置日限额
+            </label>
+        </div>
+        <div class="item">
+            <label>
+                <input type="radio" ng-checked="budget!=20000000" ng-model="is_limit" name="is_limit" value="0"> 设置日限额
+                <input class="form-control dib" name="budget" ng-model="newBudget" ng-disabled="is_limit==1" type="text" value="{?newBudget?}">元 (范围为30~99999)
+            </label>
+        </div>
+        <div class="item" style="margin-left:1rem;" ng-hide="is_limit==1">
+            <div style="margin-bottom: .5rem">
+                <label>
+                    <input type="radio" name="is_smooth" ng-checked="is_smooth=='0'" ng-model="is_smooth" value="0"> 标准投放
+                </label>
+                <div style="font-size:.65rem" class="sub-text">
+                    系统会根据您的投放设置正常展现您的推广，但您可能因过早到达日限额而提前下线。
+                </div>
+            </div>
+            <div style="margin-bottom: .5rem">
+                <label>
+                    <input type="radio" name="is_smooth" ng-checked="is_smooth=='1'" ng-model="is_smooth" value="1"> 智能均匀投放
+                </label>
+                <div style="font-size:.65rem" class="sub-text">
+                    根据流量变化及您的日限额，系统会在设置的投放时间内均匀展现您的推广，不会因为过早到达日限额而错过晚些时候的流量。
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="popup_bottom">
+        <div class="warning">
+            请谨慎设置，不要过高或过低，同时请根据计划花费及时调整
+        </div>
+        <div>
+            <button class="button button-fill close-popup button-light">取消</button>
+            <button class="button button-fill" ng-click="submit()">确定</button>
+        </div>
+    </div>
+</div>
+<!-- 抢排名 -->
+<div class="popup popup_rob_rank" ng-controller="robRankSetCtl">
+    <div class="content">
+    <header class="top-nav">抢排名设置</header>
+    <div class="content-block-title">抢位平台：</div>
+    <div class="list-block">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <label style="margin-left:.5rem;display: flex;align-items: center;">
+                        <input type="radio" name="platform" ng-model="platform" ng-checked="platform=='pc'" ng-click="rank_pc=rank_yd=''" value="pc"> 
+                        <div>
+                            <div>计算机</div>
+                            <div class="item-after f12" style="margin-left:0">当前出价：{?max_price?}元&emsp;{?qscore?}分&emsp;排名：{?pc_rank_desc?}</div>
+                        </div>
+                    </label>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <label style="margin-left:.5rem;display: flex;align-items: center;">
+                        <input type="radio" name="platform" ng-model="platform" ng-disabled="wireless_qscore==-1" ng-click="rank_pc=rank_yd=''" ng-checked="platform=='yd'" value="yd"> 
+                        <div>
+                            <div>移动</div>
+                            <div class="item-after f12" style="margin-left:0">当前出价：{?max_mobile_price?}元&emsp;{?wireless_qscore==-1?'未投放':wireless_qscore+'分';?}&emsp;排名：{?mobile_rank_desc?}</div>
+                        </div>
+                    </label>
+                </div>
+            </li>            
+        </ul>
+    </div>    
+    <div class="list-block mt10">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">抢位方式：</div>
+                    <div class="item-after">
+                        <label>
+                            <input type="radio" name="method" ng-model="method" value="manual"> 手动&emsp;
+                        </label>
+                        <label style="margin-left:1.5rem;">
+                            <input type="radio" name="method" ng-model="method" value="auto"> 自动
+                        </label>
+                    </div>
+                </div>
+            </li>
+            <li class="item-content item-link" ng-show="method=='auto'">
+                <div class="item-inner">
+                    <div class="item-title">抢位时间：</div>
+                    <div class="item-after">
+                        <input type="text" class="time" ng-model="exceptTime">
+                    </div>
+                </div>
+            </li>
+            <li class="item-content item-link">
+                <div class="item-inner">
+                    <div class="item-title">期望排名：</div>
+                    <div class="item-after">
+                        <input class="rank" name="rank_pc" ng-show="platform=='pc'" ng-model="rank_pc" type="text" placeholder="请选择">
+                        <input class="rank" name="rank_mobil" ng-show="platform=='yd'" ng-model="rank_yd" type="text" placeholder="请选择">
+                    </div>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">最高限价：</div>
+                    <div class="item-after">
+                        <input name="limit" placeholder="请输入最高限价" ng-model="limit" type="text">&ensp;元
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="content-block-title">抢位失败：</div>
+    <div class="list-block">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">
+                        <label style="margin-left:.5rem;">
+                            <input type="radio" name="nearly_success" ng-model="nearly_success" ng-checked="nearly_success=='1' || nearly_success==undefined" value="1"> 接近期望排名时保留出价&emsp;
+                        </label>
+                    </div>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">
+                        <label style="margin-left:.5rem;">
+                            <input type="radio" name="nearly_success" ng-model="nearly_success" ng-checked="nearly_success=='0'" value="0"> 恢复为原价
+                        </label>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    </div>
+    <div class="popup_bottom">
+        <div>
+            <button class="button button-fill close-popup button-light">取消</button>
+            <button class="button button-fill" ng-click="submit()">确定</button>
+        </div>
+    </div>
+</div>
+<!-- 抢排名历史记录 -->
+<div class="popup popup_rob_rank_history" ng-controller="robRankHistoryCtl">
+    <div class="content">
+        <header class="bar bar-nav top-nav">
+        </header>
+        <div class="warp">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="tc">优化时间</th>
+                        <th class="tr">出价</th>
+                        <th class="tr">排名情况</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   <tr ng-repeat="info in info_list" ng-show="info_list.length" ng-class="{'ok':'bg_ok','nearly_ok':'bg_ok','done':'bg_fail','failed':'bg_fail'}[info.result_flag]">
+                        <td class="tc">{?formatDate(info.rob_time)?}</td>
+                        <td class="tr">{?info.price?}</td>
+                        <td class="tr">{?info.msg?}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p ng-hide="info_list.length" class="no-data">暂时还没有记录</p>
+        </div>
+    </div>
+    <div class="popup_bottom">
+        <div>
+            <button class="button button-fill close-popup button-light">关闭</button>
+        </div>
+    </div>
+</div>
+<!-- 根据宝贝筛选核心词 -->
+<div class="popup popup_choose_shop_core" ng-controller="chooseShopCoreCtl">
+    <div class="content">
+        <header class="top-nav">
+            按宝贝筛选核心词
+        </header>                
+        <ul class="list">
+            <li ng-repeat="adg in adgroup_list track by $index"ng-model="adg.check" ng-init="adg.check=false" ng-click="adg.check=!adg.check">
+                <img ng-src="{?adg.pic_url?}_80x80.jpg">
+                <div>
+                    <div class="item">
+                        <div class="adg-title">{?adg.title?}</div>
+                    </div>
+                    <div class="item">
+                        <span class="text-overflow sub-text">点击量：{?adg.click?}，{?adg.camp_title?}</span>
+                    </div>   
+                    <div class="item">
+                        <span style="display: inline-block" class="button button-fill button-light" ng-if="adg.mnt_opt_type==2">未托管</span>
+                        <span style="display: inline-block" class="button button-fill button-warning" ng-if="adg.mnt_opt_type!=2">已托管</span>
+                        <input type="radio" ng-checked="adg.check" >
+                    </div>                                        
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="popup_bottom">
+        <div>
+            <button class="button button-fill" ng-click="filter()">筛选</button>
+        </div>
+    </div>
+</div>
+<!-- 手动抢排名信息展示面板 -->
+<div class="popup popup_rob_rank_manual" ng-controller="manualRobRankCtl">
+    <div class="content">
+        <header class="bar bar-nav top-nav">
+            <h1 class="title">{?info?}</h1>
+        </header>
+        <div class="warp" style="padding-left: 10px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>优化时间</th>
+                        <th>出价</th>
+                        <th>排名情况</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="kw in keyword_list">
+                        <td>{?kw.rob_time?}</td>
+                        <td>{?kw.price?}</td>
+                        <td>{?kw.msg?}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="popup_bottom">
+        <div>
+            <button class="button button-fill close-popup" ng-click="reset()">重新设置</button>
+            <button class="button button-fill close-popup button-light">关闭</button>
+        </div>
+    </div>
+</div>
+<!-- 意见反馈 -->
+<div class="popup popup_suggestion" ng-controller="suggestionCtl">
+    <div class="content">
+        <header class="bar bar-nav top-nav">
+            <h1 class="title">意见反馈</h1>
+        </header>
+        <div style="padding: .5rem;">
+            <div class="content-title">感谢您的参与和鞭策，精灵会做的更好</div>
+            <textarea name="textfield" ng-model="suggestions" placeholder="您的意见是我们进步最大的动力"></textarea>
+        </div>
+    </div>
+    <div class="popup_bottom">
+        <div>
+            <button class="button button-fill close-popup button-light">取消</button>
+            <button class="button button-fill" ng-click="submit()">提交</button>
+        <div>
+    </div>
+</div>
+
+<!-- 填写手机号 -->
+<div class="popup popup_phone" ng-controller="phoneCtl">
+    <input type="hidden" ng-model="isneed_phone" ng-init="isneed_phone={{isneed_phone}}">
+    <div class="content">
+        <p>为了方便与您的沟通和及时向您反馈软件效果，请留下您的联系方式！</p>
+        <div class="list-block">
+            <ul>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title label">手机<span style="color:red;">*</span></div>
+                            <div class="item-input">
+                                <input type="text" ng-model="phone">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-email"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title label">QQ</div>
+                            <div class="item-input">
+                                <input type="text" ng-model="qq">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="popup_bottom">
+                <div>
+                    <button class="button button-fill" ng-click="submit()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

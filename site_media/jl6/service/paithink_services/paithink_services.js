@@ -1,0 +1,1 @@
+define("jl6/site_media/service/paithink_services/paithink_services",["jl6/site_media/plugins/jquery/jquery.min","jl6/site_media/service/common/main_poster_event"],function(i,e){var n=function(){i("#server_menu").click(function(){e.addClickTimes(i(this).attr("obj_id"))})};return{init:n}});

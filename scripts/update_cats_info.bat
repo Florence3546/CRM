@@ -1,0 +1,1 @@
+python.exe ../apps/kwlib/update_cats_info.py

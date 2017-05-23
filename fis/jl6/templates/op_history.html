@@ -1,0 +1,101 @@
+{#utf-8#}
+{% extends "base_main.html" %}
+{% block title %}操作记录{% endblock %}
+{% load rates %}
+{% block content %}
+<section class="container-fluid">
+    <ol class="breadcrumb">
+      <li><a href="../web_home">首页</a></li>
+      <li><span class="item_dark">操作记录</span></li>
+    </ol>
+
+    <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert">×</a>
+        以下操作记录只包含精灵系统自动、精灵技术专家、以及亲在精灵中所做的操作，无法获取亲在直通车后台或其他软件中的操作记录哦
+    </div>
+
+    <header class="mb12">
+        <div class="operate">
+            <label>推广计划</label>
+            <div class="select_warp mr20" id="select_camp">
+                <span class="tip" data-toggle="dropdown">全部</span>
+                <ul class="dropdown-menu">
+                    {% for c in main_list %}
+                        <li data-value="{{c.id}}"><span>{% if c.mnt_type %}{{ c.mnt_type }}：{% endif %}{{c.name}}</span></li>
+                    {%endfor%}
+                </ul>
+            </div>
+
+            <label>数据类型</label>
+            <div class="select_warp mr20" id="select_optype">
+                <span class="tip" data-toggle="dropdown">全部</span>
+                <ul class="dropdown-menu">
+                  <li data-value="-1"><span class="active">全部</span></li>
+                  <li data-value="1"><span>计划</span></li>
+                  <li data-value="2"><span>宝贝</span></li>
+                  <li data-value="3"><span>创意</span></li>
+                  <li data-value="4"><span>关键词</span></li>
+                </ul>
+            </div>
+
+            <label>操作人</label>
+            <div class="select_warp mr20" id="select_opter">
+                <span class="tip" data-toggle="dropdown">全部</span>
+                <ul class="dropdown-menu">
+                  <li data-value="-1"><span class="active">全部</span></li>
+                  <!--<li data-value="0"><span>系统</span></li>-->
+                  <li data-value="1"><span>用户</span></li>
+                  <li data-value="2"><span>技术专家</span></li>
+                  <li data-value="3"><span>自动托管</span></li>
+                  <li data-value="4"><span>实时优化</span></li>
+                  <li data-value="5"><span>一键优化</span></li>
+                  <li data-value="6"><span>手动抢位</span></li>
+                  <li data-value="7"><span>自动抢位</span></li>
+                  <li data-value="8"><span>全店删词</span></li>
+                  <li data-value="9"><span>创意测试</span></li>
+                </ul>
+            </div>
+
+            <div class="dtr_picker_warp">
+                <span class="tip" data-toggle="dtr_picker" data-init-text="{{start_date|date:'m-d'}}&emsp;至&emsp;{{end_date|date:'m-d'}}" id="select_days"></span>
+            </div>
+
+            <div class="pull-right">
+                <div class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control" autocomplete="on" id="search_val" placeholder="输入宝贝标题关键字">
+                      <div class="btn input-group-addon" id="search_btn"><i class="iconfont">&#xe618;</i></div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="box op-table btno">
+        <table class="table table-bordered icon_hover_show table-hover cell-bk" id="op_table">
+          <thead>
+              <tr class="h35 tc">
+                  <th class="w140 tc" data-active="opt_time"><div>时间</div></th>
+                  <th class="w90 tc" data-active="opter"><div>操作人</div></th>
+                  <th class="w90 tc" data-active="op_type"><div>数据类型</div></th>
+                  <th class="w120 tc" data-active="data_type"><div>操作</div></th>
+                  <th class="tc" data-active="details"><div>详细</div></th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5">
+                  <div class="tc">
+                    <img src="../site_media/static/images/ajax_loader.gif" alt=""><br>
+                    <span>请稍候...</span>
+                  </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="page-tool"></div>
+</section>
+{%endblock%}

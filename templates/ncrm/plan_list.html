@@ -1,0 +1,374 @@
+{#utf-8#}{% extends "base_ncrm.html" %}
+{% load rates %}
+{% block title %}计划列表{% endblock %}
+
+{% block content %}
+<div class="w1329 auto">
+    <div class="mt20">
+        <div class="fix lh30 mt10 mb10">
+            <ul class="breadcrumb p0 l m0">
+                <li>
+                    <a href="/ncrm/plan_list/{{current_plan_user.id}}">
+                    {%if current_plan_user%}
+                        <span>{{current_plan_user.name_cn}}</span>
+                    {%else%}
+                    我
+                    {%endif%}
+                    </a>
+                    <span class="divider">&gt;</span>
+                </li>
+                <li class="active">计划列表</li>
+            </ul>
+        </div>
+
+        <ul class="nav nav-tabs p0 rel">
+            <li class="active">
+                <a href="#my_plan" data-toggle="tab">我的计划({{my_plan|length|default:0}})</a>
+            </li>
+            <li>
+                <div class="abs r0">
+                    <form action="./" method="post">
+                        计划名称：
+                        <input class="w160 mr10 f12" name="title" type="text" value="{{title}}">
+                        计划时间：
+                        <input class="w100" name="start_time" id="start_time" type="text" value="{{start_time}}">
+                        <span class="dib w10 tc">-</span>
+                        <input class="w100" name="end_time" id="end_time" type="text" value="{{end_time}}">
+                        <button class="btn" type="submit"><i class="iconfont">&#xe645;</i></button>
+                        <a class="btn r ml40 btn-primary f12" href="{%url 'create_plan'%}">创建计划</a>
+                    </form>
+                </div>
+            </li>
+        </ul>
+
+        <div class="tab-content bg_white">
+            <div class="tab-pane active in pt20" id="my_plan">
+                {%if my_plan%}
+                <table class="table-bordered mini table-no-warp-border" id="plan_list_table">
+                    <thead>
+                        <tr>
+                            <th class="w180 tl">计划名称</th>
+                            <th class="tl">目标</th>
+                            <th class="tl">备注</th>
+                            <th class="tl">进展</th>
+                            <th class="w80">下属计划</th>
+                            <th class="w80">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for p in my_plan%}
+                        <tr plan_id="{{p.id}}">
+                            <td>
+                                {%if p.relate_plan%}
+                                <div>
+                                    <span><span><a href="{% url 'plan_list' p.relate_plan.psuser.id %}">{{p.relate_plan.title}}</a></span><span class="orange ml5">{{p.relate_plan.psuser_cn_name}}</span></span>
+                                </div>
+                                {%endif%}
+                                <div>{{p.title}}</div>
+                                <div class="gray">{{p.start_time|date:"Y-m-d"}}<span class="dib tc w12">-</span>{{p.end_time|date:"Y-m-d"}}</div>
+                            </td>
+                            <td>{{p.target|safe}}</td>
+                            <td>{{p.note|safe}}</td>
+                            <td class="vt">
+                                <div class="h140 plan_process" style="overflow:auto;">
+                                </div>
+                                <div>
+                                    <a class="r" target="_blank" href="{%url 'lower_detail' p.id%}">详情</a>
+                                </div>
+                            </td>
+                            <td class="tc">
+                                {%for pl in p.lower_plans%}
+                                    <a href="{% url 'plan_list' pl.psuser.id %}">{{pl.psuser.name_cn}}</a><br>
+                                {%endfor%}
+                            </td>
+                            <td class="tc">
+                                {%if not current_plan_user%}
+                                    <a class="mr4" href="{% url 'edit_plan' p.id %}">修改</a><a class="ml5 del_confirm" data-title="你确定要删除吗?" href="{% url 'del_plan' p.id %}">删除</a><br>
+                                    <a href="{% url 'create_plan' p.id %}">创建周计划</a><br>
+                                {%endif%}
+                            </td>
+                        </tr>
+                        {%for pc in p.childs%}
+                        <tr plan_id="{{pc.id}}">
+                            <td class="pl20"  style="border-left:2px solid #4a79db;">
+                                <div>{{pc.title}}</div>
+                                <div class="gray">{{pc.start_time|date:"Y-m-d"}}<span class="dib tc w12">-</span>{{pc.end_time|date:"Y-m-d"}}</div>
+                            </td>
+                            <td>{{pc.target|safe}}</td>
+                            <td>{{pc.note|safe}}</td>
+                            <td class="vt">
+                                <div class="h140 plan_process" style="overflow:auto;">
+                                </div>
+                                <div>
+                                    <a class="r" href="{%url 'lower_detail' pc.id%}">详情</a>
+                                </div>
+                            </td>
+                            <td class="tc">
+                                {%for pcl in pc.lower_plans%}
+                                    <a href="{% url 'plan_list' pcl.psuser.id %}">{{pcl.psuser.name_cn}}</a><br>
+                                {%endfor%}
+                            </td>
+                            <td class="tc">
+                                {%if not current_plan_user%}
+                                <a class="mr4" href="{% url 'edit_plan' pc.id %}">修改</a><a class="ml5 del_confirm" data-title="你确定要删除吗?" href="{% url 'del_plan' pc.id %}">删除</a><br>
+                                {%endif%}
+                            </td>
+                        </tr>
+                        {%endfor%}
+                        {%endfor%}
+                    </tbody>
+                </table>
+                {%else%}
+                <div class="tc p20">
+                    <i class="iconfont f20 mr5">&#xe66f;</i>暂无计划
+                </div>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="id_ncrm_contact_layout" class="modal hide fade p10" data-width="w880" >
+    <div style="padding-bottom:10px;overflow:hidden;">
+      <span class="l f16 b">联系事件<span class="f12 ml10 gray">默认最多显示100条数据</span></span>
+      <a href="javascript:;" class="close" data-dismiss="modal">×</a>
+      <span class="r gray f14 b">实际用户数（<span class="red f16 b user_counter"></span>/人）</span>
+    </div>
+    <div >
+        <table class="table-bordered mini">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w40">类型</th>
+                    <th class="w80">主动联系</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="id_ncrm_subscribe_layout" class="modal hide fade p10" data-width="w1200" >
+    <div style="padding-bottom:10px;overflow:hidden;">
+      <span class="l red f16 b">订单事件&nbsp; - &nbsp;<span class="red f14 b">默认最多显示100条数据</span></span>
+      <a href="javascript:;" class="close" data-dismiss="modal">×</a>
+      <span class="r gray f14 b">实际用户数（<span class="red f16 b user_counter"></span>/人）</span>
+    </div>
+    <div >
+        <table class="table-bordered mini">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w180">订购项</th>
+                    <th class="w100">订购类型</th>
+                    <th class="w100">开始时间</th>
+                    <th class="w100">结束时间</th>
+                    <th class="w80">金额</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="id_ncrm_reintro_layout" class="modal hide fade p10" data-width="w880" >
+    <div style="padding-bottom:10px;overflow:hidden;">
+      <span class="l f16 b">转介绍事件<span class="f12 ml10 gray">默认最多显示100条数据</span></span>
+      <a href="javascript:;" class="close" data-dismiss="modal">×</a>
+      <span class="r gray f14 b">实际用户数（<span class="red f16 b user_counter"></span>/人）</span>
+    </div>
+    <div >
+        <table class="table-bordered mini">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w120">类型</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="id_ncrm_operate_layout" class="modal hide fade p10" data-width="w880" >
+    <div style="padding-bottom:10px;overflow:hidden;">
+      <span class="l f16 b">操作事件<span class="f12 ml10 gray">默认最多显示100条数据</span></span>
+      <a href="javascript:;" class="close" data-dismiss="modal">×</a>
+      <span class="r gray f14 b">实际用户数（<span class="red f16 b user_counter"></span>/人）</span>
+    </div>
+    <div >
+        <table class="table-bordered mini">
+            <thead>
+                <tr>
+                    <th class="w160">创建时间</th>
+                    <th class="w180">昵称</th>
+                    <th class="w120">类型</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody class="content">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{'/site_media/jl5/ncrm_js/plan_list.js'|file_time_stamp}}" type="text/javascript"></script>
+<!-- <script id="plan_process_div" type="text/html">
+
+        <% for(var key in data) { %>
+            <p class="mb0">
+            <a href="javascript:;" class="event_detail" counter="<%=data[key]%>" event_name="<%=key%>">详情</a>&nbsp;
+            <%=describption[key]%>&nbsp;:&nbsp;<%=data[key]%>
+            </p>
+        <% } %>
+
+</script> -->
+<script id="plan_process_div" type="text/html">
+<ul class="ul_line">
+    <% for(var i = 0 ; i < data.length ; i ++) { %>
+    <li class="w130 mr10"> <%=describption[data[i][0]]%><span class="r mr5"><%=data[i][1]%></span></li>
+    <% } %>
+</ul>
+</script>
+
+<script id="id_ncrm_subscribe_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td>
+            <% if(article_code== 'ts-25811'){ %>
+                <i class="iconfont inherit mr5 ml5">&#xe652;</i>
+            <%} else if(article_code== 'ts-25811-6') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe685;</i>
+            <%} else if(article_code== 'FW_GOODS-1921400') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe690;</i>
+            <%} else if(article_code== 'tp-001') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe696;</i>
+            <%} else if(article_code== 'tp-002') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe692;</i>
+            <%} else if(article_code== 'tp-003') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe695;</i>
+            <%} else if(article_code== 'tp-004') {%>
+                <i class="iconfont inherit mr5 ml5">&#xe694;</i>
+            <%} else { %>
+                其他
+            <% }%>
+            <% if(article_name.length > 10){ %>
+                <%=article_name.substring(0,10)+"....."%>
+            <% } else {%>
+                <%=article_name.substring(0,10)%>
+            <%} %>
+        </td>
+        <td>
+            <% if(biz_type== 1){ %>
+                新订
+            <% } else if(biz_type== 2){ %>
+                续订
+            <% }  else if(biz_type== 3){ %>
+                升级
+            <% }  else if(biz_type== 4){ %>
+                后台赠送
+            <% } else if(biz_type== 5){ %>
+                自动续订
+            <%} %>
+        </td>
+        <td><%=start_date%></td>
+        <td><%=end_date%></td>
+        <td><%=pay / 100 %></td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_contact_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td class="tc">
+            <% if(contact_type== 'qq'){ %>
+                QQ
+            <%} else if(contact_type== 'phone') {%>
+                电话
+           <%} else if(contact_type== 'ww') {%>
+                旺旺
+            <%} else if(contact_type== 'weixin') {%>
+                微信
+            <%} else { %>
+                其他
+            <% }%>
+        </td>
+        <td class="tc">
+            <% if(is_initiative== 1){ %>
+                是
+            <%} else {%>
+                否
+            <%} %>
+        </td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_reintro_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td class="tc">
+            <% if(reintro_type== 'ztc'){ %>
+                直通车操作
+            <%} else if(reintro_type== 'zz') {%>
+                钻展操作
+           <%} else if(reintro_type== 'rjjh') {%>
+                人机操作
+            <%} else if(reintro_type== 'zx') {%>
+                装修
+            <%} else { %>
+                其他
+            <% }%>
+        </td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+<script id="id_ncrm_operate_layout_tr" type="text/html">
+    <tr>
+        <td><%=create_time%></td>
+        <td><%=nick%></td>
+        <td class="tc">
+            <% if(reintro_type== 'ztc'){ %>
+                直通车操作
+            <%} else if(reintro_type== 'zz') {%>
+                钻展操作
+           <%} else if(reintro_type== 'rjjh') {%>
+                人机操作
+            <%} else if(reintro_type== 'zx') {%>
+                装修
+            <%} else { %>
+                其他
+            <% }%>
+        </td>
+        <td><%=note%></td>
+    </tr>
+</script>
+
+
+<script>
+$().ready(function(){
+    PT.PlanList.init();
+    PT.PlanList.loading_plan_process();
+});
+</script>
+{% endblock %}
